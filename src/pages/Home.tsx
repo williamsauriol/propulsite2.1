@@ -42,14 +42,14 @@ export default function Home() {
               <span className="block text-accent-blue text-glow-blue italic text-[0.85em] md:text-[0.9em]">CROISSANCE DIGITALE</span>
             </h1>
             <p className="text-xl md:text-2xl text-white/70 mb-10 max-w-2xl leading-relaxed">
-              Nous aidons les <span className="text-white font-bold">entrepreneurs en construction</span> à dominer leur marché local grâce à des stratégies digitales spatiales.
+              Nous aidons les <span className="text-white font-bold">entrepreneurs en construction</span> à dominer leur marché local grâce à des stratégies digitales.
             </p>
             <div className="flex flex-wrap gap-6 justify-center">
               <Link to="/contact" className="px-10 py-5 bubble-glass text-white font-black hover:text-accent-blue transform hover:-translate-y-1">
                 OBTENIR UNE SOUMISSION
               </Link>
               <Link to="/services" className="px-10 py-5 bubble-glass text-white/70 font-bold hover:text-white">
-                NOS RÉALISATIONS
+                NOS SERVICES
               </Link>
             </div>
           </motion.div>
@@ -67,7 +67,7 @@ export default function Home() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {homeServices.map((s, i) => (
               <Link key={s.slug} to={`/services/${s.slug}`} className="group">
-                <LiquidGlassCard delay={i * 0.1} className="h-full group-hover:border-accent-blue/50 transition-all">
+                <LiquidGlassCard delay={i * 0.1} className="h-full transition-all duration-500 transform group-hover:-translate-y-6 group-hover:scale-[1.03] group-hover:shadow-[0_20px_50px_rgba(0,210,255,0.4)] group-hover:border-accent-blue bg-gradient-to-br hover:from-accent-blue/10 hover:to-transparent">
                   <div className="w-14 h-14 bg-accent-blue/10 rounded-2xl flex items-center justify-center mb-8 text-accent-blue border border-accent-blue/20 group-hover:scale-110 transition-transform">
                     {s.icon}
                   </div>
@@ -104,19 +104,19 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-6">
-                <div className="aspect-square bubble-glass overflow-hidden bg-accent-blue/5">
-                  <img src="/images/placeholder-1.png" alt="Construction Builder" className="w-full h-full object-cover opacity-60 hover:opacity-100 transition-opacity" referrerPolicy="no-referrer" />
+                <div className="aspect-square rounded-3xl border border-white/10 overflow-hidden bg-accent-blue/5 shadow-lg">
+                  <img src="/images/placeholder-1.png" alt="Construction Builder" className="w-full h-full object-cover opacity-80" referrerPolicy="no-referrer" />
                 </div>
-                <div className="aspect-[3/4] bubble-glass overflow-hidden bg-accent-blue/5">
-                  <img src="/images/placeholder-2.png" alt="Digital Blueprint" className="w-full h-full object-cover opacity-60 hover:opacity-100 transition-opacity" referrerPolicy="no-referrer" />
+                <div className="aspect-[3/4] rounded-3xl border border-white/10 overflow-hidden bg-accent-blue/5 shadow-lg">
+                  <img src="/images/placeholder-2.png" alt="Digital Blueprint" className="w-full h-full object-cover opacity-80" referrerPolicy="no-referrer" />
                 </div>
               </div>
               <div className="space-y-6 pt-12">
-                <div className="aspect-[3/4] bubble-glass overflow-hidden bg-accent-blue/5">
-                  <img src="/images/placeholder-3.png" alt="Excavator Work" className="w-full h-full object-cover opacity-60 hover:opacity-100 transition-opacity" referrerPolicy="no-referrer" />
+                <div className="aspect-[3/4] rounded-3xl border border-white/10 overflow-hidden bg-accent-blue/5 shadow-lg">
+                  <img src="/images/placeholder-3.png" alt="Excavator Work" className="w-full h-full object-cover opacity-80" referrerPolicy="no-referrer" />
                 </div>
-                <div className="aspect-square bubble-glass overflow-hidden bg-accent-blue/5">
-                  <img src="/images/placeholder-4.png" alt="Marketing Analytics" className="w-full h-full object-cover opacity-60 hover:opacity-100 transition-opacity" referrerPolicy="no-referrer" />
+                <div className="aspect-square rounded-3xl border border-white/10 overflow-hidden bg-accent-blue/5 shadow-lg">
+                  <img src="/images/placeholder-4.png" alt="Marketing Analytics" className="w-full h-full object-cover opacity-80" referrerPolicy="no-referrer" />
                 </div>
               </div>
             </div>

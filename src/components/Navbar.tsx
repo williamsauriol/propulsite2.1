@@ -67,7 +67,7 @@ export default function Navbar() {
         <div className="flex-1 flex justify-end">
           <Link
             to="/contact"
-            className="px-8 py-3 bubble-glass text-white font-bold hover:text-accent-blue text-sm md:text-base hidden sm:block"
+            className="px-8 py-3 bg-accent-blue rounded-[50px] text-[#050a15] font-bold hover:bg-white transition-colors text-sm md:text-base hidden sm:block shadow-[0_0_15px_rgba(0,210,255,0.6)] hover:shadow-[0_0_25px_rgba(255,255,255,0.8)]"
           >
             DÉCOLLAGE
           </Link>

@@ -45,20 +45,6 @@ export default function About() {
           </div>
         </div>
 
-        <div className="mt-24 grid md:grid-cols-3 gap-8">
-          <LiquidGlassCard>
-            <h3 className="text-4xl font-black text-accent-blue mb-2">10+</h3>
-            <p className="font-bold uppercase tracking-widest text-sm">Années d'expérience</p>
-          </LiquidGlassCard>
-          <LiquidGlassCard>
-            <h3 className="text-4xl font-black text-accent-blue mb-2">1500+</h3>
-            <p className="font-bold uppercase tracking-widest text-sm">Projets livrés</p>
-          </LiquidGlassCard>
-          <LiquidGlassCard>
-            <h3 className="text-4xl font-black text-accent-blue mb-2">98%</h3>
-            <p className="font-bold uppercase tracking-widest text-sm">Clients satisfaits</p>
-          </LiquidGlassCard>
-        </div>
       </div>
     </div>
   );

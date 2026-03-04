@@ -9,7 +9,7 @@ export default function Services() {
   return (
     <div className="pt-32 pb-24 px-6 relative z-10">
       <div className="container mx-auto">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="max-w-3xl mb-16"
@@ -23,7 +23,7 @@ export default function Services() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {SERVICES.map((s, i) => (
             <Link key={s.slug} to={`/services/${s.slug}`} className="group">
-              <LiquidGlassCard delay={i * 0.05} className="h-full group-hover:border-accent-blue/50 transition-all">
+              <LiquidGlassCard delay={i * 0.05} className="h-full transition-all duration-500 transform group-hover:-translate-y-6 group-hover:scale-[1.03] group-hover:shadow-[0_20px_50px_rgba(0,210,255,0.4)] group-hover:border-accent-blue bg-gradient-to-br hover:from-accent-blue/10 hover:to-transparent">
                 <div className="text-accent-blue mb-6 group-hover:scale-110 transition-transform">{s.icon}</div>
                 <h3 className="text-2xl font-bold mb-4 group-hover:text-accent-blue transition-colors uppercase">{s.title}</h3>
                 <p className="text-white/60 leading-relaxed mb-8">{s.shortDesc}</p>
