@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import LiquidGlassCard from '../components/LiquidGlassCard';
 
 type FunnelData = {
-    objectif: string;
+    objectif: string[];
     services: string[];
     budget: string;
     delai: string;
@@ -18,7 +18,7 @@ const STEPS = ['welcome', 'objectif', 'services', 'budget', 'contact', 'success'
 export default function Funnel() {
     const [currentStep, setCurrentStep] = useState(0);
     const [data, setData] = useState<FunnelData>({
-        objectif: '',
+        objectif: [],
         services: [],
         budget: '',
         delai: '',
@@ -42,8 +42,8 @@ export default function Funnel() {
         setError('');
 
         // Validation
-        if (stepId === 'objectif' && !data.objectif) {
-            setError('Veuillez choisir une option.');
+        if (stepId === 'objectif' && data.objectif.length === 0) {
+            setError('Veuillez choisir au moins une option.');
             return;
         }
         if (stepId === 'services' && data.services.length === 0) {
@@ -70,6 +70,15 @@ export default function Funnel() {
         setCurrentStep(prev => prev - 1);
     };
 
+    const toggleObjectif = (opt: string) => {
+        setData(prev => {
+            const objectif = prev.objectif.includes(opt)
+                ? prev.objectif.filter(o => o !== opt)
+                : [...prev.objectif, opt];
+            return { ...prev, objectif };
+        });
+    };
+
     const toggleService = (service: string) => {
         setData(prev => {
             const services = prev.services.includes(service)
@@ -84,7 +93,7 @@ export default function Funnel() {
         const subject = encodeURIComponent(`Nouveau lead – ${data.nom}`);
         const body = encodeURIComponent(
             `Nom: ${data.nom}\nEmail: ${data.email}\nTéléphone: ${data.telephone || 'N/A'}\n\n` +
-            `Objectif: ${data.objectif}\nServices: ${data.services.join(', ')}\n` +
+            `Objectif: ${data.objectif.join(', ')}\nServices: ${data.services.join(', ')}\n` +
             `Budget: ${data.budget}\nDélai: ${data.delai}\n\nMessage: ${data.message || 'Aucun'}`
         );
         // Use a small timeout to allow UI to transition to success before opening mailto
@@ -149,23 +158,23 @@ export default function Funnel() {
                             {stepId === 'objectif' && (
                                 <div>
                                     <h2 className="text-3xl font-black mb-2 text-white">Quel est votre objectif principal ?</h2>
-                                    <p className="text-white/50 mb-8">Sélectionnez la destination de votre mission.</p>
+                                    <p className="text-white/50 mb-8">Sélectionnez la ou les destinations de votre mission.</p>
 
                                     <div className="space-y-4 mb-8">
                                         {['Attirer plus de clients', 'Améliorer ma visibilité en ligne', 'Refaire mon image de marque', 'Vendre en ligne', 'Autre'].map(opt => (
                                             <button
                                                 key={opt}
-                                                onClick={() => setData({ ...data, objectif: opt })}
-                                                className={`w-full text-left px-6 py-4 rounded-2xl border transition-all duration-300 font-medium ${data.objectif === opt
+                                                onClick={() => toggleObjectif(opt)}
+                                                className={`w-full text-left px-6 py-4 rounded-2xl border transition-all duration-300 font-medium ${data.objectif.includes(opt)
                                                         ? 'bg-accent-blue/10 border-accent-blue text-white shadow-[0_0_15px_rgba(0,210,255,0.2)]'
                                                         : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:border-white/20'
                                                     }`}
                                             >
                                                 <div className="flex items-center gap-4">
-                                                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${data.objectif === opt ? 'border-accent-blue' : 'border-white/30'}`}>
-                                                        {data.objectif === opt && <div className="w-2.5 h-2.5 bg-accent-blue rounded-full" />}
+                                                    <div className={`mt-0.5 w-5 h-5 rounded border-2 flex shrink-0 items-center justify-center ${data.objectif.includes(opt) ? 'border-accent-blue bg-accent-blue' : 'border-white/30'}`}>
+                                                        {data.objectif.includes(opt) && <svg className="w-3.5 h-3.5 text-[#050a15]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
                                                     </div>
-                                                    {opt}
+                                                    <span className="leading-tight">{opt}</span>
                                                 </div>
                                             </button>
                                         ))}
@@ -288,7 +297,7 @@ export default function Funnel() {
                                         initial={{ scale: 0 }}
                                         animate={{ scale: 1, rotate: 360 }}
                                         transition={{ type: "spring", damping: 15, stiffness: 100 }}
-                                        className="w-24 h-24 bg-accent-blue/20 text-accent-blue rounded-full flex items-center justify-center mx-auto mb-8 mx-auto"
+                                        className="w-24 h-24 bg-accent-blue/20 text-accent-blue rounded-full flex items-center justify-center mx-auto mb-8"
                                     >
                                         <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
