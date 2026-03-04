@@ -7,6 +7,7 @@ import Services from './pages/Services';
 import ServiceDetail from './pages/ServiceDetail';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import Funnel from './pages/Funnel';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -30,9 +31,10 @@ export default function App() {
             <Route path="/services/:slug" element={<ServiceDetail />} />
             <Route path="/a-propos" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/funnel" element={<Funnel />} />
           </Routes>
         </main>
-        
+
         <footer className="py-12 px-6 border-t border-white/5 relative z-10 bg-black/50 backdrop-blur-md">
           <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
             <div>

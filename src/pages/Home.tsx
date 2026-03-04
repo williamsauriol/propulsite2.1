@@ -45,7 +45,7 @@ export default function Home() {
               Nous aidons les <span className="text-white font-bold">entrepreneurs en construction</span> à dominer leur marché local grâce à des stratégies digitales.
             </p>
             <div className="flex flex-wrap gap-6 justify-center">
-              <Link to="/contact" className="px-10 py-5 bubble-glass text-white font-black hover:text-accent-blue transform hover:-translate-y-1">
+              <Link to="/funnel" className="px-10 py-5 bubble-glass text-white font-black hover:text-accent-blue transform hover:-translate-y-1">
                 OBTENIR UNE SOUMISSION
               </Link>
               <Link to="/services" className="px-10 py-5 bubble-glass text-white/70 font-bold hover:text-white">

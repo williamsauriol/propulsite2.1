@@ -59,6 +59,7 @@ export default React.memo(function RocketBackground() {
   const isServices = pathname.startsWith('/services');
   const isAbout = pathname === '/a-propos';
   const isContact = pathname === '/contact';
+  const isFunnel = pathname === '/funnel';
 
   // Increase the number of stars for more life
   const stars = useMemo(() => {
@@ -95,6 +96,7 @@ export default React.memo(function RocketBackground() {
   if (isServices) bgColor = "bg-[#050c20]"; // Deeper blue/purple hint
   if (isAbout) bgColor = "bg-[#100515]"; // Slight purple/dark red hint
   if (isContact) bgColor = "bg-[#051515]"; // Slight green/teal hint
+  if (isFunnel) bgColor = "bg-[#060b20]"; // Futuristic dark violet/blue
 
   return (
     <div className={`fixed inset-0 pointer-events-none z-0 overflow-hidden transition-colors duration-1000 ${bgColor}`}>
@@ -124,6 +126,13 @@ export default React.memo(function RocketBackground() {
           className="absolute bottom-[10%] left-[30%] w-[700px] h-[700px] bg-[#00ff88]/10 rounded-full blur-[150px]"
           animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        />
+      )}
+      {isFunnel && (
+        <motion.div
+          className="absolute top-[20%] right-[20%] w-[800px] h-[800px] bg-[#00d2ff]/10 rounded-full blur-[150px]"
+          animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.6, 0.2], rotate: [0, 360] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
         />
       )}
 
