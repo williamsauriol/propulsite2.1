@@ -167,58 +167,64 @@ export default React.memo(function RocketBackground() {
             y: smoothY,
           }}
         >
-          {/* Idle Rocket */}
-          <motion.img
-            src="/images/rocket.webp"
-            alt="Rocket Idle"
-            className="w-full h-auto drop-shadow-[0_0_50px_rgba(0,210,255,0.4)] relative z-10"
-            referrerPolicy="no-referrer"
-          />
-
-          {/* Generated Exhaust Fire */}
           <motion.div
-            className="absolute bottom-[-15%] origin-top z-0"
-            style={{
-              opacity: fireOpacity,
-              scaleY: fireScale,
-              width: "30%",
-              height: "150%",
-              background: "linear-gradient(to bottom, #ffffff 0%, #00d2ff 30%, #001a4d 80%, transparent 100%)",
-              filter: "blur(20px)",
-              borderRadius: "100px",
-            }}
-            animate={{
-              scaleX: [0.9, 1.1, 0.9],
-              opacity: [0.8, 1, 0.8],
-            }}
-            transition={{
-              duration: 0.08,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-          />
+            className="relative w-full flex justify-center"
+            animate={{ y: [0, -15, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            {/* Idle Rocket */}
+            <motion.img
+              src="/images/rocket.webp"
+              alt="Rocket Idle"
+              className="w-full h-auto drop-shadow-[0_0_50px_rgba(0,210,255,0.4)] relative z-10"
+              referrerPolicy="no-referrer"
+            />
 
-          {/* Core Heat Exhaust */}
-          <motion.div
-            className="absolute bottom-[-5%] origin-top z-0"
-            style={{
-              opacity: fireOpacity,
-              scaleY: fireScale,
-              width: "15%",
-              height: "80%",
-              background: "linear-gradient(to bottom, #ffffff 0%, #aaddff 50%, transparent 100%)",
-              filter: "blur(10px)",
-              borderRadius: "100px",
-            }}
-            animate={{
-              scaleX: [0.95, 1.05, 0.95],
-            }}
-            transition={{
-              duration: 0.05,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-          />
+            {/* Generated Exhaust Fire */}
+            <motion.div
+              className="absolute bottom-[-15%] origin-top z-0"
+              style={{
+                opacity: fireOpacity,
+                scaleY: fireScale,
+                width: "30%",
+                height: "150%",
+                background: "linear-gradient(to bottom, #ffffff 0%, #00d2ff 30%, #001a4d 80%, transparent 100%)",
+                filter: "blur(20px)",
+                borderRadius: "100px",
+              }}
+              animate={{
+                scaleX: [0.9, 1.1, 0.9],
+                opacity: [0.8, 1, 0.8],
+              }}
+              transition={{
+                duration: 0.08,
+                repeat: Infinity,
+                ease: "linear"
+              }}
+            />
+
+            {/* Core Heat Exhaust */}
+            <motion.div
+              className="absolute bottom-[-5%] origin-top z-0"
+              style={{
+                opacity: fireOpacity,
+                scaleY: fireScale,
+                width: "15%",
+                height: "80%",
+                background: "linear-gradient(to bottom, #ffffff 0%, #aaddff 50%, transparent 100%)",
+                filter: "blur(10px)",
+                borderRadius: "100px",
+              }}
+              animate={{
+                scaleX: [0.95, 1.05, 0.95],
+              }}
+              transition={{
+                duration: 0.05,
+                repeat: Infinity,
+                ease: "linear"
+              }}
+            />
+          </motion.div>
         </motion.div>
       )}
 
