@@ -1,53 +1,75 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { motion } from 'motion/react';
-import { Rocket } from 'lucide-react';
+import { motion, useScroll, useMotionValueEvent } from 'motion/react';
 
 export default function Navbar() {
   const location = useLocation();
-  
+  const { scrollY } = useScroll();
+  const [hidden, setHidden] = useState(false);
+
+  // Hide header on scroll down, show on scroll up
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious() || 0;
+    if (latest > previous && latest > 150) {
+      setHidden(true);
+    } else {
+      setHidden(false);
+    }
+  });
+
   const navLinks = [
-    { name: 'Accueil', path: '/' },
     { name: 'Services', path: '/services' },
     { name: 'À Propos', path: '/a-propos' },
     { name: 'Contact', path: '/contact' },
   ];
 
   return (
-    <motion.header 
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+    <motion.header
+      variants={{
+        visible: { y: 0 },
+        hidden: { y: "-100%" },
+      }}
+      animate={hidden ? "hidden" : "visible"}
+      transition={{ duration: 0.35, ease: "easeInOut" }}
+      className="fixed top-0 left-0 right-0 z-50 bg-[#050a15]/80 backdrop-blur-md border-b border-white/5"
     >
-      <div className="container mx-auto px-6 py-6 flex justify-between items-center">
-        <Link to="/" className="flex items-center gap-2 group">
-          <div className="w-10 h-10 bg-accent-blue/20 rounded-lg flex items-center justify-center border border-accent-blue/30 group-hover:border-accent-blue transition-colors">
-            <Rocket className="text-accent-blue w-6 h-6" />
-          </div>
-          <span className="text-2xl font-bold tracking-tighter text-white">
-            PROPULSITE
-          </span>
-        </Link>
+      <div className="container mx-auto px-6 py-4 flex items-center justify-between">
 
-        <nav className="hidden md:flex items-center gap-8">
+        {/* Logo (Left) */}
+        <div className="flex-1 flex justify-start">
+          <Link to="/" className="flex items-center group">
+            <img
+              src="/images/logo-propulsite-transparent.png"
+              alt="Propulsite Accueil"
+              className="h-10 md:h-12 object-contain filter drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] transition-transform group-hover:scale-105"
+            />
+          </Link>
+        </div>
+
+        {/* Links (Centered) */}
+        <nav className="hidden md:flex flex-1 justify-center items-center gap-8">
           {navLinks.map((link) => (
-            <Link 
+            <Link
               key={link.path}
               to={link.path}
-              className={`text-sm font-medium tracking-widest uppercase transition-colors hover:text-accent-blue ${
-                location.pathname === link.path ? 'text-accent-blue' : 'text-white/70'
-              }`}
+              className={`text-sm font-medium tracking-widest uppercase transition-colors hover:text-accent-blue ${location.pathname === link.path ? 'text-accent-blue' : 'text-white/70'
+                }`}
             >
               {link.name}
             </Link>
           ))}
-          <Link 
-            to="/contact" 
-            className="px-8 py-3 bubble-glass text-white font-bold hover:text-accent-blue"
+        </nav>
+
+        {/* Button (Right) */}
+        <div className="flex-1 flex justify-end">
+          <Link
+            to="/contact"
+            className="px-8 py-3 bubble-glass text-white font-bold hover:text-accent-blue text-sm md:text-base hidden sm:block"
           >
             DÉCOLLAGE
           </Link>
-        </nav>
+        </div>
+
       </div>
     </motion.header>
   );
