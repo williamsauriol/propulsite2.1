@@ -53,18 +53,8 @@ const ShootingStar = () => {
 export default React.memo(function RocketBackground() {
   const { scrollYProgress } = useScroll();
 
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  // No mouse tracking needed, rocket is static horizontally until scrolled
 
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({
-        x: (e.clientX / window.innerWidth - 0.5) * 30,
-        y: (e.clientY / window.innerHeight - 0.5) * 30,
-      });
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
 
   // Generate random stars once
   const stars = useMemo(() => {
@@ -88,15 +78,16 @@ export default React.memo(function RocketBackground() {
     }));
   }, []);
 
-  const opacityIdle = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
-  const opacityLaunch = useTransform(scrollYProgress, [0.05, 0.15], [0, 1]);
-  const translateY = useTransform(scrollYProgress, [0.1, 1], [0, -4000]);
-  const scale = useTransform(scrollYProgress, [0.1, 0.5], [1, 0.5]);
+  const fireScale = useTransform(scrollYProgress, [0, 0.05], [0, 1]);
+  const fireOpacity = useTransform(scrollYProgress, [0, 0.05], [0, 1]);
+  const overallOpacity = useTransform(scrollYProgress, [0.1, 0.4], [1, 0]);
+
+  // Propel rocket upwards while scrolling
+  const translateY = useTransform(scrollYProgress, [0, 1], [0, -3500]);
+  const smoothY = useSpring(translateY, { stiffness: 45, damping: 20 });
 
   // Parallax for following stars
   const starParallax = useTransform(scrollYProgress, [0, 1], [0, 500]);
-
-  const smoothY = useSpring(translateY, { stiffness: 40, damping: 15 });
 
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-[#050a15]">
@@ -132,39 +123,64 @@ export default React.memo(function RocketBackground() {
 
       {/* Rocket Container */}
       <motion.div
-        className="absolute right-[10%] top-[20%] w-64 md:w-[450px]"
-        animate={{
-          x: [0, 20, 0],
-          y: [0, -15, 0],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
+        className="absolute inset-x-0 mx-auto top-[20%] md:top-[10%] flex justify-center w-[350px] md:w-[650px] z-[5]"
         style={{
+          opacity: overallOpacity,
+          scale: 0.9,
           y: smoothY,
-          scale: scale,
-          translateX: mousePos.x,
-          translateY: mousePos.y,
         }}
       >
         {/* Idle Rocket */}
         <motion.img
-          src="/images/starship-black.png"
+          src="/images/rocket.webp"
           alt="Rocket Idle"
-          className="w-full h-auto drop-shadow-[0_0_50px_rgba(0,210,255,0.2)]"
-          style={{ opacity: opacityIdle }}
+          className="w-full h-auto drop-shadow-[0_0_50px_rgba(0,210,255,0.4)] relative z-10"
           referrerPolicy="no-referrer"
         />
 
-        {/* Launching Rocket */}
-        <motion.img
-          src="/images/starship-fire.png"
-          alt="Rocket Launch"
-          className="w-full h-auto absolute top-0 left-0 drop-shadow-[0_0_100px_rgba(255,100,0,0.4)]"
-          style={{ opacity: opacityLaunch }}
-          referrerPolicy="no-referrer"
+        {/* Generated Exhaust Fire */}
+        <motion.div
+          className="absolute bottom-[-15%] origin-top z-0"
+          style={{
+            opacity: fireOpacity,
+            scaleY: fireScale,
+            width: "30%",
+            height: "150%",
+            background: "linear-gradient(to bottom, #ffffff 0%, #00d2ff 30%, #001a4d 80%, transparent 100%)",
+            filter: "blur(20px)",
+            borderRadius: "100px",
+          }}
+          animate={{
+            scaleX: [0.9, 1.1, 0.9],
+            opacity: [0.8, 1, 0.8],
+          }}
+          transition={{
+            duration: 0.08,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
+
+        {/* Core Heat Exhaust */}
+        <motion.div
+          className="absolute bottom-[-5%] origin-top z-0"
+          style={{
+            opacity: fireOpacity,
+            scaleY: fireScale,
+            width: "15%",
+            height: "80%",
+            background: "linear-gradient(to bottom, #ffffff 0%, #aaddff 50%, transparent 100%)",
+            filter: "blur(10px)",
+            borderRadius: "100px",
+          }}
+          animate={{
+            scaleX: [0.95, 1.05, 0.95],
+          }}
+          transition={{
+            duration: 0.05,
+            repeat: Infinity,
+            ease: "linear"
+          }}
         />
       </motion.div>
 

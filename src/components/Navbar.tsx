@@ -37,12 +37,15 @@ export default function Navbar() {
 
         {/* Logo (Left) */}
         <div className="flex-1 flex justify-start">
-          <Link to="/" className="flex items-center group">
+          <Link to="/" className="flex items-center group gap-3">
             <img
-              src="/images/logo-propulsite-transparent.png"
+              src="/images/logo-fuser-sans-backk.png"
               alt="Propulsite Accueil"
               className="h-10 md:h-12 object-contain filter drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] transition-transform group-hover:scale-105"
             />
+            <span className="text-xl md:text-2xl font-black tracking-widest text-white transition-colors group-hover:text-accent-blue">
+              PROPULSITE
+            </span>
           </Link>
         </div>
 

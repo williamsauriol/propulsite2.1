@@ -32,19 +32,19 @@ export default function Home() {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
-            className="max-w-4xl"
+            className="max-w-4xl mx-auto flex flex-col items-center text-center"
           >
             <div className="flex items-center gap-3 mb-6 text-accent-blue font-bold tracking-widest uppercase text-sm">
               <HardHat className="w-5 h-5" /> Spécialiste Marketing Construction
             </div>
-            <h1 className="text-6xl md:text-9xl font-black leading-none mb-8 text-3xl-effect">
-              <span className="block text-white text-3d">PROPULSER VOTRE</span>
-              <span className="block text-accent-blue text-glow-blue italic">CROISSANCE</span>
+            <h1 className="text-6xl md:text-8xl lg:text-9xl font-black leading-none mb-8 text-3xl-effect">
+              <span className="block text-white text-3d mb-2">PROPULSER VOTRE</span>
+              <span className="block text-accent-blue text-glow-blue italic text-[0.85em] md:text-[0.9em]">CROISSANCE DIGITALE</span>
             </h1>
             <p className="text-xl md:text-2xl text-white/70 mb-10 max-w-2xl leading-relaxed">
               Nous aidons les <span className="text-white font-bold">entrepreneurs en construction</span> à dominer leur marché local grâce à des stratégies digitales spatiales.
             </p>
-            <div className="flex flex-wrap gap-6">
+            <div className="flex flex-wrap gap-6 justify-center">
               <Link to="/contact" className="px-10 py-5 bubble-glass text-white font-black hover:text-accent-blue transform hover:-translate-y-1">
                 OBTENIR UNE SOUMISSION
               </Link>
