@@ -122,27 +122,41 @@ export default function Home() {
           .cta-container {
             perspective: 1000px;
             position: relative;
+            width: 100%;
+            height: 100%;
           }
           
           .cta-canvas {
             display: grid;
+            position: absolute;
+            inset: 0;
+            z-index: 200;
             grid-template-columns: repeat(5, 1fr);
             grid-template-rows: repeat(5, 1fr);
-            position: relative;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
+            gap: 0px 0px;
+            grid-template-areas:
+              "tr-1 tr-2 tr-3 tr-4 tr-5"
+              "tr-6 tr-7 tr-8 tr-9 tr-10"
+              "tr-11 tr-12 tr-13 tr-14 tr-15"
+              "tr-16 tr-17 tr-18 tr-19 tr-20"
+              "tr-21 tr-22 tr-23 tr-24 tr-25";
+            /* We need to stretch canvas over the card below */
           }
           
           .cta-tracker {
-            position: relative;
-            z-index: 200;
-            width: 100%;
-            height: 100%;
+            position: absolute;
+            cursor: pointer;
           }
 
+          /* Explicit grid-area assignments for the 25 trackers */
+          .tr-1 { grid-area: tr-1; } .tr-2 { grid-area: tr-2; } .tr-3 { grid-area: tr-3; } .tr-4 { grid-area: tr-4; } .tr-5 { grid-area: tr-5; }
+          .tr-6 { grid-area: tr-6; } .tr-7 { grid-area: tr-7; } .tr-8 { grid-area: tr-8; } .tr-9 { grid-area: tr-9; } .tr-10 { grid-area: tr-10; }
+          .tr-11 { grid-area: tr-11; } .tr-12 { grid-area: tr-12; } .tr-13 { grid-area: tr-13; } .tr-14 { grid-area: tr-14; } .tr-15 { grid-area: tr-15; }
+          .tr-16 { grid-area: tr-16; } .tr-17 { grid-area: tr-17; } .tr-18 { grid-area: tr-18; } .tr-19 { grid-area: tr-19; } .tr-20 { grid-area: tr-20; }
+          .tr-21 { grid-area: tr-21; } .tr-22 { grid-area: tr-22; } .tr-23 { grid-area: tr-23; } .tr-24 { grid-area: tr-24; } .tr-25 { grid-area: tr-25; }
+
           #cta-card {
-            grid-area: 1 / 1 / 6 / 6;
+            position: relative;
             z-index: 0;
             transition: transform 700ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
             transform-style: preserve-3d;
@@ -189,7 +203,7 @@ export default function Home() {
             transform: translateZ(0);
             transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           }
-          .cta-canvas:hover #cta-card .cta-3d-content {
+          .cta-container:hover #cta-card .cta-3d-content {
             transform: translateZ(50px);
           }
           
@@ -197,17 +211,19 @@ export default function Home() {
             transform: translateZ(0);
             transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           }
-          .cta-canvas:hover #cta-card .cta-3d-btn {
+          .cta-container:hover #cta-card .cta-3d-btn {
             transform: translateZ(80px); /* Extruded more than text */
           }
         `}</style>
 
-        <Link to="/funnel" className="block container mx-auto max-w-5xl cta-container select-none group">
-          <div className="cta-canvas">
-            {/* Generating 25 Trackers */}
-            {Array.from({ length: 25 }).map((_, i) => (
-              <div key={i} className={`cta-tracker tr-${i + 1}`} />
-            ))}
+        <Link to="/funnel" className="block container mx-auto max-w-5xl select-none group">
+          <div className="cta-container w-full h-full">
+            <div className="cta-canvas">
+              {/* Generating 25 Trackers */}
+              {Array.from({ length: 25 }).map((_, i) => (
+                <div key={i} className={`cta-tracker tr-${i + 1}`} />
+              ))}
+            </div>
 
             <div id="cta-card" className="rounded-3xl overflow-hidden relative shadow-[0_0_50px_rgba(0,210,255,0.15)] border border-white/10 bg-gradient-to-br from-[#0a1526] to-[#050a15] w-full h-full pointer-events-none">
               {/* Decorative background instead of specific image */}
