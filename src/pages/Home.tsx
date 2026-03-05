@@ -102,22 +102,14 @@ export default function Home() {
                 ))}
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-6">
-              <div className="space-y-6">
-                <div className="aspect-square rounded-3xl border border-white/10 overflow-hidden bg-accent-blue/5 shadow-lg">
-                  <img src="/images/placeholder-1.png" alt="Construction Builder" className="w-full h-full object-cover opacity-80" referrerPolicy="no-referrer" />
-                </div>
-                <div className="aspect-[3/4] rounded-3xl border border-white/10 overflow-hidden bg-accent-blue/5 shadow-lg">
-                  <img src="/images/placeholder-2.png" alt="Digital Blueprint" className="w-full h-full object-cover opacity-80" referrerPolicy="no-referrer" />
-                </div>
-              </div>
-              <div className="space-y-6 pt-12">
-                <div className="aspect-[3/4] rounded-3xl border border-white/10 overflow-hidden bg-accent-blue/5 shadow-lg">
-                  <img src="/images/placeholder-3.png" alt="Excavator Work" className="w-full h-full object-cover opacity-80" referrerPolicy="no-referrer" />
-                </div>
-                <div className="aspect-square rounded-3xl border border-white/10 overflow-hidden bg-accent-blue/5 shadow-lg">
-                  <img src="/images/placeholder-4.png" alt="Marketing Analytics" className="w-full h-full object-cover opacity-80" referrerPolicy="no-referrer" />
-                </div>
+            <div className="relative h-full min-h-[400px]">
+              <div className="absolute inset-0 rounded-3xl border border-white/10 overflow-hidden shadow-[0_0_30px_rgba(0,210,255,0.15)] group">
+                <div className="absolute inset-0 bg-accent-blue/10 mix-blend-overlay z-10 opacity-50 transition-opacity duration-300 group-hover:opacity-0" />
+                <img
+                  src="/images/unnamed.jpg"
+                  alt="Propulsite équipe en action"
+                  className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105"
+                />
               </div>
             </div>
           </div>
