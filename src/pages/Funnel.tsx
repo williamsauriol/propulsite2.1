@@ -3,25 +3,46 @@ import { motion, AnimatePresence } from 'motion/react';
 import LiquidGlassCard from '../components/LiquidGlassCard';
 
 type FunnelData = {
-    objectif: string[];
-    services: string[];
-    budget: string;
-    delai: string;
+    role: string;
+    tailleEntreprise: string;
+    defi: string;
+    solutionActuelle: string;
+    declencheur: string;
+    objectif: string;
     nom: string;
     email: string;
     telephone: string;
     message: string;
 };
 
-const STEPS = ['welcome', 'objectif', 'services', 'budget', 'contact', 'success'];
+const STEPS = ['welcome', 'role', 'taille', 'defi', 'solution', 'declencheur', 'objectif', 'contact', 'success'];
+
+const SelectButton = ({ value, selected, onClick }: { key?: string; value: string; selected: boolean; onClick: () => void }) => (
+    <button
+        onClick={onClick}
+        className={`w-full text-left px-6 py-4 rounded-2xl border transition-all duration-300 font-medium ${selected
+            ? 'bg-accent-blue/10 border-accent-blue text-white shadow-[0_0_15px_rgba(0,210,255,0.2)]'
+            : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:border-white/20'
+            }`}
+    >
+        <div className="flex items-center gap-4">
+            <div className={`w-5 h-5 rounded-full border-2 flex shrink-0 items-center justify-center ${selected ? 'border-accent-blue bg-accent-blue' : 'border-white/30'}`}>
+                {selected && <div className="w-2 h-2 rounded-full bg-[#050a15]" />}
+            </div>
+            <span className="leading-tight">{value}</span>
+        </div>
+    </button>
+);
 
 export default function Funnel() {
     const [currentStep, setCurrentStep] = useState(0);
     const [data, setData] = useState<FunnelData>({
-        objectif: [],
-        services: [],
-        budget: '',
-        delai: '',
+        role: '',
+        tailleEntreprise: '',
+        defi: '',
+        solutionActuelle: '',
+        declencheur: '',
+        objectif: '',
         nom: '',
         email: '',
         telephone: '',
@@ -41,17 +62,28 @@ export default function Funnel() {
     const handleNext = () => {
         setError('');
 
-        // Validation
-        if (stepId === 'objectif' && data.objectif.length === 0) {
-            setError('Veuillez choisir au moins une option.');
+        if (stepId === 'role' && !data.role) {
+            setError('Veuillez choisir votre rôle.');
             return;
         }
-        if (stepId === 'services' && data.services.length === 0) {
-            setError('Veuillez choisir au moins un service.');
+        if (stepId === 'taille' && !data.tailleEntreprise) {
+            setError('Veuillez choisir la taille de votre équipe.');
             return;
         }
-        if (stepId === 'budget' && (!data.budget || !data.delai)) {
-            setError('Veuillez remplir les deux sections.');
+        if (stepId === 'defi' && !data.defi.trim()) {
+            setError('Veuillez décrire votre défi principal.');
+            return;
+        }
+        if (stepId === 'solution' && !data.solutionActuelle) {
+            setError('Veuillez choisir une option.');
+            return;
+        }
+        if (stepId === 'declencheur' && !data.declencheur) {
+            setError('Veuillez choisir une option.');
+            return;
+        }
+        if (stepId === 'objectif' && !data.objectif) {
+            setError('Veuillez choisir votre objectif principal.');
             return;
         }
         if (stepId === 'contact') {
@@ -70,33 +102,16 @@ export default function Funnel() {
         setCurrentStep(prev => prev - 1);
     };
 
-    const toggleObjectif = (opt: string) => {
-        setData(prev => {
-            const objectif = prev.objectif.includes(opt)
-                ? prev.objectif.filter(o => o !== opt)
-                : [...prev.objectif, opt];
-            return { ...prev, objectif };
-        });
-    };
-
-    const toggleService = (service: string) => {
-        setData(prev => {
-            const services = prev.services.includes(service)
-                ? prev.services.filter(s => s !== service)
-                : [...prev.services, service];
-            return { ...prev, services };
-        });
-    };
-
     const sendEmail = () => {
-        const TO = 'contact@propulsite.ca'; // Replace with actual email
+        const TO = 'contact@propulsite.ca';
         const subject = encodeURIComponent(`Nouveau lead – ${data.nom}`);
         const body = encodeURIComponent(
             `Nom: ${data.nom}\nEmail: ${data.email}\nTéléphone: ${data.telephone || 'N/A'}\n\n` +
-            `Objectif: ${data.objectif.join(', ')}\nServices: ${data.services.join(', ')}\n` +
-            `Budget: ${data.budget}\nDélai: ${data.delai}\n\nMessage: ${data.message || 'Aucun'}`
+            `Rôle: ${data.role}\nTaille d'entreprise: ${data.tailleEntreprise}\n` +
+            `Défi principal: ${data.defi}\nSolution actuelle: ${data.solutionActuelle}\n` +
+            `Déclencheur: ${data.declencheur}\nObjectif 3 mois: ${data.objectif}\n\n` +
+            `Message: ${data.message || 'Aucun'}`
         );
-        // Use a small timeout to allow UI to transition to success before opening mailto
         setTimeout(() => {
             window.location.href = `mailto:${TO}?subject=${subject}&body=${body}`;
         }, 500);
@@ -134,7 +149,7 @@ export default function Funnel() {
                             transition={{ duration: 0.3 }}
                         >
 
-                            {/* WELCOME STEP */}
+                            {/* WELCOME */}
                             {stepId === 'welcome' && (
                                 <div className="text-center py-8">
                                     <motion.div
@@ -146,7 +161,7 @@ export default function Funnel() {
                                     </motion.div>
                                     <h2 className="text-4xl font-black mb-4 text-3d uppercase italic">Prêt pour le décollage ?</h2>
                                     <p className="text-white/70 text-lg mb-10 leading-relaxed">
-                                        Trouvons ensemble la trajectoire idéale pour votre entreprise de construction. Répondez à ces quelques questions pour lancer la mission.
+                                        Trouvons ensemble la trajectoire idéale pour votre entreprise. Répondez à ces quelques questions pour lancer la mission.
                                     </p>
                                     <button onClick={handleNext} className="w-full md:w-auto px-10 py-5 bg-accent-blue rounded-[50px] text-[#050a15] font-black tracking-widest hover:bg-white transition-colors shadow-[0_0_15px_rgba(0,210,255,0.5)] hover:shadow-[0_0_30px_rgba(255,255,255,0.8)] hover:-translate-y-1 transform duration-200">
                                         DÉMARRER L'EXPLORATION →
@@ -154,107 +169,113 @@ export default function Funnel() {
                                 </div>
                             )}
 
-                            {/* OBJECTIF STEP */}
+                            {/* Q1 — RÔLE */}
+                            {stepId === 'role' && (
+                                <div>
+                                    <h2 className="text-3xl font-black mb-2 text-white">Quel est votre rôle dans l'entreprise ?</h2>
+                                    <p className="text-white/50 mb-8">Cela nous aide à mieux adapter notre approche.</p>
+                                    <div className="space-y-4 mb-8">
+                                        {['Fondateur / Propriétaire', 'Directeur / Manager', 'Responsable marketing', 'Développeur / Technique', 'Autre'].map(opt => (
+                                            <SelectButton key={opt} value={opt} selected={data.role === opt} onClick={() => setData({ ...data, role: opt })} />
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Q2 — TAILLE */}
+                            {stepId === 'taille' && (
+                                <div>
+                                    <h2 className="text-3xl font-black mb-2 text-white">Quelle est la taille de votre équipe ?</h2>
+                                    <p className="text-white/50 mb-8">Pour personnaliser nos recommandations.</p>
+                                    <div className="space-y-4 mb-8">
+                                        {['Juste moi (solopreneur)', '2 – 5 personnes', '6 – 20 personnes', '20 – 50 personnes', '50+ personnes'].map(opt => (
+                                            <SelectButton key={opt} value={opt} selected={data.tailleEntreprise === opt} onClick={() => setData({ ...data, tailleEntreprise: opt })} />
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Q3 — DÉFI */}
+                            {stepId === 'defi' && (
+                                <div>
+                                    <h2 className="text-3xl font-black mb-2 text-white">Quel est votre plus grand défi en ce moment ?</h2>
+                                    <p className="text-white/50 mb-8">Décrivez le problème principal que vous souhaitez résoudre.</p>
+                                    <div className="mb-8">
+                                        <textarea
+                                            placeholder="Ex : Je n'arrive pas à attirer suffisamment de clients en ligne, ma visibilité est très faible..."
+                                            value={data.defi}
+                                            onChange={e => setData({ ...data, defi: e.target.value })}
+                                            rows={5}
+                                            className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-white placeholder-white/30 focus:outline-none focus:border-accent-blue focus:ring-1 focus:ring-accent-blue transition-all resize-none"
+                                        />
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Q4 — SOLUTION ACTUELLE */}
+                            {stepId === 'solution' && (
+                                <div>
+                                    <h2 className="text-3xl font-black mb-2 text-white">Comment gérez-vous ce problème actuellement ?</h2>
+                                    <p className="text-white/50 mb-8">Votre situation actuelle nous aide à trouver la meilleure solution.</p>
+                                    <div className="space-y-4 mb-8">
+                                        {[
+                                            'Je n\'ai aucune solution en place',
+                                            'Je gère ça moi-même, sans outil précis',
+                                            'J\'utilise des outils gratuits (réseaux sociaux, etc.)',
+                                            'Je travaille déjà avec une agence ou un freelance',
+                                            'J\'ai une solution interne mais elle ne fonctionne pas bien'
+                                        ].map(opt => (
+                                            <SelectButton key={opt} value={opt} selected={data.solutionActuelle === opt} onClick={() => setData({ ...data, solutionActuelle: opt })} />
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Q5 — DÉCLENCHEUR */}
+                            {stepId === 'declencheur' && (
+                                <div>
+                                    <h2 className="text-3xl font-black mb-2 text-white">Qu'est-ce qui vous a poussé à chercher une solution maintenant ?</h2>
+                                    <p className="text-white/50 mb-8">Comprendre votre moment nous aide à prioriser.</p>
+                                    <div className="space-y-4 mb-8">
+                                        {[
+                                            'Je perds des clients face à la concurrence',
+                                            'Je viens de lancer mon entreprise',
+                                            'Ma croissance est bloquée depuis un moment',
+                                            'J\'ai eu une mauvaise expérience avec une autre agence',
+                                            'C\'est le bon moment pour investir',
+                                            'Autre'
+                                        ].map(opt => (
+                                            <SelectButton key={opt} value={opt} selected={data.declencheur === opt} onClick={() => setData({ ...data, declencheur: opt })} />
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Q6 — OBJECTIF 3 MOIS */}
                             {stepId === 'objectif' && (
                                 <div>
-                                    <h2 className="text-3xl font-black mb-2 text-white">Quel est votre objectif principal ?</h2>
-                                    <p className="text-white/50 mb-8">Sélectionnez la ou les destinations de votre mission.</p>
-
+                                    <h2 className="text-3xl font-black mb-2 text-white">Quel est votre objectif principal pour les 3 prochains mois ?</h2>
+                                    <p className="text-white/50 mb-8">Choisissez la destination prioritaire de votre mission.</p>
                                     <div className="space-y-4 mb-8">
-                                        {['Attirer plus de clients', 'Améliorer ma visibilité en ligne', 'Refaire mon image de marque', 'Vendre en ligne', 'Autre'].map(opt => (
-                                            <button
-                                                key={opt}
-                                                onClick={() => toggleObjectif(opt)}
-                                                className={`w-full text-left px-6 py-4 rounded-2xl border transition-all duration-300 font-medium ${data.objectif.includes(opt)
-                                                        ? 'bg-accent-blue/10 border-accent-blue text-white shadow-[0_0_15px_rgba(0,210,255,0.2)]'
-                                                        : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:border-white/20'
-                                                    }`}
-                                            >
-                                                <div className="flex items-center gap-4">
-                                                    <div className={`mt-0.5 w-5 h-5 rounded border-2 flex shrink-0 items-center justify-center ${data.objectif.includes(opt) ? 'border-accent-blue bg-accent-blue' : 'border-white/30'}`}>
-                                                        {data.objectif.includes(opt) && <svg className="w-3.5 h-3.5 text-[#050a15]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
-                                                    </div>
-                                                    <span className="leading-tight">{opt}</span>
-                                                </div>
-                                            </button>
+                                        {[
+                                            'Attirer plus de clients',
+                                            'Améliorer ma visibilité en ligne',
+                                            'Lancer ou refaire mon site web',
+                                            'Augmenter mes ventes en ligne',
+                                            'Renforcer mon image de marque',
+                                            'Autre'
+                                        ].map(opt => (
+                                            <SelectButton key={opt} value={opt} selected={data.objectif === opt} onClick={() => setData({ ...data, objectif: opt })} />
                                         ))}
                                     </div>
                                 </div>
                             )}
 
-                            {/* SERVICES STEP */}
-                            {stepId === 'services' && (
-                                <div>
-                                    <h2 className="text-3xl font-black mb-2 text-white">Quels services vous intéressent ?</h2>
-                                    <p className="text-white/50 mb-8">Sélectionnez les propulseurs nécessaires (plusieurs choix possibles).</p>
-
-                                    <div className="grid sm:grid-cols-2 gap-4 mb-8">
-                                        {['Conception de site web', 'Google Ads', 'Référencement SEO', 'Publicité Facebook', 'Gestion de médias sociaux', 'Design web', 'Design graphique'].map(srv => (
-                                            <button
-                                                key={srv}
-                                                onClick={() => toggleService(srv)}
-                                                className={`text-left px-5 py-4 rounded-2xl border transition-all duration-300 font-medium ${data.services.includes(srv)
-                                                        ? 'bg-accent-blue/10 border-accent-blue text-white shadow-[0_0_15px_rgba(0,210,255,0.2)]'
-                                                        : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:border-white/20'
-                                                    }`}
-                                            >
-                                                <div className="flex items-start gap-4">
-                                                    <div className={`mt-0.5 w-5 h-5 rounded border-2 flex shrink-0 items-center justify-center ${data.services.includes(srv) ? 'border-accent-blue bg-accent-blue' : 'border-white/30'}`}>
-                                                        {data.services.includes(srv) && <svg className="w-3.5 h-3.5 text-[#050a15]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
-                                                    </div>
-                                                    <span className="leading-tight">{srv}</span>
-                                                </div>
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* BUDGET & DELAI STEP */}
-                            {stepId === 'budget' && (
-                                <div>
-                                    <h2 className="text-3xl font-black mb-8 text-white">Paramètres de la mission</h2>
-
-                                    <h3 className="text-xl font-bold text-accent-blue mb-4">Budget approximatif</h3>
-                                    <div className="grid sm:grid-cols-2 gap-4 mb-10">
-                                        {['Moins de 500$', '500$ – 1 500$', '1 500$ – 5 000$', '5 000$+', 'Je ne sais pas encore'].map(opt => (
-                                            <button
-                                                key={opt}
-                                                onClick={() => setData({ ...data, budget: opt })}
-                                                className={`text-left px-5 py-3 rounded-xl border transition-all duration-300 text-sm font-medium ${data.budget === opt
-                                                        ? 'bg-accent-blue/10 border-accent-blue text-white'
-                                                        : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10'
-                                                    }`}
-                                            >
-                                                {opt}
-                                            </button>
-                                        ))}
-                                    </div>
-
-                                    <h3 className="text-xl font-bold text-accent-blue mb-4">Délai de lancement</h3>
-                                    <div className="grid sm:grid-cols-2 gap-4 mb-8">
-                                        {['Le plus tôt possible', 'Dans 1 à 3 mois', 'Dans 3 à 6 mois', 'Pas de délai précis'].map(opt => (
-                                            <button
-                                                key={opt}
-                                                onClick={() => setData({ ...data, delai: opt })}
-                                                className={`text-left px-5 py-3 rounded-xl border transition-all duration-300 text-sm font-medium ${data.delai === opt
-                                                        ? 'bg-accent-blue/10 border-accent-blue text-white'
-                                                        : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10'
-                                                    }`}
-                                            >
-                                                {opt}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* CONTACT STEP */}
+                            {/* CONTACT */}
                             {stepId === 'contact' && (
                                 <div>
                                     <h2 className="text-3xl font-black mb-2 text-white">Dernière étape</h2>
                                     <p className="text-white/50 mb-8">Configurez vos coordonnées de contact pour l'atterrissage.</p>
-
                                     <div className="space-y-4 mb-8">
                                         <input
                                             type="text"
@@ -290,7 +311,7 @@ export default function Funnel() {
                                 </div>
                             )}
 
-                            {/* SUCCESS STEP */}
+                            {/* SUCCESS */}
                             {stepId === 'success' && (
                                 <div className="text-center py-12">
                                     <motion.div
@@ -310,7 +331,7 @@ export default function Funnel() {
                                 </div>
                             )}
 
-                            {/* Error Message */}
+                            {/* Error */}
                             {error && (
                                 <motion.p
                                     initial={{ opacity: 0, y: -10 }}
@@ -321,7 +342,7 @@ export default function Funnel() {
                                 </motion.p>
                             )}
 
-                            {/* Navigation Buttons (hidden on welcome and success) */}
+                            {/* Navigation */}
                             {currentStep > 0 && currentStep < STEPS.length - 1 && (
                                 <div className="flex items-center justify-between pt-6 mt-4 border-t border-white/10">
                                     <button

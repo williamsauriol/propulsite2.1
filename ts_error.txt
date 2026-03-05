@@ -1,0 +1,10 @@
+﻿src/pages/Funnel.tsx(179,59): error TS2322: Type '{ key: string; value: string; selected: boolean; onClick: () => any; }' is not assignable to type '{ value: string; selected: boolean; onClick: () => void; }'.
+  Property 'key' does not exist on type '{ value: string; selected: boolean; onClick: () => void; }'.
+src/pages/Funnel.tsx(192,59): error TS2322: Type '{ key: string; value: string; selected: boolean; onClick: () => any; }' is not assignable to type '{ value: string; selected: boolean; onClick: () => void; }'.
+  Property 'key' does not exist on type '{ value: string; selected: boolean; onClick: () => void; }'.
+src/pages/Funnel.tsx(228,59): error TS2322: Type '{ key: string; value: string; selected: boolean; onClick: () => any; }' is not assignable to type '{ value: string; selected: boolean; onClick: () => void; }'.
+  Property 'key' does not exist on type '{ value: string; selected: boolean; onClick: () => void; }'.
+src/pages/Funnel.tsx(248,59): error TS2322: Type '{ key: string; value: string; selected: boolean; onClick: () => any; }' is not assignable to type '{ value: string; selected: boolean; onClick: () => void; }'.
+  Property 'key' does not exist on type '{ value: string; selected: boolean; onClick: () => void; }'.
+src/pages/Funnel.tsx(268,59): error TS2322: Type '{ key: string; value: string; selected: boolean; onClick: () => any; }' is not assignable to type '{ value: string; selected: boolean; onClick: () => void; }'.
+  Property 'key' does not exist on type '{ value: string; selected: boolean; onClick: () => void; }'.
