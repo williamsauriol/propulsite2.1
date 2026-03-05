@@ -143,8 +143,8 @@ export default function Home() {
                 </p>
               </div>
               <div className="shrink-0">
-                <Link to="/contact" className="px-8 py-5 bg-accent-blue text-[#050a15] rounded-[50px] font-black hover:bg-white tracking-widest shadow-[0_0_20px_rgba(0,210,255,0.4)] transform hover:-translate-y-1 transition-all inline-flex items-center">
-                  DÉMARRER LE PROJET <ArrowRight className="ml-2 w-5 h-5" />
+                <Link to="/funnel" className="px-8 py-5 bg-accent-blue text-[#050a15] rounded-[50px] font-black hover:bg-white tracking-widest shadow-[0_0_20px_rgba(0,210,255,0.4)] transform hover:-translate-y-1 transition-all inline-flex items-center">
+                  DÉCOLLAGE <ArrowRight className="ml-2 w-5 h-5" />
                 </Link>
               </div>
             </div>
