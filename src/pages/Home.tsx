@@ -119,56 +119,120 @@ export default function Home() {
       {/* CTA Banner Section */}
       <section className="py-32 px-6">
         <style>{`
-          .cta-3d-wrapper {
+          .cta-container {
             perspective: 1000px;
+            position: relative;
           }
-          .cta-3d-card {
+          
+          .cta-canvas {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            position: relative;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+          }
+          
+          .cta-tracker {
+            position: relative;
+            z-index: 200;
+            width: 100%;
+            height: 100%;
+          }
+
+          #cta-card {
+            grid-area: 1 / 1 / 6 / 6;
+            z-index: 0;
+            transition: transform 700ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
             transform-style: preserve-3d;
-            will-change: transform;
-            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           }
-          .cta-3d-card:hover {
-            transform: translateZ(10px) rotateX(10deg) rotateY(-10deg);
+
+          /* Hover Effects from Trackers */
+          .tr-1:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(20deg) rotateY(-10deg) rotateZ(0deg); }
+          .tr-2:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(20deg) rotateY(-5deg) rotateZ(0deg); }
+          .tr-3:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(20deg) rotateY(0deg) rotateZ(0deg); }
+          .tr-4:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(20deg) rotateY(5deg) rotateZ(0deg); }
+          .tr-5:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(20deg) rotateY(10deg) rotateZ(0deg); }
+          
+          .tr-6:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(10deg) rotateY(-10deg) rotateZ(0deg); }
+          .tr-7:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(10deg) rotateY(-5deg) rotateZ(0deg); }
+          .tr-8:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(10deg) rotateY(0deg) rotateZ(0deg); }
+          .tr-9:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(10deg) rotateY(5deg) rotateZ(0deg); }
+          .tr-10:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(10deg) rotateY(10deg) rotateZ(0deg); }
+          
+          .tr-11:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(0deg) rotateY(-10deg) rotateZ(0deg); }
+          .tr-12:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(0deg) rotateY(-5deg) rotateZ(0deg); }
+          .tr-13:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+          .tr-14:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(0deg) rotateY(5deg) rotateZ(0deg); }
+          .tr-15:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(0deg) rotateY(10deg) rotateZ(0deg); }
+          
+          .tr-16:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(-10deg) rotateY(-10deg) rotateZ(0deg); }
+          .tr-17:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(-10deg) rotateY(-5deg) rotateZ(0deg); }
+          .tr-18:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(-10deg) rotateY(0deg) rotateZ(0deg); }
+          .tr-19:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(-10deg) rotateY(5deg) rotateZ(0deg); }
+          .tr-20:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(-10deg) rotateY(10deg) rotateZ(0deg); }
+          
+          .tr-21:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(-20deg) rotateY(-10deg) rotateZ(0deg); }
+          .tr-22:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(-20deg) rotateY(-5deg) rotateZ(0deg); }
+          .tr-23:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(-20deg) rotateY(0deg) rotateZ(0deg); }
+          .tr-24:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(-20deg) rotateY(5deg) rotateZ(0deg); }
+          .tr-25:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(-20deg) rotateY(10deg) rotateZ(0deg); }
+
+          /* Glow effect on hover */
+          .cta-tracker:hover ~ #cta-card {
+            filter: brightness(1.1);
           }
-          .cta-3d-text {
+
+          /* 3D text and button inside #cta-card */
+          #cta-card .cta-3d-content {
             transform: translateZ(0);
             transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           }
-          .cta-3d-card:hover .cta-3d-text {
+          .cta-canvas:hover #cta-card .cta-3d-content {
             transform: translateZ(50px);
           }
-          .cta-3d-btn {
+          
+          #cta-card .cta-3d-btn {
             transform: translateZ(0);
             transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           }
-          .cta-3d-card:hover .cta-3d-btn {
-            transform: translateZ(60px);
+          .cta-canvas:hover #cta-card .cta-3d-btn {
+            transform: translateZ(80px); /* Extruded more than text */
           }
         `}</style>
-        <div className="container mx-auto max-w-5xl cta-3d-wrapper">
-          <div className="cta-3d-card rounded-3xl overflow-hidden relative shadow-[0_0_50px_rgba(0,210,255,0.15)] border border-white/10 group bg-gradient-to-br from-[#0a1526] to-[#050a15]">
-            {/* Decorative background instead of specific image */}
-            <div className="absolute inset-0 bg-accent-blue/5 transform group-hover:scale-105 transition-transform duration-700" />
-            <div className="absolute -top-24 -right-24 w-64 h-64 bg-accent-blue/20 rounded-full blur-[80px]" />
-            <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-accent-blue/10 rounded-full blur-[60px]" />
 
-            <div className="relative z-10 p-12 md:p-16 flex flex-col md:flex-row items-center justify-between gap-12">
-              <div className="flex-1 text-center md:text-left cta-3d-text">
-                <h2 className="text-4xl md:text-5xl font-black mb-4 text-white text-3d drop-shadow-xl">
-                  Prêt à décoller avec Propulsite ?
-                </h2>
-                <p className="text-white/70 text-lg drop-shadow-md">
-                  Prêt à propulser votre entreprise de construction au sommet ? Notre équipe d'experts est prête à décoller avec vous.
-                </p>
-              </div>
-              <div className="shrink-0 cta-3d-btn">
-                <Link to="/funnel" className="px-8 py-5 bg-accent-blue text-[#050a15] rounded-[50px] font-black hover:bg-white tracking-widest shadow-[0_20px_40px_rgba(0,210,255,0.3)] transform hover:-translate-y-1 transition-all inline-flex items-center">
-                  DÉCOLLAGE <ArrowRight className="ml-2 w-5 h-5" />
-                </Link>
+        <Link to="/funnel" className="block container mx-auto max-w-5xl cta-container select-none group">
+          <div className="cta-canvas">
+            {/* Generating 25 Trackers */}
+            {Array.from({ length: 25 }).map((_, i) => (
+              <div key={i} className={`cta-tracker tr-${i + 1}`} />
+            ))}
+
+            <div id="cta-card" className="rounded-3xl overflow-hidden relative shadow-[0_0_50px_rgba(0,210,255,0.15)] border border-white/10 bg-gradient-to-br from-[#0a1526] to-[#050a15] w-full h-full pointer-events-none">
+              {/* Decorative background instead of specific image */}
+              <div className="absolute inset-0 bg-accent-blue/5 transform group-hover:scale-105 transition-transform duration-700" />
+              <div className="absolute -top-24 -right-24 w-64 h-64 bg-accent-blue/20 rounded-full blur-[80px]" />
+              <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-accent-blue/10 rounded-full blur-[60px]" />
+
+              <div className="relative z-10 p-12 md:p-16 flex flex-col md:flex-row items-center justify-between gap-12 h-full">
+                <div className="flex-1 text-center md:text-left cta-3d-content">
+                  <h2 className="text-4xl md:text-5xl font-black mb-4 text-white text-3d drop-shadow-2xl">
+                    Prêt à décoller avec Propulsite ?
+                  </h2>
+                  <p className="text-white/70 text-lg drop-shadow-lg">
+                    Prêt à propulser votre entreprise de construction au sommet ? Notre équipe d'experts est prête à décoller avec vous.
+                  </p>
+                </div>
+                <div className="shrink-0 cta-3d-btn">
+                  <div className="px-8 py-5 bg-accent-blue group-hover:bg-white text-[#050a15] rounded-[50px] font-black tracking-widest shadow-[0_30px_50px_rgba(0,210,255,0.4)] transition-colors inline-flex items-center">
+                    DÉCOLLAGE <ArrowRight className="ml-2 w-5 h-5" />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </Link>
       </section>
     </div>
   );
