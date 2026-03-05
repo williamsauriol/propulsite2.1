@@ -103,7 +103,7 @@ export default function Funnel() {
     };
 
     const sendEmail = () => {
-        const TO = 'contact@propulsite.ca';
+        const TO = 'propulsiteprojet@gmail.com';
         const subject = encodeURIComponent(`Nouveau lead – ${data.nom}`);
         const body = encodeURIComponent(
             `Nom: ${data.nom}\nEmail: ${data.email}\nTéléphone: ${data.telephone || 'N/A'}\n\n` +
