@@ -118,24 +118,51 @@ export default function Home() {
 
       {/* CTA Banner Section */}
       <section className="py-32 px-6">
-        <div className="container mx-auto max-w-5xl">
-          <div className="rounded-3xl overflow-hidden relative shadow-[0_0_50px_rgba(0,210,255,0.15)] border border-white/10 group bg-gradient-to-br from-[#0a1526] to-[#050a15]">
+        <style>{`
+          .cta-3d-wrapper {
+            perspective: 1000px;
+          }
+          .cta-3d-card {
+            transform-style: preserve-3d;
+            will-change: transform;
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          }
+          .cta-3d-card:hover {
+            transform: translateZ(10px) rotateX(10deg) rotateY(-10deg);
+          }
+          .cta-3d-text {
+            transform: translateZ(0);
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          }
+          .cta-3d-card:hover .cta-3d-text {
+            transform: translateZ(50px);
+          }
+          .cta-3d-btn {
+            transform: translateZ(0);
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          }
+          .cta-3d-card:hover .cta-3d-btn {
+            transform: translateZ(60px);
+          }
+        `}</style>
+        <div className="container mx-auto max-w-5xl cta-3d-wrapper">
+          <div className="cta-3d-card rounded-3xl overflow-hidden relative shadow-[0_0_50px_rgba(0,210,255,0.15)] border border-white/10 group bg-gradient-to-br from-[#0a1526] to-[#050a15]">
             {/* Decorative background instead of specific image */}
             <div className="absolute inset-0 bg-accent-blue/5 transform group-hover:scale-105 transition-transform duration-700" />
             <div className="absolute -top-24 -right-24 w-64 h-64 bg-accent-blue/20 rounded-full blur-[80px]" />
             <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-accent-blue/10 rounded-full blur-[60px]" />
 
             <div className="relative z-10 p-12 md:p-16 flex flex-col md:flex-row items-center justify-between gap-12">
-              <div className="flex-1 text-center md:text-left">
-                <h2 className="text-4xl md:text-5xl font-black mb-4 text-white text-3d">
+              <div className="flex-1 text-center md:text-left cta-3d-text">
+                <h2 className="text-4xl md:text-5xl font-black mb-4 text-white text-3d drop-shadow-xl">
                   Prêt à décoller avec Propulsite ?
                 </h2>
-                <p className="text-white/70 text-lg">
+                <p className="text-white/70 text-lg drop-shadow-md">
                   Prêt à propulser votre entreprise de construction au sommet ? Notre équipe d'experts est prête à décoller avec vous.
                 </p>
               </div>
-              <div className="shrink-0">
-                <Link to="/funnel" className="px-8 py-5 bg-accent-blue text-[#050a15] rounded-[50px] font-black hover:bg-white tracking-widest shadow-[0_0_20px_rgba(0,210,255,0.4)] transform hover:-translate-y-1 transition-all inline-flex items-center">
+              <div className="shrink-0 cta-3d-btn">
+                <Link to="/funnel" className="px-8 py-5 bg-accent-blue text-[#050a15] rounded-[50px] font-black hover:bg-white tracking-widest shadow-[0_20px_40px_rgba(0,210,255,0.3)] transform hover:-translate-y-1 transition-all inline-flex items-center">
                   DÉCOLLAGE <ArrowRight className="ml-2 w-5 h-5" />
                 </Link>
               </div>
