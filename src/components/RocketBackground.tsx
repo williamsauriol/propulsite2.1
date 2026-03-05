@@ -191,12 +191,12 @@ export default React.memo(function RocketBackground() {
 
             {/* Generated Exhaust Fire */}
             <motion.div
-              className="absolute bottom-[-15%] origin-top z-0"
+              className="absolute top-[85%] left-1/2 -translate-x-1/2 origin-top z-0"
               style={{
                 opacity: fireOpacity,
                 scaleY: fireScale,
-                width: "30%",
-                height: "150%",
+                width: "25%",
+                height: "120%",
                 background: "linear-gradient(to bottom, #ffffff 0%, #00d2ff 30%, #001a4d 80%, transparent 100%)",
                 filter: "blur(20px)",
                 borderRadius: "100px",
@@ -214,11 +214,11 @@ export default React.memo(function RocketBackground() {
 
             {/* Core Heat Exhaust */}
             <motion.div
-              className="absolute bottom-[-5%] origin-top z-0"
+              className="absolute top-[85%] left-1/2 -translate-x-1/2 origin-top z-0"
               style={{
                 opacity: fireOpacity,
                 scaleY: fireScale,
-                width: "15%",
+                width: "12%",
                 height: "80%",
                 background: "linear-gradient(to bottom, #ffffff 0%, #aaddff 50%, transparent 100%)",
                 filter: "blur(10px)",
