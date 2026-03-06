@@ -9,6 +9,7 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Funnel from './pages/Funnel';
 import Blog from './pages/Blog';
+import Legal from './pages/Legal';
 import Footer from './components/Footer';
 
 function ScrollToTop() {
@@ -35,6 +36,7 @@ export default function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/funnel" element={<Funnel />} />
             <Route path="/blog" element={<Blog />} />
+            <Route path="/legal" element={<Legal />} />
           </Routes>
         </main>
 

@@ -112,9 +112,9 @@ export default function Footer() {
                         © {new Date().getFullYear()} Tous droits réservés. Agence Propulsite.
                     </p>
                     <div className="flex items-center gap-6">
-                        <Link to="#" className="text-white/40 hover:text-white transition-colors text-xs">Politique de confidentialité</Link>
+                        <Link to="/legal#confidentialite" className="text-white/40 hover:text-white transition-colors text-xs">Politique de confidentialité</Link>
                         <span className="text-white/20">•</span>
-                        <Link to="#" className="text-white/40 hover:text-white transition-colors text-xs">Conditions d'utilisation</Link>
+                        <Link to="/legal#conditions" className="text-white/40 hover:text-white transition-colors text-xs">Conditions d'utilisation</Link>
                     </div>
                 </div>
             </div>
