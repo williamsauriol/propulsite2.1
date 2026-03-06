@@ -8,6 +8,7 @@ import ServiceDetail from './pages/ServiceDetail';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Funnel from './pages/Funnel';
+import Blog from './pages/Blog';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -32,6 +33,7 @@ export default function App() {
             <Route path="/a-propos" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/funnel" element={<Funnel />} />
+            <Route path="/blog" element={<Blog />} />
           </Routes>
         </main>
 
