@@ -8,44 +8,51 @@ export default function Blog() {
         {
             num: "01",
             icon: <TrendingUp className="w-8 h-8 text-accent-blue" />,
-            title: "Pas assez de contrats?",
-            desc: "Le carnet de commandes se vide entre deux projets et les appels entrants se font rares. Sans stratégie numérique claire, les clients potentiels ne savent tout simplement pas que vous existez. Une présence en ligne bien optimisée transforme votre site en véritable générateur de leads, même quand vous êtes sur le chantier."
+            title: "Pas assez de contrats de construction ?",
+            desc: "Le carnet de commandes se vide entre deux projets de rénovation ou de construction neuve, et les appels entrants se font rares. Sans stratégie de marketing numérique ciblée pour les entrepreneurs, les clients potentiels (résidentiels ou commerciaux) ne peuvent tout simplement pas vous trouver. Une présence en ligne bien optimisée transforme votre site web en un véritable générateur de leads qualifiés, travaillant pour vous 24/7, même quand vous êtes sur le chantier.",
+            link: "/services/google-ads"
         },
         {
             num: "02",
             icon: <Target className="w-8 h-8 text-accent-blue" />,
-            title: "Image de marque datée",
-            desc: "Un logo vieillissant, un site web d'une autre époque, une identité visuelle qui ne reflète plus la qualité de votre travail. Dans un secteur compétitif, la première impression se fait en ligne. Une image de marque moderne inspire confiance dès le premier regard et positionne votre entreprise comme un acteur sérieux et professionnel."
+            title: "Une image de marque datée qui repousse les clients",
+            desc: "Un logo vieillissant, des couleurs passées, un site web d'une autre époque : votre identité visuelle ne reflète plus la qualité exceptionnelle de votre travail sur le terrain. Dans un secteur de la construction hautement compétitif, la première impression se fait désormais à 100% en ligne. Une image de marque moderne, professionnelle et rassurante inspire confiance dès le premier regard et justifie votre tarification auprès des clients.",
+            link: "/services/design-graphique"
         },
         {
             num: "03",
             icon: <Search className="w-8 h-8 text-accent-blue" />,
-            title: "Perdu dans Google",
-            desc: "Vos concurrents apparaissent en premier sur Google pendant que votre site est introuvable. La majorité des clients cherchent un entrepreneur en ligne avant de décrocher leur téléphone. Sans référencement SEO adapté à la construction, vous laissez des dizaines de contrats sur la table chaque mois."
+            title: "Totalement invisible sur Google (SEO et Local)",
+            desc: "Vos principaux concurrents apparaissent en premier dans les résultats Google pendant que votre entreprise de construction est reléguée à la page 3. La grande majorité des clients cherchent « entrepreneur général près de moi » avant de décrocher leur téléphone. Sans un référencement naturel (SEO) puissant et adapté aux requêtes locales de la construction, vous laissez des dizaines de chantiers lucratifs sur la table chaque mois.",
+            link: "/services/referencement-seo"
         },
         {
             num: "04",
             icon: <Users className="w-8 h-8 text-accent-blue" />,
-            title: "Difficile de se démarquer",
-            desc: "Trop d'entreprises de construction se ressemblent : mêmes services, même discours, même visuel générique. Sans positionnement clair, vous vous battez uniquement sur le prix. Définir ce qui vous rend unique — votre expertise, votre région, votre spécialité — vous permet d'attirer exactement les clients que vous voulez."
+            title: "Difficulté à se démarquer de la concurrence",
+            desc: "Trop d'entreprises de construction se ressemblent : mêmes services (rénovation, agrandissement, toiture), même discours promotionnel, même visuel générique. Sans un positionnement stratégique clair, vous vous battez uniquement sur le prix, ce qui réduit vos marges de profit. Définir votre proposition de valeur unique (expertise spécialisée, rapidité, finition haut de gamme) vous permet d'attirer les clients idéaux.",
+            link: "/services/conception-site-web"
         },
         {
             num: "05",
             icon: <Rocket className="w-8 h-8 text-accent-blue" />,
-            title: "Aucune présence sociale",
-            desc: "Les chantiers avancent, les transformations sont impressionnantes, mais personne ne le voit. Les réseaux sociaux sont une vitrine gratuite et puissante pour montrer votre savoir-faire en temps réel. Avant/après, avancement de chantier, témoignages — chaque publication renforce votre crédibilité et élargit votre réseau."
+            title: "Aucune stratégie sur les réseaux sociaux",
+            desc: "Vos chantiers avancent vite et les transformations (avant/après) sont impressionnantes, mais personne ne le voit. Les plateformes sociales (Facebook, Instagram, LinkedIn) sont des vitrines gratuites et extrêmement puissantes pour prouver votre savoir-faire en temps réel. Partager l'avancement d'un chantier, la finition détaillée ou l'équipe au travail renforce instantanément votre crédibilité et bâtit une communauté engagée autour de votre marque.",
+            link: "/services/medias-sociaux"
         },
         {
             num: "06",
             icon: <Star className="w-8 h-8 text-accent-blue" />,
-            title: "Réputation en ligne invisible",
-            desc: "Vos clients sont satisfaits, mais ils ne laissent pas d'avis Google. Or, 90% des consommateurs lisent les avis avant de choisir un entrepreneur. Une stratégie simple de collecte d'avis et de gestion de réputation peut devenir votre meilleur outil de vente — plus convaincant que n'importe quelle publicité."
+            title: "Gestion de réputation en ligne inexistante",
+            desc: "Vos clients finaux sont extrêmement satisfaits de leurs travaux, mais ils ne pensent pas à laisser d'avis sur Google ou Facebook. Or, plus de 90% des consommateurs lisent attentivement les avis (reviews) avant de signer un contrat avec un entrepreneur. Mettre en place une stratégie simple et automatisée de collecte d'avis 5 étoiles (et de gestion des commentaires) deviendra votre outil de vente le plus persuasif.",
+            link: "/services/creation-contenu"
         },
         {
             num: "07",
             icon: <Smartphone className="w-8 h-8 text-accent-blue" />,
-            title: "Site web non adapté (Mobile)",
-            desc: "Plus de 70% des recherches se font depuis un téléphone. Si votre site est lent, difficile à naviguer ou tout simplement absent, les clients potentiels repartent chez le concurrent en quelques secondes. Un site rapide, clair et adapté au mobile est aujourd'hui la base incontournable de toute stratégie numérique efficace."
+            title: "Site web non adapté aux appareils mobiles",
+            desc: "Aujourd'hui, plus de 70% des recherches pour trouver un entrepreneur se font directement depuis un téléphone intelligent (smartphone). Si votre site web est lent à charger, difficile à lire sans zoomer, ou s'il plante sur mobile, les clients potentiels quittent immédiatement pour aller chez le concurrent. Un site web responsif, ultra-rapide et clair est la base absolue de toute tactique numérique réussie.",
+            link: "/services/conception-site-web"
         }
     ];
 
@@ -102,9 +109,15 @@ export default function Blog() {
                                         {point.title}
                                     </h2>
                                 </div>
-                                <p className="text-white/60 leading-relaxed text-lg">
+                                <p className="text-white/60 leading-relaxed text-lg mb-6">
                                     {point.desc}
                                 </p>
+                                <Link
+                                    to={point.link}
+                                    className="inline-flex items-center gap-2 text-sm font-bold tracking-widest uppercase text-accent-blue hover:text-white transition-colors"
+                                >
+                                    En savoir plus <span className="text-lg leading-none transition-transform group-hover:translate-x-1">→</span>
+                                </Link>
                             </div>
                         </motion.div>
                     ))}
