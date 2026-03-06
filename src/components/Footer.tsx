@@ -51,7 +51,7 @@ export default function Footer() {
                         <ul className="space-y-4 mb-8">
                             <li><a href="mailto:propulsiteprojet@gmail.com" className="text-white/60 hover:text-accent-blue transition-colors text-sm break-all">propulsiteprojet@gmail.com</a></li>
                             <li><a href="tel:5146496862" className="text-white/60 hover:text-accent-blue transition-colors text-sm">(514) 649-6862</a></li>
-                            <li className="text-white/60 text-sm">Terrebonne & Longueuil, Québec</li>
+                            <li className="text-white/60 text-sm">Saint-Eustache, Québec</li>
                         </ul>
 
                         {/* Iso Social Icons */}

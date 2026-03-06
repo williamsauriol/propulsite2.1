@@ -90,7 +90,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="text-xs font-bold uppercase tracking-widest text-white/50">Bureaux</p>
-                  <p className="font-bold">Terrebonne & Longueuil</p>
+                  <p className="font-bold">Saint-Eustache</p>
                 </div>
               </div>
             </LiquidGlassCard>
