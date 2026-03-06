@@ -131,15 +131,15 @@ export default function Blog() {
                         <div className="flex flex-col sm:flex-row justify-center gap-4">
                             <a
                                 href="mailto:info@propulse.ca"
-                                className="px-8 py-4 bg-accent-blue rounded-full text-[#050a15] font-black uppercase tracking-widest hover:bg-white transition-all duration-300 shadow-[0_0_20px_rgba(0,198,255,0.5)] hover:shadow-[0_0_30px_rgba(255,255,255,0.8)] flex items-center justify-center gap-3 transform hover:-translate-y-1"
+                                className="px-8 py-4 bg-white/5 border border-white/20 rounded-full text-white font-bold tracking-widest uppercase hover:bg-white/10 transition-all duration-300 flex items-center justify-center transform hover:-translate-y-1"
                             >
-                                Obtenir une consultation gratuite <Send className="w-5 h-5" />
+                                Contactez-nous
                             </a>
                             <Link
                                 to="/funnel"
-                                className="px-8 py-4 bg-white/5 border border-white/20 rounded-full text-white font-bold tracking-widest uppercase hover:bg-white/10 transition-all duration-300 flex items-center justify-center"
+                                className="px-8 py-4 bg-accent-blue rounded-full text-[#050a15] font-black uppercase tracking-widest hover:bg-white transition-all duration-300 shadow-[0_0_20px_rgba(0,198,255,0.5)] hover:shadow-[0_0_30px_rgba(255,255,255,0.8)] flex items-center justify-center gap-3 transform hover:-translate-y-1"
                             >
-                                Démarrer un projet
+                                Démarrer un projet <Send className="w-5 h-5" />
                             </Link>
                         </div>
                     </div>
