@@ -130,7 +130,7 @@ export default function Blog() {
                         </p>
                         <div className="flex flex-col sm:flex-row justify-center gap-4">
                             <a
-                                href="mailto:info@propulse.ca"
+                                href="mailto:propulsiteprojet@gmail.com"
                                 className="px-8 py-4 bg-white/5 border border-white/20 rounded-full text-white font-bold tracking-widest uppercase hover:bg-white/10 transition-all duration-300 flex items-center justify-center transform hover:-translate-y-1"
                             >
                                 Contactez-nous

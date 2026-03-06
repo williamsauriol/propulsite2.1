@@ -21,16 +21,16 @@ export default function Contact() {
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-sm font-bold uppercase tracking-widest text-white/50">Nom Complet</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-accent-blue transition-colors"
                       placeholder="Jean Dupont"
                     />
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-bold uppercase tracking-widest text-white/50">Email</label>
-                    <input 
-                      type="email" 
+                    <input
+                      type="email"
                       className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-accent-blue transition-colors"
                       placeholder="jean@entreprise.com"
                     />
@@ -47,7 +47,7 @@ export default function Contact() {
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-bold uppercase tracking-widest text-white/50">Message</label>
-                  <textarea 
+                  <textarea
                     rows={5}
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-accent-blue transition-colors"
                     placeholder="Parlez-nous de votre projet..."
@@ -68,7 +68,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="text-xs font-bold uppercase tracking-widest text-white/50">Email</p>
-                  <p className="font-bold">info@propulse.ca</p>
+                  <p className="font-bold text-sm sm:text-base break-all mt-1">propulsiteprojet@gmail.com</p>
                 </div>
               </div>
             </LiquidGlassCard>
@@ -79,7 +79,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="text-xs font-bold uppercase tracking-widest text-white/50">Téléphone</p>
-                  <p className="font-bold">(514) 777-7264</p>
+                  <p className="font-bold mt-1">(514) 649-6862</p>
                 </div>
               </div>
             </LiquidGlassCard>
