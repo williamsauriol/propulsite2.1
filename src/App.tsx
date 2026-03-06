@@ -9,6 +9,7 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Funnel from './pages/Funnel';
 import Blog from './pages/Blog';
+import Footer from './components/Footer';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -37,18 +38,7 @@ export default function App() {
           </Routes>
         </main>
 
-        <footer className="py-12 px-6 border-t border-white/5 relative z-10 bg-black/50 backdrop-blur-md">
-          <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-            <div>
-              <span className="text-2xl font-bold tracking-tighter text-white">PROPULSITE</span>
-              <p className="text-white/40 text-sm mt-2">© 2026 Tous droits réservés. Agence Propulsite.</p>
-            </div>
-            <div className="flex gap-8">
-              <a href="#" className="text-white/60 hover:text-accent-blue transition-colors">Politique de confidentialité</a>
-              <a href="#" className="text-white/60 hover:text-accent-blue transition-colors">Conditions d'utilisation</a>
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </Router>
   );
