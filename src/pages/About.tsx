@@ -58,13 +58,12 @@ export default function About() {
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="bg-white/5 border border-white/10 rounded-3xl h-80 flex flex-col items-center justify-center gap-6 p-8 relative overflow-hidden group shadow-[0_0_30px_rgba(0,198,255,0.1)]"
+              className="flex flex-col items-center justify-center gap-6 p-8 relative group"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-accent-blue/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <img
                 src="/images/logo-fuser-sans-backk.png"
                 alt="Propulsite Logo"
-                className="w-48 h-auto filter drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] z-10 transition-transform duration-500 group-hover:scale-110"
+                className="w-full max-w-sm h-auto filter drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] z-10 transition-transform duration-500 group-hover:scale-105"
               />
               <span className="text-accent-blue font-bold tracking-widest uppercase text-sm z-10 flex items-center gap-2">
                 <MapPin className="w-4 h-4" /> Propulsite — Québec
@@ -118,7 +117,7 @@ export default function About() {
 
             <div className="space-y-4 text-white/70 text-lg leading-relaxed mb-10">
               <p>
-                Bonjour! Moi c'est William. J'ai un DEP en charpenterie-menuiserie et j'ai travaillé pendant un bon moment comme charpentier. Je connais bien la réalité des chantiers et les défis auxquels vous faites face au quotidien. J'ai fondé Propulsite parce que j'ai toujours cru que chaque entrepreneur en construction mérite une présence en ligne à la hauteur de la qualité de son travail.
+                Bonjour! Moi c'est William. J'ai un DEP en charpenterie-menuiserie et j'ai travaillé en tant que charpentier-menuisier. Je connais bien la réalité des chantiers et les défis auxquels vous faites face au quotidien. J'ai fondé Propulsite parce que j'ai toujours cru que chaque entrepreneur en construction mérite une présence en ligne à la hauteur de la qualité de son travail.
               </p>
               <p>
                 Passionné par le marketing numérique, le design et les stratégies de croissance, j'accompagne mes clients avec une approche directe et humaine. Pas de langue de bois — juste des solutions concrètes qui fonctionnent.
