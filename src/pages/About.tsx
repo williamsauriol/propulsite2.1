@@ -26,7 +26,7 @@ export default function About() {
             ON BÂTIT DES PRÉSENCES NUMÉRIQUES QUI FONT <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-blue to-purple-400 italic">UNE VRAIE DIFFÉRENCE</span>
           </h1>
           <p className="text-xl text-white/60 max-w-2xl mx-auto leading-relaxed">
-            Propulsite, c'est une agence humaine, passionnée et engagée à faire grandir les entreprises d'ici.
+            Propulsite, c'est une agence passionnée et engagée à faire grandir les entreprises d'ici.
           </p>
         </motion.section>
 
@@ -113,18 +113,18 @@ export default function About() {
 
           <div className="max-w-3xl">
             <div className="text-accent-blue text-sm font-bold tracking-widest uppercase mb-4">Fondateur</div>
-            <h2 className="text-3xl md:text-5xl font-black text-white mb-2">William Suriol</h2>
+            <h2 className="text-3xl md:text-5xl font-black text-white mb-2">William Sauriol</h2>
             <div className="text-white/40 font-medium mb-8 text-lg">Fondateur & Stratège numérique</div>
 
             <div className="space-y-4 text-white/70 text-lg leading-relaxed mb-10">
               <p>
-                Bonjour! Moi c'est William. J'ai fondé Propulsite parce que j'ai toujours cru que chaque entrepreneur mérite une présence en ligne à la hauteur de son travail.
+                Bonjour! Moi c'est William. J'ai un DEP en charpenterie-menuiserie et j'ai travaillé pendant un bon moment comme charpentier. Je connais bien la réalité des chantiers et les défis auxquels vous faites face au quotidien. J'ai fondé Propulsite parce que j'ai toujours cru que chaque entrepreneur en construction mérite une présence en ligne à la hauteur de la qualité de son travail.
               </p>
               <p>
                 Passionné par le marketing numérique, le design et les stratégies de croissance, j'accompagne mes clients avec une approche directe et humaine. Pas de langue de bois — juste des solutions concrètes qui fonctionnent.
               </p>
               <p>
-                Ce que j'aime le plus dans mon travail? Voir un client décrocher son téléphone parce qu'un nouveau client l'a trouvé sur Google. C'est pour ça que je fais ce métier.
+                Ce que j'aime le plus dans mon travail? Voir un client décrocher son téléphone parce qu'un nouveau contrat de construction l'a trouvé sur Google. C'est pour ça que je fais ce métier.
               </p>
             </div>
 

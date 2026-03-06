@@ -92,11 +92,14 @@ export default function Home() {
               <h2 className="text-5xl font-black mb-8 leading-tight text-3d">POURQUOI LES ENTREPRENEURS NOUS CHOISISSENT ?</h2>
               <div className="space-y-12">
                 {painPoints.map((p, i) => (
-                  <div key={i} className="flex gap-6">
+                  <div key={i} className="flex gap-6 group">
                     <div className="text-4xl font-black text-accent-blue/20">0{i + 1}</div>
                     <div>
                       <h3 className="text-2xl font-bold mb-3 text-accent-blue">{p.title}</h3>
-                      <p className="text-white/70 leading-relaxed">{p.desc}</p>
+                      <p className="text-white/70 leading-relaxed mb-3">{p.desc}</p>
+                      <Link to="/blog" className="inline-flex items-center gap-2 text-sm font-bold text-accent-blue uppercase tracking-widest hover:text-white transition-colors">
+                        En savoir plus <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                      </Link>
                     </div>
                   </div>
                 ))}
