@@ -115,101 +115,69 @@ export default function Home() {
             <div className="w-16 h-1 bg-gradient-to-r from-accent-blue to-blue-400 rounded-full mx-auto" />
           </div>
 
-          {/* Cards Grid */}
-          <style>{`
-            .pain-card {
-              position: relative;
-              background: rgba(255,255,255,0.03);
-              border: 1px solid rgba(255,255,255,0.07);
-              border-radius: 20px;
-              padding: 36px 30px 40px;
-              backdrop-filter: blur(10px);
-              transition: all 0.35s ease;
-              overflow: hidden;
-              cursor: default;
-              display: flex;
-              flex-direction: column;
-              height: 100%;
-            }
-            .pain-card::before {
-              content: attr(data-num);
-              position: absolute;
-              top: -10px;
-              right: 16px;
-              font-size: 110px;
-              font-weight: 900;
-              color: rgba(59, 130, 246, 0.06);
-              line-height: 1;
-              pointer-events: none;
-              transition: color 0.35s ease;
-            }
-            .pain-card:hover {
-              transform: translateY(-10px);
-              background: rgba(37, 99, 235, 0.08);
-              border-color: rgba(59, 130, 246, 0.4);
-              box-shadow: 0 20px 60px rgba(37, 99, 235, 0.15), 0 0 0 1px rgba(59,130,246,0.2) inset;
-            }
-            .pain-card:hover::before { color: rgba(59, 130, 246, 0.12); }
-            .card-bottom-line {
-              position: absolute;
-              bottom: 0;
-              left: 0;
-              width: 0%;
-              height: 3px;
-              background: linear-gradient(90deg, #3b82f6, #60a5fa);
-              border-radius: 0 0 0 20px;
-              transition: width 0.4s ease;
-            }
-            .pain-card:hover .card-bottom-line { width: 100%; }
-          `}</style>
-
+          {/* Cards Grid with Images */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Card 1 */}
-            <div className="pain-card group" data-num="01">
-              <div className="card-bottom-line" />
-              <div className="w-14 h-14 rounded-2xl bg-accent-blue/15 border border-accent-blue/25 flex items-center justify-center text-2xl mb-6 transition-all duration-300 group-hover:bg-accent-blue/25 group-hover:scale-110">
-                📋
+            <div className="bg-[#0a1628] rounded-3xl overflow-hidden border border-white/10 group flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(37,99,235,0.15)] hover:border-accent-blue/40">
+              <div className="relative h-64 overflow-hidden">
+                <img src="/images/team_collaboration.png" alt="Équipe de construction" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] to-transparent opacity-90" />
+                <div className="absolute top-4 right-6 text-5xl font-black text-white/10">01</div>
               </div>
-              <div className="text-[11px] font-black text-accent-blue tracking-widest uppercase mb-3">01</div>
-              <h3 className="text-xl font-bold text-white mb-4 leading-tight">Pas assez de contrats ?</h3>
-              <p className="text-white/60 text-sm leading-relaxed mb-8 flex-grow">
-                Votre carnet de commandes est vide ? Nous ciblons les propriétaires qui cherchent activement vos services et les convertissons en clients.
-              </p>
-              <Link to="/blog" className="inline-flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest transition-all hover:text-blue-400 hover:gap-3 mt-auto">
-                En savoir plus <ArrowRight className="w-4 h-4" />
-              </Link>
+              <div className="p-8 flex-grow flex flex-col relative z-10 -mt-10">
+                <div className="w-12 h-12 rounded-xl bg-accent-blue/20 border border-accent-blue/30 flex items-center justify-center text-xl mb-4 backdrop-blur-md">
+                  📋
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-4 leading-tight">Pas assez de contrats ?</h3>
+                <p className="text-white/60 text-sm leading-relaxed mb-8 flex-grow">
+                  Votre carnet de commandes est vide ? Nous ciblons les propriétaires qui cherchent activement vos services et les convertissons en clients.
+                </p>
+                <Link to="/blog" className="inline-flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest transition-all hover:text-blue-400 hover:gap-3 mt-auto">
+                  En savoir plus <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
             </div>
 
             {/* Card 2 */}
-            <div className="pain-card group" data-num="02">
-              <div className="card-bottom-line" />
-              <div className="w-14 h-14 rounded-2xl bg-accent-blue/15 border border-accent-blue/25 flex items-center justify-center text-2xl mb-6 transition-all duration-300 group-hover:bg-accent-blue/25 group-hover:scale-110">
-                🎨
+            <div className="bg-[#0a1628] rounded-3xl overflow-hidden border border-white/10 group flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(37,99,235,0.15)] hover:border-accent-blue/40">
+              <div className="relative h-64 overflow-hidden">
+                <img src="/images/human_worker.png" alt="Entrepreneur en construction" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] to-transparent opacity-90" />
+                <div className="absolute top-4 right-6 text-5xl font-black text-white/10">02</div>
               </div>
-              <div className="text-[11px] font-black text-accent-blue tracking-widest uppercase mb-3">02</div>
-              <h3 className="text-xl font-bold text-white mb-4 leading-tight">Image de marque datée ?</h3>
-              <p className="text-white/60 text-sm leading-relaxed mb-8 flex-grow">
-                Votre site web fait peur aux clients ? Modernisez votre image pour refléter la qualité réelle de vos travaux et inspirer confiance dès le premier regard.
-              </p>
-              <Link to="/blog" className="inline-flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest transition-all hover:text-blue-400 hover:gap-3 mt-auto">
-                En savoir plus <ArrowRight className="w-4 h-4" />
-              </Link>
+              <div className="p-8 flex-grow flex flex-col relative z-10 -mt-10">
+                <div className="w-12 h-12 rounded-xl bg-accent-blue/20 border border-accent-blue/30 flex items-center justify-center text-xl mb-4 backdrop-blur-md">
+                  🎨
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-4 leading-tight">Image de marque datée ?</h3>
+                <p className="text-white/60 text-sm leading-relaxed mb-8 flex-grow">
+                  Votre site web fait peur aux clients ? Modernisez votre image pour refléter la qualité réelle de vos travaux et inspirer confiance dès le premier regard.
+                </p>
+                <Link to="/blog" className="inline-flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest transition-all hover:text-blue-400 hover:gap-3 mt-auto">
+                  En savoir plus <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
             </div>
 
             {/* Card 3 */}
-            <div className="pain-card group" data-num="03">
-              <div className="card-bottom-line" />
-              <div className="w-14 h-14 rounded-2xl bg-accent-blue/15 border border-accent-blue/25 flex items-center justify-center text-2xl mb-6 transition-all duration-300 group-hover:bg-accent-blue/25 group-hover:scale-110">
-                🔍
+            <div className="bg-[#0a1628] rounded-3xl overflow-hidden border border-white/10 group flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(37,99,235,0.15)] hover:border-accent-blue/40">
+              <div className="relative h-64 overflow-hidden">
+                <img src="/images/client_handshake.png" alt="Poignée de main client satisfait" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] to-transparent opacity-90" />
+                <div className="absolute top-4 right-6 text-5xl font-black text-white/10">03</div>
               </div>
-              <div className="text-[11px] font-black text-accent-blue tracking-widest uppercase mb-3">03</div>
-              <h3 className="text-xl font-bold text-white mb-4 leading-tight">Perdu dans Google ?</h3>
-              <p className="text-white/60 text-sm leading-relaxed mb-8 flex-grow">
-                Vos concurrents prennent toute la place ? Nous vous propulsons en tête des résultats locaux pour que les bons clients vous trouvent en premier.
-              </p>
-              <Link to="/blog" className="inline-flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest transition-all hover:text-blue-400 hover:gap-3 mt-auto">
-                En savoir plus <ArrowRight className="w-4 h-4" />
-              </Link>
+              <div className="p-8 flex-grow flex flex-col relative z-10 -mt-10">
+                <div className="w-12 h-12 rounded-xl bg-accent-blue/20 border border-accent-blue/30 flex items-center justify-center text-xl mb-4 backdrop-blur-md">
+                  🔍
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-4 leading-tight">Perdu dans Google ?</h3>
+                <p className="text-white/60 text-sm leading-relaxed mb-8 flex-grow">
+                  Vos concurrents prennent toute la place ? Nous vous propulsons en tête des résultats locaux pour que les bons clients vous trouvent en premier.
+                </p>
+                <Link to="/blog" className="inline-flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest transition-all hover:text-blue-400 hover:gap-3 mt-auto">
+                  En savoir plus <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
             </div>
           </div>
 
