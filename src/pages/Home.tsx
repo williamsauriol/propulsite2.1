@@ -120,138 +120,174 @@ export default function Home() {
       </section>
 
       {/* CTA Banner Section */}
-      <section className="py-32 px-6">
+      <section className="py-32 px-6 flex justify-center">
         <style>{`
-          .cta-container {
-            perspective: 1000px;
+          .widget-container {
             position: relative;
-            width: 100%;
-            height: 100%;
+            width: 560px;
+            height: 280px;
+            transition: 200ms;
+            user-select: none;
+            margin: 0 auto;
           }
-          
-          .cta-canvas {
-            display: grid;
+          .widget-container:active { height: 270px; }
+          .widget-canvas {
+            perspective: 800px;
             position: absolute;
             inset: 0;
             z-index: 200;
+            display: grid;
             grid-template-columns: repeat(5, 1fr);
             grid-template-rows: repeat(5, 1fr);
-            gap: 0px 0px;
-            grid-template-areas:
-              "tr-1 tr-2 tr-3 tr-4 tr-5"
-              "tr-6 tr-7 tr-8 tr-9 tr-10"
-              "tr-11 tr-12 tr-13 tr-14 tr-15"
-              "tr-16 tr-17 tr-18 tr-19 tr-20"
-              "tr-21 tr-22 tr-23 tr-24 tr-25";
-            /* We need to stretch canvas over the card below */
           }
-          
-          .cta-tracker {
+          .widget-tracker {
             position: absolute;
+            z-index: 200;
+            width: 100%;
+            height: 100%;
             cursor: pointer;
           }
-
-          /* Explicit grid-area assignments for the 25 trackers */
-          .tr-1 { grid-area: tr-1; } .tr-2 { grid-area: tr-2; } .tr-3 { grid-area: tr-3; } .tr-4 { grid-area: tr-4; } .tr-5 { grid-area: tr-5; }
-          .tr-6 { grid-area: tr-6; } .tr-7 { grid-area: tr-7; } .tr-8 { grid-area: tr-8; } .tr-9 { grid-area: tr-9; } .tr-10 { grid-area: tr-10; }
-          .tr-11 { grid-area: tr-11; } .tr-12 { grid-area: tr-12; } .tr-13 { grid-area: tr-13; } .tr-14 { grid-area: tr-14; } .tr-15 { grid-area: tr-15; }
-          .tr-16 { grid-area: tr-16; } .tr-17 { grid-area: tr-17; } .tr-18 { grid-area: tr-18; } .tr-19 { grid-area: tr-19; } .tr-20 { grid-area: tr-20; }
-          .tr-21 { grid-area: tr-21; } .tr-22 { grid-area: tr-22; } .tr-23 { grid-area: tr-23; } .tr-24 { grid-area: tr-24; } .tr-25 { grid-area: tr-25; }
-
-          #cta-card {
-            position: relative;
+          #widget-card {
+            position: absolute;
+            inset: 0;
             z-index: 0;
-            transition: transform 700ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            transform-style: preserve-3d;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: flex-start;
+            padding: 28px 32px;
+            border-radius: 24px;
+            transition: 700ms;
+            background: linear-gradient(135deg, #0a1628 0%, #0f2044 50%, #0a1628 100%);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            overflow: hidden;
           }
-
-          /* Hover Effects from Trackers */
-          .tr-1:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(20deg) rotateY(-10deg) rotateZ(0deg); }
-          .tr-2:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(20deg) rotateY(-5deg) rotateZ(0deg); }
-          .tr-3:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(20deg) rotateY(0deg) rotateZ(0deg); }
-          .tr-4:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(20deg) rotateY(5deg) rotateZ(0deg); }
-          .tr-5:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(20deg) rotateY(10deg) rotateZ(0deg); }
-          
-          .tr-6:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(10deg) rotateY(-10deg) rotateZ(0deg); }
-          .tr-7:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(10deg) rotateY(-5deg) rotateZ(0deg); }
-          .tr-8:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(10deg) rotateY(0deg) rotateZ(0deg); }
-          .tr-9:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(10deg) rotateY(5deg) rotateZ(0deg); }
-          .tr-10:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(10deg) rotateY(10deg) rotateZ(0deg); }
-          
-          .tr-11:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(0deg) rotateY(-10deg) rotateZ(0deg); }
-          .tr-12:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(0deg) rotateY(-5deg) rotateZ(0deg); }
-          .tr-13:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
-          .tr-14:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(0deg) rotateY(5deg) rotateZ(0deg); }
-          .tr-15:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(0deg) rotateY(10deg) rotateZ(0deg); }
-          
-          .tr-16:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(-10deg) rotateY(-10deg) rotateZ(0deg); }
-          .tr-17:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(-10deg) rotateY(-5deg) rotateZ(0deg); }
-          .tr-18:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(-10deg) rotateY(0deg) rotateZ(0deg); }
-          .tr-19:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(-10deg) rotateY(5deg) rotateZ(0deg); }
-          .tr-20:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(-10deg) rotateY(10deg) rotateZ(0deg); }
-          
-          .tr-21:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(-20deg) rotateY(-10deg) rotateZ(0deg); }
-          .tr-22:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(-20deg) rotateY(-5deg) rotateZ(0deg); }
-          .tr-23:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(-20deg) rotateY(0deg) rotateZ(0deg); }
-          .tr-24:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(-20deg) rotateY(5deg) rotateZ(0deg); }
-          .tr-25:hover ~ #cta-card { transition: 125ms ease-in-out; transform: rotateX(-20deg) rotateY(10deg) rotateZ(0deg); }
-
-          /* Glow effect on hover */
-          .cta-tracker:hover ~ #cta-card {
-            filter: brightness(1.1);
+          #widget-card::before {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            border-radius: 26px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8, #60a5fa);
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 300ms;
           }
-
-          /* 3D text and button inside #cta-card */
-          #cta-card .cta-3d-content {
-            transform: translateZ(0);
-            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          .widget-container:hover #widget-card::before { opacity: 0.6; }
+          #widget-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+              radial-gradient(1.5px 1.5px at 15% 25%, rgba(255,255,255,0.5) 0%, transparent 100%),
+              radial-gradient(1px 1px at 40% 70%, rgba(255,255,255,0.4) 0%, transparent 100%),
+              radial-gradient(2px 2px at 60% 15%, rgba(255,255,255,0.3) 0%, transparent 100%),
+              radial-gradient(1px 1px at 80% 80%, rgba(255,255,255,0.35) 0%, transparent 100%),
+              radial-gradient(1.5px 1.5px at 92% 40%, rgba(255,255,255,0.25) 0%, transparent 100%);
+            pointer-events: none;
           }
-          .cta-container:hover #cta-card .cta-3d-content {
-            transform: translateZ(50px);
+          #widget-prompt {
+            font-size: 42px;
+            font-weight: 900;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            line-height: 1.1;
+            transition: 300ms ease-in-out;
+            z-index: 10;
+            text-shadow: 0 0 40px rgba(59, 130, 246, 0.6);
+            margin: 0;
           }
-          
-          #cta-card .cta-3d-btn {
-            transform: translateZ(0);
-            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          .widget-description {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 32px;
+            opacity: 0;
+            transition: opacity 300ms ease-in-out;
+            transition-delay: 100ms;
+            z-index: 10;
+            text-align: center;
+            gap: 20px;
           }
-          .cta-container:hover #cta-card .cta-3d-btn {
-            transform: translateZ(80px); /* Extruded more than text */
+          .widget-description p { font-size: 17px; color: #e2e8f0; line-height: 1.6; max-width: 380px; margin: 0; }
+          .widget-description .cta-btn {
+            display: inline-block;
+            background: #2563eb;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.5);
           }
+          .widget-rocket {
+            position: absolute;
+            top: 24px;
+            right: 28px;
+            font-size: 36px;
+            z-index: 10;
+            transition: transform 300ms ease-in-out;
+            filter: drop-shadow(0 0 12px rgba(59,130,246,0.8));
+          }
+          .widget-tracker:hover ~ #widget-card #widget-prompt { opacity: 0; }
+          .widget-tracker:hover ~ #widget-card .widget-description { opacity: 1; }
+          .widget-tracker:hover ~ #widget-card .widget-rocket { transform: translateY(-8px) rotate(15deg); }
+          .widget-tracker:hover ~ #widget-card { filter: brightness(1.15); }
+          .w-tr-1  { grid-area: 1/1; } .w-tr-2  { grid-area: 1/2; } .w-tr-3  { grid-area: 1/3; }
+          .w-tr-4  { grid-area: 1/4; } .w-tr-5  { grid-area: 1/5; } .w-tr-6  { grid-area: 2/1; }
+          .w-tr-7  { grid-area: 2/2; } .w-tr-8  { grid-area: 2/3; } .w-tr-9  { grid-area: 2/4; }
+          .w-tr-10 { grid-area: 2/5; } .w-tr-11 { grid-area: 3/1; } .w-tr-12 { grid-area: 3/2; }
+          .w-tr-13 { grid-area: 3/3; } .w-tr-14 { grid-area: 3/4; } .w-tr-15 { grid-area: 3/5; }
+          .w-tr-16 { grid-area: 4/1; } .w-tr-17 { grid-area: 4/2; } .w-tr-18 { grid-area: 4/3; }
+          .w-tr-19 { grid-area: 4/4; } .w-tr-20 { grid-area: 4/5; } .w-tr-21 { grid-area: 5/1; }
+          .w-tr-22 { grid-area: 5/2; } .w-tr-23 { grid-area: 5/3; } .w-tr-24 { grid-area: 5/4; }
+          .w-tr-25 { grid-area: 5/5; }
+          .w-tr-1:hover  ~ #widget-card { transform: rotateX(20deg) rotateY(-10deg); transition: 125ms ease-in-out; }
+          .w-tr-2:hover  ~ #widget-card { transform: rotateX(20deg) rotateY(-5deg);  transition: 125ms ease-in-out; }
+          .w-tr-3:hover  ~ #widget-card { transform: rotateX(20deg) rotateY(0deg);   transition: 125ms ease-in-out; }
+          .w-tr-4:hover  ~ #widget-card { transform: rotateX(20deg) rotateY(5deg);   transition: 125ms ease-in-out; }
+          .w-tr-5:hover  ~ #widget-card { transform: rotateX(20deg) rotateY(10deg);  transition: 125ms ease-in-out; }
+          .w-tr-6:hover  ~ #widget-card { transform: rotateX(10deg) rotateY(-10deg); transition: 125ms ease-in-out; }
+          .w-tr-7:hover  ~ #widget-card { transform: rotateX(10deg) rotateY(-5deg);  transition: 125ms ease-in-out; }
+          .w-tr-8:hover  ~ #widget-card { transform: rotateX(10deg) rotateY(0deg);   transition: 125ms ease-in-out; }
+          .w-tr-9:hover  ~ #widget-card { transform: rotateX(10deg) rotateY(5deg);   transition: 125ms ease-in-out; }
+          .w-tr-10:hover ~ #widget-card { transform: rotateX(10deg) rotateY(10deg);  transition: 125ms ease-in-out; }
+          .w-tr-11:hover ~ #widget-card { transform: rotateX(0deg)  rotateY(-10deg); transition: 125ms ease-in-out; }
+          .w-tr-12:hover ~ #widget-card { transform: rotateX(0deg)  rotateY(-5deg);  transition: 125ms ease-in-out; }
+          .w-tr-13:hover ~ #widget-card { transform: rotateX(0deg)  rotateY(0deg);   transition: 125ms ease-in-out; }
+          .w-tr-14:hover ~ #widget-card { transform: rotateX(0deg)  rotateY(5deg);   transition: 125ms ease-in-out; }
+          .w-tr-15:hover ~ #widget-card { transform: rotateX(0deg)  rotateY(10deg);  transition: 125ms ease-in-out; }
+          .w-tr-16:hover ~ #widget-card { transform: rotateX(-10deg) rotateY(-10deg);transition: 125ms ease-in-out; }
+          .w-tr-17:hover ~ #widget-card { transform: rotateX(-10deg) rotateY(-5deg); transition: 125ms ease-in-out; }
+          .w-tr-18:hover ~ #widget-card { transform: rotateX(-10deg) rotateY(0deg);  transition: 125ms ease-in-out; }
+          .w-tr-19:hover ~ #widget-card { transform: rotateX(-10deg) rotateY(5deg);  transition: 125ms ease-in-out; }
+          .w-tr-20:hover ~ #widget-card { transform: rotateX(-10deg) rotateY(10deg); transition: 125ms ease-in-out; }
+          .w-tr-21:hover ~ #widget-card { transform: rotateX(-20deg) rotateY(-10deg);transition: 125ms ease-in-out; }
+          .w-tr-22:hover ~ #widget-card { transform: rotateX(-20deg) rotateY(-5deg); transition: 125ms ease-in-out; }
+          .w-tr-23:hover ~ #widget-card { transform: rotateX(-20deg) rotateY(0deg);  transition: 125ms ease-in-out; }
+          .w-tr-24:hover ~ #widget-card { transform: rotateX(-20deg) rotateY(5deg);  transition: 125ms ease-in-out; }
+          .w-tr-25:hover ~ #widget-card { transform: rotateX(-20deg) rotateY(10deg); transition: 125ms ease-in-out; }
         `}</style>
 
-        <Link to="/funnel" className="block container mx-auto max-w-5xl select-none group">
-          <div className="cta-container w-full h-full">
-            <div className="cta-canvas">
-              {/* Generating 25 Trackers */}
-              {Array.from({ length: 25 }).map((_, i) => (
-                <div key={i} className={`cta-tracker tr-${i + 1}`} />
-              ))}
-            </div>
-
-            <div id="cta-card" className="rounded-3xl overflow-hidden relative shadow-[0_0_50px_rgba(0,210,255,0.15)] border border-white/10 bg-gradient-to-br from-[#0a1526] to-[#050a15] w-full h-full pointer-events-none">
-              {/* Decorative background instead of specific image */}
-              <div className="absolute inset-0 bg-accent-blue/5 transform group-hover:scale-105 transition-transform duration-700" />
-              <div className="absolute -top-24 -right-24 w-64 h-64 bg-accent-blue/20 rounded-full blur-[80px]" />
-              <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-accent-blue/10 rounded-full blur-[60px]" />
-
-              <div className="relative z-10 p-12 md:p-16 flex flex-col md:flex-row items-center justify-between gap-12 h-full">
-                <div className="flex-1 text-center md:text-left cta-3d-content">
-                  <h2 className="text-4xl md:text-5xl font-black mb-4 text-white text-3d drop-shadow-2xl">
-                    Prêt à décoller avec Propulsite ?
-                  </h2>
-                  <p className="text-white/70 text-lg drop-shadow-lg">
-                    Prêt à propulser votre entreprise de construction au sommet ? Notre équipe d'experts est prête à décoller avec vous.
-                  </p>
-                </div>
-                <div className="shrink-0 cta-3d-btn">
-                  <div className="px-8 py-5 bg-accent-blue group-hover:bg-white text-[#050a15] rounded-[50px] font-black tracking-widest shadow-[0_30px_50px_rgba(0,210,255,0.4)] transition-colors inline-flex items-center">
-                    DÉCOLLAGE <ArrowRight className="ml-2 w-5 h-5" />
-                  </div>
-                </div>
+        <div className="widget-container">
+          <div className="widget-canvas">
+            {Array.from({ length: 25 }).map((_, i) => (
+              <div key={i} className={`widget-tracker w-tr-${i + 1}`} />
+            ))}
+            <div id="widget-card">
+              <div className="widget-rocket">🚀</div>
+              <p id="widget-prompt">Prêt à<br />décoller?</p>
+              <div className="widget-description">
+                <p>Propulsez votre entreprise en ligne dès aujourd'hui avec une stratégie numérique sur mesure.</p>
+                <Link to="/funnel" className="cta-btn">Démarrer maintenant →</Link>
               </div>
             </div>
           </div>
-        </Link>
+        </div>
       </section>
     </div>
   );
