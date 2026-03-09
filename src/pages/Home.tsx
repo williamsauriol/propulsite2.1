@@ -83,39 +83,136 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Pain Points Section */}
-      <section className="py-32 px-6 relative overflow-hidden">
-        <div className="absolute inset-0 bg-accent-blue/5 skew-y-3 transform origin-left" />
-        <div className="container mx-auto relative">
-          <div className="grid lg:grid-cols-2 gap-20 items-center">
-            <div>
-              <h2 className="text-5xl font-black mb-8 leading-tight text-3d">POURQUOI LES ENTREPRENEURS NOUS CHOISISSENT ?</h2>
-              <div className="space-y-12">
-                {painPoints.map((p, i) => (
-                  <div key={i} className="flex gap-6 group">
-                    <div className="text-4xl font-black text-accent-blue/20">0{i + 1}</div>
-                    <div>
-                      <h3 className="text-2xl font-bold mb-3 text-accent-blue">{p.title}</h3>
-                      <p className="text-white/70 leading-relaxed mb-3">{p.desc}</p>
-                      <Link to="/blog" className="inline-flex items-center gap-2 text-sm font-bold text-accent-blue uppercase tracking-widest hover:text-white transition-colors">
-                        En savoir plus <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                      </Link>
-                    </div>
-                  </div>
-                ))}
-              </div>
+      {/* Pain Points Section - New Design */}
+      <section className="py-32 relative overflow-hidden bg-gradient-to-b from-[#060d1f] to-[#0a1628]">
+        {/* Background Stars / Dots */}
+        <div className="absolute inset-0 z-0 pointer-events-none opacity-60" style={{
+          backgroundImage: `
+            radial-gradient(1.5px 1.5px at 8%  15%, rgba(255,255,255,0.45) 0%, transparent 100%),
+            radial-gradient(1px   1px   at 22% 72%, rgba(255,255,255,0.3)  0%, transparent 100%),
+            radial-gradient(2px   2px   at 45% 10%, rgba(255,255,255,0.25) 0%, transparent 100%),
+            radial-gradient(1px   1px   at 68% 88%, rgba(255,255,255,0.35) 0%, transparent 100%),
+            radial-gradient(1.5px 1.5px at 85% 30%, rgba(255,255,255,0.2)  0%, transparent 100%),
+            radial-gradient(1px   1px   at 93% 65%, rgba(255,255,255,0.3)  0%, transparent 100%),
+            radial-gradient(1px   1px   at 33% 50%, rgba(255,255,255,0.15) 0%, transparent 100%),
+            radial-gradient(1.5px 1.5px at 57% 38%, rgba(255,255,255,0.2)  0%, transparent 100%)
+          `
+        }} />
+
+        {/* Glow Orb */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-accent-blue/10 blur-[100px] pointer-events-none z-0" />
+
+        <div className="container mx-auto relative z-10 px-6 max-w-6xl">
+          {/* Header */}
+          <div className="text-center mb-20">
+            <div className="inline-block bg-accent-blue/15 border border-accent-blue/30 text-accent-blue text-xs font-bold tracking-[2.5px] uppercase px-5 py-2 rounded-full mb-6">
+              Pourquoi nous choisir
             </div>
-            <div className="relative h-full min-h-[400px]">
-              <div className="absolute inset-0 rounded-3xl border border-white/10 overflow-hidden shadow-[0_0_30px_rgba(0,210,255,0.15)] group">
-                <div className="absolute inset-0 bg-accent-blue/10 mix-blend-overlay z-10 opacity-50 transition-opacity duration-300 group-hover:opacity-0" />
-                <img
-                  src="/images/unnamed.jpg"
-                  alt="Propulsite équipe en action"
-                  className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105"
-                />
+            <h2 className="text-4xl md:text-5xl lg:text-[52px] font-black leading-tight text-white uppercase tracking-tight mb-6">
+              Pourquoi les entrepreneurs<br />
+              <span className="text-accent-blue">nous choisissent ?</span>
+            </h2>
+            <div className="w-16 h-1 bg-gradient-to-r from-accent-blue to-blue-400 rounded-full mx-auto" />
+          </div>
+
+          {/* Cards Grid */}
+          <style>{`
+            .pain-card {
+              position: relative;
+              background: rgba(255,255,255,0.03);
+              border: 1px solid rgba(255,255,255,0.07);
+              border-radius: 20px;
+              padding: 36px 30px 40px;
+              backdrop-filter: blur(10px);
+              transition: all 0.35s ease;
+              overflow: hidden;
+              cursor: default;
+              display: flex;
+              flex-direction: column;
+              height: 100%;
+            }
+            .pain-card::before {
+              content: attr(data-num);
+              position: absolute;
+              top: -10px;
+              right: 16px;
+              font-size: 110px;
+              font-weight: 900;
+              color: rgba(59, 130, 246, 0.06);
+              line-height: 1;
+              pointer-events: none;
+              transition: color 0.35s ease;
+            }
+            .pain-card:hover {
+              transform: translateY(-10px);
+              background: rgba(37, 99, 235, 0.08);
+              border-color: rgba(59, 130, 246, 0.4);
+              box-shadow: 0 20px 60px rgba(37, 99, 235, 0.15), 0 0 0 1px rgba(59,130,246,0.2) inset;
+            }
+            .pain-card:hover::before { color: rgba(59, 130, 246, 0.12); }
+            .card-bottom-line {
+              position: absolute;
+              bottom: 0;
+              left: 0;
+              width: 0%;
+              height: 3px;
+              background: linear-gradient(90deg, #3b82f6, #60a5fa);
+              border-radius: 0 0 0 20px;
+              transition: width 0.4s ease;
+            }
+            .pain-card:hover .card-bottom-line { width: 100%; }
+          `}</style>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Card 1 */}
+            <div className="pain-card group" data-num="01">
+              <div className="card-bottom-line" />
+              <div className="w-14 h-14 rounded-2xl bg-accent-blue/15 border border-accent-blue/25 flex items-center justify-center text-2xl mb-6 transition-all duration-300 group-hover:bg-accent-blue/25 group-hover:scale-110">
+                📋
               </div>
+              <div className="text-[11px] font-black text-accent-blue tracking-widest uppercase mb-3">01</div>
+              <h3 className="text-xl font-bold text-white mb-4 leading-tight">Pas assez de contrats ?</h3>
+              <p className="text-white/60 text-sm leading-relaxed mb-8 flex-grow">
+                Votre carnet de commandes est vide ? Nous ciblons les propriétaires qui cherchent activement vos services et les convertissons en clients.
+              </p>
+              <Link to="/blog" className="inline-flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest transition-all hover:text-blue-400 hover:gap-3 mt-auto">
+                En savoir plus <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+
+            {/* Card 2 */}
+            <div className="pain-card group" data-num="02">
+              <div className="card-bottom-line" />
+              <div className="w-14 h-14 rounded-2xl bg-accent-blue/15 border border-accent-blue/25 flex items-center justify-center text-2xl mb-6 transition-all duration-300 group-hover:bg-accent-blue/25 group-hover:scale-110">
+                🎨
+              </div>
+              <div className="text-[11px] font-black text-accent-blue tracking-widest uppercase mb-3">02</div>
+              <h3 className="text-xl font-bold text-white mb-4 leading-tight">Image de marque datée ?</h3>
+              <p className="text-white/60 text-sm leading-relaxed mb-8 flex-grow">
+                Votre site web fait peur aux clients ? Modernisez votre image pour refléter la qualité réelle de vos travaux et inspirer confiance dès le premier regard.
+              </p>
+              <Link to="/blog" className="inline-flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest transition-all hover:text-blue-400 hover:gap-3 mt-auto">
+                En savoir plus <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+
+            {/* Card 3 */}
+            <div className="pain-card group" data-num="03">
+              <div className="card-bottom-line" />
+              <div className="w-14 h-14 rounded-2xl bg-accent-blue/15 border border-accent-blue/25 flex items-center justify-center text-2xl mb-6 transition-all duration-300 group-hover:bg-accent-blue/25 group-hover:scale-110">
+                🔍
+              </div>
+              <div className="text-[11px] font-black text-accent-blue tracking-widest uppercase mb-3">03</div>
+              <h3 className="text-xl font-bold text-white mb-4 leading-tight">Perdu dans Google ?</h3>
+              <p className="text-white/60 text-sm leading-relaxed mb-8 flex-grow">
+                Vos concurrents prennent toute la place ? Nous vous propulsons en tête des résultats locaux pour que les bons clients vous trouvent en premier.
+              </p>
+              <Link to="/blog" className="inline-flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest transition-all hover:text-blue-400 hover:gap-3 mt-auto">
+                En savoir plus <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
           </div>
+
         </div>
       </section>
 
