@@ -60,7 +60,7 @@ export default function Footer() {
 
                             {/* Facebook Iso */}
                             <a
-                                href="https://facebook.com/propulsite"
+                                href="https://www.facebook.com/william.sauriol.2025/"
                                 target="_blank"
                                 rel="noreferrer"
                                 className="relative group w-14 h-14 flex items-center justify-center transition-all duration-300 hover:-translate-y-2 hover:translate-x-2"
@@ -82,7 +82,7 @@ export default function Footer() {
 
                             {/* Instagram Iso */}
                             <a
-                                href="https://instagram.com/propulsite"
+                                href="https://www.instagram.com/propulsite_/"
                                 target="_blank"
                                 rel="noreferrer"
                                 className="relative group w-14 h-14 flex items-center justify-center transition-all duration-300 hover:-translate-y-2 hover:translate-x-2"
