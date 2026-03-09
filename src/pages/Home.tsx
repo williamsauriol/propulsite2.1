@@ -273,7 +273,7 @@ export default function Home() {
           .w-tr-25:hover ~ #widget-card { transform: rotateX(-20deg) rotateY(10deg); transition: 125ms ease-in-out; }
         `}</style>
 
-        <div className="widget-container">
+        <Link to="/funnel" className="widget-container block">
           <div className="widget-canvas">
             {Array.from({ length: 25 }).map((_, i) => (
               <div key={i} className={`widget-tracker w-tr-${i + 1}`} />
@@ -283,11 +283,11 @@ export default function Home() {
               <p id="widget-prompt">Prêt à<br />décoller?</p>
               <div className="widget-description">
                 <p>Propulsez votre entreprise en ligne dès aujourd'hui avec une stratégie numérique sur mesure.</p>
-                <Link to="/funnel" className="cta-btn">Démarrer maintenant →</Link>
+                <span className="cta-btn cursor-pointer">Démarrer maintenant →</span>
               </div>
             </div>
           </div>
-        </div>
+        </Link>
       </section>
     </div>
   );
