@@ -162,7 +162,7 @@ export default function Home() {
             {/* Card 3 */}
             <div className="bg-[#0a1628] rounded-3xl overflow-hidden border border-white/10 group flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(37,99,235,0.15)] hover:border-accent-blue/40">
               <div className="relative h-64 overflow-hidden">
-                <img src="/images/client_handshake.png" alt="Poignée de main client satisfait" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <img src="/images/construction_seo.png" alt="Succès digital et construction" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] to-transparent opacity-90" />
                 <div className="absolute top-4 right-6 text-5xl font-black text-white/10">03</div>
               </div>
