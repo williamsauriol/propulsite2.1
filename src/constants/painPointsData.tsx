@@ -1,0 +1,375 @@
+export interface PainPointArticleData {
+  slug: string;
+  tag: string;
+  titlePart1: string;
+  titleHighlight: string;
+  titlePart3?: string;
+  intro: string;
+  blocks: {
+    title: string;
+    paragraphs?: string[];
+    listItems?: { text: string; bold?: string }[];
+    solutionBox?: { label: string; text: string };
+  }[];
+  cta: {
+    title: string;
+    desc: string;
+    btnText: string;
+    btnLink: string;
+  };
+}
+
+export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
+  {
+    slug: 'pas-assez-contrats',
+    tag: 'Problème 01',
+    titlePart1: 'Pas assez de ',
+    titleHighlight: 'contrats de construction',
+    titlePart3: '?',
+    intro: 'Votre expertise est réelle, mais votre téléphone reste silencieux. Voici pourquoi — et comment y remédier.',
+    blocks: [
+      {
+        title: 'Pourquoi votre carnet se vide',
+        paragraphs: [
+          "La plupart des entrepreneurs en construction excellent sur le chantier mais sont invisibles en ligne. Le problème n'est pas la qualité de votre travail — c'est que les clients potentiels ne peuvent tout simplement pas vous trouver quand ils cherchent.",
+          "Aujourd'hui, plus de 80% des propriétaires commencent leur recherche d'entrepreneur sur Google. Si vous n'apparaissez pas dans les premiers résultats, vous n'existez pas pour eux."
+        ],
+        listItems: [
+          { bold: 'Bouche-à-oreille seul :', text: ' Efficace mais imprévisible — vous dépendez du bon vouloir de vos anciens clients.' },
+          { bold: 'Pas de présence en ligne :', text: ' Votre concurrent qui a un site optimisé capte tous les leads que vous manquez.' },
+          { bold: 'Aucune stratégie de génération de leads :', text: ' Sans système, vous attendez que le téléphone sonne.' }
+        ],
+        solutionBox: {
+          label: 'Comment Propulsite règle ce problème',
+          text: "On transforme votre site web en machine à leads — optimisé pour Google, conçu pour convertir les visiteurs en appels. Google Ads ciblés, SEO local, et pages de destination conçues pour les entrepreneurs. Votre téléphone recommence à sonner, même quand vous êtes sur le chantier."
+        }
+      },
+      {
+        title: "Les signaux d'alarme à reconnaître",
+        listItems: [
+          { text: "Vous avez terminé un projet mais le prochain n'est pas encore confirmé" },
+          { text: "Vos seuls clients viennent de références de proches" },
+          { text: "Vous n'avez jamais reçu un appel via votre site web" },
+          { text: "Vous ne savez pas combien de personnes cherchent vos services chaque mois sur Google" },
+          { text: "Vous baissez vos prix pour décrocher des contrats" }
+        ]
+      },
+      {
+        title: "Ce qu'un système de génération de leads change concrètement",
+        paragraphs: ["Un entrepreneur avec un système marketing bien rodé ne chasse plus les contrats — ce sont les contrats qui viennent à lui. Voici ce que ça ressemble en pratique :"],
+        listItems: [
+          { bold: "3 à 5 demandes de soumissions par semaine", text: " provenant de Google et Facebook" },
+          { bold: "Des leads qualifiés", text: " — des gens qui cherchent activement votre type de service dans votre région" },
+          { bold: "Un carnet de commandes planifié", text: " sur 2 à 3 mois à l'avance" },
+          { bold: "La liberté de choisir", text: " vos projets plutôt que d'accepter n'importe quoi" }
+        ]
+      }
+    ],
+    cta: {
+      title: "Votre prochain contrat commence ici",
+      desc: "Une stratégie numérique sur mesure pour votre entreprise de construction. Consultation gratuite, sans engagement.",
+      btnText: "Obtenir plus de contrats →",
+      btnLink: "/funnel"
+    }
+  },
+  {
+    slug: 'image-marque-datee',
+    tag: 'Problème 02',
+    titlePart1: '',
+    titleHighlight: 'Une image de marque datée qui repousse les clients',
+    intro: 'Votre travail sur le terrain est impeccable. Mais votre image en ligne raconte une autre histoire.',
+    blocks: [
+      {
+        title: "Pourquoi l'image de marque fait ou défait un contrat",
+        paragraphs: [
+          "Avant même de vous appeler, un client potentiel visite votre site, regarde votre logo, et se fait une opinion en moins de 7 secondes. Si votre image visuelle est dépassée, il associe automatiquement ça à un travail de moindre qualité — même si c'est faux.",
+          "Dans la construction, la confiance est tout. Une image professionnelle et cohérente signale sérieux, stabilité et compétence avant même que vous ayez dit un mot."
+        ],
+        listItems: [
+          { bold: 'Logo générique ou vieillissant :', text: " Donne l'impression d'une entreprise peu établie." },
+          { bold: 'Couleurs et polices incohérentes :', text: " Crée de la méfiance sans que le client sache pourquoi." },
+          { bold: 'Photos de mauvaise qualité :', text: " Sous-valorise un travail pourtant excellent." }
+        ],
+        solutionBox: {
+          label: 'Comment Propulsite règle ce problème',
+          text: "On crée une identité visuelle complète qui reflète la vraie qualité de votre travail — logo, couleurs, typographie, et site web cohérents. Résultat : vous justifiez vos prix et vous attirez des clients qui valorisent la qualité."
+        }
+      },
+      {
+        title: "Les signes que votre image vous coûte des contrats",
+        listItems: [
+          { text: "Votre logo date de plus de 5 ans et n'a jamais été revu" },
+          { text: "Votre site web n'est pas responsive sur mobile" },
+          { text: "Vos photos de réalisations sont floues ou mal éclairées" },
+          { text: "Vous avez du mal à justifier vos tarifs face à la concurrence" },
+          { text: "Les clients hésitent à vous recommander à leurs proches" }
+        ]
+      },
+      {
+        title: "Ce qu'une image modernisée change pour vous",
+        listItems: [
+          { bold: "Crédibilité immédiate :", text: " Les clients vous font confiance avant même le premier appel" },
+          { bold: "Tarification justifiée :", text: " Une image haut de gamme permet de facturer à sa juste valeur" },
+          { bold: "Différenciation claire :", text: " Vous sortez du lot face aux concurrents génériques" },
+          { bold: "Fierté de partager :", text: " Vous et votre équipe êtes fiers de montrer votre carte d'affaires" }
+        ]
+      }
+    ],
+    cta: {
+      title: "Votre image mérite de refléter votre talent",
+      desc: "On redesigne votre identité visuelle pour qu'elle inspire confiance dès le premier regard. Consultation gratuite.",
+      btnText: "Moderniser mon image →",
+      btnLink: "/funnel"
+    }
+  },
+  {
+    slug: 'invisible-google',
+    tag: 'Problème 03',
+    titlePart1: '',
+    titleHighlight: 'Totalement invisible sur Google',
+    intro: "Vos concurrents apparaissent en premier. Vos clients potentiels ne vous trouvent jamais. Voici comment inverser ça.",
+    blocks: [
+      {
+        title: "Pourquoi Google est votre meilleur vendeur",
+        paragraphs: [
+          "Quand un propriétaire a besoin d'un entrepreneur, son premier réflexe est de taper 'entrepreneur général près de moi' sur Google. Celui qui apparaît en premier décroche le contrat. C'est aussi simple que ça.",
+          "Le SEO local pour la construction n'est pas mystérieux — c'est une combinaison de techniques précises qui font remonter votre entreprise dans les résultats. Mais sans stratégie, vous restez invisible pendant que vos concurrents récoltent tous les appels."
+        ],
+        listItems: [
+          { bold: 'Fiche Google non optimisée :', text: " Votre entreprise n'apparaît pas sur Google Maps." },
+          { bold: 'Site sans mots-clés locaux :', text: " Google ne sait pas que vous servez votre région." },
+          { bold: 'Aucun avis Google :', text: " Les entreprises avec des avis passent devant vous systématiquement." }
+        ],
+        solutionBox: {
+          label: 'Comment Propulsite règle ce problème',
+          text: "On optimise votre présence Google de A à Z — fiche Google Business, SEO local ciblé sur vos services et votre région, et stratégie de mots-clés pour les requêtes que vos clients tapent vraiment. Vous remontez, ils vous trouvent, ils appellent."
+        }
+      },
+      {
+        title: "Comment savoir si vous êtes invisible en ligne",
+        listItems: [
+          { text: "Tapez 'entrepreneur général [votre ville]' — apparaissez-vous dans les 3 premiers résultats?" },
+          { text: "Votre fiche Google Business est incomplète ou inexistante" },
+          { text: "Vous avez moins de 10 avis Google" },
+          { text: "Votre site n'a pas été mis à jour depuis plus d'un an" },
+          { text: "Vous ne recevez aucun appel provenant de Google" }
+        ]
+      },
+      {
+        title: "Ce que le SEO local change concrètement",
+        listItems: [
+          { bold: "Apparaître dans le top 3 local :", text: " 75% des clics vont aux 3 premiers résultats" },
+          { bold: "Leads gratuits et récurrents :", text: " Contrairement aux pubs, le SEO travaille 24/7 sans frais par clic" },
+          { bold: "Crédibilité accrue :", text: " Apparaître en premier inspire confiance automatiquement" },
+          { bold: "Ciblage précis :", text: " Vous attirez des clients dans votre zone de service exacte" }
+        ]
+      }
+    ],
+    cta: {
+      title: "Propulsez-vous en tête de Google",
+      desc: "On vous place là où vos clients vous cherchent. Audit SEO gratuit pour votre entreprise de construction.",
+      btnText: "Apparaître sur Google →",
+      btnLink: "/funnel"
+    }
+  },
+  {
+    slug: 'se-demarquer-concurrence',
+    tag: 'Problème 04',
+    titlePart1: '',
+    titleHighlight: 'Difficile de se démarquer de la concurrence',
+    intro: "Quand tout le monde offre les mêmes services au même prix, comment gagner? En étant différent — stratégiquement.",
+    blocks: [
+      {
+        title: "Le piège du prix comme seul argument",
+        paragraphs: [
+          "Quand votre positionnement n'est pas clair, les clients comparent uniquement les prix. Vous vous retrouvez à baisser vos marges pour décrocher des contrats que vous auriez pu avoir à meilleur tarif avec le bon positionnement.",
+          "La différenciation n'est pas une question de prix — c'est une question de perception. Les entreprises qui se démarquent clairement n'ont pas à se battre sur le prix parce que les clients perçoivent une valeur supérieure."
+        ],
+        listItems: [
+          { bold: 'Spécialisation :', text: " Être reconnu pour un type de projet précis vaut plus que d'être générique." },
+          { bold: 'Histoire de marque :', text: " Les clients achètent de l'humain — votre histoire compte." },
+          { bold: 'Preuves sociales :', text: " Réalisations, témoignages, avant/après — montrer plutôt que dire." }
+        ],
+        solutionBox: {
+          label: 'Comment Propulsite règle ce problème',
+          text: "On définit votre positionnement unique et on le communique clairement sur tous vos canaux — site web, réseaux sociaux, publicités. Vous cessez d'être un entrepreneur parmi d'autres pour devenir LA référence dans votre spécialité."
+        }
+      },
+      {
+        title: "Êtes-vous en train de vous fondre dans la masse?",
+        listItems: [
+          { text: "Votre slogan pourrait appartenir à n'importe quelle autre entreprise" },
+          { text: "Vous répondez à tous les types de projets sans spécialité claire" },
+          { text: "Vos clients ne savent pas vraiment ce qui vous distingue" },
+          { text: "Vous perdez des soumissions face à des concurrents moins expérimentés" },
+          { text: "Vous n'avez pas de section 'réalisations' convaincante sur votre site" }
+        ]
+      },
+      {
+        title: "Ce qu'un positionnement clair vous apporte",
+        listItems: [
+          { bold: "Attirer les bons clients :", text: " Ceux qui cherchent exactement ce que vous faites le mieux" },
+          { bold: "Justifier vos prix :", text: " La spécialisation commande des tarifs plus élevés" },
+          { bold: "Notoriété locale :", text: " Devenir la référence dans votre niche géographique" },
+          { bold: "Moins de compétition directe :", text: " Plus votre niche est précise, moins vous avez de rivaux directs" }
+        ]
+      }
+    ],
+    cta: {
+      title: "Devenez LA référence dans votre domaine",
+      desc: "On vous aide à définir et communiquer ce qui vous rend unique. Votre positionnement, votre force.",
+      btnText: "Me démarquer maintenant →",
+      btnLink: "/funnel"
+    }
+  },
+  {
+    slug: 'reseaux-sociaux',
+    tag: 'Problème 05',
+    titlePart1: '',
+    titleHighlight: 'Aucune stratégie sur les réseaux sociaux',
+    intro: "Vos chantiers sont impressionnants. Mais si personne ne les voit en ligne, vous passez à côté d'une vitrine gratuite et puissante.",
+    blocks: [
+      {
+        title: "Pourquoi les réseaux sociaux sont essentiels en construction",
+        paragraphs: [
+          "Facebook et Instagram ne sont pas juste pour les restaurants et les boutiques. Dans la construction, les transformations visuelles — avant/après, avancement de chantier, finitions — génèrent un engagement énorme et créent une preuve concrète de votre expertise.",
+          "Un propriétaire qui voit vos réalisations défiler dans son fil d'actualité pense à vous en premier quand il a un projet. C'est de la notoriété gratuite que vous laissez sur la table chaque jour sans présence active."
+        ],
+        listItems: [
+          { bold: 'Avant/après :', text: " Le contenu qui performe le mieux dans la construction — fort impact visuel." },
+          { bold: 'Avancement de chantier :', text: " Crée de l'anticipation et montre votre processus sérieux." },
+          { bold: 'Équipe en action :', text: " Humanise votre entreprise et bâtit la confiance." }
+        ],
+        solutionBox: {
+          label: 'Comment Propulsite règle ce problème',
+          text: "On crée et gère votre présence sur Facebook et Instagram — contenu régulier, photos professionnelles de vos réalisations, stories d'avancement. Votre communauté grossit, votre notoriété augmente, et les demandes entrent."
+        }
+      },
+      {
+        title: "Les signes que vous manquez des opportunités",
+        listItems: [
+          { text: "Votre dernière publication remonte à plus de 3 mois" },
+          { text: "Vous n'avez jamais reçu un message direct d'un client potentiel via Instagram" },
+          { text: "Vous n'avez pas de photos professionnelles de vos réalisations" },
+          { text: "Votre page Facebook a moins de 200 abonnés" },
+          { text: "Vous ne faites jamais de contenu avant/après" }
+        ]
+      },
+      {
+        title: "Ce qu'une présence active sur les réseaux vous apporte",
+        listItems: [
+          { bold: "Notoriété locale :", text: " Vous devenez reconnaissable dans votre communauté" },
+          { bold: "Preuve sociale en temps réel :", text: " Chaque post est une démonstration de votre savoir-faire" },
+          { bold: "Leads entrants organiques :", text: " Des clients qui viennent à vous via vos publications" },
+          { bold: "Référencement boosté :", text: " Une présence sociale active aide votre SEO Google" }
+        ]
+      }
+    ],
+    cta: {
+      title: "Montrez votre travail au monde",
+      desc: "On gère vos réseaux sociaux pour que vos réalisations travaillent pour vous, même le soir et les fins de semaine.",
+      btnText: "Activer mes réseaux sociaux →",
+      btnLink: "/funnel"
+    }
+  },
+  {
+    slug: 'reputation-en-ligne',
+    tag: 'Problème 06',
+    titlePart1: '',
+    titleHighlight: 'Gestion de réputation en ligne inexistante',
+    intro: "Vos clients sont satisfaits mais silencieux en ligne. Pendant ce temps, un avis négatif peut faire fuir 10 clients potentiels.",
+    blocks: [
+      {
+        title: "Pourquoi les avis Google sont votre meilleur outil de vente",
+        paragraphs: [
+          "Plus de 90% des consommateurs lisent les avis en ligne avant de choisir un entrepreneur. Un profil avec 50 avis 5 étoiles écrase systématiquement un concurrent sans avis, même si ce concurrent est meilleur sur le terrain.",
+          "Le problème c'est que les clients satisfaits ne pensent pas spontanément à laisser un avis. Ceux qui ont eu un problème, eux, n'oublient pas. Sans stratégie proactive, votre réputation en ligne ne reflète pas la réalité de votre travail."
+        ],
+        listItems: [
+          { bold: 'Collecte automatisée :', text: " Un système simple qui rappelle aux clients satisfaits de laisser un avis." },
+          { bold: 'Gestion des avis négatifs :', text: " Répondre correctement transforme un problème en preuve de professionnalisme." },
+          { bold: 'Réputation sur plusieurs plateformes :', text: " Google, Facebook, et autres annuaires locaux." }
+        ],
+        solutionBox: {
+          label: 'Comment Propulsite règle ce problème',
+          text: "On met en place un système de collecte d'avis automatisé et on gère vos réponses aux commentaires. Votre réputation en ligne devient un actif qui travaille pour vous, générant confiance et nouveaux contrats en continu."
+        }
+      },
+      {
+        title: "Évaluez votre réputation en ligne maintenant",
+        listItems: [
+          { text: "Vous avez moins de 20 avis Google" },
+          { text: "Votre note moyenne est en dessous de 4.5 étoiles" },
+          { text: "Vous ne répondez jamais aux avis — bons ou mauvais" },
+          { text: "Vous n'avez aucun processus pour demander des avis après un projet" },
+          { text: "Vos concurrents ont plus d'avis que vous malgré moins d'années d'expérience" }
+        ]
+      },
+      {
+        title: "Ce qu'une bonne réputation en ligne génère",
+        listItems: [
+          { bold: "Confiance instantanée :", text: " 50+ avis 5 étoiles et les clients appellent sans hésiter" },
+          { bold: "Meilleur classement Google :", text: " Les avis influencent directement votre position locale" },
+          { bold: "Bouche-à-oreille numérique :", text: " Chaque avis est une recommandation publique permanente" },
+          { bold: "Avantage concurrentiel durable :", text: " Difficile à rattraper pour vos concurrents une fois établi" }
+        ]
+      }
+    ],
+    cta: {
+      title: "Bâtissez une réputation qui vend pour vous",
+      desc: "On met en place votre stratégie de réputation en ligne. Vos clients satisfaits deviennent votre meilleure publicité.",
+      btnText: "Gérer ma réputation →",
+      btnLink: "/funnel"
+    }
+  },
+  {
+    slug: 'site-mobile',
+    tag: 'Problème 07',
+    titlePart1: '',
+    titleHighlight: 'Site web non adapté aux appareils mobiles',
+    intro: "70% de vos clients potentiels cherchent sur leur téléphone. Si votre site ne fonctionne pas sur mobile, vous perdez ces clients avant même qu'ils vous appellent.",
+    blocks: [
+      {
+        title: "Le mobile d'abord — la réalité de 2025",
+        paragraphs: [
+          "Aujourd'hui, la majorité des recherches 'entrepreneur près de moi' se font depuis un téléphone intelligent. Si votre site est lent, difficile à naviguer, ou impossible à lire sans zoomer, le visiteur quitte en moins de 3 secondes pour aller chez votre concurrent.",
+          "Google pénalise aussi les sites non-mobiles dans ses résultats de recherche. Un site inadapté vous fait donc perdre sur deux fronts : vous perdez les visiteurs ET vous descendez dans Google."
+        ],
+        listItems: [
+          { bold: 'Vitesse de chargement :', text: " Chaque seconde de délai coûte 20% de conversions supplémentaires." },
+          { bold: 'Design responsif :', text: " Le site doit s'adapter parfaitement à toutes les tailles d'écran." },
+          { bold: 'Bouton d\'appel direct :', text: " Sur mobile, le client doit pouvoir vous appeler en un clic." }
+        ],
+        solutionBox: {
+          label: 'Comment Propulsite règle ce problème',
+          text: "On conçoit ou refontes votre site web pour qu'il soit ultra-rapide, parfaitement lisible sur mobile, et optimisé pour convertir les visiteurs en appels. Un bouton d'appel bien placé sur mobile peut doubler vos demandes de soumissions."
+        }
+      },
+      {
+        title: "Testez votre site mobile maintenant",
+        listItems: [
+          { text: "Ouvrez votre site sur votre téléphone — est-ce facile à lire sans zoomer?" },
+          { text: "Votre numéro de téléphone est-il cliquable directement?" },
+          { text: "Le site se charge-t-il en moins de 3 secondes sur mobile?" },
+          { text: "Les boutons sont-ils assez grands pour être cliqués facilement?" },
+          { text: "Google PageSpeed indique-t-il un score en dessous de 70?" }
+        ]
+      },
+      {
+        title: "Ce qu'un site mobile-first change pour vous",
+        listItems: [
+          { bold: "Zéro client perdu à cause du site :", text: " Chaque visiteur reste et trouve ce qu'il cherche" },
+          { bold: "Plus de demandes de soumissions :", text: " Un parcours fluide = plus de conversions" },
+          { bold: "Meilleur classement Google :", text: " Google favorise les sites rapides et mobiles" },
+          { bold: "Image professionnelle :", text: " Un site moderne inspire confiance instantanément" }
+        ]
+      }
+    ],
+    cta: {
+      title: "Un site qui performe sur tous les écrans",
+      desc: "On refait votre site web pour qu'il soit rapide, moderne, et optimisé mobile. Vos clients vous trouvent et vous appellent.",
+      btnText: "Refaire mon site web →",
+      btnLink: "/funnel"
+    }
+  }
+];

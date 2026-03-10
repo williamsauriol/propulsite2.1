@@ -10,6 +10,7 @@ import Contact from './pages/Contact';
 import Funnel from './pages/Funnel';
 import Blog from './pages/Blog';
 import Legal from './pages/Legal';
+import PainPointDetail from './pages/PainPointDetail';
 import Footer from './components/Footer';
 
 function ScrollToTop() {
@@ -36,6 +37,7 @@ export default function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/funnel" element={<Funnel />} />
             <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<PainPointDetail />} />
             <Route path="/legal" element={<Legal />} />
           </Routes>
         </main>

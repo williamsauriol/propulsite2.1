@@ -10,49 +10,49 @@ export default function Blog() {
             icon: <TrendingUp className="w-8 h-8 text-accent-blue" />,
             title: "Pas assez de contrats de construction ?",
             desc: "Le carnet de commandes se vide entre deux projets de rénovation ou de construction neuve, et les appels entrants se font rares. Sans stratégie de marketing numérique ciblée pour les entrepreneurs, les clients potentiels (résidentiels ou commerciaux) ne peuvent tout simplement pas vous trouver. Une présence en ligne bien optimisée transforme votre site web en un véritable générateur de leads qualifiés, travaillant pour vous 24/7, même quand vous êtes sur le chantier.",
-            link: "/services/google-ads"
+            link: "/blog/pas-assez-contrats"
         },
         {
             num: "02",
             icon: <Target className="w-8 h-8 text-accent-blue" />,
             title: "Une image de marque datée qui repousse les clients",
-            desc: "Un logo vieillissant, des couleurs passées, un site web d'une autre époque : votre identité visuelle ne reflète plus la qualité exceptionnelle de votre travail sur le terrain. Dans un secteur de la construction hautement compétitif, la première impression se fait désormais à 100% en ligne. Une image de marque moderne, professionnelle et rassurante inspire confiance dès le premier regard et justifie votre tarification auprès des clients.",
-            link: "/services/design-graphique"
+            desc: "Un logo vieillissant, des couleurs passées, un site web d'une autre époque : votre identité visuelle ne reflète plus la qualité exceptionnelle de votre travail sur le terrain. Dans un secteur de la construction hautement compétitif, la première impression se fait désormais à 100% en ligne. Une image de marque moderne, professionnelle et rassurante inspire confiance dès le premier regard et justify votre tarification auprès des clients.",
+            link: "/blog/image-marque-datee"
         },
         {
             num: "03",
             icon: <Search className="w-8 h-8 text-accent-blue" />,
             title: "Totalement invisible sur Google (SEO et Local)",
             desc: "Vos principaux concurrents apparaissent en premier dans les résultats Google pendant que votre entreprise de construction est reléguée à la page 3. La grande majorité des clients cherchent « entrepreneur général près de moi » avant de décrocher leur téléphone. Sans un référencement naturel (SEO) puissant et adapté aux requêtes locales de la construction, vous laissez des dizaines de chantiers lucratifs sur la table chaque mois.",
-            link: "/services/referencement-seo"
+            link: "/blog/invisible-google"
         },
         {
             num: "04",
             icon: <Users className="w-8 h-8 text-accent-blue" />,
             title: "Difficulté à se démarquer de la concurrence",
             desc: "Trop d'entreprises de construction se ressemblent : mêmes services (rénovation, agrandissement, toiture), même discours promotionnel, même visuel générique. Sans un positionnement stratégique clair, vous vous battez uniquement sur le prix, ce qui réduit vos marges de profit. Définir votre proposition de valeur unique (expertise spécialisée, rapidité, finition haut de gamme) vous permet d'attirer les clients idéaux.",
-            link: "/services/conception-site-web"
+            link: "/blog/se-demarquer-concurrence"
         },
         {
             num: "05",
             icon: <Rocket className="w-8 h-8 text-accent-blue" />,
             title: "Aucune stratégie sur les réseaux sociaux",
             desc: "Vos chantiers avancent vite et les transformations (avant/après) sont impressionnantes, mais personne ne le voit. Les plateformes sociales (Facebook, Instagram, LinkedIn) sont des vitrines gratuites et extrêmement puissantes pour prouver votre savoir-faire en temps réel. Partager l'avancement d'un chantier, la finition détaillée ou l'équipe au travail renforce instantanément votre crédibilité et bâtit une communauté engagée autour de votre marque.",
-            link: "/services/medias-sociaux"
+            link: "/blog/reseaux-sociaux"
         },
         {
             num: "06",
             icon: <Star className="w-8 h-8 text-accent-blue" />,
             title: "Gestion de réputation en ligne inexistante",
             desc: "Vos clients finaux sont extrêmement satisfaits de leurs travaux, mais ils ne pensent pas à laisser d'avis sur Google ou Facebook. Or, plus de 90% des consommateurs lisent attentivement les avis (reviews) avant de signer un contrat avec un entrepreneur. Mettre en place une stratégie simple et automatisée de collecte d'avis 5 étoiles (et de gestion des commentaires) deviendra votre outil de vente le plus persuasif.",
-            link: "/services/creation-contenu"
+            link: "/blog/reputation-en-ligne"
         },
         {
             num: "07",
             icon: <Smartphone className="w-8 h-8 text-accent-blue" />,
             title: "Site web non adapté aux appareils mobiles",
             desc: "Aujourd'hui, plus de 70% des recherches pour trouver un entrepreneur se font directement depuis un téléphone intelligent (smartphone). Si votre site web est lent à charger, difficile à lire sans zoomer, ou s'il plante sur mobile, les clients potentiels quittent immédiatement pour aller chez le concurrent. Un site web responsif, ultra-rapide et clair est la base absolue de toute tactique numérique réussie.",
-            link: "/services/conception-site-web"
+            link: "/blog/site-mobile"
         }
     ];
 

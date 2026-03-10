@@ -142,7 +142,7 @@ export default function Home() {
                 <p className="text-white/60 text-sm leading-relaxed mb-8 flex-grow">
                   Votre carnet de commandes est vide ? Nous ciblons les propriétaires qui cherchent activement vos services et les convertissons en clients.
                 </p>
-                <Link to="/blog" className="inline-flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest transition-all hover:text-blue-400 hover:gap-3 mt-auto">
+                <Link to="/blog/pas-assez-contrats" className="inline-flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest transition-all hover:text-blue-400 hover:gap-3 mt-auto">
                   En savoir plus <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -163,7 +163,7 @@ export default function Home() {
                 <p className="text-white/60 text-sm leading-relaxed mb-8 flex-grow">
                   Votre site web fait peur aux clients ? Modernisez votre image pour refléter la qualité réelle de vos travaux et inspirer confiance dès le premier regard.
                 </p>
-                <Link to="/blog" className="inline-flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest transition-all hover:text-blue-400 hover:gap-3 mt-auto">
+                <Link to="/blog/image-marque-datee" className="inline-flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest transition-all hover:text-blue-400 hover:gap-3 mt-auto">
                   En savoir plus <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -184,7 +184,7 @@ export default function Home() {
                 <p className="text-white/60 text-sm leading-relaxed mb-8 flex-grow">
                   Vos concurrents prennent toute la place ? Nous vous propulsons en tête des résultats locaux pour que les bons clients vous trouvent en premier.
                 </p>
-                <Link to="/blog" className="inline-flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest transition-all hover:text-blue-400 hover:gap-3 mt-auto">
+                <Link to="/blog/invisible-google" className="inline-flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest transition-all hover:text-blue-400 hover:gap-3 mt-auto">
                   En savoir plus <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
