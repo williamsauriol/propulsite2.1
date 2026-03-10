@@ -16,11 +16,19 @@ export default function ServiceDetail() {
   const otherServices = SERVICES.filter((s) => s.slug !== slug);
 
   return (
-    <div className="pt-32 pb-24 px-6 relative z-10">
+    <div 
+      className="pt-32 pb-24 px-6 relative z-10"
+      style={{
+        '--service-color': service.color,
+        '--service-bg': `${service.color}1A`, // 10% opacity
+        '--service-border': `${service.color}33`, // 20% opacity
+        '--service-shadow': `${service.color}66`, // 40% opacity
+      } as React.CSSProperties}
+    >
       <div className="container mx-auto">
         <Link 
           to="/services" 
-          className="inline-flex items-center gap-2 text-accent-blue mb-8 hover:gap-4 transition-all font-bold uppercase tracking-widest text-sm"
+          className="inline-flex items-center gap-2 text-[color:var(--service-color)] mb-8 hover:gap-4 transition-all font-bold uppercase tracking-widest text-sm"
         >
           <ChevronLeft className="w-4 h-4" /> Retour aux services
         </Link>
@@ -31,7 +39,7 @@ export default function ServiceDetail() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <div className="w-16 h-16 bg-accent-blue/10 rounded-2xl flex items-center justify-center mb-8 text-accent-blue border border-accent-blue/20">
+            <div className="w-16 h-16 bg-[color:var(--service-bg)] rounded-2xl flex items-center justify-center mb-8 text-[color:var(--service-color)] border border-[color:var(--service-border)]">
               {service.icon}
             </div>
             <h1 className="text-5xl md:text-7xl font-black mb-8 text-3d uppercase italic">
@@ -42,7 +50,7 @@ export default function ServiceDetail() {
             </p>
             <Link 
               to="/contact" 
-              className="inline-block px-10 py-5 bubble-glass text-white font-black hover:text-accent-blue"
+              className="inline-block px-10 py-5 bubble-glass text-white font-black hover:text-[color:var(--service-color)]"
             >
               DEMANDER UNE SOUMISSION
             </Link>
@@ -54,11 +62,11 @@ export default function ServiceDetail() {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <LiquidGlassCard className="h-full">
-              <h2 className="text-2xl font-bold mb-8 text-accent-blue uppercase tracking-widest">Ce que nous incluons</h2>
+              <h2 className="text-2xl font-bold mb-8 text-[color:var(--service-color)] uppercase tracking-widest">Ce que nous incluons</h2>
               <ul className="space-y-6">
                 {service.features.map((feature, index) => (
                   <li key={index} className="flex items-start gap-4 group">
-                    <CheckCircle2 className="w-6 h-6 text-accent-blue mt-1 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                    <CheckCircle2 className="w-6 h-6 text-[color:var(--service-color)] mt-1 flex-shrink-0 group-hover:scale-110 transition-transform" />
                     <span className="text-lg text-white/80 leading-snug">{feature}</span>
                   </li>
                 ))}
@@ -72,12 +80,22 @@ export default function ServiceDetail() {
           <h2 className="text-4xl font-black mb-12 text-3d uppercase italic">Autres Expertises</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {otherServices.map((s, i) => (
-              <Link key={s.slug} to={`/services/${s.slug}`} className="group">
-                <LiquidGlassCard className="h-full group-hover:border-accent-blue/50 transition-all">
-                  <div className="text-accent-blue mb-6 group-hover:scale-110 transition-transform">{s.icon}</div>
-                  <h3 className="text-xl font-bold mb-4 group-hover:text-accent-blue transition-colors uppercase">{s.title}</h3>
+              <Link 
+                key={s.slug} 
+                to={`/services/${s.slug}`} 
+                className="group"
+                style={{
+                  '--other-color': s.color,
+                  '--other-bg': `${s.color}1A`,
+                  '--other-border': `${s.color}33`,
+                  '--other-shadow': `${s.color}66`,
+                } as React.CSSProperties}
+              >
+                <LiquidGlassCard className="h-full group-hover:border-[color:var(--other-color)] group-hover:shadow-[0_20px_50px_var(--other-shadow)] transition-all bg-gradient-to-br hover:bg-[linear-gradient(to_bottom_right,var(--other-bg),transparent)]">
+                  <div className="text-[color:var(--other-color)] mb-6 group-hover:scale-110 transition-transform">{s.icon}</div>
+                  <h3 className="text-xl font-bold mb-4 group-hover:text-[color:var(--other-color)] transition-colors uppercase">{s.title}</h3>
                   <p className="text-white/60 text-sm mb-6 line-clamp-2">{s.shortDesc}</p>
-                  <div className="flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest">
+                  <div className="flex items-center gap-2 text-xs font-bold text-[color:var(--other-color)] uppercase tracking-widest">
                     Découvrir <ArrowRight className="w-4 h-4" />
                   </div>
                 </LiquidGlassCard>
