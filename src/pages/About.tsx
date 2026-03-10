@@ -128,7 +128,7 @@ export default function About() {
             </div>
 
             <div className="flex flex-wrap gap-3">
-              {['Google Ads', 'SEO', 'Design web', 'Facebook Ads', 'Médias sociaux', 'Stratégie numérique'].map((tag, i) => (
+              {['Google Ads', 'SEO', 'Chatbot IA', 'Facebook Ads', 'Médias sociaux', 'Stratégie numérique'].map((tag, i) => (
                 <span key={i} className="px-4 py-2 rounded-full bg-accent-blue/10 border border-accent-blue/20 text-accent-blue text-xs font-bold tracking-wider uppercase">
                   {tag}
                 </span>

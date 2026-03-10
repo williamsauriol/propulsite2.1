@@ -82,17 +82,17 @@ export const SERVICES: Service[] = [
     ]
   },
   {
-    slug: 'design-web-et-graphique',
-    title: 'Design web et graphique',
-    icon: <Palette className="w-8 h-8" />,
-    shortDesc: 'Une identité visuelle forte qui communique votre professionnalisme.',
-    fullDesc: "Votre logo et votre image de marque doivent inspirer la solidité et la confiance. Nos designers créent des identités visuelles qui se démarquent. Que ce soit pour votre site web, vos cartes d'affaires ou l'habillage de vos camions, nous assurons une cohérence parfaite.",
+    slug: 'chatbot-ia',
+    title: 'Chatbot IA',
+    icon: <MessageSquare className="w-8 h-8" />,
+    shortDesc: 'Un assistant virtuel intelligent disponible 24/7 pour engager vos clients.',
+    fullDesc: "Un Chatbot IA transforme la façon dont vous interagissez avec vos clients. Fini les opportunités perdues en dehors des heures d'ouverture. Notre agent conversationnel intelligent automatisé répond instantanément aux questions fréquentes, qualifie vos prospects et redirige les demandes complexes vers la bonne personne.",
     features: [
-      'Création de logo et charte graphique',
-      'Design d\'interfaces (UI/UX)',
-      'Conception de supports imprimés',
-      'Visuels pour réseaux sociaux',
-      'Retouche photo professionnelle'
+      'Réponses instantanées 24/7',
+      'Qualification de prospects automatisée',
+      'Capture de coordonnées (Lead Gen)',
+      'Personnalisation selon votre marque',
+      'Support conversationnel fluide'
     ]
   }
 ];

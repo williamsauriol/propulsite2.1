@@ -221,7 +221,7 @@ export default function Legal() {
                                             <li>Gestion de campagnes Google Ads et publicité Facebook</li>
                                             <li>Référencement naturel (SEO)</li>
                                             <li>Gestion de médias sociaux</li>
-                                            <li>Design web et graphique</li>
+                                            <li>Chatbot IA</li>
                                         </ul>
                                     </section>
 
