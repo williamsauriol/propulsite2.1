@@ -25,7 +25,23 @@ export default function ServiceDetail() {
         '--service-shadow': `${service.color}66`, // 40% opacity
       } as React.CSSProperties}
     >
-      <div className="container mx-auto">
+      {/* Ambient Service Color Glow in Background */}
+      <div className="fixed inset-0 pointer-events-none z-[0] overflow-hidden">
+        <motion.div
+          className="absolute top-[10%] left-[5%] w-[600px] h-[600px] md:w-[800px] md:h-[800px] rounded-full blur-[150px]"
+          style={{ backgroundColor: 'var(--service-color)' }}
+          animate={{ scale: [1, 1.2, 1], opacity: [0.03, 0.08, 0.03] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute bottom-[20%] right-[10%] w-[500px] h-[500px] rounded-full blur-[120px]"
+          style={{ backgroundColor: 'var(--service-color)' }}
+          animate={{ scale: [1, 1.3, 1], opacity: [0.02, 0.06, 0.02] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        />
+      </div>
+
+      <div className="container mx-auto relative z-10">
         <Link 
           to="/services" 
           className="inline-flex items-center gap-2 text-[color:var(--service-color)] mb-8 hover:gap-4 transition-all font-bold uppercase tracking-widest text-sm"
