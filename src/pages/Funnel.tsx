@@ -49,6 +49,7 @@ export default function Funnel() {
         message: ''
     });
     const [error, setError] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const stepId = STEPS[currentStep];
     const totalSteps = STEPS.length - 2;
@@ -59,7 +60,7 @@ export default function Funnel() {
         return Math.round((currentStep / totalSteps) * 100);
     };
 
-    const handleNext = () => {
+    const handleNext = async () => {
         setError('');
 
         if (stepId === 'role' && !data.role) {
@@ -91,7 +92,8 @@ export default function Funnel() {
                 setError('Veuillez remplir votre nom et email.');
                 return;
             }
-            sendEmail();
+            await sendEmail();
+            return; // on attend que l'email s'envoie avant de changer d'étape
         }
 
         setCurrentStep(prev => prev + 1);
@@ -102,19 +104,43 @@ export default function Funnel() {
         setCurrentStep(prev => prev - 1);
     };
 
-    const sendEmail = () => {
-        const TO = 'propulsiteprojet@gmail.com';
-        const subject = encodeURIComponent(`Nouveau lead – ${data.nom}`);
-        const body = encodeURIComponent(
-            `Nom: ${data.nom}\nEmail: ${data.email}\nTéléphone: ${data.telephone || 'N/A'}\n\n` +
-            `Rôle: ${data.role}\nTaille d'entreprise: ${data.tailleEntreprise}\n` +
-            `Défi principal: ${data.defi}\nSolution actuelle: ${data.solutionActuelle}\n` +
-            `Déclencheur: ${data.declencheur}\nObjectif 3 mois: ${data.objectif}\n\n` +
-            `Message: ${data.message || 'Aucun'}`
-        );
-        setTimeout(() => {
-            window.location.href = `mailto:${TO}?subject=${subject}&body=${body}`;
-        }, 500);
+    const sendEmail = async () => {
+        setIsSubmitting(true);
+        // Si ton email Propulsite est différent, change cette variable (ex: info@propulsite.ca)
+        const targetEmail = 'propulsiteprojet@gmail.com'; 
+        
+        try {
+            const response = await fetch(`https://formsubmit.co/ajax/${targetEmail}`, {
+                method: "POST",
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    _subject: `Nouveau lead Funnel – ${data.nom}`,
+                    Nom: data.nom,
+                    Email: data.email,
+                    Téléphone: data.telephone || 'N/A',
+                    Rôle: data.role,
+                    "Taille d'entreprise": data.tailleEntreprise,
+                    "Défi": data.defi,
+                    "Solution actuelle": data.solutionActuelle,
+                    "Déclencheur": data.declencheur,
+                    "Objectif 3 mois": data.objectif,
+                    "Message": data.message || 'Aucun'
+                })
+            });
+            
+            if (response.ok) {
+                setCurrentStep(prev => prev + 1);
+            } else {
+                setError("Une erreur est survenue lors de l'envoi de l'email.");
+            }
+        } catch (err) {
+            setError("Impossible de contacter le serveur d'envoi.");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -347,15 +373,24 @@ export default function Funnel() {
                                 <div className="flex items-center justify-between pt-6 mt-4 border-t border-white/10">
                                     <button
                                         onClick={handleBack}
-                                        className="px-6 py-3 text-white/50 font-bold hover:text-white transition-colors uppercase tracking-widest text-sm"
+                                        disabled={isSubmitting}
+                                        className="px-6 py-3 text-white/50 font-bold hover:text-white transition-colors uppercase tracking-widest text-sm disabled:opacity-50"
                                     >
                                         ← Retour
                                     </button>
                                     <button
                                         onClick={handleNext}
-                                        className="px-8 py-3 bg-accent-blue text-[#050a15] rounded-full font-bold hover:bg-white transition-colors uppercase tracking-widest shadow-[0_0_15px_rgba(0,210,255,0.4)]"
+                                        disabled={isSubmitting}
+                                        className="px-8 py-3 bg-accent-blue text-[#050a15] rounded-full font-bold hover:bg-white transition-colors uppercase tracking-widest shadow-[0_0_15px_rgba(0,210,255,0.4)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                                     >
-                                        {stepId === 'contact' ? 'Envoyer ✓' : 'Suivant →'}
+                                        {isSubmitting ? (
+                                            <>
+                                                <div className="w-5 h-5 border-2 border-[#050a15] border-t-transparent rounded-full animate-spin"></div>
+                                                Envoi...
+                                            </>
+                                        ) : (
+                                            stepId === 'contact' ? 'Envoyer ✓' : 'Suivant →'
+                                        )}
                                     </button>
                                 </div>
                             )}
