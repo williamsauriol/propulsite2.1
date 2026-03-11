@@ -1,9 +1,58 @@
-import React from 'react';
-import { motion } from 'motion/react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import LiquidGlassCard from '../components/LiquidGlassCard';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, CheckCircle2 } from 'lucide-react';
 
 export default function Contact() {
+  const [formData, setFormData] = useState({
+    nom: '',
+    email: '',
+    sujet: 'Audit Gratuit',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.nom || !formData.email || !formData.message) {
+      setError('Veuillez remplir tous les champs obligatoires.');
+      return;
+    }
+
+    setError('');
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(`https://formsubmit.co/ajax/propulsiteprojet@gmail.com`, {
+        method: "POST",
+        headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            _subject: `Nouveau message Contact - ${formData.sujet}`,
+            Nom: formData.nom,
+            Email: formData.email,
+            Sujet: formData.sujet,
+            Message: formData.message
+        })
+      });
+      
+      if (response.ok) {
+        setIsSuccess(true);
+        setFormData({ nom: '', email: '', sujet: 'Audit Gratuit', message: '' });
+      } else {
+        setError("Une erreur est survenue lors de l'envoi du message.");
+      }
+    } catch (err) {
+      setError("Impossible de contacter le serveur d'envoi.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="pt-32 pb-24 px-6 relative z-10">
       <div className="container mx-auto">
@@ -17,46 +66,93 @@ export default function Contact() {
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <LiquidGlassCard>
-              <form className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-sm font-bold uppercase tracking-widest text-white/50">Nom Complet</label>
-                    <input
-                      type="text"
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-accent-blue transition-colors"
-                      placeholder="Jean Dupont"
-                    />
+              {isSuccess ? (
+                <div className="py-12 text-center flex flex-col items-center justify-center h-full">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="w-20 h-20 bg-accent-blue/20 text-accent-blue rounded-full flex items-center justify-center mb-6"
+                  >
+                    <CheckCircle2 className="w-10 h-10" />
+                  </motion.div>
+                  <h3 className="text-2xl font-black mb-2 text-white">Message envoyé !</h3>
+                  <p className="text-white/60 mb-8 max-w-sm mx-auto">
+                    Nous avons bien reçu votre message. Notre équipe vous contactera très rapidement.
+                  </p>
+                  <button 
+                    onClick={() => setIsSuccess(false)}
+                    className="px-8 py-3 bg-white/10 hover:bg-white/20 text-white rounded-full font-bold transition-colors text-sm uppercase tracking-widest"
+                  >
+                    Envoyer un autre message
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  {error && (
+                    <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm">
+                      {error}
+                    </div>
+                  )}
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold uppercase tracking-widest text-white/50">Nom Complet *</label>
+                      <input
+                        type="text"
+                        value={formData.nom}
+                        onChange={(e) => setFormData({...formData, nom: e.target.value})}
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent-blue focus:ring-1 focus:ring-accent-blue transition-all"
+                        placeholder="Jean Dupont"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold uppercase tracking-widest text-white/50">Email *</label>
+                      <input
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => setFormData({...formData, email: e.target.value})}
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent-blue focus:ring-1 focus:ring-accent-blue transition-all"
+                        placeholder="jean@entreprise.com"
+                      />
+                    </div>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-bold uppercase tracking-widest text-white/50">Email</label>
-                    <input
-                      type="email"
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-accent-blue transition-colors"
-                      placeholder="jean@entreprise.com"
+                    <label className="text-sm font-bold uppercase tracking-widest text-white/50">Sujet</label>
+                    <select 
+                      value={formData.sujet}
+                      onChange={(e) => setFormData({...formData, sujet: e.target.value})}
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent-blue focus:ring-1 focus:ring-accent-blue transition-all appearance-none cursor-pointer"
+                    >
+                      <option className="bg-[#050a15]">Audit Gratuit</option>
+                      <option className="bg-[#050a15]">Conception Web</option>
+                      <option className="bg-[#050a15]">SEO / Ads</option>
+                      <option className="bg-[#050a15]">Autre</option>
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold uppercase tracking-widest text-white/50">Message *</label>
+                    <textarea
+                      rows={5}
+                      value={formData.message}
+                      onChange={(e) => setFormData({...formData, message: e.target.value})}
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent-blue focus:ring-1 focus:ring-accent-blue transition-all resize-none"
+                      placeholder="Parlez-nous de votre projet..."
                     />
                   </div>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-bold uppercase tracking-widest text-white/50">Sujet</label>
-                  <select className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-accent-blue transition-colors appearance-none">
-                    <option className="bg-space-blue">Audit Gratuit</option>
-                    <option className="bg-space-blue">Conception Web</option>
-                    <option className="bg-space-blue">SEO / Ads</option>
-                    <option className="bg-space-blue">Autre</option>
-                  </select>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-bold uppercase tracking-widest text-white/50">Message</label>
-                  <textarea
-                    rows={5}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-accent-blue transition-colors"
-                    placeholder="Parlez-nous de votre projet..."
-                  />
-                </div>
-                <button className="w-full py-5 bubble-glass text-white font-black hover:text-accent-blue flex items-center justify-center gap-2">
-                  Envoyer le Message <Send className="w-4 h-4" />
-                </button>
-              </form>
+                  <button 
+                    disabled={isSubmitting}
+                    className="w-full py-5 bubble-glass text-white font-black hover:text-accent-blue flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin mr-2"></div>
+                        Envoi en cours...
+                      </>
+                    ) : (
+                      <>Envoyer le Message <Send className="w-4 h-4" /></>
+                    )}
+                  </button>
+                </form>
+              )}
             </LiquidGlassCard>
           </div>
 
