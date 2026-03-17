@@ -360,7 +360,7 @@ export default function Home() {
               <div key={i} className={`widget-tracker w-tr-${i + 1}`} />
             ))}
             <div id="widget-card">
-              <div className="widget-rocket">🚀</div>
+              <div className="widget-rocket"><img src="/images/logo-fuser-sans-backk.png" alt="Propulsite" style={{ height: '40px', width: 'auto', filter: 'drop-shadow(0 0 12px rgba(255,255,255,0.9))' }} /></div>
               <p id="widget-prompt">Prêt à<br />décoller?</p>
               <div className="widget-description">
                 <p>Propulsez votre entreprise en ligne dès aujourd'hui avec une stratégie numérique sur mesure.</p>

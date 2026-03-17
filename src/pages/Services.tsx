@@ -77,7 +77,7 @@ export default function Services() {
               to="/funnel"
               className="inline-flex items-center gap-3 px-10 py-5 bg-accent-blue rounded-[50px] text-[#050a15] font-black text-lg uppercase tracking-widest hover:bg-white transition-all duration-300 shadow-[0_0_25px_rgba(0,210,255,0.5)] hover:shadow-[0_0_35px_rgba(255,255,255,0.7)] hover:-translate-y-1 transform"
             >
-              🚀 DÉCOLLAGE
+              <img src="/images/logo-fuser-sans-backk.png" alt="" className="h-6 w-auto object-contain drop-shadow-[0_0_6px_rgba(255,255,255,0.8)]" /> DÉCOLLAGE
             </Link>
           </div>
         </motion.div>

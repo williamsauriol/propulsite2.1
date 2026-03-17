@@ -150,7 +150,7 @@ export default function Navbar() {
               to="/funnel"
               className="block w-full py-4 bg-accent-blue rounded-[50px] text-[#050a15] font-black text-center text-lg uppercase tracking-widest shadow-[0_0_20px_rgba(0,210,255,0.5)] hover:bg-white transition-colors"
             >
-              DÉCOLLAGE 🚀
+              DÉCOLLAGE <img src="/images/logo-fuser-sans-backk.png" alt="" className="inline h-6 w-auto object-contain drop-shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
             </Link>
           </motion.div>
         </nav>

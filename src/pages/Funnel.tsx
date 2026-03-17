@@ -186,9 +186,13 @@ export default function Funnel() {
                                     <motion.div
                                         animate={{ y: [0, -10, 0] }}
                                         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                                        className="text-6xl mb-6"
+                                        className="flex justify-center mb-6"
                                     >
-                                        🚀
+                                        <img
+                                            src="/images/logo-fuser-sans-backk.png"
+                                            alt="Propulsite"
+                                            className="h-24 w-auto object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.7)]"
+                                        />
                                     </motion.div>
                                     <h2 className="text-4xl font-black mb-4 text-3d uppercase italic">Prêt pour le décollage ?</h2>
                                     <p className="text-white/70 text-lg mb-10 leading-relaxed">
