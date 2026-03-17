@@ -4,10 +4,16 @@ import { motion } from 'motion/react';
 import { SERVICES } from '../constants/services';
 import LiquidGlassCard from '../components/LiquidGlassCard';
 import { ArrowRight, CheckCircle2, ChevronLeft } from 'lucide-react';
+import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function ServiceDetail() {
   const { slug } = useParams<{ slug: string }>();
   const service = SERVICES.find((s) => s.slug === slug);
+
+  usePageMeta(
+    service ? `${service.title} – Propulsite | Agence marketing construction` : 'Service – Propulsite',
+    service ? `Découvrez notre service ${service.title} pour les entrepreneurs en construction. ${service.shortDesc}` : undefined
+  );
 
   if (!service) {
     return <Navigate to="/services" replace />;

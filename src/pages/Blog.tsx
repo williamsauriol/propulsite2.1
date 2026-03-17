@@ -2,8 +2,13 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { Rocket, Target, Search, Users, Smartphone, Star, TrendingUp, Send } from 'lucide-react';
+import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function Blog() {
+    usePageMeta(
+        'Blog – 7 problèmes qui freinent les compagnies de construction | Propulsite',
+        'Découvrez les 7 obstacles numériques les plus fréquents pour les entrepreneurs en construction et comment Propulsite vous aide à les surmonter.'
+    );
     const painPoints = [
         {
             num: "01",

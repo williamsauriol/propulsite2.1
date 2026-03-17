@@ -4,8 +4,13 @@ import { Link } from 'react-router-dom';
 import LiquidGlassCard from '../components/LiquidGlassCard';
 import { ArrowRight, HardHat } from 'lucide-react';
 import { SERVICES } from '../constants/services';
+import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function Home() {
+  usePageMeta(
+    'Propulsite – Agence marketing pour la construction',
+    'Propulsite aide les entrepreneurs en construction à dominer leur marché local grâce à des stratégies digitales : Google Ads, SEO local, conception web et réseaux sociaux.'
+  );
   const homeServices = SERVICES.slice(0, 6);
 
   const painPoints = [

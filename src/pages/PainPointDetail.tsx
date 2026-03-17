@@ -4,10 +4,16 @@ import { motion } from 'motion/react';
 import { PAIN_POINTS_ARTICLES } from '../constants/painPointsData';
 import { ChevronLeft, CheckCircle2, AlertCircle } from 'lucide-react';
 import LiquidGlassCard from '../components/LiquidGlassCard';
+import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function PainPointDetail() {
   const { slug } = useParams<{ slug: string }>();
   const article = PAIN_POINTS_ARTICLES.find((a) => a.slug === slug);
+
+  usePageMeta(
+    article ? `${article.titlePart1}${article.titleHighlight}${article.titlePart3} – Propulsite` : 'Article – Propulsite',
+    article ? article.intro : undefined
+  );
 
   if (!article) {
     return <Navigate to="/blog" replace />;

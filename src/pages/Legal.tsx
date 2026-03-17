@@ -3,8 +3,13 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useLocation } from 'react-router-dom';
 import LiquidGlassCard from '../components/LiquidGlassCard';
 import { Shield, FileText } from 'lucide-react';
+import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function Legal() {
+    usePageMeta(
+        'Politique de confidentialité – Propulsite',
+        'Consultez la politique de confidentialité et les conditions d’utilisation de Propulsite, agence marketing pour les entrepreneurs en construction au Québec.'
+    );
     const location = useLocation();
     const [activeTab, setActiveTab] = useState<'confidentialite' | 'conditions'>('confidentialite');
 

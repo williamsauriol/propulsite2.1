@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import LiquidGlassCard from '../components/LiquidGlassCard';
+import { usePageMeta } from '../hooks/usePageMeta';
 
 type FunnelData = {
     role: string;
@@ -35,6 +36,10 @@ const SelectButton = ({ value, selected, onClick }: { key?: string; value: strin
 );
 
 export default function Funnel() {
+    usePageMeta(
+        'Soumission gratuite – Propulsite | Propulsez votre entreprise',
+        'Répondez à quelques questions et obtenez une stratégie numérique sur mesure pour votre entreprise de construction. C’est gratuit et sans engagement.'
+    );
     const [currentStep, setCurrentStep] = useState(0);
     const [data, setData] = useState<FunnelData>({
         role: '',

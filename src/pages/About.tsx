@@ -1,8 +1,13 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Target, Search, Users, Smartphone, Star, TrendingUp, Handshake, Lightbulb, Zap, Rocket, CheckCircle2, MapPin } from 'lucide-react';
+import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function About() {
+  usePageMeta(
+    'À Propos – Propulsite | Agence marketing construction Québec',
+    'Découvrez l’histoire de Propulsite, agence fondée par William Sauriol, expert en marketing numérique pour les entrepreneurs en construction au Québec.'
+  );
   return (
     <div className="pt-32 pb-24 px-6 relative z-10 overflow-hidden min-h-screen">
 

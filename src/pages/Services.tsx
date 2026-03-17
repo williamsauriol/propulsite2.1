@@ -4,8 +4,13 @@ import { Link } from 'react-router-dom';
 import LiquidGlassCard from '../components/LiquidGlassCard';
 import { SERVICES } from '../constants/services';
 import { ArrowRight } from 'lucide-react';
+import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function Services() {
+  usePageMeta(
+    'Nos Services – Propulsite | Marketing digital pour la construction',
+    'Découvrez tous les services de Propulsite : conception web, Google Ads, SEO local, réseaux sociaux et design graphique, spécialisés pour les entrepreneurs en construction.'
+  );
   return (
     <div className="pt-32 pb-24 px-6 relative z-10">
       <div className="container mx-auto">

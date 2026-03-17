@@ -2,8 +2,13 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import LiquidGlassCard from '../components/LiquidGlassCard';
 import { Mail, Phone, MapPin, Send, CheckCircle2 } from 'lucide-react';
+import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function Contact() {
+  usePageMeta(
+    'Contactez-nous – Propulsite | Obtenir une soumission gratuite',
+    'Contactez Propulsite pour obtenir une soumission gratuite. Nous aidons les entrepreneurs en construction à générer plus de leads grâce au marketing numérique.'
+  );
   const [formData, setFormData] = useState({
     nom: '',
     email: '',

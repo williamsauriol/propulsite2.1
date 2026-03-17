@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Bloquer le funnel des moteurs (page privée de conversion, pas de SEO nécessaire)
+Disallow: /funnel
+
+Sitemap: https://propulsite.ca/sitemap.xml
