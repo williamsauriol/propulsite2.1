@@ -12,6 +12,7 @@ export default function Contact() {
   const [formData, setFormData] = useState({
     nom: '',
     email: '',
+    telephone: '',
     sujet: 'Audit Gratuit',
     message: ''
   });
@@ -40,6 +41,7 @@ export default function Contact() {
             _subject: `Nouveau message Contact - ${formData.sujet}`,
             Nom: formData.nom,
             Email: formData.email,
+            Téléphone: formData.telephone || 'Non fourni',
             Sujet: formData.sujet,
             Message: formData.message
         })
@@ -47,7 +49,7 @@ export default function Contact() {
       
       if (response.ok) {
         setIsSuccess(true);
-        setFormData({ nom: '', email: '', sujet: 'Audit Gratuit', message: '' });
+        setFormData({ nom: '', email: '', telephone: '', sujet: 'Audit Gratuit', message: '' });
       } else {
         setError("Une erreur est survenue lors de l'envoi du message.");
       }
@@ -119,6 +121,16 @@ export default function Contact() {
                         placeholder="jean@entreprise.com"
                       />
                     </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold uppercase tracking-widest text-white/50">Téléphone</label>
+                    <input
+                      type="tel"
+                      value={formData.telephone}
+                      onChange={(e) => setFormData({...formData, telephone: e.target.value})}
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent-blue focus:ring-1 focus:ring-accent-blue transition-all"
+                      placeholder="(514) 555-1234"
+                    />
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-bold uppercase tracking-widest text-white/50">Sujet</label>
