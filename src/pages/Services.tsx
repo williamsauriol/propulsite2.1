@@ -49,6 +49,39 @@ export default function Services() {
             </Link>
           ))}
         </div>
+
+        {/* CTA — Undecided visitors */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mt-24 relative bg-gradient-to-br from-[#0a1930] to-[#050a15] border border-accent-blue/30 rounded-3xl p-10 md:p-16 text-center overflow-hidden shadow-[0_0_60px_rgba(0,210,255,0.1)]"
+        >
+          {/* Decorative glows */}
+          <div className="absolute top-0 right-0 w-72 h-72 bg-accent-blue/10 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-72 h-72 bg-purple-500/10 rounded-full blur-[100px] pointer-events-none" />
+
+          <div className="relative z-10">
+            <div className="inline-block px-4 py-1.5 rounded-full bg-accent-blue/10 border border-accent-blue/30 text-accent-blue text-xs font-bold tracking-[2.5px] uppercase mb-6">
+              Pas sûr par où commencer ?
+            </div>
+            <h2 className="text-3xl md:text-5xl font-black text-white mb-6 leading-tight">
+              Trouvons ensemble le<br />
+              <span className="text-accent-blue italic">service parfait pour vous</span>
+            </h2>
+            <p className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+              Vous ne savez pas quel service correspond le mieux à vos besoins ? Répondez à quelques questions et on vous propose une stratégie sur mesure — gratuitement, sans engagement.
+            </p>
+            <Link
+              to="/funnel"
+              className="inline-flex items-center gap-3 px-10 py-5 bg-accent-blue rounded-[50px] text-[#050a15] font-black text-lg uppercase tracking-widest hover:bg-white transition-all duration-300 shadow-[0_0_25px_rgba(0,210,255,0.5)] hover:shadow-[0_0_35px_rgba(255,255,255,0.7)] hover:-translate-y-1 transform"
+            >
+              🚀 DÉCOLLAGE
+            </Link>
+          </div>
+        </motion.div>
+
       </div>
     </div>
   );
