@@ -31,7 +31,7 @@ export default function Home() {
   return (
     <div className="relative z-10">
       {/* Hero Section */}
-      <section className="min-h-screen flex items-center px-6 relative">
+      <section className="min-h-screen flex items-center px-6 relative pt-24">
         <div className="container mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
