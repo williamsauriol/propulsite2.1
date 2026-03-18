@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import Navbar from './components/Navbar';
 import RocketBackground from './components/RocketBackground';
 import Home from './pages/Home';
@@ -13,10 +14,21 @@ import Legal from './pages/Legal';
 import PainPointDetail from './pages/PainPointDetail';
 import Footer from './components/Footer';
 
+// Déclaration de gtag pour TypeScript
+declare function gtag(...args: unknown[]): void;
+
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
+    // Tracking GA4 : envoie un page_view à chaque changement de route
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'page_view', {
+        page_path: pathname,
+        page_location: window.location.href,
+        page_title: document.title,
+      });
+    }
   }, [pathname]);
   return null;
 }
@@ -44,6 +56,7 @@ export default function App() {
 
         <Footer />
       </div>
+      <Analytics />
     </Router>
   );
 }
