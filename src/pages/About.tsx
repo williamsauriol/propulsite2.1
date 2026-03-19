@@ -122,13 +122,13 @@ export default function About() {
 
             <div className="space-y-4 text-white/70 text-lg leading-relaxed mb-10">
               <p>
-                Bonjour! Moi c'est William. J'ai un DEP en charpenterie-menuiserie et j'ai travaillé en tant que charpentier-menuisier. Je connais bien la réalité des chantiers et les défis auxquels vous faites face au quotidien. J'ai fondé Propulsite parce que j'ai toujours cru que chaque entrepreneur en construction mérite une présence en ligne à la hauteur de la qualité de son travail.
+                Bonjour! Moi c'est William. J'ai travaillé en tant que charpentier-menuisier. Je connais bien la réalité des chantiers et les défis auxquels vous faites face au quotidien. J'ai fondé Propulsite parce que j'ai toujours cru que chaque entrepreneur en construction mérite une présence en ligne à la hauteur de la qualité de son travail.
               </p>
               <p>
                 Passionné par le marketing numérique, le design et les stratégies de croissance, j'accompagne mes clients avec une approche directe et humaine. Pas de langue de bois — juste des solutions concrètes qui fonctionnent.
               </p>
               <p>
-                Ce que j'aime le plus dans mon travail? Voir un client décrocher son téléphone parce qu'un nouveau contrat de construction l'a trouvé sur Google. C'est pour ça que je fais ce métier.
+                Ce que j'aime le plus dans mon travail? C'est de voir un entrepreneur d'ici franchir un nouveau cap et décrocher les chantiers qu'il mérite vraiment. Contribuer à votre croissance et bâtir votre succès sur le web, c'est ça qui me motive chaque jour.
               </p>
             </div>
 
