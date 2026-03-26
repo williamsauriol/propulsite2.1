@@ -371,5 +371,74 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
       btnText: "Refaire mon site web →",
       btnLink: "/funnel"
     }
+  },
+  {
+    slug: 'google-ads-construction',
+    tag: 'Stratégie Avancée',
+    titlePart1: 'Google Ads pour entrepreneurs en construction : ',
+    titleHighlight: 'ça vaut-il vraiment la peine',
+    titlePart3: '?',
+    intro: "Vous avez entendu parler de Google Ads mais vous ne savez pas si c'est fait pour votre business de construction ? Voici la vérité — chiffres à l'appui.",
+    blocks: [
+      {
+        title: "Pourquoi Google Ads est l'outil le plus puissant en construction",
+        paragraphs: [
+          "Contrairement aux réseaux sociaux où vous interrompez des gens qui ne cherchent pas votre service, Google Ads vous place devant des personnes qui cherchent EXACTEMENT ce que vous faites — en ce moment précis. Quelqu'un tape 'entrepreneur général Saint-Eustache' ? Votre publicité apparaît en premier, avant tous vos concurrents.",
+          "Dans la construction, le coût moyen d'un projet tourne entre 15 000 $ et 150 000 $. Décrocher un seul contrat supplémentaire par mois via Google Ads peut rapporter 10x à 50x votre investissement publicitaire. C'est le médium avec le meilleur retour sur investissement pour les entreprises de construction."
+        ],
+        listItems: [
+          { bold: 'Intention d\'achat maximale :', text: " Les gens cherchent activement un entrepreneur — ils sont prêts à signer." },
+          { bold: 'Géociblage précis :', text: " Vous payez uniquement quand quelqu'un dans votre zone cherche vos services." },
+          { bold: 'Résultats immédiats :', text: " Contrairement au SEO qui prend des mois, Google Ads génère des appels dès le premier jour." }
+        ],
+        solutionBox: {
+          label: 'Comment Propulsite gère vos Google Ads',
+          text: "On crée et optimise vos campagnes Google Ads de A à Z — choix des mots-clés, rédaction des annonces, pages de destination optimisées et suivi des conversions. Chaque dollar investi est tracké pour maximiser votre retour. Nos clients en construction obtiennent en moyenne 8 à 15 demandes de soumissions qualifiées par mois."
+        }
+      },
+      {
+        title: "Les erreurs qui font brûler votre budget publicitaire",
+        paragraphs: [
+          "La plupart des entrepreneurs qui ont 'essayé Google Ads et trouvé que ça ne marche pas' ont commis des erreurs évitables. Sans les bonnes configurations, vous payez des clics inutiles qui ne convertissent jamais."
+        ],
+        listItems: [
+          { bold: 'Mots-clés trop génériques :', text: " 'construction' attire des gens qui cherchent n'importe quoi — et vous coûte une fortune." },
+          { bold: 'Pas de mots-clés négatifs :', text: " Sans liste d'exclusions, vous payez pour des clics hors-cible (emploi, DIY, etc.)." },
+          { bold: 'Page de destination inefficace :', text: " Envoyer les visiteurs sur votre page d'accueil plutôt qu'une page dédiée réduit vos conversions de 60%." },
+          { bold: 'Pas de suivi des appels :', text: " Sans tracking, impossible de savoir quelles annonces génèrent de vrais contrats." }
+        ]
+      },
+      {
+        title: "Les résultats réalistes à attendre avec une bonne campagne",
+        paragraphs: [
+          "Voici ce que vous pouvez espérer avec une campagne Google Ads bien structurée pour une entreprise de construction au Québec, avec un budget mensuel de 800 $ à 2 000 $ :"
+        ],
+        listItems: [
+          { bold: '8 à 20 demandes de soumissions qualifiées par mois :', text: " Des leads qui cherchent exactement ce que vous offrez." },
+          { bold: 'Coût par lead entre 40 $ et 120 $ :', text: " Sur un contrat de 20 000 $, c'est un investissement négligeable." },
+          { bold: 'Retour sur investissement de 5x à 20x :', text: " Chaque dollar investi rapporte entre 5 $ et 20 $ en chiffre d'affaires." },
+          { bold: 'Résultats dès la première semaine :', text: " Les premiers appels arrivent souvent dans les 48 à 72 heures." }
+        ],
+        solutionBox: {
+          label: 'Conseil de pro',
+          text: "Combinez Google Ads (résultats immédiats) et SEO local (résultats durables) pour une stratégie complète. Les Ads génèrent des leads pendant que le SEO monte — et dans 6 mois, vous dominez Google sur les deux fronts."
+        }
+      },
+      {
+        title: "Google Ads vs autres canaux : le comparatif honnête",
+        listItems: [
+          { bold: 'Google Ads :', text: " Résultats immédiats, coût par clic, intention d'achat maximale. Idéal pour générer des leads rapidement." },
+          { bold: 'SEO local :', text: " Gratuit à long terme, prend 3 à 6 mois à bâtir, durable et cumulatif." },
+          { bold: 'Facebook/Instagram Ads :', text: " Bonne notoriété, intention d'achat plus faible, idéal pour le branding et le remarketing." },
+          { bold: 'Bouche-à-oreille :', text: " Gratuit mais imprévisible — ne peut pas être votre seule source de leads." }
+        ]
+      }
+    ],
+    cta: {
+      title: "Prêt à décrocher plus de contrats dès cette semaine ?",
+      desc: "On lance votre campagne Google Ads conçue spécifiquement pour les entrepreneurs en construction. Les premiers appels arrivent en 48h.",
+      btnText: "Lancer mes Google Ads →",
+      btnLink: "/funnel"
+    }
   }
 ];

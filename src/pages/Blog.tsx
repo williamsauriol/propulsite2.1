@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { Rocket, Target, Search, Users, Smartphone, Star, TrendingUp, Send } from 'lucide-react';
+import { Rocket, Target, Search, Users, Smartphone, Star, TrendingUp, Send, Zap } from 'lucide-react';
 import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function Blog() {
@@ -58,8 +58,16 @@ export default function Blog() {
             title: "Site web non adapté aux appareils mobiles",
             desc: "Aujourd'hui, plus de 70% des recherches pour trouver un entrepreneur se font directement depuis un téléphone intelligent (smartphone). Si votre site web est lent à charger, difficile à lire sans zoomer, ou s'il plante sur mobile, les clients potentiels quittent immédiatement pour aller chez le concurrent. Un site web responsif, ultra-rapide et clair est la base absolue de toute tactique numérique réussie.",
             link: "/blog/site-mobile"
+        },
+        {
+            num: "08",
+            icon: <Zap className="w-8 h-8 text-accent-blue" />,
+            title: "Google Ads pour entrepreneurs en construction : ça vaut-il vraiment la peine ?",
+            desc: "Contrairement aux réseaux sociaux, Google Ads place votre entreprise devant des gens qui cherchent EXACTEMENT vos services en ce moment. Un seul contrat décroché via une campagne bien configurée peut rapporter 10x à 50x votre investissement publicitaire. Leads qualifiés dès 48h, géociblage précis, et retour mesurable à chaque dollar investi — voici pourquoi c'est l'outil le plus puissant pour les entrepreneurs en construction.",
+            link: "/blog/google-ads-construction"
         }
     ];
+
 
     return (
         <div className="pt-32 pb-24 px-6 relative z-10 overflow-hidden">
