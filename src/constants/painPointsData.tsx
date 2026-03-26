@@ -393,7 +393,7 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
         ],
         solutionBox: {
           label: 'Comment Propulsite gère vos Google Ads',
-          text: "On crée et optimise vos campagnes Google Ads de A à Z — choix des mots-clés, rédaction des annonces, pages de destination optimisées et suivi des conversions. Chaque dollar investi est tracké pour maximiser votre retour. Nos clients en construction obtiennent en moyenne 8 à 15 demandes de soumissions qualifiées par mois."
+          text: "On crée et optimise vos campagnes Google Ads de A à Z — choix des mots-clés, rédaction des annonces, pages de destination optimisées et suivi des conversions. Chaque dollar investi est tracké pour maximiser votre retour."
         }
       },
       {
