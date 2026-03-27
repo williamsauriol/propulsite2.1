@@ -361,7 +361,7 @@ export default function Funnel() {
                                     </motion.div>
                                     <h2 className="text-4xl font-black mb-4 text-white">Mission accomplie !</h2>
                                     <p className="text-white/60 text-lg leading-relaxed max-w-md mx-auto">
-                                        Vos coordonnées de vol ont été transmises. L'équipage Propulsite vous contactera sur <strong className="text-white">{data.email}</strong> d'ici peu.
+                                        Vos coordonnées de vol ont été transmises. L'équipe Propulsite vous contactera sur <strong className="text-white">{data.email}</strong> d'ici peu.
                                     </p>
                                 </div>
                             )}

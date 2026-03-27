@@ -12,6 +12,7 @@ import Funnel from './pages/Funnel';
 import Blog from './pages/Blog';
 import Legal from './pages/Legal';
 import PainPointDetail from './pages/PainPointDetail';
+import NotFound from './pages/NotFound';
 import Footer from './components/Footer';
 
 // Déclaration de gtag pour TypeScript
@@ -51,6 +52,7 @@ export default function App() {
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<PainPointDetail />} />
             <Route path="/legal" element={<Legal />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
 

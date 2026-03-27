@@ -4,7 +4,7 @@
   <!-- Page d'accueil -->
   <url>
     <loc>https://propulsite.ca/</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -12,45 +12,45 @@
   <!-- Services -->
   <url>
     <loc>https://propulsite.ca/services</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
-  <!-- Pages de service individuelles -->
+  <!-- Pages de service individuelles (slugs correspondant à services.tsx) -->
   <url>
-    <loc>https://propulsite.ca/services/conception-web</loc>
-    <lastmod>2026-03-17</lastmod>
+    <loc>https://propulsite.ca/services/conception-site-web</loc>
+    <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://propulsite.ca/services/google-ads</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://propulsite.ca/services/seo-local</loc>
-    <lastmod>2026-03-17</lastmod>
+    <loc>https://propulsite.ca/services/seo</loc>
+    <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://propulsite.ca/services/facebook-ads</loc>
-    <lastmod>2026-03-17</lastmod>
+    <loc>https://propulsite.ca/services/publicite-facebook</loc>
+    <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://propulsite.ca/services/medias-sociaux</loc>
-    <lastmod>2026-03-17</lastmod>
+    <loc>https://propulsite.ca/services/gestion-medias-sociaux</loc>
+    <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://propulsite.ca/services/design-graphique</loc>
-    <lastmod>2026-03-17</lastmod>
+    <loc>https://propulsite.ca/services/chatbot-ia</loc>
+    <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -58,7 +58,7 @@
   <!-- Blog -->
   <url>
     <loc>https://propulsite.ca/blog</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>2026-03-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -66,43 +66,49 @@
   <!-- Articles de blog -->
   <url>
     <loc>https://propulsite.ca/blog/pas-assez-contrats</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://propulsite.ca/blog/image-marque-datee</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://propulsite.ca/blog/invisible-google</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://propulsite.ca/blog/se-demarquer-concurrence</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://propulsite.ca/blog/reseaux-sociaux</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://propulsite.ca/blog/reputation-en-ligne</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://propulsite.ca/blog/site-mobile</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>2026-03-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://propulsite.ca/blog/google-ads-construction</loc>
+    <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -110,7 +116,7 @@
   <!-- À Propos -->
   <url>
     <loc>https://propulsite.ca/a-propos</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -118,23 +124,15 @@
   <!-- Contact -->
   <url>
     <loc>https://propulsite.ca/contact</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-  </url>
-
-  <!-- Funnel -->
-  <url>
-    <loc>https://propulsite.ca/funnel</loc>
-    <lastmod>2026-03-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
   </url>
 
   <!-- Légal -->
   <url>
     <loc>https://propulsite.ca/legal</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>2026-03-26</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

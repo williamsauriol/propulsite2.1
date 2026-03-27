@@ -6,8 +6,8 @@ import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function Blog() {
     usePageMeta(
-        'Blog – 7 problèmes qui freinent les compagnies de construction | Propulsite',
-        'Découvrez les 7 obstacles numériques les plus fréquents pour les entrepreneurs en construction et comment Propulsite vous aide à les surmonter.'
+        'Blog – 8 problèmes qui freinent les compagnies de construction | Propulsite',
+        'Découvrez les 8 obstacles numériques les plus fréquents pour les entrepreneurs en construction et comment Propulsite vous aide à les surmonter.'
     );
     const painPoints = [
         {
@@ -89,7 +89,7 @@ export default function Blog() {
                         Article de Blog
                     </div>
                     <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-                        7 PROBLÈMES QUI FREINENT LES <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-blue to-purple-400">COMPAGNIES DE CONSTRUCTION</span> EN LIGNE
+                        8 PROBLÈMES QUI FREINENT LES <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-blue to-purple-400">COMPAGNIES DE CONSTRUCTION</span> EN LIGNE
                     </h1>
                     <p className="text-xl text-white/60 max-w-2xl mx-auto leading-relaxed">
                         Vous bâtissez des projets solides, mais votre présence numérique ne suit pas? Voici les obstacles les plus fréquents — et comment les surmonter pour exploser vos ventes.

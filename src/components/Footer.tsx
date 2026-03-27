@@ -36,12 +36,12 @@ export default function Footer() {
                     <div className="md:col-span-3">
                         <h4 className="text-sm font-bold tracking-widest uppercase text-white mb-6">Services</h4>
                         <ul className="space-y-4">
-                            <li><Link to="/services" className="text-white/60 hover:text-accent-blue transition-colors text-sm">Conception de site web</Link></li>
-                            <li><Link to="/services" className="text-white/60 hover:text-accent-blue transition-colors text-sm">Google Ads</Link></li>
-                            <li><Link to="/services" className="text-white/60 hover:text-accent-blue transition-colors text-sm">Référencement SEO</Link></li>
-                            <li><Link to="/services" className="text-white/60 hover:text-accent-blue transition-colors text-sm">Publicité Facebook</Link></li>
-                            <li><Link to="/services" className="text-white/60 hover:text-accent-blue transition-colors text-sm">Médias sociaux</Link></li>
-                            <li><Link to="/services" className="text-white/60 hover:text-accent-blue transition-colors text-sm">Design graphique</Link></li>
+                            <li><Link to="/services/conception-site-web" className="text-white/60 hover:text-accent-blue transition-colors text-sm">Conception de site web</Link></li>
+                            <li><Link to="/services/google-ads" className="text-white/60 hover:text-accent-blue transition-colors text-sm">Google Ads</Link></li>
+                            <li><Link to="/services/seo" className="text-white/60 hover:text-accent-blue transition-colors text-sm">Référencement SEO</Link></li>
+                            <li><Link to="/services/publicite-facebook" className="text-white/60 hover:text-accent-blue transition-colors text-sm">Publicité Facebook</Link></li>
+                            <li><Link to="/services/gestion-medias-sociaux" className="text-white/60 hover:text-accent-blue transition-colors text-sm">Médias sociaux</Link></li>
+                            <li><Link to="/services/chatbot-ia" className="text-white/60 hover:text-accent-blue transition-colors text-sm">Chatbot IA</Link></li>
                         </ul>
                     </div>
 
