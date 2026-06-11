@@ -1,6 +1,8 @@
 export interface PainPointArticleData {
   slug: string;
   tag: string;
+  datePublished?: string; // format YYYY-MM-DD
+  dateModified?: string; // format YYYY-MM-DD
   titlePart1: string;
   titleHighlight: string;
   titlePart3?: string;
@@ -23,6 +25,7 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
   {
     slug: 'pas-assez-contrats',
     tag: 'Problème 01',
+    datePublished: '2026-03-10',
     titlePart1: 'Pas assez de ',
     titleHighlight: 'contrats de construction',
     titlePart3: '?',
@@ -75,6 +78,7 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
   {
     slug: 'image-marque-datee',
     tag: 'Problème 02',
+    datePublished: '2026-03-10',
     titlePart1: '',
     titleHighlight: 'Une image de marque datée qui repousse les clients',
     intro: 'Votre travail sur le terrain est impeccable. Mais votre image en ligne raconte une autre histoire.',
@@ -125,6 +129,7 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
   {
     slug: 'invisible-google',
     tag: 'Problème 03',
+    datePublished: '2026-03-10',
     titlePart1: '',
     titleHighlight: 'Totalement invisible sur Google',
     intro: "Vos concurrents apparaissent en premier. Vos clients potentiels ne vous trouvent jamais. Voici comment inverser ça.",
@@ -175,6 +180,7 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
   {
     slug: 'se-demarquer-concurrence',
     tag: 'Problème 04',
+    datePublished: '2026-03-10',
     titlePart1: '',
     titleHighlight: 'Difficile de se démarquer de la concurrence',
     intro: "Quand tout le monde offre les mêmes services au même prix, comment gagner? En étant différent — stratégiquement.",
@@ -225,6 +231,7 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
   {
     slug: 'reseaux-sociaux',
     tag: 'Problème 05',
+    datePublished: '2026-03-10',
     titlePart1: '',
     titleHighlight: 'Aucune stratégie sur les réseaux sociaux',
     intro: "Vos chantiers sont impressionnants. Mais si personne ne les voit en ligne, vous passez à côté d'une vitrine gratuite et puissante.",
@@ -275,6 +282,7 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
   {
     slug: 'reputation-en-ligne',
     tag: 'Problème 06',
+    datePublished: '2026-03-10',
     titlePart1: '',
     titleHighlight: 'Gestion de réputation en ligne inexistante',
     intro: "Vos clients sont satisfaits mais silencieux en ligne. Pendant ce temps, un avis négatif peut faire fuir 10 clients potentiels.",
@@ -325,6 +333,7 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
   {
     slug: 'site-mobile',
     tag: 'Problème 07',
+    datePublished: '2026-03-10',
     titlePart1: '',
     titleHighlight: 'Site web non adapté aux appareils mobiles',
     intro: "70% de vos clients potentiels cherchent sur leur téléphone. Si votre site ne fonctionne pas sur mobile, vous perdez ces clients avant même qu'ils vous appellent.",
@@ -375,6 +384,7 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
   {
     slug: 'google-ads-construction',
     tag: 'Stratégie Avancée',
+    datePublished: '2026-03-26',
     titlePart1: 'Google Ads pour entrepreneurs en construction : ',
     titleHighlight: 'ça vaut-il vraiment la peine',
     titlePart3: '?',

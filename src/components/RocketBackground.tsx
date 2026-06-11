@@ -137,10 +137,24 @@ export default React.memo(function RocketBackground() {
 
   return (
     <div className={`fixed inset-0 pointer-events-none z-0 overflow-hidden transition-colors duration-1000 ${bgColor}`}>
-      {/* Static Stars Background */}
+      {/* Static Stars Background (CSS only — no image request) */}
       <div
-        className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000"
-        style={{ backgroundImage: "url('/input_file_0.png')", opacity: isHome ? 0.4 : 0.15 }}
+        className="absolute inset-0 transition-opacity duration-1000"
+        style={{
+          opacity: isHome ? 0.5 : 0.2,
+          backgroundImage: `
+            radial-gradient(1.5px 1.5px at 10% 20%, rgba(255,255,255,0.4) 0%, transparent 100%),
+            radial-gradient(1px 1px at 25% 65%, rgba(255,255,255,0.3) 0%, transparent 100%),
+            radial-gradient(2px 2px at 42% 12%, rgba(255,255,255,0.25) 0%, transparent 100%),
+            radial-gradient(1px 1px at 58% 80%, rgba(255,255,255,0.35) 0%, transparent 100%),
+            radial-gradient(1.5px 1.5px at 72% 35%, rgba(255,255,255,0.2) 0%, transparent 100%),
+            radial-gradient(1px 1px at 88% 58%, rgba(255,255,255,0.3) 0%, transparent 100%),
+            radial-gradient(1px 1px at 35% 42%, rgba(255,255,255,0.15) 0%, transparent 100%),
+            radial-gradient(1.5px 1.5px at 65% 90%, rgba(255,255,255,0.2) 0%, transparent 100%),
+            radial-gradient(1px 1px at 15% 88%, rgba(255,255,255,0.25) 0%, transparent 100%),
+            radial-gradient(2px 2px at 92% 15%, rgba(0,210,255,0.3) 0%, transparent 100%)
+          `,
+        }}
       />
 
       {/* Dynamic Ambient Orbs */}

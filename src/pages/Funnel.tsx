@@ -314,6 +314,9 @@ export default function Funnel() {
                                     <div className="space-y-4 mb-8">
                                         <input
                                             type="text"
+                                            name="nom"
+                                            autoComplete="name"
+                                            aria-label="Nom complet"
                                             placeholder="Nom complet *"
                                             value={data.nom}
                                             onChange={e => setData({ ...data, nom: e.target.value })}
@@ -322,6 +325,9 @@ export default function Funnel() {
                                         <div className="grid sm:grid-cols-2 gap-4">
                                             <input
                                                 type="email"
+                                                name="email"
+                                                autoComplete="email"
+                                                aria-label="Adresse courriel"
                                                 placeholder="Adresse courriel *"
                                                 value={data.email}
                                                 onChange={e => setData({ ...data, email: e.target.value })}
@@ -329,6 +335,9 @@ export default function Funnel() {
                                             />
                                             <input
                                                 type="tel"
+                                                name="telephone"
+                                                autoComplete="tel"
+                                                aria-label="Téléphone"
                                                 placeholder="Téléphone"
                                                 value={data.telephone}
                                                 onChange={e => setData({ ...data, telephone: e.target.value })}

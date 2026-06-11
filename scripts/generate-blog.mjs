@@ -244,6 +244,8 @@ async function main() {
   console.log(`🎯 Selected topic: ${topic.topic}`);
 
   const article = await generateArticle(topic);
+  // Date de publication (affichée sur l'article + utilisée par le schema BlogPosting et le sitemap)
+  article.datePublished = new Date().toISOString().slice(0, 10);
   console.log(`📝 Article generated: "${article.titleHighlight}"`);
 
   appendToPainPointsData(article);

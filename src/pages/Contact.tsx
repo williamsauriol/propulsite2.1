@@ -102,9 +102,12 @@ export default function Contact() {
                   )}
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label className="text-sm font-bold uppercase tracking-widest text-white/50">Nom Complet *</label>
+                      <label htmlFor="contact-nom" className="text-sm font-bold uppercase tracking-widest text-white/50">Nom Complet *</label>
                       <input
+                        id="contact-nom"
+                        name="nom"
                         type="text"
+                        autoComplete="name"
                         value={formData.nom}
                         onChange={(e) => setFormData({...formData, nom: e.target.value})}
                         className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent-blue focus:ring-1 focus:ring-accent-blue transition-all"
@@ -112,9 +115,12 @@ export default function Contact() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-bold uppercase tracking-widest text-white/50">Email *</label>
+                      <label htmlFor="contact-email" className="text-sm font-bold uppercase tracking-widest text-white/50">Email *</label>
                       <input
+                        id="contact-email"
+                        name="email"
                         type="email"
+                        autoComplete="email"
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
                         className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent-blue focus:ring-1 focus:ring-accent-blue transition-all"
@@ -123,9 +129,12 @@ export default function Contact() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-bold uppercase tracking-widest text-white/50">Téléphone</label>
+                    <label htmlFor="contact-telephone" className="text-sm font-bold uppercase tracking-widest text-white/50">Téléphone</label>
                     <input
+                      id="contact-telephone"
+                      name="telephone"
                       type="tel"
+                      autoComplete="tel"
                       value={formData.telephone}
                       onChange={(e) => setFormData({...formData, telephone: e.target.value})}
                       className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent-blue focus:ring-1 focus:ring-accent-blue transition-all"
@@ -133,8 +142,10 @@ export default function Contact() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-bold uppercase tracking-widest text-white/50">Sujet</label>
-                    <select 
+                    <label htmlFor="contact-sujet" className="text-sm font-bold uppercase tracking-widest text-white/50">Sujet</label>
+                    <select
+                      id="contact-sujet"
+                      name="sujet"
                       value={formData.sujet}
                       onChange={(e) => setFormData({...formData, sujet: e.target.value})}
                       className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent-blue focus:ring-1 focus:ring-accent-blue transition-all appearance-none cursor-pointer"
@@ -146,8 +157,10 @@ export default function Contact() {
                     </select>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-bold uppercase tracking-widest text-white/50">Message *</label>
+                    <label htmlFor="contact-message" className="text-sm font-bold uppercase tracking-widest text-white/50">Message *</label>
                     <textarea
+                      id="contact-message"
+                      name="message"
                       rows={5}
                       value={formData.message}
                       onChange={(e) => setFormData({...formData, message: e.target.value})}

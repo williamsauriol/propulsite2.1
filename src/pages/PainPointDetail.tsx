@@ -11,7 +11,7 @@ export default function PainPointDetail() {
   const article = PAIN_POINTS_ARTICLES.find((a) => a.slug === slug);
 
   usePageMeta(
-    article ? `${article.titlePart1}${article.titleHighlight}${article.titlePart3} – Propulsite` : 'Article – Propulsite',
+    article ? `${article.titlePart1}${article.titleHighlight}${article.titlePart3 || ''} | Propulsite` : 'Article – Propulsite',
     article ? article.intro : undefined
   );
 
@@ -54,6 +54,19 @@ export default function PainPointDetail() {
           <p className="text-xl text-white/60 max-w-2xl mx-auto leading-relaxed">
             {article.intro}
           </p>
+          <div className="mt-6 text-sm text-white/40 font-medium tracking-wide">
+            Par <span className="text-white/70 font-bold">William Sauriol</span>
+            {article.datePublished && (
+              <>
+                {' '}· Publié le{' '}
+                {new Date(`${article.datePublished}T00:00:00`).toLocaleDateString('fr-CA', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                })}
+              </>
+            )}
+          </div>
         </motion.div>
 
         {/* CONTENT BLOCKS */}

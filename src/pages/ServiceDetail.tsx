@@ -11,8 +11,8 @@ export default function ServiceDetail() {
   const service = SERVICES.find((s) => s.slug === slug);
 
   usePageMeta(
-    service ? `${service.title} – Propulsite | Agence marketing construction` : 'Service – Propulsite',
-    service ? `Découvrez notre service ${service.title} pour les entrepreneurs en construction. ${service.shortDesc}` : undefined
+    service ? `${service.title} pour entrepreneurs en construction | Propulsite` : 'Service – Propulsite',
+    service ? `${service.shortDesc} Service ${service.title} spécialisé pour les entrepreneurs en construction au Québec.` : undefined
   );
 
   if (!service) {
@@ -96,6 +96,24 @@ export default function ServiceDetail() {
             </LiquidGlassCard>
           </motion.div>
         </div>
+
+        {/* FAQ Section */}
+        {service.faq && service.faq.length > 0 && (
+          <div className="mt-32 max-w-3xl">
+            <h2 className="text-4xl font-black mb-4 text-3d uppercase italic">Questions fréquentes</h2>
+            <p className="text-white/50 mb-12">
+              Les questions que les entrepreneurs nous posent le plus souvent à propos de ce service.
+            </p>
+            <div className="space-y-6">
+              {service.faq.map((item, index) => (
+                <LiquidGlassCard key={index} delay={index * 0.05} className="!p-8">
+                  <h3 className="text-xl font-bold mb-3 text-[color:var(--service-color)]">{item.q}</h3>
+                  <p className="text-white/70 leading-relaxed">{item.a}</p>
+                </LiquidGlassCard>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Other Services Section */}
         <div className="mt-32">

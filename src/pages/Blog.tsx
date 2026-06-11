@@ -6,8 +6,8 @@ import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function Blog() {
     usePageMeta(
-        'Blog – 8 problèmes qui freinent les compagnies de construction | Propulsite',
-        'Découvrez les 8 obstacles numériques les plus fréquents pour les entrepreneurs en construction et comment Propulsite vous aide à les surmonter.'
+        'Blog marketing pour compagnies de construction | Propulsite',
+        'Conseils marketing numérique pour entrepreneurs en construction au Québec : SEO local, Google Ads, image de marque, réseaux sociaux et génération de leads.'
     );
     const painPoints = [
         {
@@ -21,7 +21,7 @@ export default function Blog() {
             num: "02",
             icon: <Target className="w-8 h-8 text-accent-blue" />,
             title: "Une image de marque datée qui repousse les clients",
-            desc: "Un logo vieillissant, des couleurs passées, un site web d'une autre époque : votre identité visuelle ne reflète plus la qualité exceptionnelle de votre travail sur le terrain. Dans un secteur de la construction hautement compétitif, la première impression se fait désormais à 100% en ligne. Une image de marque moderne, professionnelle et rassurante inspire confiance dès le premier regard et justify votre tarification auprès des clients.",
+            desc: "Un logo vieillissant, des couleurs passées, un site web d'une autre époque : votre identité visuelle ne reflète plus la qualité exceptionnelle de votre travail sur le terrain. Dans un secteur de la construction hautement compétitif, la première impression se fait désormais à 100% en ligne. Une image de marque moderne, professionnelle et rassurante inspire confiance dès le premier regard et justifie votre tarification auprès des clients.",
             link: "/blog/image-marque-datee"
         },
         {

@@ -1,6 +1,11 @@
 import React from 'react';
 import { Layout, Search, Megaphone, Users, Palette, MessageSquare, Globe, Zap } from 'lucide-react';
 
+export interface ServiceFaq {
+  q: string;
+  a: string;
+}
+
 export interface Service {
   slug: string;
   title: string;
@@ -9,6 +14,7 @@ export interface Service {
   fullDesc: string;
   features: string[];
   color: string;
+  faq: ServiceFaq[];
 }
 
 export const SERVICES: Service[] = [
@@ -25,6 +31,24 @@ export const SERVICES: Service[] = [
       'Système de gestion de contenu (CMS) intuitif',
       'Intégration de formulaires de soumission personnalisés',
       'Hébergement sécurisé et maintenance'
+    ],
+    faq: [
+      {
+        q: 'Combien de temps faut-il pour créer un site web de construction ?',
+        a: "En général, comptez de 2 à 4 semaines selon la complexité du projet : un site vitrine simple se livre plus vite qu'un site avec portfolio de réalisations, formulaires de soumission avancés et intégrations sur mesure. On établit un échéancier clair dès le départ et on le respecte."
+      },
+      {
+        q: 'Mon site sera-t-il adapté aux téléphones mobiles ?',
+        a: "Absolument. Plus de 70 % des recherches pour trouver un entrepreneur se font sur mobile, alors chaque site qu'on conçoit est responsive : il s'affiche parfaitement sur téléphone, tablette et ordinateur, avec un temps de chargement optimisé."
+      },
+      {
+        q: 'Vais-je pouvoir modifier mon site moi-même ?',
+        a: "Oui. On intègre un système de gestion de contenu (CMS) intuitif et on vous montre comment ajouter vos photos de chantier, modifier vos textes ou publier une nouvelle réalisation — sans aucune connaissance technique."
+      },
+      {
+        q: "Combien coûte un site web pour une entreprise de construction ?",
+        a: "Le prix dépend de l'ampleur du projet : nombre de pages, fonctionnalités, photographie, rédaction. Plutôt que des forfaits génériques, on prépare une soumission personnalisée gratuite basée sur vos besoins réels et vos objectifs d'affaires."
+      }
     ]
   },
   {
@@ -40,6 +64,20 @@ export const SERVICES: Service[] = [
       'Ciblage géographique précis',
       'Suivi des conversions et appels',
       'Optimisation continue du budget'
+    ],
+    faq: [
+      {
+        q: 'En combien de temps Google Ads donne-t-il des résultats ?',
+        a: "C'est le levier le plus rapide du marketing numérique : vos annonces apparaissent dès le lancement de la campagne, et les premières demandes de soumission peuvent arriver en quelques jours. Les semaines suivantes servent à optimiser le coût par lead."
+      },
+      {
+        q: 'Quel budget publicitaire prévoir pour la construction au Québec ?',
+        a: "Le budget dépend de votre région, de vos services et de la concurrence locale. On recommande de commencer avec un budget de test raisonnable, de mesurer le coût par demande de soumission, puis d'augmenter progressivement ce qui fonctionne. Vous gardez le contrôle du budget en tout temps."
+      },
+      {
+        q: 'Est-ce que Google Ads fonctionne pour une petite entreprise de construction ?',
+        a: "Oui, et c'est même un avantage : le géociblage permet de viser uniquement votre territoire de service et vos types de projets. Vous ne payez jamais pour des clics à l'extérieur de votre zone, ce qui rend l'outil rentable même avec une petite équipe."
+      }
     ]
   },
   {
@@ -55,6 +93,20 @@ export const SERVICES: Service[] = [
       'Stratégie de contenu et blogue',
       'Netlinking et autorité de domaine',
       'Optimisation Google Business Profile'
+    ],
+    faq: [
+      {
+        q: 'Combien de temps avant de voir des résultats SEO ?',
+        a: "Le référencement naturel est un investissement à moyen terme : les premiers gains apparaissent généralement entre 3 et 6 mois, selon votre point de départ et la concurrence locale. Contrairement à la publicité, les résultats sont durables — vous continuez de récolter des leads sans payer chaque clic."
+      },
+      {
+        q: "C'est quoi le SEO local exactement ?",
+        a: "C'est l'art d'apparaître quand quelqu'un cherche « entrepreneur général près de moi » ou « rénovation + votre ville » sur Google et Google Maps. Ça passe par votre fiche Google Business Profile, des pages optimisées pour votre territoire et des avis clients — exactement ce qu'on optimise pour vous."
+      },
+      {
+        q: 'SEO ou Google Ads : lequel choisir ?',
+        a: "Les deux sont complémentaires : Google Ads génère des leads immédiatement pendant que le SEO bâtit votre visibilité à long terme. La stratégie idéale dépend de votre budget et de vos objectifs — on vous recommande le bon dosage lors de la consultation gratuite."
+      }
     ]
   },
   {
@@ -70,6 +122,20 @@ export const SERVICES: Service[] = [
       'Retargeting (reciblage des visiteurs)',
       'Tests A/B pour maximiser les performances',
       'Rapports de performance détaillés'
+    ],
+    faq: [
+      {
+        q: 'Est-ce que la publicité Facebook fonctionne vraiment pour la construction ?',
+        a: "Oui — les photos avant/après et les vidéos de chantier sont parmi les contenus les plus performants sur Facebook et Instagram. On cible les propriétaires de votre région selon leur profil, et vos réalisations font le reste."
+      },
+      {
+        q: 'Quelle est la différence entre « booster » une publication et une vraie campagne ?',
+        a: "Le bouton « Booster » achète de la visibilité sans réelle stratégie. Une campagne structurée définit un objectif précis (demandes de soumission, appels), des audiences ciblées, du reciblage des visiteurs de votre site et des tests A/B — c'est ce qui transforme un budget pub en contrats."
+      },
+      {
+        q: 'Mes publicités vont-elles apparaître aussi sur Instagram ?',
+        a: "Oui. Les campagnes sont gérées via Meta et diffusées sur Facebook et Instagram en même temps, avec des formats adaptés à chaque plateforme. Vous touchez les deux audiences sans doubler le travail ni le budget."
+      }
     ]
   },
   {
@@ -85,6 +151,20 @@ export const SERVICES: Service[] = [
       'Interaction avec la communauté',
       'Veille concurrentielle',
       'Croissance organique de l\'audience'
+    ],
+    faq: [
+      {
+        q: 'Sur quelles plateformes mon entreprise devrait-elle être présente ?',
+        a: "Pour le résidentiel, Facebook et Instagram sont prioritaires : c'est là que vos futurs clients passent leur temps. Pour les projets commerciaux et institutionnels, LinkedIn devient pertinent. On choisit ensemble selon votre clientèle cible plutôt que d'être partout à moitié."
+      },
+      {
+        q: 'À quelle fréquence faut-il publier ?',
+        a: "La régularité bat le volume : mieux vaut 2 à 3 publications de qualité par semaine, constantes, qu'une rafale suivie de trois mois de silence. C'est exactement ce que le calendrier éditorial mensuel garantit — sans que vous ayez à y penser entre deux chantiers."
+      },
+      {
+        q: 'Dois-je fournir les photos et le contenu ?',
+        a: "Vos photos de chantier sont votre meilleur atout : quelques clichés pris au téléphone suffisent. On s'occupe de la sélection, de la retouche, des textes et de la publication. Vous bâtissez, on raconte."
+      }
     ]
   },
   {
@@ -100,6 +180,20 @@ export const SERVICES: Service[] = [
       'Capture de coordonnées (Lead Gen)',
       'Personnalisation selon votre marque',
       'Support conversationnel fluide'
+    ],
+    faq: [
+      {
+        q: 'Comment un chatbot IA aide-t-il une entreprise de construction ?',
+        a: "Il répond instantanément aux visiteurs de votre site, le soir et la fin de semaine inclus — exactement quand les propriétaires magasinent leur entrepreneur. Il capte les demandes de soumission que vous auriez manquées pendant que vous êtes sur le chantier."
+      },
+      {
+        q: "Est-ce compliqué à installer sur mon site ?",
+        a: "Non, on s'occupe de tout : configuration, intégration à votre site web, personnalisation des réponses selon vos services et votre territoire. Le chatbot est entraîné avec les questions réelles de vos clients avant la mise en ligne."
+      },
+      {
+        q: 'Le chatbot peut-il qualifier mes prospects ?',
+        a: "Oui, c'est sa force principale : il pose les bonnes questions (type de projet, secteur, échéancier), recueille les coordonnées et vous transmet un lead déjà qualifié. Les demandes complexes sont redirigées vers vous automatiquement."
+      }
     ]
   }
 ];

@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 
 interface LiquidGlassCardProps {
+  key?: React.Key;
   children: React.ReactNode;
   className?: string;
   delay?: number;

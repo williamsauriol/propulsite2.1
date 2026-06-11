@@ -2,14 +2,14 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import LiquidGlassCard from '../components/LiquidGlassCard';
-import { ArrowRight, HardHat } from 'lucide-react';
+import { ArrowRight, HardHat, ClipboardList, Palette, Search } from 'lucide-react';
 import { SERVICES } from '../constants/services';
 import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function Home() {
   usePageMeta(
-    'Propulsite – Agence marketing pour la construction',
-    'Propulsite aide les entrepreneurs en construction à dominer leur marché local grâce à des stratégies digitales : Google Ads, SEO local, conception web et réseaux sociaux.'
+    'Agence marketing construction au Québec | Propulsite',
+    'Propulsite aide les entrepreneurs en construction au Québec à dominer leur marché local grâce au marketing numérique : Google Ads, SEO local, conception web et réseaux sociaux.'
   );
   const homeServices = SERVICES.slice(0, 6);
 
@@ -43,11 +43,11 @@ export default function Home() {
               <HardHat className="w-5 h-5" /> Spécialiste Marketing Construction
             </div>
             <h1 className="text-6xl md:text-8xl lg:text-9xl font-black leading-none mb-8 text-3xl-effect">
-              <span className="block text-white text-3d mb-2">PROPULSER VOTRE</span>
-              <span className="block text-accent-blue text-glow-blue italic text-[0.85em] md:text-[0.9em]">CROISSANCE DIGITALE</span>
+              <span className="block text-white text-3d mb-2">PROPULSEZ VOTRE</span>
+              <span className="block text-accent-blue text-glow-blue italic text-[0.62em] md:text-[0.66em]">ENTREPRISE DE CONSTRUCTION</span>
             </h1>
             <p className="text-xl md:text-2xl text-white/70 mb-10 max-w-2xl leading-relaxed">
-              Nous aidons les <span className="text-white font-bold">entrepreneurs en construction</span> à dominer leur marché local grâce à des stratégies digitales.
+              Nous aidons les <span className="text-white font-bold">entrepreneurs en construction au Québec</span> à dominer leur marché local grâce au marketing numérique.
             </p>
             <div className="flex flex-wrap gap-6 justify-center">
               <Link to="/funnel" className="px-10 py-5 bubble-glass text-white font-black hover:text-accent-blue transform hover:-translate-y-1">
@@ -127,69 +127,69 @@ export default function Home() {
               Pourquoi les entrepreneurs<br />
               <span className="text-accent-blue">nous choisissent ?</span>
             </h2>
-            <div className="w-16 h-1 bg-gradient-to-r from-accent-blue to-blue-400 rounded-full mx-auto" />
+            <div className="w-16 h-1 bg-gradient-to-r from-accent-blue to-cyan-300 rounded-full mx-auto" />
           </div>
 
           {/* Cards Grid with Images */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Card 1 */}
-            <div className="bg-[#0a1628] rounded-3xl overflow-hidden border border-white/10 group flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(37,99,235,0.15)] hover:border-accent-blue/40">
+            <div className="bg-[#0a1628] rounded-3xl overflow-hidden border border-white/10 group flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(0,210,255,0.15)] hover:border-accent-blue/40">
               <div className="relative h-64 overflow-hidden">
                 <img src="/images/team_collaboration.webp" alt="Équipe de construction" loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] to-transparent opacity-90" />
                 <div className="absolute top-4 right-6 text-5xl font-black text-white/10">01</div>
               </div>
               <div className="p-8 flex-grow flex flex-col relative z-10 -mt-10">
-                <div className="w-12 h-12 rounded-xl bg-accent-blue/20 border border-accent-blue/30 flex items-center justify-center text-xl mb-4 backdrop-blur-md">
-                  📋
+                <div className="w-12 h-12 rounded-xl bg-accent-blue/20 border border-accent-blue/30 flex items-center justify-center text-accent-blue mb-4 backdrop-blur-md">
+                  <ClipboardList className="w-6 h-6" />
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-4 leading-tight">Pas assez de contrats ?</h3>
                 <p className="text-white/60 text-sm leading-relaxed mb-8 flex-grow">
                   Votre carnet de commandes est vide ? Nous ciblons les propriétaires qui cherchent activement vos services et les convertissons en clients.
                 </p>
-                <Link to="/blog/pas-assez-contrats" className="inline-flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest transition-all hover:text-blue-400 hover:gap-3 mt-auto">
+                <Link to="/blog/pas-assez-contrats" className="inline-flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest transition-all hover:text-cyan-300 hover:gap-3 mt-auto">
                   En savoir plus <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>
 
             {/* Card 2 */}
-            <div className="bg-[#0a1628] rounded-3xl overflow-hidden border border-white/10 group flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(37,99,235,0.15)] hover:border-accent-blue/40">
+            <div className="bg-[#0a1628] rounded-3xl overflow-hidden border border-white/10 group flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(0,210,255,0.15)] hover:border-accent-blue/40">
               <div className="relative h-64 overflow-hidden">
                 <img src="/images/human_worker.webp" alt="Entrepreneur en construction" loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] to-transparent opacity-90" />
                 <div className="absolute top-4 right-6 text-5xl font-black text-white/10">02</div>
               </div>
               <div className="p-8 flex-grow flex flex-col relative z-10 -mt-10">
-                <div className="w-12 h-12 rounded-xl bg-accent-blue/20 border border-accent-blue/30 flex items-center justify-center text-xl mb-4 backdrop-blur-md">
-                  🎨
+                <div className="w-12 h-12 rounded-xl bg-accent-blue/20 border border-accent-blue/30 flex items-center justify-center text-accent-blue mb-4 backdrop-blur-md">
+                  <Palette className="w-6 h-6" />
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-4 leading-tight">Image de marque datée ?</h3>
                 <p className="text-white/60 text-sm leading-relaxed mb-8 flex-grow">
                   Votre site web fait peur aux clients ? Modernisez votre image pour refléter la qualité réelle de vos travaux et inspirer confiance dès le premier regard.
                 </p>
-                <Link to="/blog/image-marque-datee" className="inline-flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest transition-all hover:text-blue-400 hover:gap-3 mt-auto">
+                <Link to="/blog/image-marque-datee" className="inline-flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest transition-all hover:text-cyan-300 hover:gap-3 mt-auto">
                   En savoir plus <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>
 
             {/* Card 3 */}
-            <div className="bg-[#0a1628] rounded-3xl overflow-hidden border border-white/10 group flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(37,99,235,0.15)] hover:border-accent-blue/40">
+            <div className="bg-[#0a1628] rounded-3xl overflow-hidden border border-white/10 group flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(0,210,255,0.15)] hover:border-accent-blue/40">
               <div className="relative h-64 overflow-hidden">
                 <img src="/images/construction_seo.webp" alt="Succès digital et construction" loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] to-transparent opacity-90" />
                 <div className="absolute top-4 right-6 text-5xl font-black text-white/10">03</div>
               </div>
               <div className="p-8 flex-grow flex flex-col relative z-10 -mt-10">
-                <div className="w-12 h-12 rounded-xl bg-accent-blue/20 border border-accent-blue/30 flex items-center justify-center text-xl mb-4 backdrop-blur-md">
-                  🔍
+                <div className="w-12 h-12 rounded-xl bg-accent-blue/20 border border-accent-blue/30 flex items-center justify-center text-accent-blue mb-4 backdrop-blur-md">
+                  <Search className="w-6 h-6" />
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-4 leading-tight">Perdu dans Google ?</h3>
                 <p className="text-white/60 text-sm leading-relaxed mb-8 flex-grow">
                   Vos concurrents prennent toute la place ? Nous vous propulsons en tête des résultats locaux pour que les bons clients vous trouvent en premier.
                 </p>
-                <Link to="/blog/invisible-google" className="inline-flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest transition-all hover:text-blue-400 hover:gap-3 mt-auto">
+                <Link to="/blog/invisible-google" className="inline-flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest transition-all hover:text-cyan-300 hover:gap-3 mt-auto">
                   En savoir plus <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -240,7 +240,7 @@ export default function Home() {
             border-radius: 24px;
             transition: 700ms;
             background: linear-gradient(135deg, #0a1628 0%, #0f2044 50%, #0a1628 100%);
-            border: 1px solid rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(0, 210, 255, 0.25);
             overflow: hidden;
           }
           #widget-card::before {
@@ -248,7 +248,7 @@ export default function Home() {
             position: absolute;
             inset: -2px;
             border-radius: 26px;
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8, #60a5fa);
+            background: linear-gradient(135deg, #00d2ff, #0077b6, #7ee8ff);
             opacity: 0;
             z-index: -1;
             transition: opacity 300ms;
@@ -275,7 +275,7 @@ export default function Home() {
             line-height: 1.1;
             transition: 300ms ease-in-out;
             z-index: 10;
-            text-shadow: 0 0 40px rgba(59, 130, 246, 0.6);
+            text-shadow: 0 0 40px rgba(0, 210, 255, 0.6);
             margin: 0;
           }
           .widget-description {
@@ -296,14 +296,14 @@ export default function Home() {
           .widget-description p { font-size: 17px; color: #e2e8f0; line-height: 1.6; max-width: 380px; margin: 0; }
           .widget-description .cta-btn {
             display: inline-block;
-            background: #2563eb;
-            color: #fff;
+            background: #00d2ff;
+            color: #050a15;
             font-size: 15px;
             font-weight: 700;
             padding: 12px 28px;
-            border-radius: 8px;
+            border-radius: 50px;
             text-decoration: none;
-            box-shadow: 0 0 20px rgba(37, 99, 235, 0.5);
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.5);
           }
           .widget-rocket {
             position: absolute;
@@ -312,7 +312,7 @@ export default function Home() {
             font-size: 36px;
             z-index: 10;
             transition: transform 300ms ease-in-out;
-            filter: drop-shadow(0 0 12px rgba(59,130,246,0.8));
+            filter: drop-shadow(0 0 12px rgba(0,210,255,0.8));
           }
           .widget-tracker:hover ~ #widget-card #widget-prompt { opacity: 0; }
           .widget-tracker:hover ~ #widget-card .widget-description { opacity: 1; }
