@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
 
     steps:
       - name: Checkout repository
@@ -28,10 +29,21 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: node scripts/generate-blog.mjs
 
-      - name: Commit and push new article
+      - name: Ouvrir une PR de relecture (brouillon, jamais publie en direct)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          if git diff --quiet src/constants/painPointsData.tsx src/pages/Blog.tsx; then
+            echo "Aucun nouvel article genere - rien a proposer."
+            exit 0
+          fi
           git config --global user.name "Propulsite Blog Bot"
           git config --global user.email "bot@propulsite.ca"
+          BRANCH="blog/brouillon-$(date +%Y-%m-%d)"
+          git checkout -b "$BRANCH"
           git add src/constants/painPointsData.tsx src/pages/Blog.tsx
-          git diff --staged --quiet || git commit -m "feat: auto-publish new weekly blog article [skip ci]"
-          git push
+          git commit -m "brouillon: nouvel article de blogue en attente de relecture [skip ci]"
+          git push -u origin "$BRANCH"
+          gh pr create --base main --head "$BRANCH" \
+            --title "Brouillon de blogue a relire - $(date +%Y-%m-%d)" \
+            --body "Article genere automatiquement, en attente de relecture humaine avant publication. Relis le contenu (angle chantier, honnetete des chiffres, voix Propulsite), puis fusionne pour publier ou ferme pour rejeter."

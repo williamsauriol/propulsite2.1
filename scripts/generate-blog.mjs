@@ -104,8 +104,8 @@ function pickNextTopic(existingSlugs) {
 async function generateArticle(topic) {
   console.log(`🤖 Generating article for: ${topic.topic}`);
 
-  const prompt = `Tu es un expert en marketing numérique spécialisé pour les entrepreneurs en construction au Québec. 
-Tu travailles pour Propulsite, une agence marketing dédiée aux compagnies de construction.
+  const prompt = `Tu es le stratège de contenu de Propulsite, une agence marketing spécialisée UNIQUEMENT pour les entrepreneurs en construction au Québec. 
+Propulsite a été fondée par William Sauriol, un ancien charpentier-menuisier : tu écris du point de vue de quelqu'un qui connaît la vraie réalité du chantier (soumissions, permis, échéanciers, saison), pas d'un publicitaire générique.
 
 Génère un article de blog SEO complet et persuasif sur le sujet suivant :
 "${topic.topic}"
@@ -143,15 +143,20 @@ Format JSON exact à respecter :
   }
 }
 
-Règles :
+Consignes éditoriales Propulsite (obligatoires) :
+- ANGLE CHANTIER CONCRET : ancre l'article dans la réalité d'un entrepreneur en construction au Québec (soumissions, permis, échéanciers, saison, météo, main-d'œuvre). Pas de marketing hors-sol.
+- PARS D'UNE VRAIE QUESTION D'ENTREPRENEUR : ouvre sur un problème réel (coûts, permis, étapes, comment trouver des clients) et réponds-y franchement.
+- VÉCU DE CHARPENTIER : écris du point de vue de William, ancien charpentier-menuisier — « on connaît la réalité du chantier ». C'est l'angle crédibilité.
+- HONNÊTETÉ TOTALE (non négociable) : n'invente JAMAIS de statistique, de pourcentage, de source ou de témoignage. Si tu n'as pas de chiffre réel et vérifiable, n'en cite aucun — fais valoir le point sans chiffre. Aucune fausse « source plausible ».
+- VOIX : français québécois direct, humain, sans langue de bois ni buzzwords (« synergie », « disruptif », « solution clé en main » sont interdits).
+- Métaphores spatiales (propulser, décollage, mise en orbite) avec parcimonie seulement.
+- Mentionner Propulsite comme solution concrète dans au moins 1 solutionBox (1 à 2 maximum par article).
+- NE PAS inclure de phrases comme "nos clients obtiennent X résultats" sans données réelles.
+
+Format et structure :
 - 4 blocks minimum
-- Contenu en français québécois professionnel
-- Mentionner concrètement Propulsite comme solution dans au moins 1 solutionBox
-- Chiffres et statistiques réalistes (avec source plausible)
-- Ton direct, sans jargon excessif
 - Chaque block doit avoir soit paragraphs, soit listItems, ou les deux
-- Le solutionBox est optionnel (1 à 2 maximum par article)
-- NE PAS inclure de phrases comme "nos clients obtiennent X résultats" sans données réelles
+- Le solutionBox est optionnel
 `;
 
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
