@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Search, Megaphone, Users, Palette, MessageSquare, Globe, Zap } from 'lucide-react';
+import { Layout, Search, Megaphone, Users, Palette, MessageSquare, Globe, Zap, ShieldCheck } from 'lucide-react';
 
 export interface ServiceFaq {
   q: string;
@@ -77,6 +77,43 @@ export const SERVICES: Service[] = [
       {
         q: 'Est-ce que Google Ads fonctionne pour une petite entreprise de construction ?',
         a: "Oui, et c'est même un avantage : le géociblage permet de viser uniquement votre territoire de service et vos types de projets. Vous ne payez jamais pour des clics à l'extérieur de votre zone, ce qui rend l'outil rentable même avec une petite équipe."
+      }
+    ]
+  },
+  {
+    slug: 'local-services-ads',
+    title: 'Local Services Ads',
+    icon: <ShieldCheck className="w-8 h-8" />,
+    color: '#22c55e', // Vert « Google Garantie »
+    shortDesc: 'Apparaissez en tête de Google, au-dessus des annonces — payez seulement quand un vrai client vous appelle.',
+    fullDesc: "Les Local Services Ads (le « Google Garantie ») affichent votre entreprise tout en haut des résultats Google, au-dessus des annonces classiques et du référencement naturel. Le badge vérifié par Google rassure instantanément le client, et vous ne payez que lorsqu'un prospect vous contacte réellement — pas au clic. Pour un entrepreneur en construction, c'est le moyen le plus direct de générer des appels qualifiés. Propulsite s'occupe de tout : vérification de votre éligibilité au Québec, configuration du profil, processus de vérification Google, et gestion continue pour que chaque dollar serve à de vrais leads.",
+    features: [
+      'Vérification de votre éligibilité au Québec (sans perte de temps)',
+      'Configuration complète de votre profil Google Garantie',
+      'Accompagnement dans la vérification Google (licences, assurances)',
+      'Affichage au-dessus des annonces et du référencement naturel',
+      'Suivi des leads et optimisation du budget en continu'
+    ],
+    faq: [
+      {
+        q: 'Quelle est la différence entre les Local Services Ads et Google Ads ?',
+        a: "Les Google Ads classiques vous facturent à chaque clic, peu importe si le visiteur vous contacte. Les Local Services Ads vous facturent seulement quand un prospect vous appelle ou vous écrit directement via l'annonce — et ils s'affichent au-dessus des annonces classiques, avec le badge Google Garantie en prime."
+      },
+      {
+        q: 'Combien coûte un lead avec les Local Services Ads ?',
+        a: "Le coût par lead varie selon votre métier, votre région et la concurrence. Google fixe un tarif par lead qui peut aller de quelques dollars à quelques dizaines de dollars selon les cas. On le vérifie avec vous avant de lancer quoi que ce soit."
+      },
+      {
+        q: 'Est-ce que tous les entrepreneurs au Québec peuvent s\'inscrire ?',
+        a: "Pas encore toutes les catégories. L'éligibilité dépend de votre type de travaux et de votre région. C'est justement pourquoi on commence par une vérification — pour ne pas vous faire perdre de temps."
+      },
+      {
+        q: 'Est-ce Propulsite qui gère tout, ou dois-je m\'impliquer ?',
+        a: "Le processus de vérification Google nécessite votre participation (documents d'entreprise, licences, assurances). Une fois ça réglé, on prend le relais pour la configuration et la gestion. Votre temps sur le chantier reste votre temps."
+      },
+      {
+        q: 'Est-ce que ça remplace mes autres campagnes marketing ?',
+        a: "Non, c'est complémentaire. Les Local Services Ads sont excellents pour générer des appels locaux immédiats. Le SEO et le site web bâtissent votre présence sur le long terme. Les deux ensemble, c'est plus fort que l'un ou l'autre seul."
       }
     ]
   },
