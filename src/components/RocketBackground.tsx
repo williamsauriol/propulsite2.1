@@ -83,6 +83,10 @@ const ShootingStar = () => {
 };
 
 export default React.memo(function RocketBackground() {
+  // Décoratif et dépendant du navigateur : on ne le rend pas côté serveur
+  // (pré-rendu SEO). Le client le rend normalement après le montage.
+  if (typeof window === 'undefined') return null;
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { pathname } = useLocation();
   const isMobile = useIsMobile();
   const { scrollYProgress } = useScroll();

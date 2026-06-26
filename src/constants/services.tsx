@@ -1,9 +1,19 @@
 import React from 'react';
-import { Layout, Search, Megaphone, Users, Palette, MessageSquare, Globe, Zap } from 'lucide-react';
+import { Layout, Search, Megaphone, Users, Palette, MessageSquare, Globe, Zap, Sparkles, ShieldCheck } from 'lucide-react';
 
 export interface ServiceFaq {
   q: string;
   a: string;
+}
+
+export interface ServicePillar {
+  title: string;
+  tagline: string;
+  color: string;
+  icon: React.ReactNode;
+  paragraphs: string[];
+  articleSlug?: string;
+  articleLabel?: string;
 }
 
 export interface Service {
@@ -15,6 +25,7 @@ export interface Service {
   features: string[];
   color: string;
   faq: ServiceFaq[];
+  pillars?: ServicePillar[];
 }
 
 export const SERVICES: Service[] = [
@@ -24,7 +35,7 @@ export const SERVICES: Service[] = [
     icon: <Layout className="w-8 h-8" />,
     color: '#0ea5e9', // Cyan
     shortDesc: 'Des sites vitrines et e-commerce performants pour entrepreneurs.',
-    fullDesc: "Votre site web est votre carte de visite numérique 24/7. Chez Propulsite, nous concevons des sites web qui ne sont pas seulement beaux, mais qui sont bâtis pour convertir. Spécialisés pour le secteur de la construction, nous comprenons vos besoins : présentation de projets, formulaires de soumission simplifiés et rapidité de chargement sur chantier.",
+    fullDesc: "Votre site web est votre **carte de visite numérique 24/7**. Chez Propulsite, nous concevons des sites web qui ne sont pas seulement beaux, mais **bâtis pour convertir**. **Spécialisés pour la construction**, nous comprenons vos besoins : présentation de projets, **formulaires de soumission simplifiés** et **rapidité de chargement** sur chantier.",
     features: [
       'Design responsive (mobile, tablette, desktop)',
       'Optimisation de la vitesse de chargement',
@@ -57,7 +68,7 @@ export const SERVICES: Service[] = [
     icon: <Search className="w-8 h-8" />,
     color: '#f59e0b', // Amber
     shortDesc: 'Générez des appels de clients prêts à signer dès aujourd\'hui.',
-    fullDesc: "Le marketing par moteur de recherche (SEM) vous permet d'apparaître exactement quand un client cherche vos services. Nous gérons vos campagnes Google Ads pour maximiser votre retour sur investissement. Pour un entrepreneur, chaque clic doit compter : nous ciblons les mots-clés les plus rentables de votre région.",
+    fullDesc: "Le marketing par moteur de recherche (SEM) vous permet d'**apparaître exactement quand un client cherche vos services**. Nous gérons vos campagnes Google Ads pour **maximiser votre retour sur investissement**. Pour un entrepreneur, chaque clic doit compter : nous ciblons les **mots-clés les plus rentables de votre région**.",
     features: [
       'Analyse approfondie des mots-clés',
       'Rédaction d\'annonces percutantes',
@@ -77,6 +88,10 @@ export const SERVICES: Service[] = [
       {
         q: 'Est-ce que Google Ads fonctionne pour une petite entreprise de construction ?',
         a: "Oui, et c'est même un avantage : le géociblage permet de viser uniquement votre territoire de service et vos types de projets. Vous ne payez jamais pour des clics à l'extérieur de votre zone, ce qui rend l'outil rentable même avec une petite équipe."
+      },
+      {
+        q: "Quelle est la différence entre Google Ads et les Local Services Ads (Google Garantie) ?",
+        a: "Les deux sont de la publicité Google, mais elles fonctionnent différemment. Google Ads, c'est de la pub au clic : vous choisissez vos mots-clés, on rédige vos annonces, et vous payez chaque fois que quelqu'un clique. Les Local Services Ads (offertes dans notre service Domination Google) affichent le badge « Garanti par Google » et vous font payer seulement quand un client vous contacte — au lead, pas au clic. On vous conseille la bonne combinaison selon votre métier et votre budget."
       }
     ]
   },
@@ -85,16 +100,21 @@ export const SERVICES: Service[] = [
     title: 'Domination Google',
     icon: <Globe className="w-8 h-8" />,
     color: '#10b981', // Emerald
-    shortDesc: 'Être en tête de Google par tous les moyens : référencement (SEO), fiche Google et Local Services Ads.',
-    fullDesc: "Il n'y a pas une seule façon d'être premier sur Google — il y en a plusieurs, et on les combine. Le référencement naturel (SEO) fait grimper votre site dans les résultats avec le temps, sans payer le clic. Votre fiche Google Business vous place sur la carte et dans le top local. Et les Local Services Ads (le « Google Garantie ») vous propulsent tout en haut, avec un badge vérifié, où vous ne payez que lorsqu'un vrai client vous appelle. Ensemble, ces leviers font de vous le nom qui revient partout quand un propriétaire cherche un entrepreneur dans votre région.",
+    shortDesc: 'Être partout où vos clients cherchent : référencement (SEO), fiche Google, Local Services Ads et GEO (être cité par ChatGPT et l\'IA de Google).',
+    fullDesc: "Être **premier sur Google**, ce n'est plus une seule chose — c'en est plusieurs, et on les combine. **Référencement naturel (SEO)**, **Local Services Ads** et **GEO** : ensemble, ces leviers font de vous **le nom qui revient partout** quand un client cherche un entrepreneur dans votre région — autant dans les **résultats Google** que dans les **réponses générées par l'IA**.",
     features: [
       'Référencement naturel (SEO) : audit technique et optimisation on-page',
       'Optimisation de votre fiche Google Business (carte et top local)',
       'Local Services Ads « Google Garantie » : configuration et gestion',
+      'GEO : être cité et recommandé par ChatGPT, l\'IA de Google et Perplexity',
       'Stratégie de contenu et de mots-clés locaux',
-      'Avis clients et autorité — les signaux que Google récompense'
+      'Avis clients et autorité — les signaux que Google et les IA récompensent'
     ],
     faq: [
+      {
+        q: "C'est quoi le GEO, et pourquoi ça compte pour mon entreprise de construction ?",
+        a: "Le GEO (Generative Engine Optimization), c'est l'art de se faire citer par les moteurs de réponse IA — ChatGPT, l'IA de Google (AI Overviews), Perplexity, Gemini. De plus en plus de propriétaires posent leur question directement à une IA (« quel entrepreneur en rénovation engager à [votre ville] ? ») au lieu de faire défiler Google. Le GEO structure votre contenu et vos informations pour que l'IA vous comprenne, vous fasse confiance et vous recommande. C'est le prolongement naturel du référencement, et on le bâtit en même temps que votre SEO — pour que vous ne soyez pas invisible dans les réponses que vos futurs clients lisent déjà."
+      },
       {
         q: 'Quelle est la différence entre le SEO et les Local Services Ads ?',
         a: "Le SEO, c'est organique et gratuit : votre site grimpe naturellement dans les résultats, mais ça prend des mois. Les Local Services Ads, c'est une pub vérifiée qui s'affiche tout en haut avec le badge « Garanti par Google » — instantané, et vous payez seulement quand un client vous appelle. C'est complémentaire : on combine les deux pour occuper le plus d'espace possible sur Google."
@@ -114,6 +134,46 @@ export const SERVICES: Service[] = [
       {
         q: 'On commence par quoi si mon budget est limité ?',
         a: "On priorise selon votre situation. Souvent, on commence par optimiser votre fiche Google Business (gratuit et rapide) et on teste les Local Services Ads (paiement au lead, donc à faible risque), pendant que le SEO se construit en arrière-plan. On vous recommande le bon dosage lors de la consultation gratuite."
+      },
+      {
+        q: 'Quelle différence avec votre service Google Ads ?',
+        a: "Google Ads est un service à part : c'est de la publicité au clic sur les recherches Google (résultat immédiat, vous payez chaque clic). Domination Google, c'est surtout vous faire trouver de façon durable — référencement naturel (SEO), fiche Google et GEO — plus les Local Services Ads qui se paient au lead. En clair : Google Ads pour des résultats rapides payants, Domination Google pour bâtir votre présence à long terme et être recommandé par l'IA."
+      }
+    ],
+    pillars: [
+      {
+        title: 'Référencement naturel (SEO)',
+        tagline: 'Grimper dans Google, sans payer le clic.',
+        color: '#10b981',
+        icon: <Search className="w-7 h-7" />,
+        paragraphs: [
+          "Le SEO fait monter votre site dans les résultats de Google, **naturellement**. On optimise vos pages, votre **fiche Google Business** et votre contenu local pour que vous apparaissiez quand un client cherche « **entrepreneur + votre ville** ».",
+          "C'est un investissement **à moyen terme** : les premiers gains apparaissent généralement entre **3 et 6 mois**, mais ils sont **durables** et ne se paient jamais au clic."
+        ],
+        articleSlug: 'invisible-google',
+        articleLabel: "Lire l'article : invisible sur Google ?"
+      },
+      {
+        title: "GEO — Optimisation pour l'IA",
+        tagline: "Être recommandé par ChatGPT et l'IA de Google.",
+        color: '#00d2ff',
+        icon: <Sparkles className="w-7 h-7" />,
+        paragraphs: [
+          "De plus en plus de clients posent leur question directement à une **intelligence artificielle**. Le GEO structure votre présence pour que **ChatGPT, l'IA de Google, Perplexity et Gemini** vous **citent et vous recommandent**.",
+          "C'est le prolongement naturel du référencement — et **presque personne dans la construction au Québec ne le fait encore**. Une vraie **longueur d'avance** pour ceux qui s'y mettent maintenant."
+        ],
+        articleSlug: 'geo-chatgpt-construction',
+        articleLabel: "Lire l'article complet sur le GEO"
+      },
+      {
+        title: 'Local Services Ads (Google Garantie)',
+        tagline: 'Tout en haut, badge vérifié — payez au lead.',
+        color: '#f59e0b',
+        icon: <ShieldCheck className="w-7 h-7" />,
+        paragraphs: [
+          "Les Local Services Ads vous propulsent **tout en haut de Google** avec le badge **« Garanti par Google »**. C'est **instantané**, et vous ne payez que lorsqu'un **vrai client vous appelle** — jamais au simple clic.",
+          "On vérifie d'abord votre **éligibilité** (selon votre métier et votre région), on configure tout, puis on gère vos campagnes pour **maximiser les appels qualifiés**."
+        ]
       }
     ]
   },
@@ -123,7 +183,7 @@ export const SERVICES: Service[] = [
     icon: <Megaphone className="w-8 h-8" />,
     color: '#3b82f6', // Blue
     shortDesc: 'Ciblez vos clients idéaux avec des créations visuelles percutantes.',
-    fullDesc: "Les réseaux sociaux sont parfaits pour montrer la qualité de vos travaux. Nous créons des campagnes publicitaires sur Facebook et Instagram qui captent l'attention des propriétaires. Grâce à un ciblage démographique précis, nous montrons vos réalisations aux bonnes personnes.",
+    fullDesc: "Les réseaux sociaux sont parfaits pour **montrer la qualité de vos travaux**. Nous créons des campagnes publicitaires sur **Facebook et Instagram** qui captent l'attention des propriétaires. Grâce à un **ciblage démographique précis**, nous montrons vos réalisations **aux bonnes personnes**.",
     features: [
       'Création de visuels et vidéos publicitaires',
       'Ciblage d\'audience personnalisé',
@@ -143,6 +203,10 @@ export const SERVICES: Service[] = [
       {
         q: 'Mes publicités vont-elles apparaître aussi sur Instagram ?',
         a: "Oui. Les campagnes sont gérées via Meta et diffusées sur Facebook et Instagram en même temps, avec des formats adaptés à chaque plateforme. Vous touchez les deux audiences sans doubler le travail ni le budget."
+      },
+      {
+        q: "Publicité Facebook ou gestion de médias sociaux : c'est quoi la différence ?",
+        a: "La publicité Facebook, c'est du payant : on crée des campagnes ciblées sur Facebook et Instagram et vous payez pour rejoindre de nouveaux clients (résultat rapide). La gestion de médias sociaux (un service à part) est organique : on publie du contenu régulier sur vos pages pour bâtir votre crédibilité et votre communauté avec le temps, sans payer pour la diffusion. Les deux se complètent : on fait grandir votre page pendant que les pubs génèrent des leads."
       }
     ]
   },
@@ -152,7 +216,7 @@ export const SERVICES: Service[] = [
     icon: <Users className="w-8 h-8" />,
     color: '#ec4899', // Pink
     shortDesc: 'Bâtissez une communauté engagée autour de votre marque.',
-    fullDesc: "Vous n'avez pas le temps de gérer vos pages sociales entre deux chantiers ? Nous nous en occupons. Nous publions du contenu régulier qui met en valeur vos projets, votre équipe et votre savoir-faire, renforçant ainsi la confiance de vos futurs clients.",
+    fullDesc: "Vous n'avez pas le temps de gérer vos pages sociales entre deux chantiers ? **Nous nous en occupons.** Nous publions du **contenu régulier** qui met en valeur vos projets, votre équipe et votre savoir-faire, renforçant ainsi **la confiance de vos futurs clients**.",
     features: [
       'Calendrier éditorial mensuel',
       'Publication de photos de chantiers',
@@ -172,6 +236,10 @@ export const SERVICES: Service[] = [
       {
         q: 'Dois-je fournir les photos et le contenu ?',
         a: "Vos photos de chantier sont votre meilleur atout : quelques clichés pris au téléphone suffisent. On s'occupe de la sélection, de la retouche, des textes et de la publication. Vous bâtissez, on raconte."
+      },
+      {
+        q: "Gestion de page ou publicité payante : c'est quoi la différence ?",
+        a: "La gestion de médias sociaux, c'est organique : on s'occupe de vos publications, de votre image et de votre communauté pour bâtir la confiance sur le long terme, sans payer pour la diffusion. La publicité Facebook (un service à part) est payante et vise des résultats rapides en plaçant vos annonces devant de nouveaux clients ciblés. L'idéal : une page bien gérée qui inspire confiance, soutenue par des pubs quand vous voulez accélérer."
       }
     ]
   },
@@ -181,7 +249,7 @@ export const SERVICES: Service[] = [
     icon: <MessageSquare className="w-8 h-8" />,
     color: '#8b5cf6', // Violet
     shortDesc: 'Un assistant virtuel intelligent disponible 24/7 pour engager vos clients.',
-    fullDesc: "Un Chatbot IA transforme la façon dont vous interagissez avec vos clients. Fini les opportunités perdues en dehors des heures d'ouverture. Notre agent conversationnel intelligent automatisé répond instantanément aux questions fréquentes, qualifie vos prospects et redirige les demandes complexes vers la bonne personne.",
+    fullDesc: "Un Chatbot IA transforme la façon dont vous interagissez avec vos clients. **Fini les opportunités perdues** en dehors des heures d'ouverture. Notre agent conversationnel **répond instantanément** aux questions fréquentes, **qualifie vos prospects** et redirige les demandes complexes vers la bonne personne.",
     features: [
       'Réponses instantanées 24/7',
       'Qualification de prospects automatisée',

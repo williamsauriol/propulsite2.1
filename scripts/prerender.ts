@@ -17,8 +17,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createElement } from 'react';
+import { renderToString } from 'react-dom/server';
+import { StaticRouter } from 'react-router-dom';
 import { SERVICES } from '../src/constants/services';
 import { PAIN_POINTS_ARTICLES } from '../src/constants/painPointsData';
+import { AppContent } from '../src/App';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DIST = path.resolve(__dirname, '../dist');
@@ -96,7 +100,7 @@ const routes: RouteMeta[] = [
         '@type': 'Service',
         name: service.title,
         serviceType: service.title,
-        description: service.fullDesc,
+        description: service.fullDesc.replace(/\*\*/g, ''),
         url: `${SITE_URL}/services/${service.slug}`,
         areaServed: { '@type': 'AdministrativeArea', name: 'Québec' },
         inLanguage: 'fr-CA',
@@ -223,6 +227,20 @@ const routes: RouteMeta[] = [
 
 // ─── Injection des métadonnées dans le HTML ───────────────────────────────────
 
+// Rend le contenu React de la route en HTML statique (pour les robots/IA qui
+// n'exécutent pas le JavaScript). En cas d'échec, on retourne '' : la page
+// reste alors en rendu côté client, comme avant.
+function renderAppHtml(routePath: string): string {
+  try {
+    return renderToString(
+      createElement(StaticRouter, { location: routePath }, createElement(AppContent))
+    );
+  } catch (err) {
+    console.warn(`⚠️  Pré-rendu du contenu échoué pour ${routePath} : ${(err as Error).message}`);
+    return '';
+  }
+}
+
 function renderPage(template: string, route: RouteMeta): string {
   const url = route.path === '/' ? `${SITE_URL}/` : `${SITE_URL}${route.path}`;
   const title = esc(route.title);
@@ -268,6 +286,12 @@ function renderPage(template: string, route: RouteMeta): string {
       )
       .join('\n');
     html = html.replace('</head>', () => `${scripts}\n  </head>`);
+  }
+
+  // Injecte le contenu rendu dans la racine pour les robots/IA sans JavaScript.
+  const appHtml = renderAppHtml(route.path);
+  if (appHtml) {
+    html = html.replace('<div id="root"></div>', () => `<div id="root">${appHtml}</div>`);
   }
 
   return html;

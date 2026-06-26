@@ -1,7 +1,48 @@
+# Robots — propulsite.ca
+# Tous les moteurs de recherche peuvent indexer le site.
+# Exception : le funnel (page privée de conversion, pas de SEO nécessaire).
 User-agent: *
 Allow: /
-
-# Bloquer le funnel des moteurs (page privée de conversion, pas de SEO nécessaire)
 Disallow: /funnel
+
+# ── Moteurs de réponse IA (GEO) ─────────────────────────────────────────
+# On autorise explicitement les robots des intelligences artificielles à lire
+# le site pour qu'ils puissent citer et recommander Propulsite dans leurs
+# réponses (ChatGPT, Google AI, Perplexity, Claude, Gemini, etc.).
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
 
 Sitemap: https://propulsite.ca/sitemap.xml
