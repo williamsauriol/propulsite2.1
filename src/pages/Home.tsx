@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import LiquidGlassCard from '../components/LiquidGlassCard';
+import GeoSection from '../components/GeoSection';
 import { ArrowRight, HardHat, ClipboardList, Palette, Search } from 'lucide-react';
 import { SERVICES } from '../constants/services';
 import { usePageMeta } from '../hooks/usePageMeta';
@@ -60,6 +61,9 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
+
+      {/* GEO Section - Mise en vedette */}
+      <GeoSection />
 
       {/* Services Section - All Services */}
       <section className="py-32 px-6">
