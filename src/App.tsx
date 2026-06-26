@@ -34,9 +34,11 @@ function ScrollToTop() {
   return null;
 }
 
-export default function App() {
+// Contenu de l'app SANS routeur — partagé entre le client (BrowserRouter) et
+// le pré-rendu SEO (StaticRouter dans scripts/prerender.ts).
+export function AppContent() {
   return (
-    <Router>
+    <>
       <ScrollToTop />
       <div className="min-h-screen relative">
         <RocketBackground />
@@ -58,6 +60,14 @@ export default function App() {
 
         <Footer />
       </div>
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <Router>
+      <AppContent />
       <Analytics />
     </Router>
   );
