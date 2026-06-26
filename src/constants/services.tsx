@@ -1,9 +1,17 @@
 import React from 'react';
-import { Layout, Search, Megaphone, Users, Palette, MessageSquare, Globe, Zap } from 'lucide-react';
+import { Layout, Search, Megaphone, Users, Palette, MessageSquare, Globe, Zap, Sparkles, ShieldCheck } from 'lucide-react';
 
 export interface ServiceFaq {
   q: string;
   a: string;
+}
+
+export interface ServicePillar {
+  title: string;
+  tagline: string;
+  color: string;
+  icon: React.ReactNode;
+  paragraphs: string[];
 }
 
 export interface Service {
@@ -15,6 +23,7 @@ export interface Service {
   features: string[];
   color: string;
   faq: ServiceFaq[];
+  pillars?: ServicePillar[];
 }
 
 export const SERVICES: Service[] = [
@@ -86,7 +95,7 @@ export const SERVICES: Service[] = [
     icon: <Globe className="w-8 h-8" />,
     color: '#10b981', // Emerald
     shortDesc: 'Être partout où vos clients cherchent : référencement (SEO), fiche Google, Local Services Ads et GEO (être cité par ChatGPT et l\'IA de Google).',
-    fullDesc: "Il n'y a pas une seule façon d'être premier sur Google — il y en a plusieurs, et on les combine. Le référencement naturel (SEO) fait grimper votre site dans les résultats avec le temps, sans payer le clic. Votre fiche Google Business vous place sur la carte et dans le top local. Les Local Services Ads (le « Google Garantie ») vous propulsent tout en haut, avec un badge vérifié, où vous ne payez que lorsqu'un vrai client vous appelle. Et le GEO — l'optimisation pour les moteurs de réponse IA — fait en sorte que lorsqu'un propriétaire demande à ChatGPT, à l'IA de Google (AI Overviews) ou à Perplexity « quel entrepreneur engager dans ma région ? », c'est votre nom qui ressort. Ensemble, ces leviers font de vous le nom qui revient partout : dans les résultats Google, sur la carte, et dans les nouvelles réponses générées par l'intelligence artificielle.",
+    fullDesc: "Être premier sur Google, ce n'est plus une seule chose — c'en est plusieurs, et on les combine. Référencement naturel, Local Services Ads et GEO : ensemble, ces leviers font de vous le nom qui revient partout quand un client cherche un entrepreneur dans votre région — autant dans les résultats Google que dans les réponses générées par l'intelligence artificielle.",
     features: [
       'Référencement naturel (SEO) : audit technique et optimisation on-page',
       'Optimisation de votre fiche Google Business (carte et top local)',
@@ -119,6 +128,38 @@ export const SERVICES: Service[] = [
       {
         q: 'On commence par quoi si mon budget est limité ?',
         a: "On priorise selon votre situation. Souvent, on commence par optimiser votre fiche Google Business (gratuit et rapide) et on teste les Local Services Ads (paiement au lead, donc à faible risque), pendant que le SEO se construit en arrière-plan. On vous recommande le bon dosage lors de la consultation gratuite."
+      }
+    ],
+    pillars: [
+      {
+        title: 'Référencement naturel (SEO)',
+        tagline: 'Grimper dans Google, sans payer le clic.',
+        color: '#10b981',
+        icon: <Search className="w-7 h-7" />,
+        paragraphs: [
+          "Le SEO fait monter votre site dans les résultats de Google, naturellement. On optimise vos pages, votre fiche Google Business et votre contenu local pour que vous apparaissiez quand un propriétaire cherche « entrepreneur + votre ville ».",
+          "C'est un investissement à moyen terme : les premiers gains organiques apparaissent généralement entre 3 et 6 mois, mais ils sont durables et ne se paient pas au clic."
+        ]
+      },
+      {
+        title: "GEO — Optimisation pour l'IA",
+        tagline: "Être recommandé par ChatGPT et l'IA de Google.",
+        color: '#00d2ff',
+        icon: <Sparkles className="w-7 h-7" />,
+        paragraphs: [
+          "De plus en plus de clients posent leur question directement à une intelligence artificielle. Le GEO structure votre présence pour que ChatGPT, l'IA de Google (AI Overviews), Perplexity et Gemini vous citent et vous recommandent.",
+          "C'est le prolongement naturel du référencement — et presque personne dans la construction au Québec ne le fait encore. Une vraie longueur d'avance pour ceux qui s'y mettent maintenant."
+        ]
+      },
+      {
+        title: 'Local Services Ads (Google Garantie)',
+        tagline: 'Tout en haut, badge vérifié — payez au lead.',
+        color: '#f59e0b',
+        icon: <ShieldCheck className="w-7 h-7" />,
+        paragraphs: [
+          "Les Local Services Ads vous propulsent tout en haut de Google avec le badge « Garanti par Google ». C'est instantané, et vous ne payez que lorsqu'un vrai client vous appelle — jamais au simple clic.",
+          "On vérifie d'abord votre éligibilité (selon votre métier et votre région), on configure tout, puis on gère vos campagnes pour maximiser les appels qualifiés."
+        ]
       }
     ]
   },

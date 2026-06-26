@@ -3,6 +3,7 @@ import { useParams, Link, Navigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { SERVICES } from '../constants/services';
 import LiquidGlassCard from '../components/LiquidGlassCard';
+import ServicePillars from '../components/ServicePillars';
 import { ArrowRight, CheckCircle2, ChevronLeft } from 'lucide-react';
 import { usePageMeta } from '../hooks/usePageMeta';
 
@@ -96,6 +97,11 @@ export default function ServiceDetail() {
             </LiquidGlassCard>
           </motion.div>
         </div>
+
+        {/* Piliers du service (cartes + pop-up) */}
+        {service.pillars && service.pillars.length > 0 && (
+          <ServicePillars pillars={service.pillars} />
+        )}
 
         {/* FAQ Section */}
         {service.faq && service.faq.length > 0 && (
