@@ -72,7 +72,8 @@ export default function GeoSection() {
   }, [started, count, done]);
 
   return (
-    <section className="relative py-32 md:py-40 px-6 overflow-hidden bg-gradient-to-b from-[#060d1f] via-[#081834] to-[#0a1628]">
+    <section className="px-4 md:px-6 mt-32 md:mt-52 mb-12 md:mb-20">
+      <div className="relative overflow-hidden rounded-[40px] border border-white/10 py-24 md:py-32 px-4 md:px-10 max-w-7xl mx-auto bg-gradient-to-b from-[#060d1f] via-[#081834] to-[#0a1628] shadow-[0_30px_90px_rgba(0,0,0,0.55)]">
       {/* Étoiles */}
       <div className="absolute inset-0 z-0 pointer-events-none opacity-70" style={{
         backgroundImage: `
@@ -251,6 +252,7 @@ export default function GeoSection() {
           </div>
         </motion.div>
 
+      </div>
       </div>
     </section>
   );
