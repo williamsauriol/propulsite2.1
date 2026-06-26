@@ -450,5 +450,64 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
       btnText: "Lancer mes Google Ads →",
       btnLink: "/funnel"
     }
+  },
+  {
+    slug: 'geo-chatgpt-construction',
+    tag: 'Nouveauté 2026',
+    datePublished: '2026-06-25',
+    titlePart1: 'Le ',
+    titleHighlight: 'GEO',
+    titlePart3: " : comment l'IA peut recommander votre entreprise de construction",
+    intro: "Le GEO (Generative Engine Optimization) consiste à optimiser votre présence en ligne pour que les intelligences artificielles — ChatGPT, l'IA de Google (AI Overviews), Perplexity, Gemini — citent et recommandent votre entreprise quand un client leur pose une question. Voici pourquoi c'est en train de changer la game pour les entrepreneurs en construction au Québec — et comment en profiter avant vos concurrents.",
+    blocks: [
+      {
+        title: 'Le GEO en clair (et pourquoi ce n\'est pas juste un buzzword)',
+        paragraphs: [
+          "De plus en plus de propriétaires ne tapent plus seulement « entrepreneur rénovation Laval » dans Google. Ils ouvrent ChatGPT ou l'IA de Google et demandent, en pleine phrase : « Quel entrepreneur fiable pour refaire ma toiture dans la région de Saint-Eustache ? » Et l'IA leur répond avec quelques noms, directement.",
+          "Le GEO, c'est tout ce qu'on met en place pour que CE soit votre nom qui sorte de la bouche de l'IA. Là où le SEO vise à apparaître dans la liste des liens bleus, le GEO vise à être la réponse — la recommandation citée par l'intelligence artificielle."
+        ],
+        solutionBox: {
+          label: 'À retenir',
+          text: "Le SEO vous fait apparaître dans les résultats de recherche. Le GEO vous fait recommander directement par l'IA. Les deux se bâtissent ensemble, et celui qui s'y met en premier prend une longueur d'avance difficile à rattraper."
+        }
+      },
+      {
+        title: 'Pourquoi ça explose maintenant',
+        paragraphs: [
+          "Google a déployé ses « AI Overviews » (les réponses générées par IA tout en haut des résultats) à grande échelle, et des centaines de millions de personnes utilisent ChatGPT chaque semaine. Une part grandissante des recherches passe désormais par une réponse générée par une IA, AVANT même que la personne clique sur un site.",
+          "Concrètement : si l'IA résume « les meilleurs entrepreneurs de votre région » sans jamais vous nommer, vous perdez le client avant même qu'il visite un seul site web. L'enjeu n'est plus seulement d'être bien classé — c'est d'être cité."
+        ]
+      },
+      {
+        title: 'SEO et GEO : la différence en une image',
+        listItems: [
+          { bold: 'SEO :', text: " votre site grimpe dans la liste des résultats Google. Le client doit cliquer, comparer, choisir." },
+          { bold: 'GEO :', text: " l'IA lit le web, fait le tri, et nomme directement quelques entreprises. Le client reçoit une recommandation, pas une liste." },
+          { bold: 'Le point commun :', text: " les deux récompensent un site clair, crédible, bien structuré et reconnu. C'est pour ça qu'on les bâtit ensemble." }
+        ]
+      },
+      {
+        title: 'Comment faire pour que l\'IA vous recommande',
+        paragraphs: [
+          "Bonne nouvelle : se faire citer par l'IA repose sur des fondations concrètes et atteignables, surtout dans un marché local comme la construction au Québec."
+        ],
+        listItems: [
+          { bold: 'Répondre clairement aux vraies questions :', text: " des pages et un blogue qui répondent directement aux questions que vos clients posent (« combien coûte une rénovation de salle de bain ? », « comment choisir un couvreur ? »)." },
+          { bold: 'Des informations structurées et cohérentes :', text: " nom, services, territoire, coordonnées identiques partout (site, fiche Google, annuaires). L'IA fait confiance à ce qui est cohérent." },
+          { bold: 'Une vraie preuve de crédibilité :', text: " avis clients, réalisations, années d'expérience — les signaux que l'IA utilise pour décider qui recommander." },
+          { bold: 'Laisser les robots IA lire votre site :', text: " une configuration technique qui autorise les moteurs d'IA à explorer et comprendre votre contenu." }
+        ],
+        solutionBox: {
+          label: 'Comment Propulsite règle ce problème',
+          text: "Avec notre service Domination Google, on bâtit votre SEO ET votre GEO en même temps : contenu qui répond aux vraies questions, données structurées, fiche Google optimisée, avis clients et configuration technique pour les moteurs d'IA. Objectif : être le nom que Google classe en premier ET celui que l'IA recommande."
+        }
+      }
+    ],
+    cta: {
+      title: "Soyez le nom que l'IA recommande",
+      desc: "Pendant que vos concurrents ignorent encore le GEO, prenez l'avance. On vous rend visible sur Google et dans les réponses des intelligences artificielles. Consultation gratuite, sans engagement.",
+      btnText: "Parler de ma visibilité IA →",
+      btnLink: "/funnel"
+    }
   }
 ];

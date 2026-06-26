@@ -85,16 +85,21 @@ export const SERVICES: Service[] = [
     title: 'Domination Google',
     icon: <Globe className="w-8 h-8" />,
     color: '#10b981', // Emerald
-    shortDesc: 'Être en tête de Google par tous les moyens : référencement (SEO), fiche Google et Local Services Ads.',
-    fullDesc: "Il n'y a pas une seule façon d'être premier sur Google — il y en a plusieurs, et on les combine. Le référencement naturel (SEO) fait grimper votre site dans les résultats avec le temps, sans payer le clic. Votre fiche Google Business vous place sur la carte et dans le top local. Et les Local Services Ads (le « Google Garantie ») vous propulsent tout en haut, avec un badge vérifié, où vous ne payez que lorsqu'un vrai client vous appelle. Ensemble, ces leviers font de vous le nom qui revient partout quand un propriétaire cherche un entrepreneur dans votre région.",
+    shortDesc: 'Être partout où vos clients cherchent : référencement (SEO), fiche Google, Local Services Ads et GEO (être cité par ChatGPT et l\'IA de Google).',
+    fullDesc: "Il n'y a pas une seule façon d'être premier sur Google — il y en a plusieurs, et on les combine. Le référencement naturel (SEO) fait grimper votre site dans les résultats avec le temps, sans payer le clic. Votre fiche Google Business vous place sur la carte et dans le top local. Les Local Services Ads (le « Google Garantie ») vous propulsent tout en haut, avec un badge vérifié, où vous ne payez que lorsqu'un vrai client vous appelle. Et le GEO — l'optimisation pour les moteurs de réponse IA — fait en sorte que lorsqu'un propriétaire demande à ChatGPT, à l'IA de Google (AI Overviews) ou à Perplexity « quel entrepreneur engager dans ma région ? », c'est votre nom qui ressort. Ensemble, ces leviers font de vous le nom qui revient partout : dans les résultats Google, sur la carte, et dans les nouvelles réponses générées par l'intelligence artificielle.",
     features: [
       'Référencement naturel (SEO) : audit technique et optimisation on-page',
       'Optimisation de votre fiche Google Business (carte et top local)',
       'Local Services Ads « Google Garantie » : configuration et gestion',
+      'GEO : être cité et recommandé par ChatGPT, l\'IA de Google et Perplexity',
       'Stratégie de contenu et de mots-clés locaux',
-      'Avis clients et autorité — les signaux que Google récompense'
+      'Avis clients et autorité — les signaux que Google et les IA récompensent'
     ],
     faq: [
+      {
+        q: "C'est quoi le GEO, et pourquoi ça compte pour mon entreprise de construction ?",
+        a: "Le GEO (Generative Engine Optimization), c'est l'art de se faire citer par les moteurs de réponse IA — ChatGPT, l'IA de Google (AI Overviews), Perplexity, Gemini. De plus en plus de propriétaires posent leur question directement à une IA (« quel entrepreneur en rénovation engager à [votre ville] ? ») au lieu de faire défiler Google. Le GEO structure votre contenu et vos informations pour que l'IA vous comprenne, vous fasse confiance et vous recommande. C'est le prolongement naturel du référencement, et on le bâtit en même temps que votre SEO — pour que vous ne soyez pas invisible dans les réponses que vos futurs clients lisent déjà."
+      },
       {
         q: 'Quelle est la différence entre le SEO et les Local Services Ads ?',
         a: "Le SEO, c'est organique et gratuit : votre site grimpe naturellement dans les résultats, mais ça prend des mois. Les Local Services Ads, c'est une pub vérifiée qui s'affiche tout en haut avec le badge « Garanti par Google » — instantané, et vous payez seulement quand un client vous appelle. C'est complémentaire : on combine les deux pour occuper le plus d'espace possible sur Google."
