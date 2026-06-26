@@ -96,7 +96,7 @@ const routes: RouteMeta[] = [
         '@type': 'Service',
         name: service.title,
         serviceType: service.title,
-        description: service.fullDesc,
+        description: service.fullDesc.replace(/\*\*/g, ''),
         url: `${SITE_URL}/services/${service.slug}`,
         areaServed: { '@type': 'AdministrativeArea', name: 'Québec' },
         inLanguage: 'fr-CA',

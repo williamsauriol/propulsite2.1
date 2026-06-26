@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { X, Plus, ArrowRight } from 'lucide-react';
 import type { ServicePillar } from '../constants/services';
+import { highlight } from './highlight';
 
 /**
  * ServicePillars — Rangée de cartes cliquables qui ouvrent un pop-up détaillé.
@@ -109,18 +110,30 @@ export default function ServicePillars({ pillars }: { pillars: ServicePillar[] }
 
               <div className="space-y-4 mb-8">
                 {active.paragraphs.map((para, idx) => (
-                  <p key={idx} className="text-white/75 leading-relaxed">{para}</p>
+                  <p key={idx} className="text-white/75 leading-relaxed">{highlight(para)}</p>
                 ))}
               </div>
 
-              <Link
-                to="/contact"
-                onClick={() => setOpen(null)}
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-black uppercase tracking-widest text-sm text-[#050a15] transition-all hover:brightness-110 transform hover:-translate-y-0.5"
-                style={{ backgroundColor: active.color }}
-              >
-                Demander une soumission <ArrowRight className="w-4 h-4" />
-              </Link>
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
+                <Link
+                  to="/contact"
+                  onClick={() => setOpen(null)}
+                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-black uppercase tracking-widest text-sm text-[#050a15] transition-all hover:brightness-110 transform hover:-translate-y-0.5"
+                  style={{ backgroundColor: active.color }}
+                >
+                  Demander une soumission <ArrowRight className="w-4 h-4" />
+                </Link>
+                {active.articleSlug && (
+                  <Link
+                    to={`/blog/${active.articleSlug}`}
+                    onClick={() => setOpen(null)}
+                    className="inline-flex items-center gap-2 font-bold uppercase tracking-widest text-xs hover:gap-3 transition-all"
+                    style={{ color: active.color }}
+                  >
+                    {active.articleLabel || "Lire l'article"} <ArrowRight className="w-4 h-4" />
+                  </Link>
+                )}
+              </div>
             </motion.div>
           </motion.div>
         )}

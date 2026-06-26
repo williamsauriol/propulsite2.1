@@ -103,8 +103,8 @@ export default function GeoSection() {
         >
           <div className="inline-flex items-center gap-2.5 bg-accent-blue/15 border border-accent-blue/40 text-accent-blue text-xs md:text-sm font-bold tracking-[2.5px] uppercase px-5 py-2.5 rounded-full mb-8 shadow-[0_0_25px_rgba(0,210,255,0.35)]">
             <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-blue opacity-75" />
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent-blue" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white" />
             </span>
             Nouveau · Juillet 2026 · GEO
           </div>

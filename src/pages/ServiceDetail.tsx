@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import { SERVICES } from '../constants/services';
 import LiquidGlassCard from '../components/LiquidGlassCard';
 import ServicePillars from '../components/ServicePillars';
+import { highlight } from '../components/highlight';
 import { ArrowRight, CheckCircle2, ChevronLeft } from 'lucide-react';
 import { usePageMeta } from '../hooks/usePageMeta';
 
@@ -69,14 +70,22 @@ export default function ServiceDetail() {
               {service.title}
             </h1>
             <p className="text-xl text-white/70 leading-relaxed mb-8">
-              {service.fullDesc}
+              {highlight(service.fullDesc)}
             </p>
-            <Link 
-              to="/contact" 
+            <Link
+              to="/contact"
               className="inline-block px-10 py-5 bubble-glass text-white font-black hover:text-[color:var(--service-color)]"
             >
               DEMANDER UNE SOUMISSION
             </Link>
+            <div className="mt-6">
+              <Link
+                to="/blog"
+                className="inline-flex items-center gap-2 text-[color:var(--service-color)] font-bold uppercase tracking-widest text-sm hover:gap-3 transition-all"
+              >
+                Mieux comprendre sur le blogue <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
           </motion.div>
 
           <motion.div
