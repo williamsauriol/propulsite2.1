@@ -509,5 +509,67 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
       btnText: "Parler de ma visibilité IA →",
       btnLink: "/funnel"
     }
+  },
+  {
+    slug: 'local-services-ads-construction',
+    tag: 'Google Garantie',
+    datePublished: '2026-06-26',
+    titlePart1: '',
+    titleHighlight: 'Local Services Ads',
+    titlePart3: " : payez quand un client appelle, pas au clic",
+    intro: "Les Local Services Ads (le badge « Garanti par Google ») placent votre entreprise tout en haut de Google, au-dessus des publicités classiques — et vous ne payez que lorsqu'un vrai client vous contacte, jamais au simple clic. Voici comment ça fonctionne pour un entrepreneur en construction au Québec, et pourquoi c'est souvent le levier le plus rentable pour démarrer.",
+    blocks: [
+      {
+        title: "C'est quoi, au juste, les Local Services Ads ?",
+        paragraphs: [
+          "Les Local Services Ads (LSA) sont un format publicitaire spécial de Google, conçu pour les entreprises de services locales comme la construction et la rénovation. Elles s'affichent tout en haut des résultats — au-dessus même des annonces Google Ads habituelles — avec votre nom, votre note d'avis et le fameux badge vert « Garanti par Google ».",
+          "La grande différence : au lieu de payer chaque fois que quelqu'un clique, vous payez seulement quand un client vous contacte réellement (appel ou message). Pas de clic curieux facturé pour rien."
+        ],
+        solutionBox: {
+          label: 'Comment Propulsite gère vos Local Services Ads',
+          text: "On vérifie d'abord votre éligibilité, on complète la vérification Google (licences, assurances), on configure votre profil et vos zones de service, puis on gère vos campagnes pour maximiser les appels qualifiés — et on conteste les leads non valides pour ne pas payer pour rien."
+        }
+      },
+      {
+        title: 'Payer au lead, pas au clic : la grande différence',
+        paragraphs: [
+          "C'est ce qui rend les Local Services Ads si rentables pour un entrepreneur : votre budget ne sert qu'à générer de vraies demandes."
+        ],
+        listItems: [
+          { bold: 'Google Ads (au clic) :', text: " vous payez chaque clic, même si la personne ne vous appelle jamais." },
+          { bold: 'Local Services Ads (au lead) :', text: " vous payez seulement quand un client vous contacte pour un vrai projet." },
+          { bold: 'Position :', text: " les LSA s'affichent tout en haut, avant les autres publicités et les résultats naturels." },
+          { bold: 'Risque :', text: " faible — vous ne dépensez pas pour de la simple curiosité." }
+        ]
+      },
+      {
+        title: 'Le badge « Garanti par Google » : pourquoi il change tout',
+        paragraphs: [
+          "Pour être accepté, vous passez une vérification de Google : licences, assurances et antécédents. Une fois validé, vous obtenez le badge vert « Garanti par Google » à côté de votre nom.",
+          "Pour un propriétaire qui hésite entre plusieurs entrepreneurs, ce badge est un signal de confiance immédiat — c'est Google lui-même qui vous présente comme une entreprise vérifiée. Dans la construction, où la confiance fait ou défait un contrat, c'est un avantage énorme."
+        ]
+      },
+      {
+        title: 'Êtes-vous éligible au Québec ?',
+        paragraphs: [
+          "Google a ouvert les Local Services Ads à plusieurs métiers de la construction et de la rénovation au Canada. L'éligibilité exacte dépend de votre type de travaux et de votre région."
+        ],
+        listItems: [
+          { bold: 'Métiers souvent admissibles :', text: " entrepreneur général, toiture, rénovation, plomberie, électricité, excavation, et plusieurs autres." },
+          { bold: 'Documents à prévoir :', text: " licence (RBQ le cas échéant), preuve d'assurance et vérification d'antécédents." },
+          { bold: 'On valide avant de lancer :', text: " on confirme votre éligibilité dès le départ pour ne pas vous faire perdre de temps." }
+        ],
+        solutionBox: {
+          label: 'Le bon point de départ',
+          text: "Comme vous payez au lead, les Local Services Ads sont un excellent moyen de tester Google à faible risque — souvent pendant que votre référencement (SEO) et votre GEO se construisent en arrière-plan. C'est la combinaison qu'on bâtit avec le service Domination Google."
+        }
+      }
+    ],
+    cta: {
+      title: "Apparaissez en haut, payez au résultat",
+      desc: "On vérifie votre éligibilité aux Local Services Ads et on configure tout pour vous. Vous payez seulement quand un vrai client vous contacte. Consultation gratuite, sans engagement.",
+      btnText: "Vérifier mon éligibilité →",
+      btnLink: "/funnel"
+    }
   }
 ];

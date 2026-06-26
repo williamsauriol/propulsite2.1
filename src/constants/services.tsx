@@ -173,7 +173,9 @@ export const SERVICES: Service[] = [
         paragraphs: [
           "Les Local Services Ads vous propulsent **tout en haut de Google** avec le badge **« Garanti par Google »**. C'est **instantané**, et vous ne payez que lorsqu'un **vrai client vous appelle** — jamais au simple clic.",
           "On vérifie d'abord votre **éligibilité** (selon votre métier et votre région), on configure tout, puis on gère vos campagnes pour **maximiser les appels qualifiés**."
-        ]
+        ],
+        articleSlug: 'local-services-ads-construction',
+        articleLabel: "Lire l'article : le « Garanti par Google »"
       }
     ]
   },

@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { Rocket, Target, Search, Users, Smartphone, Star, TrendingUp, Send, Zap, Sparkles } from 'lucide-react';
+import { Rocket, Target, Search, Users, Smartphone, Star, TrendingUp, Send, Zap, Sparkles, ShieldCheck } from 'lucide-react';
 import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function Blog() {
@@ -72,6 +72,13 @@ export default function Blog() {
             title: "Invisible quand vos clients posent leurs questions à l'IA",
             desc: "De plus en plus de propriétaires demandent directement à ChatGPT ou à l'IA de Google « quel entrepreneur engager dans ma région ? » — et reçoivent une réponse avec quelques noms, sans jamais ouvrir Google. Si votre entreprise n'est pas optimisée pour ces moteurs de réponse IA (c'est ce qu'on appelle le GEO, Generative Engine Optimization), vous perdez des clients avant même qu'ils visitent un site. Le GEO, c'est le nouveau référencement : être la réponse que l'IA recommande, pas juste un lien parmi d'autres.",
             link: "/blog/geo-chatgpt-construction"
+        },
+        {
+            num: "10",
+            icon: <ShieldCheck className="w-8 h-8 text-accent-blue" />,
+            title: "Vous payez pour des clics qui n'appellent jamais ?",
+            desc: "Avec la publicité Google classique, vous payez chaque clic — même les curieux qui ne vous contacteront jamais. Les Local Services Ads (le badge « Garanti par Google ») renversent la logique : votre entreprise s'affiche tout en haut de Google avec un badge de confiance vérifié, et vous ne payez que lorsqu'un vrai client vous appelle ou vous écrit. Au lead, pas au clic — souvent le levier le plus rentable pour un entrepreneur qui démarre sur Google.",
+            link: "/blog/local-services-ads-construction"
         }
     ];
 
@@ -96,7 +103,7 @@ export default function Blog() {
                         Article de Blog
                     </div>
                     <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-                        9 PROBLÈMES QUI FREINENT LES <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-blue to-purple-400">COMPAGNIES DE CONSTRUCTION</span> EN LIGNE
+                        10 PROBLÈMES QUI FREINENT LES <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-blue to-purple-400">COMPAGNIES DE CONSTRUCTION</span> EN LIGNE
                     </h1>
                     <p className="text-xl text-white/60 max-w-2xl mx-auto leading-relaxed">
                         Vous bâtissez des projets solides, mais votre présence numérique ne suit pas? Voici les obstacles les plus fréquents — et comment les surmonter pour exploser vos ventes.
