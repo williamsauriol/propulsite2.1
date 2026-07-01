@@ -8,8 +8,8 @@ import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function Services() {
   usePageMeta(
-    'Services marketing pour entrepreneurs en construction | Propulsite',
-    'Découvrez tous les services de Propulsite : conception web, Google Ads, SEO local, réseaux sociaux et chatbot IA, spécialisés pour les entrepreneurs en construction au Québec.'
+    'Services marketing construction — plus de contrats | Propulsite',
+    'Site web, Google, GEO, pub, réseaux sociaux, chatbot : nos services pour aider les entrepreneurs en construction du Québec à décrocher plus de contrats.'
   );
   return (
     <div className="pt-32 pb-24 px-6 relative z-10">
