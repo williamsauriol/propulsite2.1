@@ -9,8 +9,8 @@ import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function Home() {
   usePageMeta(
-    'Agence marketing construction au Québec | Propulsite',
-    'Propulsite aide les entrepreneurs en construction au Québec à dominer leur marché local grâce au marketing numérique : Google Ads, SEO local, conception web et réseaux sociaux.'
+    'Marketing construction Québec — plus de contrats | Propulsite',
+    'On aide les entrepreneurs en construction du Québec à décrocher plus de contrats grâce au web : site, référencement Google, GEO et pub. Soumission gratuite.'
   );
   const homeServices = SERVICES.slice(0, 6);
 

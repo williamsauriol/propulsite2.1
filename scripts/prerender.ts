@@ -68,18 +68,18 @@ function breadcrumb(items: { name: string; url: string }[]): object {
 const routes: RouteMeta[] = [
   {
     path: '/',
-    title: 'Agence marketing construction au Québec | Propulsite',
+    title: 'Marketing construction Québec — plus de contrats | Propulsite',
     description:
-      'Propulsite aide les entrepreneurs en construction au Québec à dominer leur marché local grâce au marketing numérique : Google Ads, SEO local, conception web et réseaux sociaux.',
+      'On aide les entrepreneurs en construction du Québec à décrocher plus de contrats grâce au web : site, référencement Google, GEO et pub. Soumission gratuite.',
     priority: '1.0',
     changefreq: 'monthly',
     lastmod: PAGES_LASTMOD,
   },
   {
     path: '/services',
-    title: 'Services marketing pour entrepreneurs en construction | Propulsite',
+    title: 'Services marketing construction — plus de contrats | Propulsite',
     description:
-      'Découvrez tous les services de Propulsite : conception web, Google Ads, SEO local, réseaux sociaux et chatbot IA, spécialisés pour les entrepreneurs en construction au Québec.',
+      'Site web, Google, GEO, pub, réseaux sociaux, chatbot : nos services pour aider les entrepreneurs en construction du Québec à décrocher plus de contrats.',
     jsonLd: [
       breadcrumb([
         { name: 'Accueil', url: `${SITE_URL}/` },
