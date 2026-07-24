@@ -109,7 +109,7 @@ export default function Footer() {
                 {/* BOTTOM BAR */}
                 <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
                     <p className="text-white/40 text-xs">
-                        © {new Date().getFullYear()} Tous droits réservés. Agence Propulsite.
+                        © {new Date().getFullYear()} Tous droits réservés. Agence Propulsite. <span className="text-white/30">NEQ&nbsp;2282389883</span>
                     </p>
                     <div className="flex items-center gap-6">
                         <Link to="/legal#confidentialite" className="text-white/40 hover:text-white transition-colors text-xs">Politique de confidentialité</Link>
