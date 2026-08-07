@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { Rocket, Target, Search, Users, Smartphone, Star, TrendingUp, Send, Zap, Sparkles, ShieldCheck } from 'lucide-react';
+import { Rocket, Target, Search, Users, Smartphone, Star, TrendingUp, Send, Zap, Sparkles, ShieldCheck, MonitorSmartphone } from 'lucide-react';
 import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function Blog() {
@@ -79,6 +79,13 @@ export default function Blog() {
             title: "Vous payez pour des clics qui n'appellent jamais ?",
             desc: "Avec la publicité Google classique, vous payez chaque clic — même les curieux qui ne vous contacteront jamais. Les Local Services Ads (le badge « Garanti par Google ») renversent la logique : votre entreprise s'affiche tout en haut de Google avec un badge de confiance vérifié, et vous ne payez que lorsqu'un vrai client vous appelle ou vous écrit. Au lead, pas au clic — souvent le levier le plus rentable pour un entrepreneur qui démarre sur Google.",
             link: "/blog/local-services-ads-construction"
+        },
+        {
+            num: "11",
+            icon: <MonitorSmartphone className="w-8 h-8 text-accent-blue" />,
+            title: "Votre site web ne transforme pas les visiteurs en appels ?",
+            desc: "Un site de construction n'est pas une carte d'affaires en ligne : c'est l'outil qui transforme une recherche Google en appel téléphonique. Téléphone cliquable, vraies photos de chantier, zones de service nommées, preuves de légitimité, avis visibles — voici ce que doit contenir un site web pour entrepreneur en construction au Québec, ce que Google et les moteurs de réponse IA doivent pouvoir y lire, et les erreurs qui font fuir les clients avant même le premier appel.",
+            link: "/blog/conception-site-web-construction"
         }
     ];
 

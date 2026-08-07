@@ -571,5 +571,70 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
       btnText: "Vérifier mon éligibilité →",
       btnLink: "/funnel"
     }
+  },
+  {
+    slug: 'conception-site-web-construction',
+    tag: 'Site web',
+    datePublished: '2026-08-07',
+    titlePart1: 'Conception d’un ',
+    titleHighlight: 'site web pour entrepreneur en construction',
+    titlePart3: " : les éléments essentiels",
+    intro: "Un site web de construction n’est pas une carte d’affaires en ligne. C’est l’outil qui transforme une recherche Google en appel téléphonique. Voici ce qu’il doit absolument contenir pour décrocher des contrats au Québec — et les erreurs qui font fuir les clients avant même qu’ils vous appellent.",
+    blocks: [
+      {
+        title: "Votre site a un seul travail : faire sonner le téléphone",
+        paragraphs: [
+          "Beaucoup d’entrepreneurs en construction pensent leur site comme une vitrine : le logo, quelques photos, une page « à propos ». Mais un propriétaire qui cherche un entrepreneur ne visite pas votre site pour vous admirer. Il veut répondre à trois questions en moins d’une minute : est-ce que vous faites ce dont j’ai besoin, est-ce que vous travaillez dans ma région, et est-ce que je peux vous faire confiance ?",
+          "Si votre site répond clairement à ces trois questions dès la première section, il travaille pour vous. Sinon, le visiteur retourne sur Google et appelle votre concurrent."
+        ]
+      },
+      {
+        title: "Ce qu’un client cherche en premier",
+        listItems: [
+          { bold: 'Votre téléphone, cliquable et visible :', text: " affiché en haut de chaque page. Sur un cellulaire, un numéro qu’on ne peut pas toucher pour appeler, c’est un contrat perdu." },
+          { bold: 'Vos vraies photos de chantier :', text: " des projets que vous avez réellement livrés, avec des avant/après quand c’est possible. Les photos de banque d’images se reconnaissent, et elles font douter." },
+          { bold: 'Vos zones de service, nommées :', text: " écrivez les villes que vous desservez. « Rive-Nord » est trop vague — « Saint-Eustache, Blainville, Deux-Montagnes » correspond à ce que les gens tapent dans Google." },
+          { bold: 'Vos preuves de légitimité :', text: " licence RBQ le cas échéant, numéro d’entreprise, preuve d’assurance. Dans la construction, la confiance se gagne avant le premier appel." },
+          { bold: 'Vos avis clients :', text: " visibles directement sur le site, pas seulement sur votre fiche Google. C’est souvent le dernier élément qui fait pencher la décision." }
+        ],
+        solutionBox: {
+          label: 'Le test des cinq secondes',
+          text: "Ouvrez votre site sur votre cellulaire et demandez-vous : en cinq secondes, est-ce qu’on voit ce que vous faites, où vous le faites, et comment vous joindre ? Si la réponse est non, c’est exactement là qu’il faut commencer."
+        }
+      },
+      {
+        title: "Le mobile n’est pas une option",
+        paragraphs: [
+          "Un propriétaire qui découvre une infiltration d’eau ne s’assoit pas devant un ordinateur. Il sort son téléphone. La grande majorité des recherches pour trouver un entrepreneur se font sur mobile — souvent debout dans le sous-sol, au moment où le problème vient d’apparaître.",
+          "Un site qui charge lentement, dont le texte est trop petit ou dont le formulaire est impossible à remplir au pouce, perd ces clients-là. Même s’il est magnifique sur un écran d’ordinateur."
+        ]
+      },
+      {
+        title: "Ce que Google — et maintenant l’IA — doivent pouvoir lire",
+        paragraphs: [
+          "Votre site ne sert pas seulement aux visiteurs humains. Google le lit pour décider où vous classer, et les moteurs de réponse comme ChatGPT ou l’IA de Google le lisent pour décider s’ils vous recommandent à quelqu’un.",
+          "Concrètement : des pages distinctes pour chacun de vos principaux services, du vrai texte plutôt que des images de texte, des coordonnées identiques partout, et des données structurées qui expliquent aux robots ce que vous faites et où vous le faites."
+        ],
+        solutionBox: {
+          label: 'Le nouveau réflexe : le GEO',
+          text: "De plus en plus de propriétaires demandent directement à une intelligence artificielle quel entrepreneur engager, et reçoivent deux ou trois noms sans jamais ouvrir Google. Apparaître dans ces réponses demande une préparation différente du référencement classique — c’est ce qu’on appelle le GEO. Un site pensé uniquement pour le Google de 2020 n’est plus suffisant."
+        }
+      },
+      {
+        title: "Les erreurs qui coûtent des contrats",
+        listItems: [
+          { bold: 'Un formulaire trop long :', text: " le nom, le téléphone et une courte description du projet suffisent. Chaque champ supplémentaire fait abandonner des gens." },
+          { bold: 'Aucun repère de prix :', text: " vous n’êtes pas obligé d’afficher des tarifs, mais donner un ordre de grandeur ou expliquer votre processus rassure et filtre les mauvais appels." },
+          { bold: 'Un site jamais mis à jour :', text: " une dernière réalisation qui date de trois ans donne l’impression d’une entreprise inactive." },
+          { bold: 'Une incohérence avec votre fiche Google :', text: " votre site et votre fiche Google Business doivent afficher le même nom, la même adresse et le même téléphone. Une différence affaiblit les deux." }
+        ]
+      }
+    ],
+    cta: {
+      title: "Un site qui travaille pour vous, pas juste une vitrine",
+      desc: "On conçoit des sites web pour les entrepreneurs en construction du Québec : pensés pour le mobile, optimisés pour Google et pour les moteurs de réponse IA. Soumission gratuite, sans engagement.",
+      btnText: "Obtenir ma soumission →",
+      btnLink: "/funnel"
+    }
   }
 ];
