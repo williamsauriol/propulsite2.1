@@ -139,7 +139,7 @@ export default function Home() {
             {/* Card 1 */}
             <div className="bg-[#0a1628] rounded-3xl overflow-hidden border border-white/10 group flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(0,210,255,0.15)] hover:border-accent-blue/40">
               <div className="relative h-64 overflow-hidden">
-                <img src="/images/team_collaboration.webp" alt="Équipe de construction" loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <img src="/images/team_collaboration.webp" alt="Équipe de construction" loading="lazy" width={640} height={640} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] to-transparent opacity-90" />
                 <div className="absolute top-4 right-6 text-5xl font-black text-white/10">01</div>
               </div>
@@ -160,7 +160,7 @@ export default function Home() {
             {/* Card 2 */}
             <div className="bg-[#0a1628] rounded-3xl overflow-hidden border border-white/10 group flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(0,210,255,0.15)] hover:border-accent-blue/40">
               <div className="relative h-64 overflow-hidden">
-                <img src="/images/human_worker.webp" alt="Entrepreneur en construction" loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <img src="/images/human_worker.webp" alt="Entrepreneur en construction" loading="lazy" width={640} height={640} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] to-transparent opacity-90" />
                 <div className="absolute top-4 right-6 text-5xl font-black text-white/10">02</div>
               </div>
@@ -181,7 +181,7 @@ export default function Home() {
             {/* Card 3 */}
             <div className="bg-[#0a1628] rounded-3xl overflow-hidden border border-white/10 group flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(0,210,255,0.15)] hover:border-accent-blue/40">
               <div className="relative h-64 overflow-hidden">
-                <img src="/images/construction_seo.webp" alt="Succès digital et construction" loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <img src="/images/construction_seo.webp" alt="Succès digital et construction" loading="lazy" width={640} height={640} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] to-transparent opacity-90" />
                 <div className="absolute top-4 right-6 text-5xl font-black text-white/10">03</div>
               </div>
@@ -236,6 +236,8 @@ export default function Home() {
               src="/exemples/atelier-nord/img/hero.jpg"
               alt="Aperçu du site Atelier Nord, réalisé par Propulsite"
               loading="lazy"
+              width={1920}
+              height={1080}
               className="w-full h-[280px] md:h-[420px] object-cover opacity-55 group-hover:opacity-70 group-hover:scale-[1.03] transition-all duration-700"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#050a15] via-[#050a15]/55 to-transparent" />
@@ -414,7 +416,7 @@ export default function Home() {
               <div key={i} className={`widget-tracker w-tr-${i + 1}`} />
             ))}
             <div id="widget-card">
-              <div className="widget-rocket"><img src="/images/logo-fuser-sans-backk.png" alt="Propulsite" style={{ height: '40px', width: 'auto', filter: 'drop-shadow(0 0 12px rgba(255,255,255,0.9))' }} /></div>
+              <div className="widget-rocket"><img src="/images/logo-fuser-sans-backk.png" alt="Propulsite" width={450} height={450} style={{ height: '40px', width: 'auto', filter: 'drop-shadow(0 0 12px rgba(255,255,255,0.9))' }} /></div>
               <p id="widget-prompt">Prêt à<br />décoller?</p>
               <div className="widget-description">
                 <p>Propulsez votre entreprise en ligne dès aujourd'hui avec une stratégie numérique sur mesure.</p>

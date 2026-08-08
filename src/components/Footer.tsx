@@ -21,6 +21,8 @@ export default function Footer() {
                             <img
                                 src="/images/logo-fuser-sans-backk.png"
                                 alt="Propulsite Logo"
+                                width={450}
+                                height={450}
                                 className="h-10 md:h-12 object-contain filter drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] transition-transform group-hover:scale-105"
                             />
                             <span className="text-2xl font-black tracking-widest text-white group-hover:text-accent-blue transition-colors">

@@ -68,6 +68,8 @@ export default function About() {
               <img
                 src="/images/logo-fuser-sans-backk.png"
                 alt="Propulsite Logo"
+                width={450}
+                height={450}
                 className="w-full max-w-sm h-auto filter drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] z-10 transition-transform duration-500 group-hover:scale-105"
               />
               <span className="text-accent-blue font-bold tracking-widest uppercase text-sm z-10 flex items-center gap-2">

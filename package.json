@@ -7,6 +7,7 @@
     "dev": "vite --port=3000 --host=0.0.0.0",
     "build": "vite build && tsx scripts/prerender.ts",
     "generate-assets": "node scripts/generate-assets.mjs",
+    "verifier": "node scripts/verifier-site.mjs",
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit"

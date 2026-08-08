@@ -26,14 +26,23 @@
   </div>
 </div>
 
+<a class="saut" href="#haut">Aller au contenu</a>
+
 <header class="hdr">
   <a class="hdr-marque" href="#haut">ATELIER NORD</a>
   <nav class="hdr-nav">
     <a href="#matieres">Matières</a>
     <a href="#realisations">Réalisations</a>
     <a href="#processus">Processus</a>
-    <a href="#contact">Contact</a>
+    <a href="#chiffres">Avant de signer</a>
   </nav>
+  <!-- Le téléphone reste joignable partout, à tout moment : c'est la seule
+       action qui compte, et sous 820 px c'est le seul élément de navigation
+       qui subsiste. -->
+  <a class="hdr-tel" href="tel:+14501234567">
+    <span class="hdr-tel-txt">450 123-4567</span>
+    <span class="hdr-tel-court" aria-hidden="true">Appeler</span>
+  </a>
 </header>
 
 <!-- Repère de monde : dit au visiteur où il est rendu dans le voyage. -->
@@ -134,14 +143,56 @@
     </div>
   </section>
 
-  <section class="fin" id="contact" data-monde="7" data-nom="Le retour">
+  <!-- Un site de rénovation qui ne parle pas d'argent perd le client avant
+       l'appel. Cette section répond aux cinq objections réelles : le prix,
+       les extras, le délai, la poussière, les garanties. -->
+  <section class="chiffres" id="chiffres" data-monde="7" data-nom="Les chiffres">
+    <div class="contenu">
+      <div class="rv">
+        <span class="num">04 — Avant de signer</span>
+        <h2 class="titre-s">Les questions<br>qu'on nous pose <span class="fin-serif">vraiment</span>.</h2>
+      </div>
+      <div class="qr-liste">
+        <div class="qr rv">
+          <h3>Combien ça coûte ?</h3>
+          <p>Une cuisine complète se situe entre <b>45 000 $ et 90 000 $</b>. Une salle de bain, entre <b>18 000 $ et 35 000 $</b>. La soumission détaillée est gratuite et vous parvient en cinq jours ouvrables.</p>
+        </div>
+        <div class="qr rv">
+          <h3>Est-ce que le prix va gonfler en cours de route ?</h3>
+          <p>Le prix au contrat est ferme. Aucun extra n'est exécuté sans votre approbation écrite — pas d'appel du contremaître un vendredi soir pour vous annoncer une surprise.</p>
+        </div>
+        <div class="qr rv">
+          <h3>Combien de temps chez moi ?</h3>
+          <p>Cinq semaines pour une salle de bain, neuf pour une cuisine. La date de fin est écrite au contrat, pas promise à l'oral.</p>
+        </div>
+        <div class="qr rv">
+          <h3>Vais-je vivre dans la poussière ?</h3>
+          <p>Cloisons temporaires scellées, planchers protégés du seuil au chantier, balayage chaque soir. La poussière reste dans la pièce en travaux.</p>
+        </div>
+        <div class="qr rv">
+          <h3>Et si quelque chose tourne mal ?</h3>
+          <p>Licence RBQ, responsabilité civile et cautionnement — les attestations sont jointes à la soumission, avant que vous signiez quoi que ce soit.</p>
+        </div>
+        <div class="qr qr-action rv">
+          <h3>Prêt à avoir vos chiffres à vous ?</h3>
+          <p>La visite et la soumission sont gratuites, sans engagement.</p>
+          <a class="btn btn-petit" href="tel:+14501234567">450 123-4567 →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="fin" id="contact" data-monde="8" data-nom="Le retour">
     <div class="contenu rv">
-      <span class="num">04 — Contact</span>
+      <span class="num">05 — Contact</span>
       <h2 class="titre-s">Parlons de <span class="fin-serif">votre</span> maison.</h2>
-      <a class="btn" href="#contact">Demander une visite →</a>
+      <!-- Le bouton pointait sur #contact, c'est-à-dire sur lui-même : il ne
+           menait nulle part. L'action utile est l'appel. -->
+      <a class="btn" href="tel:+14501234567">Appeler le 450 123-4567 →</a>
+      <p class="fin-note">Visite et soumission gratuites, sans engagement. Réponse en 24 h.</p>
       <div class="coord">
-        <div>Téléphone<b>450 123-4567</b></div>
-        <div>Courriel<b>info@ateliernord.ca</b></div>
+        <div>Téléphone<b><a href="tel:+14501234567">450 123-4567</a></b></div>
+        <div>Courriel<b><a href="mailto:info@ateliernord.ca">info@ateliernord.ca</a></b></div>
         <div>Territoire<b>Rive-Nord &amp; Laurentides</b></div>
       </div>
     </div>
@@ -165,7 +216,13 @@
   if (innerWidth > 900) {
     import('./scene3d.js')
       .then((m) => { document.body.classList.add('avec3d'); m.demarrerMondes(c, document.getElementById('infobulle')); })
-      .catch(() => c?.remove());
+      .catch((e) => {
+        // Le repli reste silencieux pour le visiteur, mais l'erreur doit
+        // rester visible en console : sans ça, une scène qui échoue est
+        // impossible à diagnostiquer — elle disparaît, sans plus.
+        console.error('[atelier-nord] scène 3D désactivée :', e);
+        c?.remove();
+      });
   } else { c?.remove(); }
 </script>
 </body>

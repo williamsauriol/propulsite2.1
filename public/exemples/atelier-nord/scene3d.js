@@ -17,6 +17,11 @@ const MONDES = [
   { id:'bain',     fond:0x0C1418, brume:0.040, cle:0xDDF0FF, contre:0x5E92B8, accent:0x9FC4E8, cam:[3,-0.5,9],  regard:[0,0,-3] },
   { id:'soussol',  fond:0x140F0C, brume:0.052, cle:0xFFCE8F, contre:0x4A5560, accent:0xD6A968, cam:[-2,1.2,8.5],regard:[0,0,-3] },
   { id:'plan',     fond:0x060A0C, brume:0.026, cle:0xBFE4FF, contre:0x2E6E96, accent:0x6FD2FF, cam:[0,4,11],    regard:[0,-1,-6] },
+  // « Les chiffres » : l'air le plus clair du parcours. La brume tombe au
+  // minimum et la lumière redevient neutre — on ne cache rien au moment de
+  // parler d'argent. Ce monde fait le pont entre le bleu technique du plan
+  // et la chaleur du retour.
+  { id:'chiffres', fond:0x0A0C0B, brume:0.024, cle:0xE8F0F4, contre:0x5A7E96, accent:0xC9A063, cam:[0,1.6,12],  regard:[0,0,-4] },
   { id:'retour',   fond:0x0D0E0B, brume:0.048, cle:0xFFF0D4, contre:0x7FA8CC, accent:0xD6A968, cam:[0,0,13],    regard:[0,0,-5] },
 ];
 
@@ -50,6 +55,33 @@ export function demarrerMondes(canvas, infobulle) {
   const cle    = new THREE.DirectionalLight(0xFFF0D4, 3.2); cle.position.set(6,8,5);    scene.add(cle);
   const contre = new THREE.DirectionalLight(0x7FA8CC, 1.6); contre.position.set(-8,-3,-4); scene.add(contre);
   const accent = new THREE.PointLight(0xD6A968, 30, 26, 2); accent.position.set(2,-1,6);  scene.add(accent);
+
+  /* ── Carte d'environnement ───────────────────────────────────────────
+     Sans elle, le laiton est une surface jaune plate : un métal n'a l'air
+     métallique que s'il a quelque chose à refléter. On fabrique un petit
+     studio (sol sombre, plafond lumineux, deux panneaux latéraux), on le
+     cuit en carte d'environnement, et on jette la scène. Aucun fichier. */
+  const pmrem = new THREE.PMREMGenerator(rendu);
+  const studio = new THREE.Scene();
+  const panneau = (couleur, intensite, x, y, z, sx, sy) => {
+    const m = new THREE.Mesh(
+      new THREE.PlaneGeometry(sx, sy),
+      new THREE.MeshBasicMaterial({ color: couleur, side: THREE.DoubleSide }),
+    );
+    m.material.color.multiplyScalar(intensite);
+    m.position.set(x, y, z);
+    m.lookAt(0, 0, 0);
+    studio.add(m);
+  };
+  studio.background = new THREE.Color(0x0A0B08);
+  panneau(0xFFF2DC, 3.2,  0,  9,  0, 26, 26);  // plafond chaud
+  panneau(0x24303A, 0.6,  0, -9,  0, 26, 26);  // sol froid
+  panneau(0xFFE2B0, 1.5, -11, 1,  4, 14, 18);  // panneau latéral chaud
+  panneau(0x7FA8CC, 0.9,  11, 0, -4, 14, 18);  // panneau latéral froid
+  const envMap = pmrem.fromScene(studio, 0.04).texture;
+  scene.environment = envMap;
+  studio.traverse((o) => { o.geometry?.dispose?.(); o.material?.dispose?.(); });
+  pmrem.dispose();
 
   const chargeur = new THREE.TextureLoader();
   const survolables = [];
@@ -167,33 +199,47 @@ export function demarrerMondes(canvas, infobulle) {
   const horloge = new THREE.Clock();
   const cFond=new THREE.Color(), cCle=new THREE.Color(), cContre=new THREE.Color(), cAcc=new THREE.Color();
   const camViseeP = new THREE.Vector3(), camViseeR = new THREE.Vector3();
-  let m = 0;
+  // Objets de travail réutilisés à chaque trame : sans eux, chaque .lerp()
+  // allouerait une couleur ou un vecteur neuf soixante fois par seconde.
+  const cCible = new THREE.Color(), vCible = new THREE.Vector3();
+  let m = 0, t = 0;
+
+  /* Amortissement indépendant du taux de rafraîchissement.
+     Un facteur fixe appliqué par trame fait réagir la scène deux fois plus
+     vite sur un écran 120 Hz que sur un 60 Hz. Cette forme exponentielle
+     donne le même mouvement à toutes les fréquences, et reste identique au
+     réglage d'origine à 60 images par seconde. */
+  const amorti = (k, dt) => 1 - Math.pow(1 - k, dt * 60);
 
   function boucle(){
     requestAnimationFrame(boucle);
-    const t = horloge.getElapsedTime();
+    // Borne haute : au retour d'un onglet resté inactif, le delta peut valoir
+    // plusieurs secondes et propulserait la scène d'un bout à l'autre.
+    const dt = Math.min(horloge.getDelta(), 0.1);
+    t += dt;
 
     // Amortissement : le monde suit le défilement sans jamais saccader.
-    m += (positionMonde() - m) * 0.055;
+    m += (positionMonde() - m) * amorti(0.055, dt);
     const i = Math.min(Math.floor(m), MONDES.length-2);
     const f = THREE.MathUtils.clamp(m-i, 0, 1);
     const a = MONDES[i], b = MONDES[i+1];
     const e = f*f*(3-2*f); // lissage aux extrémités
 
-    cFond.setHex(a.fond).lerp(new THREE.Color(b.fond), e);
+    cFond.setHex(a.fond).lerp(cCible.setHex(b.fond), e);
     rendu.setClearColor(cFond, 1);
     scene.fog.color.copy(cFond);
     scene.fog.density = THREE.MathUtils.lerp(a.brume, b.brume, e);
-    cCle.setHex(a.cle).lerp(new THREE.Color(b.cle), e);       cle.color.copy(cCle);
-    cContre.setHex(a.contre).lerp(new THREE.Color(b.contre), e); contre.color.copy(cContre);
-    cAcc.setHex(a.accent).lerp(new THREE.Color(b.accent), e);  accent.color.copy(cAcc);
+    cCle.setHex(a.cle).lerp(cCible.setHex(b.cle), e);          cle.color.copy(cCle);
+    cContre.setHex(a.contre).lerp(cCible.setHex(b.contre), e); contre.color.copy(cContre);
+    cAcc.setHex(a.accent).lerp(cCible.setHex(b.accent), e);    accent.color.copy(cAcc);
     poussiere.material.color.copy(cAcc);
 
-    camViseeP.fromArray(a.cam).lerp(new THREE.Vector3().fromArray(b.cam), e);
-    camViseeR.fromArray(a.regard).lerp(new THREE.Vector3().fromArray(b.regard), e);
-    camera.position.x += (camViseeP.x + visee.x*1.6 - camera.position.x)*0.045;
-    camera.position.y += (camViseeP.y + visee.y*1.0 - camera.position.y)*0.045;
-    camera.position.z += (camViseeP.z - camera.position.z)*0.045;
+    camViseeP.fromArray(a.cam).lerp(vCible.fromArray(b.cam), e);
+    camViseeR.fromArray(a.regard).lerp(vCible.fromArray(b.regard), e);
+    const kCam = amorti(0.045, dt);
+    camera.position.x += (camViseeP.x + visee.x*1.6 - camera.position.x)*kCam;
+    camera.position.y += (camViseeP.y + visee.y*1.0 - camera.position.y)*kCam;
+    camera.position.z += (camViseeP.z - camera.position.z)*kCam;
     camera.lookAt(camViseeR);
 
     // Les blocs : dispersés dans le vide, rassemblés en rang au monde 2,
@@ -211,9 +257,9 @@ export function demarrerMondes(canvas, infobulle) {
         cy + Math.sin(t*0.55+u.dep)*0.34,
         cz,
       );
-      if (!doux){ bl.rotation.y += u.vit*0.016; bl.rotation.x = Math.sin(t*0.28+u.dep)*0.14; }
+      if (!doux){ bl.rotation.y += u.vit*0.96*dt; bl.rotation.x = Math.sin(t*0.28+u.dep)*0.14; }
       const vise = bl===survole ? 1 : 0;
-      u.survol += (vise-u.survol)*0.12;
+      u.survol += (vise-u.survol)*amorti(0.12, dt);
       bl.scale.setScalar(u.e * presence * (1 + u.survol*0.26));
       bl.material.envMapIntensity = 1.1 + u.survol*1.6;
     });

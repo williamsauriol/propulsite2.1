@@ -26,6 +26,22 @@ img{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
 :focus-visible{outline:2px solid var(--laiton);outline-offset:4px}
 
+/* L'en-tête est fixe : sans cette marge, une ancre atteinte au clavier se
+   retrouve cachée derrière lui (WCAG 2.4.11 « focus non masqué »). */
+[id]{scroll-margin-top:6.5rem}
+
+/* Le défilement lissé est une animation comme une autre. */
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+}
+
+/* Lien d'évitement : premier élément focusable, invisible jusqu'au Tab. */
+.saut{position:fixed;top:0;left:50%;transform:translate(-50%,-120%);z-index:110;
+  background:var(--laiton);color:var(--fond);padding:.85rem 1.6rem;font-size:.72rem;
+  letter-spacing:.2em;text-transform:uppercase;border-radius:0 0 8px 8px;transition:transform .3s var(--ease)}
+.saut:focus-visible{transform:translate(-50%,0)}
+
 /* Le monde. Fixe : c'est le contenu qui le traverse. */
 #scene{position:fixed;inset:0;z-index:-1;width:100%;height:100%;display:block}
 
@@ -51,9 +67,24 @@ a{color:inherit;text-decoration:none}
 .hdr{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:1.6rem var(--marge);mix-blend-mode:difference}
 .hdr-marque{font-size:.95rem;font-weight:500;letter-spacing:.34em;text-indent:.34em}
 .hdr-nav{display:flex;gap:2.2rem;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--craie-2)}
-.hdr-nav a{transition:color .3s}
+/* Cibles d'au moins 24 px de haut (WCAG 2.5.8). Le texte ne fait que 17 px :
+   c'est le remplissage vertical qui rend le lien confortable à viser. */
+.hdr-nav a{transition:color .3s;padding:.45rem 0;display:inline-block}
 .hdr-nav a:hover{color:var(--craie)}
 @media(max-width:820px){.hdr-nav{display:none}}
+
+/* Téléphone permanent. Cible de 44 px de haut : au-dessus du minimum de
+   24 px de WCAG 2.5.8, et confortable au pouce sur un chantier. */
+.hdr-tel{display:inline-flex;align-items:center;min-height:44px;padding:0 1.1rem;
+  border:1px solid var(--laiton);border-radius:60px;font-family:var(--mono);
+  font-size:.68rem;letter-spacing:.14em;color:var(--laiton-clair);
+  transition:background .4s var(--ease),color .4s var(--ease)}
+.hdr-tel:hover{background:var(--laiton);color:var(--fond)}
+.hdr-tel-court{display:none}
+@media(max-width:820px){
+  .hdr-tel-txt{display:none}
+  .hdr-tel-court{display:inline}
+}
 
 .jauge{position:fixed;left:var(--marge);bottom:2rem;z-index:55;display:flex;align-items:center;gap:.9rem;
   font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--craie-3);
@@ -126,6 +157,26 @@ section{padding:clamp(6rem,18vh,12rem) var(--marge);position:relative;min-height
 .fin{text-align:center}
 .fin .titre-s{max-width:16ch;margin-inline:auto}
 .fin-serif{font-family:var(--serif);font-style:italic;color:var(--laiton-clair)}
+.fin-note{margin-top:1.2rem;font-size:.82rem;color:var(--craie-3);letter-spacing:.02em}
+/* Sur un élément inline, le remplissage vertical agrandit la zone cliquable
+   sans décaler la ligne : la cible atteint 24 px, la mise en page ne bouge pas. */
+.coord a{padding-block:.3rem}
+/* Pied de page et bandeau de démonstration : police d'environ 10 px, donc
+   plus de remplissage pour atteindre les mêmes 24 px de cible. */
+.pied a,.demo a{padding-block:.42rem}
+.coord a{color:inherit;border-bottom:1px solid var(--trait);transition:border-color .3s}
+.coord a:hover{border-color:var(--laiton)}
+
+/* ── Les chiffres : les objections répondues ───────────────────────────
+   Deux colonnes larges plutôt qu'une grille dense — on lit une réponse à
+   la fois, comme le reste du site. */
+.qr-liste{display:grid;grid-template-columns:repeat(2,1fr);gap:3.2rem 4rem;margin-top:clamp(3rem,7vh,5rem)}
+@media(max-width:900px){.qr-liste{grid-template-columns:1fr;gap:2.6rem}}
+.qr h3{font-size:1.06rem;font-weight:500;color:var(--craie);margin-bottom:.85rem;line-height:1.4}
+.qr p{font-size:.95rem;line-height:1.75;color:var(--craie-2);max-width:44ch}
+.qr b{color:var(--laiton-clair);font-weight:500}
+.qr-action{border-left:1px solid var(--laiton);padding-left:1.8rem}
+.btn-petit{margin-top:1.6rem;padding:.9rem 1.7rem;font-size:.68rem}
 .btn{display:inline-flex;align-items:center;gap:.9rem;margin-top:clamp(2rem,5vh,3rem);padding:1.15rem 2.4rem;border:1px solid var(--laiton);color:var(--laiton-clair);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;border-radius:60px;transition:background .45s var(--ease),color .45s var(--ease),transform .45s var(--ease)}
 .btn:hover{background:var(--laiton);color:var(--fond);transform:translateY(-2px)}
 .coord{margin-top:clamp(2.5rem,6vh,4rem);display:flex;gap:clamp(1.5rem,5vw,4rem);justify-content:center;flex-wrap:wrap;font-family:var(--mono);font-size:.64rem;letter-spacing:.15em;text-transform:uppercase;color:var(--craie-3)}

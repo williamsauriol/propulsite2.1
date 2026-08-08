@@ -2,7 +2,10 @@ node_modules/
 build/
 dist/
 coverage/
-.claude/
+# Config locale de Claude Code (launch.json, scripts .cmd propres au poste),
+# mais les skills sont du savoir-faire de projet : elles se versionnent.
+.claude/*
+!.claude/skills/
 .DS_Store
 *.log
 .env*

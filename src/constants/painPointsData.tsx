@@ -7,6 +7,15 @@ export interface PainPointArticleData {
   titleHighlight: string;
   titlePart3?: string;
   intro: string;
+  /**
+   * Versions courtes réservées aux résultats de recherche. Le titre affiché
+   * dans l'article peut être long et narratif ; Google tronque au-delà de
+   * ~65 caractères pour le titre et ~160 pour la description.
+   * Optionnels : sans eux, le titre complet et l'intro (tronquée
+   * automatiquement) sont utilisés.
+   */
+  metaTitle?: string;
+  metaDescription?: string;
   blocks: {
     title: string;
     paragraphs?: string[];
@@ -388,6 +397,7 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
     titlePart1: 'Google Ads pour entrepreneurs en construction : ',
     titleHighlight: 'ça vaut-il vraiment la peine',
     titlePart3: '?',
+    metaTitle: 'Google Ads en construction : est-ce rentable ?',
     intro: "Vous avez entendu parler de Google Ads mais vous ne savez pas si c'est fait pour votre business de construction ? Voici la vérité — chiffres à l'appui.",
     blocks: [
       {
@@ -458,6 +468,9 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
     titlePart1: 'Le ',
     titleHighlight: 'GEO',
     titlePart3: " : comment l'IA peut recommander votre entreprise de construction",
+    metaTitle: "GEO : faire recommander son entreprise par l'IA",
+    metaDescription:
+      "Comment faire citer votre entreprise de construction par ChatGPT, Perplexity et l'IA de Google — et prendre l'avance sur vos concurrents.",
     intro: "Le GEO (Generative Engine Optimization) consiste à optimiser votre présence en ligne pour que les intelligences artificielles — ChatGPT, l'IA de Google (AI Overviews), Perplexity, Gemini — citent et recommandent votre entreprise quand un client leur pose une question. Voici pourquoi c'est en train de changer la game pour les entrepreneurs en construction au Québec — et comment en profiter avant vos concurrents.",
     blocks: [
       {
@@ -517,6 +530,9 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
     titlePart1: '',
     titleHighlight: 'Local Services Ads',
     titlePart3: " : payez quand un client appelle, pas au clic",
+    metaTitle: "Local Services Ads : payer à l'appel, pas au clic",
+    metaDescription:
+      "Les Local Services Ads placent votre entreprise au-dessus des annonces Google, et vous ne payez que si un vrai client vous contacte. Comment ça marche.",
     intro: "Les Local Services Ads (le badge « Garanti par Google ») placent votre entreprise tout en haut de Google, au-dessus des publicités classiques — et vous ne payez que lorsqu'un vrai client vous contacte, jamais au simple clic. Voici comment ça fonctionne pour un entrepreneur en construction au Québec, et pourquoi c'est souvent le levier le plus rentable pour démarrer.",
     blocks: [
       {
@@ -579,6 +595,9 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
     titlePart1: 'Conception d’un ',
     titleHighlight: 'site web pour entrepreneur en construction',
     titlePart3: " : les éléments essentiels",
+    metaTitle: 'Site web pour entrepreneur en construction',
+    metaDescription:
+      "Ce qu'un site web d'entrepreneur en construction doit contenir pour transformer une recherche Google en appel — et les erreurs qui font fuir les clients.",
     intro: "Un site web de construction n’est pas une carte d’affaires en ligne. C’est l’outil qui transforme une recherche Google en appel téléphonique. Voici ce qu’il doit absolument contenir pour décrocher des contrats au Québec — et les erreurs qui font fuir les clients avant même qu’ils vous appellent.",
     blocks: [
       {

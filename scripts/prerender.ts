@@ -50,6 +50,26 @@ function esc(text: string): string {
     .replace(/"/g, '&quot;');
 }
 
+/**
+ * Ramène un texte à la longueur utile d'une meta description.
+ *
+ * Google tronque autour de 160 caractères. Plutôt que de laisser passer des
+ * introductions de 400 caractères coupées au milieu d'un mot dans les
+ * résultats, on coupe nous-mêmes sur une frontière de mot. Le bot de blog
+ * ajoute des articles sans surveillance : la troncature doit être
+ * automatique, pas une correction manuelle article par article.
+ */
+const DESC_MAX = 155;
+function metaDesc(texte: string): string {
+  const propre = texte.replace(/\s+/g, ' ').trim();
+  if (propre.length <= DESC_MAX) return propre;
+  const coupe = propre.slice(0, DESC_MAX - 1);
+  const espace = coupe.lastIndexOf(' ');
+  // Si le dernier espace est trop tôt (mot très long), on coupe au caractère.
+  const base = espace > DESC_MAX * 0.6 ? coupe.slice(0, espace) : coupe;
+  return `${base.replace(/[\s,;:.–—-]+$/, '')}…`;
+}
+
 function breadcrumb(items: { name: string; url: string }[]): object {
   return {
     '@context': 'https://schema.org',
@@ -92,8 +112,13 @@ const routes: RouteMeta[] = [
   },
   ...SERVICES.map((service) => ({
     path: `/services/${service.slug}`,
-    title: `${service.title} pour entrepreneurs en construction | Propulsite`,
-    description: `${service.shortDesc} Service ${service.title} spécialisé pour les entrepreneurs en construction au Québec.`,
+    // « pour entrepreneurs en construction | Propulsite » coûtait 47 caractères
+    // de gabarit : les titres de service dépassaient la limite d'affichage de
+    // Google. La formule courte garde les deux mots-clés qui comptent.
+    title: `${service.title} — construction Québec | Propulsite`,
+    description: metaDesc(
+      `${service.shortDesc} Service ${service.title} spécialisé pour les entrepreneurs en construction au Québec.`,
+    ),
     jsonLd: [
       {
         '@context': 'https://schema.org',
@@ -150,8 +175,10 @@ const routes: RouteMeta[] = [
     const date = article.datePublished || DEFAULT_ARTICLE_DATE;
     return {
       path: `/blog/${article.slug}`,
-      title: `${fullTitle} | Propulsite`,
-      description: article.intro,
+      // Le titre affiché dans l'article peut être long et narratif ; metaTitle
+      // permet une version courte pour les résultats de recherche.
+      title: `${article.metaTitle || fullTitle} | Propulsite`,
+      description: metaDesc(article.metaDescription || article.intro),
       jsonLd: [
         {
           '@context': 'https://schema.org',

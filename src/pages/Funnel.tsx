@@ -191,6 +191,8 @@ export default function Funnel() {
                                         <img
                                             src="/images/logo-fuser-sans-backk.png"
                                             alt="Propulsite"
+                                            width={450}
+                                            height={450}
                                             className="h-24 w-auto object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.7)]"
                                         />
                                     </motion.div>

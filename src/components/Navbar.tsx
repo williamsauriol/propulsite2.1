@@ -55,6 +55,8 @@ export default function Navbar() {
             <img
               src="/images/logo-fuser-sans-backk.png"
               alt="Propulsite Accueil"
+              width={450}
+              height={450}
               className="h-10 md:h-12 object-contain filter drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] transition-transform group-hover:scale-105"
             />
             <span className="text-xl md:text-2xl font-black tracking-widest text-white transition-colors group-hover:text-accent-blue">
@@ -150,7 +152,7 @@ export default function Navbar() {
               to="/funnel"
               className="block w-full py-4 bg-accent-blue rounded-[50px] text-[#050a15] font-black text-center text-lg uppercase tracking-widest shadow-[0_0_20px_rgba(0,210,255,0.5)] hover:bg-white transition-colors"
             >
-              SOUMISSION GRATUITE <img src="/images/logo-fuser-sans-backk.png" alt="" className="inline h-6 w-auto object-contain drop-shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
+              SOUMISSION GRATUITE <img src="/images/logo-fuser-sans-backk.png" alt="" width={450} height={450} className="inline h-6 w-auto object-contain drop-shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
             </Link>
           </motion.div>
         </nav>
