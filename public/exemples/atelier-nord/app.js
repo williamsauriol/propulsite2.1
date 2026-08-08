@@ -38,6 +38,34 @@
   // réseau lent), le rideau se lève quand même.
   setTimeout(entrer, attente + 2600);
 
+  // Jauge de monde : nomme l'univers courant et montre l'avancée du voyage.
+  // C'est le seul repère qui dit au visiteur qu'il traverse quelque chose.
+  var jNom = document.querySelector('.jauge-nom');
+  var jBarre = document.querySelector('.jauge-barre i');
+  var jNum = document.querySelector('.jauge-num');
+  var sections = [].slice.call(document.querySelectorAll('[data-monde]'));
+  var dernier = -1;
+  if (jNom && sections.length) {
+    addEventListener('scroll', function () {
+      var y = scrollY + innerHeight * 0.5;
+      var k = 0;
+      for (var n = 0; n < sections.length; n++) {
+        if (y >= sections[n].offsetTop) k = n;
+      }
+      if (k !== dernier) {
+        dernier = k;
+        jNom.classList.add('change');
+        setTimeout(function () {
+          jNom.textContent = sections[k].dataset.nom || '';
+          jNom.classList.remove('change');
+        }, 260);
+        jNum.textContent = ('0' + (k + 1)).slice(-2);
+      }
+      var total = document.body.scrollHeight - innerHeight;
+      jBarre.style.transform = 'scaleX(' + Math.min(scrollY / Math.max(total, 1), 1) + ')';
+    }, { passive: true });
+  }
+
   // Apparitions au défilement.
   var cibles = document.querySelectorAll('.rv');
   if (doux || !('IntersectionObserver' in window)) {

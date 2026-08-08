@@ -1,207 +1,293 @@
-/* ATELIER NORD — scène 3D
-   Des blocs de matière flottent dans le noir. Ils tournent, réagissent à la
-   souris, et le défilement fait avancer la caméra à travers eux : c'est le
-   passage d'un « univers » à l'autre.
-   Les textures viennent de Higgsfield ; la géométrie et la lumière sont ici. */
+/* ATELIER NORD — moteur de mondes
+   Un seul canvas fixe derrière tout le site. Le défilement ne fait pas
+   descendre une page : il fait traverser une suite de mondes. Chaque section
+   a sa couleur de vide, sa brume, ses lumières, ses objets et son mouvement
+   de caméra. Le HTML n'est qu'une couche de texte posée par-dessus. */
 
 import * as THREE from './vendor/three.module.js';
 
-const MATIERES = [
-  { fichier: 'img/tex-chene.jpg',     nom: 'CHÊNE BLANC', detail: 'MASSIF · HUILE NATURELLE', rugosite: 0.72, metal: 0.0 },
-  { fichier: 'img/tex-marbre.jpg',    nom: 'MARBRE',      detail: 'CARRARE · FINI ADOUCI',    rugosite: 0.38, metal: 0.0 },
-  { fichier: 'img/tex-laiton.jpg',    nom: 'LAITON',      detail: 'BROSSÉ · NON VERNI',       rugosite: 0.31, metal: 0.92 },
-  { fichier: 'img/tex-terrazzo.jpg',  nom: 'TERRAZZO',    detail: 'ADOUCI · ÉCLATS DE MARBRE', rugosite: 0.68, metal: 0.0 },
+/* ── Les mondes ─────────────────────────────────────────────────────────
+   Un par section, dans l'ordre du défilement. On interpole en continu entre
+   le monde courant et le suivant : la bascule n'est jamais brutale. */
+const MONDES = [
+  { id:'vide',     fond:0x0D0E0B, brume:0.042, cle:0xFFF0D4, contre:0x7FA8CC, accent:0xD6A968, cam:[0,0,14],    regard:[0,0,-4] },
+  { id:'atelier',  fond:0x171308, brume:0.055, cle:0xFFD9A0, contre:0x6B7A55, accent:0xE0B36A, cam:[2.5,1,10],  regard:[0,0,-6] },
+  { id:'matieres', fond:0x090B0D, brume:0.030, cle:0xFFFFFF, contre:0x9FC4E8, accent:0xD6A968, cam:[0,0.6,12],  regard:[0,0.4,-2] },
+  { id:'cuisine',  fond:0x1C1611, brume:0.038, cle:0xFFE2B8, contre:0xC08A50, accent:0xE8C48A, cam:[-3,0.5,9],  regard:[0,0,-3] },
+  { id:'bain',     fond:0x0C1418, brume:0.040, cle:0xDDF0FF, contre:0x5E92B8, accent:0x9FC4E8, cam:[3,-0.5,9],  regard:[0,0,-3] },
+  { id:'soussol',  fond:0x140F0C, brume:0.052, cle:0xFFCE8F, contre:0x4A5560, accent:0xD6A968, cam:[-2,1.2,8.5],regard:[0,0,-3] },
+  { id:'plan',     fond:0x060A0C, brume:0.026, cle:0xBFE4FF, contre:0x2E6E96, accent:0x6FD2FF, cam:[0,4,11],    regard:[0,-1,-6] },
+  { id:'retour',   fond:0x0D0E0B, brume:0.048, cle:0xFFF0D4, contre:0x7FA8CC, accent:0xD6A968, cam:[0,0,13],    regard:[0,0,-5] },
 ];
 
-export function demarrerScene(canvas, infobulle) {
+const MATIERES = [
+  { fichier:'img/tex-chene.jpg',    nom:'CHÊNE BLANC', detail:'MASSIF · HUILE NATURELLE',   rug:0.72, met:0.0  },
+  { fichier:'img/tex-marbre.jpg',   nom:'MARBRE',      detail:'CARRARE · FINI ADOUCI',      rug:0.34, met:0.0  },
+  { fichier:'img/tex-laiton.jpg',   nom:'LAITON',      detail:'BROSSÉ · NON VERNI',         rug:0.28, met:0.95 },
+  { fichier:'img/tex-terrazzo.jpg', nom:'TERRAZZO',    detail:'ADOUCI · ÉCLATS DE MARBRE',  rug:0.66, met:0.0  },
+];
+
+const PROJETS = [
+  { fichier:'img/proj-1.jpg', monde:3 },
+  { fichier:'img/proj-2.jpg', monde:4 },
+  { fichier:'img/proj-3.jpg', monde:5 },
+];
+
+export function demarrerMondes(canvas, infobulle) {
   const doux = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-  renderer.setSize(innerWidth, innerHeight);
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.15;
+
+  const rendu = new THREE.WebGLRenderer({ canvas, antialias:true, powerPreference:'high-performance' });
+  rendu.setPixelRatio(Math.min(devicePixelRatio, 2));
+  rendu.setSize(innerWidth, innerHeight);
+  rendu.toneMapping = THREE.ACESFilmicToneMapping;
+  rendu.toneMappingExposure = 1.2;
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x0d0e0b, 0.055);
+  scene.fog = new THREE.FogExp2(0x0D0E0B, 0.042);
+  const camera = new THREE.PerspectiveCamera(42, innerWidth/innerHeight, 0.1, 160);
 
-  const camera = new THREE.PerspectiveCamera(42, innerWidth / innerHeight, 0.1, 120);
-  camera.position.set(0, 0, 14);
-
-  // Éclairage : une dominante chaude côté laiton, une froide en contre, et un
-  // point d'accent qui fait briller les arêtes. C'est ça qui donne le « cher ».
-  // Ambiante très basse : dans le noir, ce sont les lumières directionnelles
-  // qui sculptent les arêtes. Trop d'ambiante et les blocs deviennent plats.
-  scene.add(new THREE.AmbientLight(0x3a3d31, 0.30));
-  const cle = new THREE.DirectionalLight(0xfff0d4, 3.4);
-  cle.position.set(6, 8, 5);
-  scene.add(cle);
-  const contre = new THREE.DirectionalLight(0x7fa8cc, 1.5);
-  contre.position.set(-8, -3, -4);
-  scene.add(contre);
-  const rasant = new THREE.SpotLight(0xd6a968, 90, 30, 0.72, 0.55, 1.6);
-  rasant.position.set(-6, 5, 9);
-  scene.add(rasant);
-  const accent = new THREE.PointLight(0xffd9a0, 26, 22, 2);
-  accent.position.set(2, -1, 6);
-  scene.add(accent);
+  const ambiante = new THREE.AmbientLight(0x3A3D31, 0.32); scene.add(ambiante);
+  const cle    = new THREE.DirectionalLight(0xFFF0D4, 3.2); cle.position.set(6,8,5);    scene.add(cle);
+  const contre = new THREE.DirectionalLight(0x7FA8CC, 1.6); contre.position.set(-8,-3,-4); scene.add(contre);
+  const accent = new THREE.PointLight(0xD6A968, 30, 26, 2); accent.position.set(2,-1,6);  scene.add(accent);
 
   const chargeur = new THREE.TextureLoader();
-  const groupe = new THREE.Group();
-  scene.add(groupe);
+  const survolables = [];
 
-  const blocs = [];
-  // Positions réparties en profondeur : la caméra les traversera au défilement.
-  // Écartés du centre pour laisser le titre respirer, et étagés en profondeur
-  // pour que la plongée au défilement les traverse un à un.
+  /* ── Monde 0-2 : les blocs de matière ──────────────────────────────── */
+  const grBlocs = new THREE.Group(); scene.add(grBlocs);
   const PLACES = [
-    { p: [-5.6, 2.4, 1.5],   e: 1.35, forme: 'boite' },
-    { p: [5.4, 1.0, -1.5],   e: 1.55, forme: 'dalle' },
-    { p: [-4.8, -3.0, -6],   e: 1.20, forme: 'dalle' },
-    { p: [4.6, -2.4, -10],   e: 1.45, forme: 'boite' },
+    { p:[-5.6, 2.4, 1.5],  e:1.35, f:'boite' },
+    { p:[ 5.4, 1.0,-1.5],  e:1.55, f:'dalle' },
+    { p:[-4.8,-3.0,-6.0],  e:1.20, f:'dalle' },
+    { p:[ 4.6,-2.4,-10 ],  e:1.45, f:'boite' },
   ];
+  // En section « matières » ils se rassemblent en ligne, assez loin pour
+  // tenir tous les quatre dans le cadre au-dessus des légendes.
+  const RANG = [[-5.1,-0.2,-3],[-1.7,-0.2,-3],[1.7,-0.2,-3],[5.1,-0.2,-3]];
 
-  MATIERES.forEach((m, i) => {
-    const place = PLACES[i];
-    const geo = place.forme === 'dalle'
-      ? new THREE.BoxGeometry(2.6, 0.42, 2.0, 24, 6, 20)
-      : new THREE.BoxGeometry(1.7, 1.7, 1.7, 20, 20, 20);
-    adoucirAretes(geo, 0.14);
-
+  MATIERES.forEach((m,i) => {
+    const pl = PLACES[i];
+    const geo = pl.f==='dalle'
+      ? new THREE.BoxGeometry(2.6,0.42,2.0,20,6,16)
+      : new THREE.BoxGeometry(1.7,1.7,1.7,16,16,16);
+    adoucir(geo, 0.14);
     const tex = chargeur.load(m.fichier);
     tex.colorSpace = THREE.SRGBColorSpace;
-    tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-    tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
-
-    const mat = new THREE.MeshStandardMaterial({
-      map: tex,
-      roughness: m.rugosite,
-      metalness: m.metal,
-      envMapIntensity: 1.1,
-    });
-
-    const maille = new THREE.Mesh(geo, mat);
-    maille.position.set(...place.p);
-    maille.scale.setScalar(place.e);
-    maille.rotation.set(Math.random() * 0.6 - 0.3, Math.random() * Math.PI, Math.random() * 0.4 - 0.2);
+    tex.anisotropy = rendu.capabilities.getMaxAnisotropy();
+    const maille = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({
+      map:tex, roughness:m.rug, metalness:m.met, envMapIntensity:1.1,
+    }));
+    maille.position.set(...pl.p);
+    maille.rotation.set(Math.random()*.6-.3, Math.random()*Math.PI, Math.random()*.4-.2);
     maille.userData = {
-      base: maille.position.clone(),
-      echelle: place.e,
-      vitesse: 0.06 + i * 0.022,
-      dephase: i * 1.9,
-      info: m,
-      survol: 0,
+      libre:new THREE.Vector3(...pl.p), rang:new THREE.Vector3(...RANG[i]),
+      e:pl.e, vit:0.06+i*0.022, dep:i*1.9, info:m, survol:0,
     };
-    groupe.add(maille);
-    blocs.push(maille);
+    grBlocs.add(maille); survolables.push(maille);
   });
 
-  // ── Interaction souris ───────────────────────────────────────────────────
-  const souris = new THREE.Vector2(-2, -2);
-  const cible = { x: 0, y: 0 };
-  const rayon = new THREE.Raycaster();
-  let survole = null;
-
-  addEventListener('pointermove', (e) => {
-    souris.x = (e.clientX / innerWidth) * 2 - 1;
-    souris.y = -(e.clientY / innerHeight) * 2 + 1;
-    cible.x = souris.x;
-    cible.y = souris.y;
-    if (infobulle) { infobulle.style.left = e.clientX + 'px'; infobulle.style.top = e.clientY + 'px'; }
-  }, { passive: true });
-
-  // ── Défilement : la caméra avance dans la scène ──────────────────────────
-  let avance = 0, avanceCible = 0;
-  addEventListener('scroll', () => {
-    const h = document.querySelector('.hero');
-    const max = h ? h.offsetHeight : innerHeight;
-    avanceCible = Math.min(scrollY / max, 1.6);
-  }, { passive: true });
-
-  addEventListener('resize', () => {
-    camera.aspect = innerWidth / innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(innerWidth, innerHeight);
+  /* ── Mondes 3-5 : les grandes images de réalisation ────────────────── */
+  const plans = PROJETS.map((p) => {
+    const tex = chargeur.load(p.fichier);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.anisotropy = rendu.capabilities.getMaxAnisotropy();
+    const maille = new THREE.Mesh(
+      new THREE.PlaneGeometry(11.5, 8, 40, 28),
+      new THREE.MeshBasicMaterial({ map:tex, transparent:true, opacity:0 }),
+    );
+    maille.position.set(0, 0, -6);
+    maille.userData = { monde:p.monde, base:maille.geometry.attributes.position.array.slice() };
+    maille.visible = false;
+    scene.add(maille);
+    return maille;
   });
 
-  // ── Boucle ───────────────────────────────────────────────────────────────
-  const horloge = new THREE.Clock();
-  let actif = true;
-  const io = new IntersectionObserver((es) => { actif = es[0].isIntersecting; }, { threshold: 0 });
-  io.observe(canvas);
+  /* ── Monde 6 : la grille technique ─────────────────────────────────── */
+  const grille = new THREE.GridHelper(90, 60, 0x6FD2FF, 0x1E4356);
+  grille.material.transparent = true; grille.material.opacity = 0;
+  grille.position.y = -5; scene.add(grille);
 
-  function boucle() {
-    requestAnimationFrame(boucle);
-    if (!actif) return;
+  /* ── Poussière : présente partout, elle donne l'échelle ────────────── */
+  const N = 900, pos = new Float32Array(N*3);
+  for (let i=0;i<N;i++){ pos[i*3]=(Math.random()-.5)*70; pos[i*3+1]=(Math.random()-.5)*44; pos[i*3+2]=(Math.random()-.5)*70; }
+  const geoP = new THREE.BufferGeometry();
+  geoP.setAttribute('position', new THREE.BufferAttribute(pos,3));
+  const poussiere = new THREE.Points(geoP, new THREE.PointsMaterial({
+    size:0.035, color:0xD6A968, transparent:true, opacity:0.42, sizeAttenuation:true, depthWrite:false,
+  }));
+  scene.add(poussiere);
 
-    const t = horloge.getElapsedTime();
-    avance += (avanceCible - avance) * 0.06;
+  /* ── Défilement : on mesure les sections pour savoir où on est ─────── */
+  let bornes = [];
+  function mesurer(){
+    bornes = [...document.querySelectorAll('[data-monde]')].map((s)=>{
+      const r = s.getBoundingClientRect();
+      return { haut:r.top+scrollY, bas:r.bottom+scrollY, i:+s.dataset.monde };
+    });
+  }
+  // Les polices et les images déplacent la mise en page : on remesure après
+  // coup, sinon les frontières de mondes sont fausses tout le reste du temps.
+  mesurer();
+  addEventListener('load', () => { mesurer(); setTimeout(mesurer, 600); });
+  if (document.fonts?.ready) document.fonts.ready.then(mesurer);
 
-    // Parallaxe douce de la caméra + plongée au défilement.
-    camera.position.x += (cible.x * 1.5 - camera.position.x) * 0.035;
-    camera.position.y += (cible.y * 0.9 - camera.position.y) * 0.035;
-    camera.position.z = 14 - avance * 11;
-    camera.lookAt(0, 0, -4);
-
-    // Détection de survol.
-    if (!doux) {
-      rayon.setFromCamera(souris, camera);
-      const touches = rayon.intersectObjects(blocs, false);
-      const nouveau = touches.length ? touches[0].object : null;
-      if (nouveau !== survole) {
-        survole = nouveau;
-        if (infobulle) {
-          if (survole) {
-            infobulle.innerHTML = '<b>' + survole.userData.info.nom + '</b>' + survole.userData.info.detail;
-            infobulle.classList.add('on');
-            canvas.style.cursor = 'none';
-          } else {
-            infobulle.classList.remove('on');
-            canvas.style.cursor = '';
-          }
-        }
+  // Renvoie l'index fractionnaire du monde : 2.4 = 40 % du chemin entre le
+  // monde 2 et le 3. C'est ce nombre qui pilote absolument tout.
+  function positionMonde(){
+    const y = scrollY + innerHeight*0.5;
+    for (let k=0;k<bornes.length;k++){
+      const b = bornes[k];
+      if (y >= b.haut && y < b.bas){
+        const t = (y-b.haut)/Math.max(b.bas-b.haut,1);
+        const suiv = bornes[k+1] ? bornes[k+1].i : b.i;
+        // La bascule ne commence qu'au dernier tiers : on habite le monde
+        // avant d'en changer, sinon tout est en transition permanente.
+        return b.i + (suiv-b.i) * Math.max(0,(t-0.66)/0.34);
       }
     }
+    return y < (bornes[0]?.haut ?? 0) ? 0 : MONDES.length-1;
+  }
 
-    blocs.forEach((b) => {
-      const u = b.userData;
-      // Flottement continu.
-      b.position.y = u.base.y + Math.sin(t * 0.55 + u.dephase) * 0.34;
-      b.position.x = u.base.x + Math.cos(t * 0.37 + u.dephase) * 0.16;
-      if (!doux) {
-        b.rotation.y += u.vitesse * 0.016;
-        b.rotation.x = Math.sin(t * 0.28 + u.dephase) * 0.14;
-      }
-      // Le bloc survolé grossit et se redresse vers la caméra.
-      const vise = b === survole ? 1 : 0;
-      u.survol += (vise - u.survol) * 0.12;
-      b.scale.setScalar(u.echelle * (1 + u.survol * 0.22));
-      b.material.envMapIntensity = 1.1 + u.survol * 1.4;
+  /* ── Souris ────────────────────────────────────────────────────────── */
+  const souris = new THREE.Vector2(-2,-2), visee = {x:0,y:0};
+  const rayon = new THREE.Raycaster(); let survole = null;
+  addEventListener('pointermove', (e)=>{
+    souris.x = (e.clientX/innerWidth)*2-1; souris.y = -(e.clientY/innerHeight)*2+1;
+    visee.x = souris.x; visee.y = souris.y;
+    if (infobulle){ infobulle.style.left=e.clientX+'px'; infobulle.style.top=e.clientY+'px'; }
+  }, {passive:true});
+
+  addEventListener('resize', ()=>{
+    camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
+    rendu.setSize(innerWidth, innerHeight); mesurer();
+  });
+
+  /* ── Boucle ────────────────────────────────────────────────────────── */
+  const horloge = new THREE.Clock();
+  const cFond=new THREE.Color(), cCle=new THREE.Color(), cContre=new THREE.Color(), cAcc=new THREE.Color();
+  const camViseeP = new THREE.Vector3(), camViseeR = new THREE.Vector3();
+  let m = 0;
+
+  function boucle(){
+    requestAnimationFrame(boucle);
+    const t = horloge.getElapsedTime();
+
+    // Amortissement : le monde suit le défilement sans jamais saccader.
+    m += (positionMonde() - m) * 0.055;
+    const i = Math.min(Math.floor(m), MONDES.length-2);
+    const f = THREE.MathUtils.clamp(m-i, 0, 1);
+    const a = MONDES[i], b = MONDES[i+1];
+    const e = f*f*(3-2*f); // lissage aux extrémités
+
+    cFond.setHex(a.fond).lerp(new THREE.Color(b.fond), e);
+    rendu.setClearColor(cFond, 1);
+    scene.fog.color.copy(cFond);
+    scene.fog.density = THREE.MathUtils.lerp(a.brume, b.brume, e);
+    cCle.setHex(a.cle).lerp(new THREE.Color(b.cle), e);       cle.color.copy(cCle);
+    cContre.setHex(a.contre).lerp(new THREE.Color(b.contre), e); contre.color.copy(cContre);
+    cAcc.setHex(a.accent).lerp(new THREE.Color(b.accent), e);  accent.color.copy(cAcc);
+    poussiere.material.color.copy(cAcc);
+
+    camViseeP.fromArray(a.cam).lerp(new THREE.Vector3().fromArray(b.cam), e);
+    camViseeR.fromArray(a.regard).lerp(new THREE.Vector3().fromArray(b.regard), e);
+    camera.position.x += (camViseeP.x + visee.x*1.6 - camera.position.x)*0.045;
+    camera.position.y += (camViseeP.y + visee.y*1.0 - camera.position.y)*0.045;
+    camera.position.z += (camViseeP.z - camera.position.z)*0.045;
+    camera.lookAt(camViseeR);
+
+    // Les blocs : dispersés dans le vide, rassemblés en rang au monde 2,
+    // puis ils s'écartent et s'effacent quand les réalisations arrivent.
+    const versRang = THREE.MathUtils.clamp(1-Math.abs(m-2), 0, 1);
+    const presence = THREE.MathUtils.clamp(1-Math.max(0, m-2.35)/0.5, 0, 1);
+    grBlocs.visible = presence > 0.01;
+    grBlocs.children.forEach((bl)=>{
+      const u = bl.userData;
+      const cx = THREE.MathUtils.lerp(u.libre.x, u.rang.x, versRang);
+      const cy = THREE.MathUtils.lerp(u.libre.y, u.rang.y, versRang);
+      const cz = THREE.MathUtils.lerp(u.libre.z, u.rang.z, versRang);
+      bl.position.set(
+        cx + Math.cos(t*0.37+u.dep)*0.16,
+        cy + Math.sin(t*0.55+u.dep)*0.34,
+        cz,
+      );
+      if (!doux){ bl.rotation.y += u.vit*0.016; bl.rotation.x = Math.sin(t*0.28+u.dep)*0.14; }
+      const vise = bl===survole ? 1 : 0;
+      u.survol += (vise-u.survol)*0.12;
+      bl.scale.setScalar(u.e * presence * (1 + u.survol*0.26));
+      bl.material.envMapIntensity = 1.1 + u.survol*1.6;
     });
 
-    renderer.render(scene, camera);
+    // Les grandes images : elles n'existent que dans leur monde, arrivent de
+    // loin et ondulent légèrement sous la souris.
+    plans.forEach((pl)=>{
+      // Fenêtre serrée : une image n'existe que dans SON monde, sinon elle
+      // déborde sur le monde d'avant et tout se mélange.
+      const d = Math.abs(m - pl.userData.monde);
+      const vis = THREE.MathUtils.clamp(1 - d/0.5, 0, 1);
+      pl.visible = vis > 0.01;
+      if (!pl.visible) return;
+      pl.material.opacity = vis;
+      pl.position.z = -6 + (1-vis)*7;
+      pl.position.x = (m - pl.userData.monde) * 5.5;
+      pl.rotation.y = visee.x*0.16 + (m-pl.userData.monde)*0.28;
+      pl.rotation.x = -visee.y*0.10;
+      pl.scale.setScalar(0.9 + vis*0.14);
+      // Ondulation du maillage : l'image respire au lieu d'être un carton.
+      if (!doux){
+        const at = pl.geometry.attributes.position, base = pl.userData.base;
+        for (let k=0;k<at.count;k++){
+          const x = base[k*3], y = base[k*3+1];
+          at.setZ(k, Math.sin(x*0.42 + t*0.65)*0.16 + Math.cos(y*0.5 + t*0.5)*0.12);
+        }
+        at.needsUpdate = true;
+      }
+    });
+
+    // La grille technique n'apparaît qu'au monde du processus.
+    const gv = THREE.MathUtils.clamp(1-Math.abs(m-6)/0.9, 0, 1);
+    grille.material.opacity = gv*0.5;
+    grille.visible = gv > 0.01;
+    grille.position.z = -10 + gv*6;
+    grille.rotation.y = t*0.02;
+
+    poussiere.rotation.y = t*0.012;
+    poussiere.material.opacity = 0.2 + 0.3*THREE.MathUtils.clamp(1.6-Math.abs(m-3), 0, 1);
+
+    // Survol : seulement quand les blocs sont vraiment là.
+    if (!doux && presence > 0.5){
+      rayon.setFromCamera(souris, camera);
+      const touche = rayon.intersectObjects(grBlocs.children, false);
+      const nouv = touche.length ? touche[0].object : null;
+      if (nouv !== survole){
+        survole = nouv;
+        if (infobulle){
+          if (survole){
+            infobulle.innerHTML = '<b>'+survole.userData.info.nom+'</b>'+survole.userData.info.detail;
+            infobulle.classList.add('on'); canvas.style.cursor='none';
+          } else { infobulle.classList.remove('on'); canvas.style.cursor=''; }
+        }
+      }
+    } else if (survole){ survole=null; infobulle?.classList.remove('on'); canvas.style.cursor=''; }
+
+    rendu.render(scene, camera);
   }
   boucle();
-
-  return { blocs, scene };
 }
 
-/* Trois.js n'a pas de boîte à arêtes arrondies. On déplace les sommets vers le
-   centre proportionnellement à leur distance des arêtes : ça suffit pour
-   attraper la lumière comme un vrai bloc taillé. */
-function adoucirAretes(geo, rayon) {
-  const pos = geo.attributes.position;
-  const v = new THREE.Vector3();
-  const params = geo.parameters;
-  const demi = new THREE.Vector3(params.width / 2, params.height / 2, params.depth / 2);
-  for (let i = 0; i < pos.count; i++) {
-    v.fromBufferAttribute(pos, i);
-    const interieur = new THREE.Vector3(
-      Math.max(-demi.x + rayon, Math.min(demi.x - rayon, v.x)),
-      Math.max(-demi.y + rayon, Math.min(demi.y - rayon, v.y)),
-      Math.max(-demi.z + rayon, Math.min(demi.z - rayon, v.z)),
-    );
-    const dir = v.clone().sub(interieur);
-    if (dir.length() > 0) v.copy(interieur).add(dir.normalize().multiplyScalar(rayon));
+/* Three.js n'a pas de boîte à arêtes arrondies : on pousse les sommets vers
+   l'intérieur pour que la lumière accroche comme sur un bloc taillé. */
+function adoucir(geo, r){
+  const pos = geo.attributes.position, v = new THREE.Vector3(), p = geo.parameters;
+  const d = new THREE.Vector3(p.width/2, p.height/2, p.depth/2);
+  for (let i=0;i<pos.count;i++){
+    v.fromBufferAttribute(pos,i);
+    const dedans = new THREE.Vector3(
+      Math.max(-d.x+r, Math.min(d.x-r, v.x)),
+      Math.max(-d.y+r, Math.min(d.y-r, v.y)),
+      Math.max(-d.z+r, Math.min(d.z-r, v.z)));
+    const dir = v.clone().sub(dedans);
+    if (dir.length()>0) v.copy(dedans).add(dir.normalize().multiplyScalar(r));
     pos.setXYZ(i, v.x, v.y, v.z);
   }
   geo.computeVertexNormals();
