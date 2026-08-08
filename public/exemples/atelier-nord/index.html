@@ -36,10 +36,12 @@
 
   <section class="hero">
     <div class="hero-fond">
-      <!-- Emplacement prévu pour le plan vidéo Higgsfield. L'image sert de
-           poster et de repli : la page reste correcte si la vidéo n'est pas là. -->
       <img src="img/hero.jpg" alt="Cuisine haut de gamme en cours de rénovation">
     </div>
+    <!-- Scène 3D : des blocs de matière flottent devant l'image de fond et
+         réagissent à la souris. Si WebGL manque, le canvas reste vide et le
+         héros fonctionne exactement comme avant. -->
+    <canvas id="scene" aria-hidden="true"></canvas>
     <div class="hero-in">
       <p class="hero-eyebrow">Rénovation résidentielle de prestige</p>
       <h1 class="hero-titre" id="titre-hero">Le luxe ne se décore pas. Il se construit.</h1>
@@ -68,20 +70,20 @@
       </div>
       <div class="mat-grille">
         <figure class="mat rv" style="margin:0">
-          <div class="mat-img"><img src="img/mat-chene.jpg" alt="Chêne blanc massif"></div>
+          <div class="mat-img"><img src="img/tex-chene.jpg" alt="Chêne blanc massif"></div>
           <figcaption class="mat-note"><b>Chêne blanc</b>Massif · huile naturelle<br>Provenance Québec</figcaption>
         </figure>
         <figure class="mat rv" style="margin:0">
-          <div class="mat-img"><img src="img/mat-marbre.jpg" alt="Marbre de Carrare"></div>
+          <div class="mat-img"><img src="img/tex-marbre.jpg" alt="Marbre de Carrare"></div>
           <figcaption class="mat-note"><b>Marbre</b>Carrare · fini adouci<br>Épaisseur 3 cm</figcaption>
         </figure>
         <figure class="mat rv" style="margin:0">
-          <div class="mat-img"><img src="img/mat-laiton.jpg" alt="Laiton brossé non verni"></div>
+          <div class="mat-img"><img src="img/tex-laiton.jpg" alt="Laiton brossé non verni"></div>
           <figcaption class="mat-note"><b>Laiton</b>Brossé · non verni<br>Patine avec le temps</figcaption>
         </figure>
         <figure class="mat rv" style="margin:0">
-          <div class="mat-img"><img src="img/mat-ceramique.jpg" alt="Céramique pleine masse"></div>
-          <figcaption class="mat-note"><b>Céramique</b>Pleine masse · mat<br>Pose sans joint apparent</figcaption>
+          <div class="mat-img"><img src="img/tex-terrazzo.jpg" alt="Terrazzo adouci"></div>
+          <figcaption class="mat-note"><b>Terrazzo</b>Adouci · éclats de marbre<br>Coulé sur place</figcaption>
         </figure>
       </div>
     </div>
@@ -172,6 +174,19 @@
   <b>Site de démonstration.</b> « Atelier Nord » est une entreprise fictive créée par <a href="https://propulsite.ca">Propulsite</a> pour illustrer une présence web haut de gamme. Textes, prix et réalisations sont des exemples.
 </div>
 
+<div id="infobulle" aria-hidden="true"></div>
+
 <script src="app.js" defer></script>
+<script type="module">
+  // Chargé en module et à part : si WebGL est absent ou trop lent, la page
+  // reste entièrement fonctionnelle sans lui.
+  if (!matchMedia('(pointer: coarse)').matches || innerWidth > 900) {
+    import('./scene3d.js')
+      .then((m) => m.demarrerScene(document.getElementById('scene'), document.getElementById('infobulle')))
+      .catch(() => document.getElementById('scene')?.remove());
+  } else {
+    document.getElementById('scene')?.remove();
+  }
+</script>
 </body>
 </html>
