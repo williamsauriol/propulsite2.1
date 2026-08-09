@@ -1,6 +1,8 @@
 {
   "redirects": [
-    { "source": "/services/seo", "destination": "/services/domination-google", "permanent": true }
+    { "source": "/services/seo", "destination": "/services/domination-google", "permanent": true },
+    { "source": "/exemples/atelier-nord", "destination": "/exemples/specimen-01/", "permanent": true },
+    { "source": "/exemples/atelier-nord/:chemin*", "destination": "/exemples/specimen-01/:chemin*", "permanent": true }
   ],
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
