@@ -223,7 +223,7 @@ export default function Home() {
           </motion.div>
 
           <motion.a
-            href="/exemples/atelier-nord/"
+            href="/exemples/specimen-01/"
             target="_blank"
             rel="noopener"
             initial={{ opacity: 0, y: 28 }}
@@ -233,8 +233,8 @@ export default function Home() {
             className="group block relative overflow-hidden rounded-2xl border border-white/10 bg-[#0a1628] hover:border-accent-blue/60 transition-colors"
           >
             <img
-              src="/exemples/atelier-nord/img/hero.jpg"
-              alt="Aperçu du site Atelier Nord, réalisé par Propulsite"
+              src="/exemples/specimen-01/img/hero.jpg"
+              alt="Aperçu du site Spécimen 01, réalisé par Propulsite"
               loading="lazy"
               width={1920}
               height={1080}
@@ -244,7 +244,7 @@ export default function Home() {
             <div className="absolute inset-x-0 bottom-0 p-6 md:p-10 flex flex-wrap items-end justify-between gap-5">
               <div>
                 <p className="text-[0.7rem] font-bold tracking-[0.2em] uppercase text-accent-blue mb-2">Rénovation haut de gamme</p>
-                <h3 className="text-2xl md:text-4xl font-black text-white leading-tight">Atelier Nord</h3>
+                <h3 className="text-2xl md:text-4xl font-black text-white leading-tight">Spécimen 01</h3>
                 <p className="text-white/55 text-sm mt-2 max-w-md">Site vitrine, animations sur mesure, optimisé pour le mobile et pour Google.</p>
               </div>
               <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white border border-white/25 rounded-full px-5 py-3 group-hover:bg-accent-blue group-hover:text-[#050a15] group-hover:border-accent-blue transition-all">

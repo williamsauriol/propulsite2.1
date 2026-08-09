@@ -48,7 +48,7 @@ Signatures courantes : `three` (3D WebGL), `gsap` (animation), `lenis` ou
 magique vient souvent d'une seule de ces librairies.
 
 Vérifier aussi la présence d'un `<canvas>` plein écran — c'est la signature
-d'une scène 3D de fond comme celle d'Atelier Nord.
+d'une scène 3D de fond comme celle d'Spécimen 01.
 
 ## Traduire les remarques de William
 

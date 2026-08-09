@@ -38,7 +38,7 @@ nouveau site ou toute refonte.
 ### Procédés
 | Skill | Couvre |
 |---|---|
-| `site-demonstration` | Créer un site-vitrine fictif (type Atelier Nord) |
+| `site-demonstration` | Créer un site-vitrine fictif (type Spécimen 01) |
 | `audit-site-reference` | Analyser un site d'inspiration fourni en référence |
 | `medias-higgsfield` | Générer des médias, gérer les crédits |
 

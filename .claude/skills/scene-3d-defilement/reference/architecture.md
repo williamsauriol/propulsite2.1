@@ -157,7 +157,7 @@ obj.visible = vis > 0.01;        // évite le coût de rendu à opacité nulle
 
 Une largeur de `0.5` donne une apparition nette sans déborder. Élargir à
 `0.85` fait déjà baver l'objet sur le monde voisin — bug déjà rencontré et
-corrigé sur Atelier Nord.
+corrigé sur Spécimen 01.
 
 ## Interaction souris
 

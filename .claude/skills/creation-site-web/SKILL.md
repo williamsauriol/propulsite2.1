@@ -21,7 +21,7 @@ spécialisées. Ne pas tout charger d'un coup — suivre l'aiguillage.
 | Animations, transitions, sensation « haut de gamme » | `design-mouvement` |
 | Scène 3D pilotée par le défilement | `scene-3d-defilement` |
 | Trames, éclairage, fluidité d'une scène 3D | `performance-webgl` |
-| Nouveau site-vitrine fictif (Atelier Nord, etc.) | `site-demonstration` |
+| Nouveau site-vitrine fictif (Spécimen 01, etc.) | `site-demonstration` |
 | Analyser un site d'inspiration fourni par William | `audit-site-reference` |
 | Générer images / vidéos / voix | `medias-higgsfield` |
 

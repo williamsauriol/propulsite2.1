@@ -1,6 +1,6 @@
 ---
 name: scene-3d-defilement
-description: Architecture Three.js « mondes fractionnels » — un canvas fixe plein écran dont l'ambiance change selon le défilement, chaque section étant un univers distinct. À utiliser pour créer, étendre ou déboguer une scène 3D pilotée par le scroll, comme celle de public/exemples/atelier-nord.
+description: Architecture Three.js « mondes fractionnels » — un canvas fixe plein écran dont l'ambiance change selon le défilement, chaque section étant un univers distinct. À utiliser pour créer, étendre ou déboguer une scène 3D pilotée par le scroll, comme celle de public/exemples/specimen-01.
 ---
 
 # Scène 3D pilotée par le défilement
@@ -10,7 +10,7 @@ défilement choisit quel **monde** est actif et fond les ambiances entre
 elles. Chaque section devient un univers visuellement distinct.
 
 Implémentation de référence :
-`public/exemples/atelier-nord/scene3d.js`.
+`public/exemples/specimen-01/scene3d.js`.
 Détail complet de l'architecture : voir [reference/architecture.md](reference/architecture.md).
 
 ## Principe

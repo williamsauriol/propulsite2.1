@@ -9,7 +9,7 @@ Un site-exemple sert à montrer à un prospect ce que Propulsite peut faire.
 Il doit être plus ambitieux qu'un vrai site client — c'est une vitrine, pas
 une livraison.
 
-Référence existante : `public/exemples/atelier-nord/` (rénovation haut de
+Référence existante : `public/exemples/specimen-01/` (rénovation haut de
 gamme, scène 3D à huit mondes).
 
 ## Pourquoi en statique
@@ -35,6 +35,21 @@ public/exemples/<nom>/
   img/                    images compressées
 ```
 
+## Convention de nommage — obligatoire
+
+Les sites de démonstration s'appellent **« Spécimen NN »**, numérotés dans
+l'ordre de création : `Spécimen 01`, `Spécimen 02`, etc. Dossier
+correspondant : `public/exemples/specimen-NN/`.
+
+**Pourquoi :** un nom qui sonne comme une vraie entreprise (l'ancien
+« Atelier Nord ») laisse croire au visiteur qu'il regarde le site d'un
+client réel. « Spécimen 01 » annonce immédiatement une pièce de
+démonstration, tout en gardant l'allure d'une collection soignée.
+
+Ne jamais inventer un nom d'entreprise crédible pour une démo. Les
+coordonnées suivent la même règle : courriel en `@specimen.exemple`,
+téléphone et licence RBQ manifestement fictifs.
+
 ## Obligations
 
 **Isolation SEO.** L'entreprise est fictive : elle ne doit jamais entrer
@@ -57,7 +72,7 @@ Utiliser des numéros manifestement fictifs (`0000-0000-00`).
 
 ## Composants attendus
 
-Pour rester cohérent avec le niveau d'Atelier Nord :
+Pour rester cohérent avec le niveau d'Spécimen 01 :
 
 - **Rideau d'ouverture** — nom + accroche, se lève après ~2 s, sauté si
   `prefers-reduced-motion`
@@ -71,7 +86,7 @@ Pour rester cohérent avec le niveau d'Atelier Nord :
 ```
 - [ ] 1. Choisir le métier et inventer une entreprise crédible
 - [ ] 2. Écrire les textes en premier (voir redaction-conversion)
-- [ ] 3. Copier la structure d'atelier-nord, remplacer le design system
+- [ ] 3. Copier la structure de specimen-01, remplacer le design system
 - [ ] 4. noindex + bandeau de démonstration dès le premier commit
 - [ ] 5. Ajouter la carte de prévisualisation dans src/pages/Home.tsx
 - [ ] 6. Vérifier en desktop ET mobile dans le Browser pane
