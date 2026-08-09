@@ -293,10 +293,29 @@ for i, (nom, pos, vise) in enumerate(ETAPES, start=1):
     cible.keyframe_insert('location', frame=i)
     marqueur = scene.timeline_markers.new(nom, frame=i)
 
+def fcurves_de(action):
+    """
+    Récupère les courbes d'animation, quelle que soit la version de Blender.
+
+    Depuis Blender 4.4 les actions sont « à emplacements » : les courbes sont
+    rangées dans action.layers[].strips[].channelbags[].fcurves et l'ancien
+    raccourci action.fcurves a disparu. Sans ce repli, le script plante sur
+    Blender 5.
+    """
+    if hasattr(action, 'fcurves'):
+        return list(action.fcurves)
+    courbes = []
+    for couche in getattr(action, 'layers', []):
+        for strip in getattr(couche, 'strips', []):
+            for bag in getattr(strip, 'channelbags', []):
+                courbes.extend(bag.fcurves)
+    return courbes
+
+
 # Interpolation en escalier : chaque image est une vue fixe, pas un travelling.
 for obj in (cam, cible):
     if obj.animation_data and obj.animation_data.action:
-        for fcu in obj.animation_data.action.fcurves:
+        for fcu in fcurves_de(obj.animation_data.action):
             for kp in fcu.keyframe_points:
                 kp.interpolation = 'CONSTANT'
 
