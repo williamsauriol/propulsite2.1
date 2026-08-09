@@ -16,6 +16,7 @@ nouveau site ou toute refonte.
 | Skill | Couvre |
 |---|---|
 | `creation-site-web` | Workflow complet, stack Propulsite, barrières de qualité |
+| `design-visuel` | Règles visuelles mesurables : typographie, échelle, couleur, retenue |
 | `performance-web` | Core Web Vitals (LCP/INP/CLS), budgets, corrections |
 | `accessibilite-web` | WCAG 2.2, clavier, contraste, `prefers-reduced-motion` |
 

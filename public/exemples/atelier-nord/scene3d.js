@@ -88,11 +88,22 @@ export function demarrerMondes(canvas, infobulle) {
 
   /* ── Monde 0-2 : les blocs de matière ──────────────────────────────── */
   const grBlocs = new THREE.Group(); scene.add(grBlocs);
+  // Positions délibérées, pas dispersées au hasard : x symétrique, z en pas
+  // réguliers de 4. Un objet qui n'est aligné sur rien donne l'impression de
+  // ne pas appartenir à la composition — c'est ce qui faisait « démo » ici.
   const PLACES = [
-    { p:[-5.6, 2.4, 1.5],  e:1.35, f:'boite' },
-    { p:[ 5.4, 1.0,-1.5],  e:1.55, f:'dalle' },
-    { p:[-4.8,-3.0,-6.0],  e:1.20, f:'dalle' },
-    { p:[ 4.6,-2.4,-10 ],  e:1.45, f:'boite' },
+    { p:[-5.2, 2.6,  0 ], e:1.35, f:'boite' },
+    { p:[ 5.2, 0.9, -4 ], e:1.50, f:'dalle' },
+    { p:[-5.2,-2.4, -8 ], e:1.20, f:'dalle' },
+    { p:[ 5.2,-0.6,-12 ], e:1.45, f:'boite' },
+  ];
+  // Inclinaisons choisies et faibles. La rotation aléatoire sur un tour
+  // complet donnait quatre objets sans parenté visuelle.
+  const ANGLES = [
+    [-0.08,  0.42,  0.05],
+    [ 0.06, -0.30, -0.04],
+    [-0.05,  0.88,  0.03],
+    [ 0.07, -0.72, -0.06],
   ];
   // En section « matières » ils se rassemblent en ligne, assez loin pour
   // tenir tous les quatre dans le cadre au-dessus des légendes.
@@ -111,7 +122,7 @@ export function demarrerMondes(canvas, infobulle) {
       map:tex, roughness:m.rug, metalness:m.met, envMapIntensity:1.1,
     }));
     maille.position.set(...pl.p);
-    maille.rotation.set(Math.random()*.6-.3, Math.random()*Math.PI, Math.random()*.4-.2);
+    maille.rotation.set(...ANGLES[i]);
     maille.userData = {
       libre:new THREE.Vector3(...pl.p), rang:new THREE.Vector3(...RANG[i]),
       e:pl.e, vit:0.06+i*0.022, dep:i*1.9, info:m, survol:0,
@@ -135,18 +146,18 @@ export function demarrerMondes(canvas, infobulle) {
     return maille;
   });
 
-  /* ── Monde 6 : la grille technique ─────────────────────────────────── */
-  const grille = new THREE.GridHelper(90, 60, 0x6FD2FF, 0x1E4356);
-  grille.material.transparent = true; grille.material.opacity = 0;
-  grille.position.y = -5; scene.add(grille);
-
-  /* ── Poussière : présente partout, elle donne l'échelle ────────────── */
-  const N = 900, pos = new Float32Array(N*3);
+  /* ── Poussière ──────────────────────────────────────────────────────
+     Elle donne l'échelle et empêche le vide d'être mort, mais elle doit
+     rester à la limite du perceptible. Deux fois moins dense et deux fois
+     plus discrète qu'avant : elle se remarquait, donc elle encombrait.
+     (La grille technique a été retirée : GridHelper est un outil de
+     débogage de Three.js, pas un élément de décor.) */
+  const N = 450, pos = new Float32Array(N*3);
   for (let i=0;i<N;i++){ pos[i*3]=(Math.random()-.5)*70; pos[i*3+1]=(Math.random()-.5)*44; pos[i*3+2]=(Math.random()-.5)*70; }
   const geoP = new THREE.BufferGeometry();
   geoP.setAttribute('position', new THREE.BufferAttribute(pos,3));
   const poussiere = new THREE.Points(geoP, new THREE.PointsMaterial({
-    size:0.035, color:0xD6A968, transparent:true, opacity:0.42, sizeAttenuation:true, depthWrite:false,
+    size:0.026, color:0xD6A968, transparent:true, opacity:0.2, sizeAttenuation:true, depthWrite:false,
   }));
   scene.add(poussiere);
 
@@ -290,15 +301,18 @@ export function demarrerMondes(canvas, infobulle) {
       }
     });
 
-    // La grille technique n'apparaît qu'au monde du processus.
-    const gv = THREE.MathUtils.clamp(1-Math.abs(m-6)/0.9, 0, 1);
-    grille.material.opacity = gv*0.5;
-    grille.visible = gv > 0.01;
-    grille.position.z = -10 + gv*6;
-    grille.rotation.y = t*0.02;
+    /* Règle de composition : on ne pose jamais du complexe sur du complexe.
+       Les mondes qui portent beaucoup de texte (manifeste, processus,
+       chiffres, contact) font taire le décor ; ceux qui montrent quelque
+       chose le laissent respirer. C'est cette alternance qui fait la
+       direction artistique — pas la quantité d'objets. */
+    const CALME = [0.35, 0.9, 0.15, 0.3, 0.3, 0.3, 0.9, 0.95, 0.8];
+    const iC = Math.min(Math.floor(m), CALME.length-2);
+    const calme = THREE.MathUtils.lerp(CALME[iC], CALME[iC+1], THREE.MathUtils.clamp(m-iC,0,1));
 
     poussiere.rotation.y = t*0.012;
-    poussiere.material.opacity = 0.2 + 0.3*THREE.MathUtils.clamp(1.6-Math.abs(m-3), 0, 1);
+    poussiere.material.opacity = 0.22 * (1-calme);
+    poussiere.visible = poussiere.material.opacity > 0.01;
 
     // Survol : seulement quand les blocs sont vraiment là.
     if (!doux && presence > 0.5){
