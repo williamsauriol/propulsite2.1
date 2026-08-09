@@ -116,6 +116,12 @@ a{color:inherit;text-decoration:none}
 /* ─── En-tête ────────────────────────────────────────────────────────── */
 .hdr{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;
   justify-content:space-between;gap:var(--e3);padding:var(--e3) var(--marge)}
+/* L'en-tête est fixe et le contenu défile dessous. Sans ce dégradé, un titre
+   qui passe derrière se mélange aux liens de navigation et les deux
+   deviennent illisibles. Le voile s'éteint progressivement pour ne pas
+   dessiner une barre opaque. */
+.hdr::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(18,19,16,.94) 0%,rgba(18,19,16,.78) 55%,rgba(18,19,16,0) 100%)}
 .hdr-marque{font-size:var(--t-sm);font-weight:500;letter-spacing:.34em;text-indent:.34em}
 .hdr-nav{display:flex;gap:var(--e4);font-size:var(--t-xs);letter-spacing:.2em;
   text-transform:uppercase;color:var(--craie-2);font-weight:500}
@@ -157,7 +163,16 @@ p{max-width:var(--mesure)}
 /* ─── Héros ──────────────────────────────────────────────────────────── */
 .hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;
   padding:0 var(--marge) var(--e7)}
-.hero-in{position:relative;width:100%;max-width:1400px;margin-inline:auto}
+/* Voile dégradé par-dessus la photographie de fond. Sans lui, le texte se
+   pose sur une image en pleine lumière et devient illisible — c'est
+   exactement la faute que ce site faisait. Sombre en bas où vit le texte,
+   sombre en haut derrière la navigation, plus clair au milieu pour laisser
+   respirer l'image. */
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:linear-gradient(to top,
+    rgba(18,19,16,.97) 0%, rgba(18,19,16,.90) 22%, rgba(18,19,16,.55) 46%,
+    rgba(18,19,16,.34) 68%, rgba(18,19,16,.72) 100%)}
+.hero-in{position:relative;z-index:1;width:100%;max-width:1400px;margin-inline:auto}
 .hero-eyebrow{font-family:var(--serif);font-style:italic;font-size:var(--t-md);
   color:var(--laiton-clair);margin:0 0 var(--e2)}
 .hero-titre{font-size:clamp(2.4rem,7.2vw,5.6rem);font-weight:500;line-height:1.02;
@@ -184,13 +199,24 @@ p{max-width:var(--mesure)}
 @media(max-width:860px){.manifeste-grille{grid-template-columns:1fr;gap:var(--e5)}}
 
 /* ─── Matières ───────────────────────────────────────────────────────── */
-.matieres{align-items:flex-end}
-.mat-entete{margin-bottom:auto}
-.mat-legendes{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--e4);
-  margin-top:clamp(12rem,30vh,20rem)}
+/* Titre en haut, légendes en bas, milieu laissé libre pour les tirages 3D.
+   L'ancienne version poussait les légendes avec une grosse marge et alignait
+   le bloc en bas : dès que le contenu dépassait la hauteur disponible, il
+   débordait vers le haut et le titre passait sous l'en-tête. */
+.matieres{align-items:stretch}
+.matieres .contenu{display:flex;flex-direction:column;justify-content:space-between;
+  gap:var(--e6);min-height:calc(100svh - var(--e8) * 2)}
+.mat-legendes{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--e4)}
 @media(max-width:900px){.mat-legendes{grid-template-columns:repeat(2,1fr);margin-top:var(--e6)}}
-.mat-note{font-size:var(--t-xs);letter-spacing:.1em;text-transform:uppercase;color:var(--craie-3);
-  line-height:1.8;border-top:1px solid var(--trait);padding-top:var(--e2);font-weight:500}
+/* Le décor 3D est fixe et le texte défile : il n'existe aucune bande de
+   l'écran où la légende soit garantie lisible. C'est donc le texte qui porte
+   sa propre protection — même solution que la carte des réalisations, ce qui
+   garde une seule technique dans tout le site. */
+.mat-note{font-size:var(--t-xs);letter-spacing:.1em;text-transform:uppercase;color:var(--craie-2);
+  line-height:1.8;font-weight:500;padding:var(--e2);border-radius:4px;
+  border-top:1px solid var(--trait);
+  background:linear-gradient(to bottom,rgba(18,19,16,.92),rgba(18,19,16,.74));
+  backdrop-filter:blur(10px)}
 .mat-note b{display:block;color:var(--craie);font-weight:500;letter-spacing:.14em;margin-bottom:var(--e1)}
 
 /* ─── Réalisations ───────────────────────────────────────────────────── */

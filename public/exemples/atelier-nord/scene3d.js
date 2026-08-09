@@ -86,59 +86,79 @@ export function demarrerMondes(canvas, infobulle) {
   const chargeur = new THREE.TextureLoader();
   const survolables = [];
 
-  /* ── Monde 0-2 : les blocs de matière ──────────────────────────────── */
-  const grBlocs = new THREE.Group(); scene.add(grBlocs);
-  // Positions délibérées, pas dispersées au hasard : x symétrique, z en pas
-  // réguliers de 4. Un objet qui n'est aligné sur rien donne l'impression de
-  // ne pas appartenir à la composition — c'est ce qui faisait « démo » ici.
-  const PLACES = [
-    { p:[-5.2, 2.6,  0 ], e:1.35, f:'boite' },
-    { p:[ 5.2, 0.9, -4 ], e:1.50, f:'dalle' },
-    { p:[-5.2,-2.4, -8 ], e:1.20, f:'dalle' },
-    { p:[ 5.2,-0.6,-12 ], e:1.45, f:'boite' },
-  ];
-  // Inclinaisons choisies et faibles. La rotation aléatoire sur un tour
-  // complet donnait quatre objets sans parenté visuelle.
-  const ANGLES = [
-    [-0.08,  0.42,  0.05],
-    [ 0.06, -0.30, -0.04],
-    [-0.05,  0.88,  0.03],
-    [ 0.07, -0.72, -0.06],
-  ];
-  // En section « matières » ils se rassemblent en ligne, assez loin pour
-  // tenir tous les quatre dans le cadre au-dessus des légendes.
-  const RANG = [[-5.1,-0.2,-3],[-1.7,-0.2,-3],[1.7,-0.2,-3],[5.1,-0.2,-3]];
-
-  MATIERES.forEach((m,i) => {
-    const pl = PLACES[i];
-    const geo = pl.f==='dalle'
-      ? new THREE.BoxGeometry(2.6,0.42,2.0,20,6,16)
-      : new THREE.BoxGeometry(1.7,1.7,1.7,16,16,16);
-    adoucir(geo, 0.14);
-    const tex = chargeur.load(m.fichier);
+  /** Charge une image en texture prête à l'affichage. */
+  function image(fichier){
+    const tex = chargeur.load(fichier);
     tex.colorSpace = THREE.SRGBColorSpace;
     tex.anisotropy = rendu.capabilities.getMaxAnisotropy();
-    const maille = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({
-      map:tex, roughness:m.rug, metalness:m.met, envMapIntensity:1.1,
-    }));
-    maille.position.set(...pl.p);
-    maille.rotation.set(...ANGLES[i]);
+    return tex;
+  }
+
+  /* ── Monde 0-1 : la grande image de fond ────────────────────────────
+     Une photographie occupe le fond du héros, pas un vide noir. Elle est
+     assombrie à la source (color < 1) pour que le titre reste lisible
+     par-dessus : on ne pose pas du texte sur une image en pleine lumière.
+     Elle vit dans la scène 3D, donc elle bouge en parallaxe avec la souris
+     et recule au défilement — une image de fond CSS resterait plate. */
+  const fondPhoto = new THREE.Mesh(
+    new THREE.PlaneGeometry(38, 21.4, 24, 14),
+    // fog:false — à 28 unités de la caméra, la brume exponentielle mangerait
+    // les trois quarts de l'image. Un fond doit rester lisible ; c'est son
+    // assombrissement volontaire qui l'intègre à la scène, pas la brume.
+    new THREE.MeshBasicMaterial({ map:image('img/hero.jpg'), transparent:true, opacity:0, fog:false }),
+  );
+  // L'image est déjà exposée bas et son côté gauche est dans l'ombre : elle
+  // a été faite pour porter le titre. Un assombrissement léger suffit, là où
+  // une photo d'intérieur ordinaire aurait dû être écrasée.
+  fondPhoto.material.color.setScalar(0.62);
+  fondPhoto.position.set(0, 0, -14);
+  scene.add(fondPhoto);
+
+  /* ── Monde 2 : les matières, en panneaux photographiques ─────────────
+     Les blocs texturés flottants ont été retirés : une texture plaquée sur
+     un cube ne se lit pas comme de la matière, elle se lit comme un objet
+     de démonstration. Ici chaque matière est un grand tirage, présenté
+     comme dans une galerie — c'est la photographie qui vend la matière. */
+  const grBlocs = new THREE.Group(); scene.add(grBlocs);
+  // Rangée régulière : même écart, même hauteur. L'alignement fait la
+  // composition ; c'est l'éparpillement qui faisait bricolé.
+  // Écarts calculés pour que les quatre tirages tiennent dans le cadre à la
+  // distance de caméra du monde « matières » : au-delà de ±6,5 les panneaux
+  // extérieurs sortent de l'écran en 16:9.
+  // Rangée resserrée et reculée : à 4,3 × 6,1 unités les tirages remplissaient
+  // tout l'écran et écrasaient le texte. Un tirage doit être un élément de
+  // composition, pas un fond.
+  const RANG = [[-5.0,0.2,-3.6],[-1.75,0.2,-3.2],[1.75,0.2,-3.2],[5.0,0.2,-3.6]];
+  // À l'arrivée, les panneaux montent d'en bas en éventail.
+  const DEPART = [[-6.0,-6,-7],[-2.1,-7.5,-6],[2.1,-7.5,-6],[6.0,-6,-7]];
+
+  MATIERES.forEach((m,i) => {
+    const maille = new THREE.Mesh(
+      new THREE.PlaneGeometry(3.2, 4.5, 16, 22),
+      new THREE.MeshBasicMaterial({ map:image(m.fichier), transparent:true, opacity:0 }),
+    );
+    maille.material.color.setScalar(0.55);
+    maille.position.set(...DEPART[i]);
+    // Léger éventail : les panneaux extérieurs se tournent vers le centre.
     maille.userData = {
-      libre:new THREE.Vector3(...pl.p), rang:new THREE.Vector3(...RANG[i]),
-      e:pl.e, vit:0.06+i*0.022, dep:i*1.9, info:m, survol:0,
+      libre:new THREE.Vector3(...DEPART[i]), rang:new THREE.Vector3(...RANG[i]),
+      biais:(i-1.5)*0.13, dep:i*1.7, info:m, survol:0,
+      base:null,
     };
+    maille.userData.base = maille.geometry.attributes.position.array.slice();
     grBlocs.add(maille); survolables.push(maille);
   });
 
   /* ── Mondes 3-5 : les grandes images de réalisation ────────────────── */
   const plans = PROJETS.map((p) => {
-    const tex = chargeur.load(p.fichier);
-    tex.colorSpace = THREE.SRGBColorSpace;
-    tex.anisotropy = rendu.capabilities.getMaxAnisotropy();
     const maille = new THREE.Mesh(
       new THREE.PlaneGeometry(11.5, 8, 40, 28),
-      new THREE.MeshBasicMaterial({ map:tex, transparent:true, opacity:0 }),
+      new THREE.MeshBasicMaterial({ map:image(p.fichier), transparent:true, opacity:0 }),
     );
+    // Même règle que pour le héros : une photo affichée à pleine luminosité
+    // écrase la carte de texte posée devant et rend les légendes voisines
+    // illisibles. Elle doit rester un décor, pas le sujet.
+    maille.material.color.setScalar(0.34);
     maille.position.set(0, 0, -6);
     maille.userData = { monde:p.monde, base:maille.geometry.attributes.position.array.slice() };
     maille.visible = false;
@@ -255,24 +275,55 @@ export function demarrerMondes(canvas, infobulle) {
 
     // Les blocs : dispersés dans le vide, rassemblés en rang au monde 2,
     // puis ils s'écartent et s'effacent quand les réalisations arrivent.
-    const versRang = THREE.MathUtils.clamp(1-Math.abs(m-2), 0, 1);
-    const presence = THREE.MathUtils.clamp(1-Math.max(0, m-2.35)/0.5, 0, 1);
-    grBlocs.visible = presence > 0.01;
-    grBlocs.children.forEach((bl)=>{
+    /* L'image de fond du héros : présente sur les deux premiers mondes,
+       elle recule et s'efface quand on entre dans le site. */
+    const vFond = THREE.MathUtils.clamp(1 - Math.max(0, m-0.6)/1.1, 0, 1);
+    fondPhoto.visible = vFond > 0.01;
+    if (fondPhoto.visible){
+      fondPhoto.material.opacity = vFond;
+      // Parallaxe : le fond bouge moins que la caméra, donc il paraît loin.
+      fondPhoto.position.x = visee.x * -0.9;
+      fondPhoto.position.y = visee.y * -0.6;
+      fondPhoto.position.z = -14 - (1-vFond)*10;
+      fondPhoto.scale.setScalar(1 + (1-vFond)*0.12);
+    }
+
+    /* Les panneaux de matière : ils montent en éventail, se rangent, puis
+       s'effacent quand les réalisations arrivent. */
+    // Fenêtre resserrée sur le seul monde « matières ». Elle commençait à
+    // m=0,9 : les tirages montaient pendant le manifeste et se superposaient
+    // à son texte. Un objet ne doit exister que dans son monde.
+    const versRang = THREE.MathUtils.clamp((m-1.6)/0.5, 0, 1);
+    const eRang = versRang*versRang*(3-2*versRang);
+    const presence = THREE.MathUtils.clamp(1-Math.max(0, m-2.45)/0.4, 0, 1);
+    grBlocs.visible = presence > 0.01 && eRang > 0.001;
+    if (grBlocs.visible) grBlocs.children.forEach((bl, i)=>{
       const u = bl.userData;
-      const cx = THREE.MathUtils.lerp(u.libre.x, u.rang.x, versRang);
-      const cy = THREE.MathUtils.lerp(u.libre.y, u.rang.y, versRang);
-      const cz = THREE.MathUtils.lerp(u.libre.z, u.rang.z, versRang);
       bl.position.set(
-        cx + Math.cos(t*0.37+u.dep)*0.16,
-        cy + Math.sin(t*0.55+u.dep)*0.34,
-        cz,
+        THREE.MathUtils.lerp(u.libre.x, u.rang.x, eRang),
+        THREE.MathUtils.lerp(u.libre.y, u.rang.y, eRang) + Math.sin(t*0.5+u.dep)*0.13,
+        THREE.MathUtils.lerp(u.libre.z, u.rang.z, eRang) - u.survol*1.4,
       );
-      if (!doux){ bl.rotation.y += u.vit*0.96*dt; bl.rotation.x = Math.sin(t*0.28+u.dep)*0.14; }
       const vise = bl===survole ? 1 : 0;
       u.survol += (vise-u.survol)*amorti(0.12, dt);
-      bl.scale.setScalar(u.e * presence * (1 + u.survol*0.26));
-      bl.material.envMapIntensity = 1.1 + u.survol*1.6;
+      // Les panneaux font face au visiteur, avec un éventail léger et une
+      // réaction douce à la souris. Aucune rotation libre : un tirage
+      // accroché ne tourne pas sur lui-même.
+      bl.rotation.y = u.biais*(1-u.survol*0.6) + visee.x*0.10;
+      bl.rotation.x = -visee.y*0.06 + (1-eRang)*0.5;
+      bl.scale.setScalar(presence * (0.92 + eRang*0.08 + u.survol*0.06));
+      bl.material.opacity = presence * eRang;
+      bl.material.color.setScalar(0.55 + u.survol*0.35);
+
+      // Le tirage respire très légèrement : il vit sans se tordre.
+      if (!doux){
+        const at = bl.geometry.attributes.position, base = u.base;
+        for (let k=0;k<at.count;k++){
+          const x = base[k*3], y = base[k*3+1];
+          at.setZ(k, Math.sin(x*0.5 + t*0.6 + u.dep)*0.07 + Math.cos(y*0.45 + t*0.45)*0.05);
+        }
+        at.needsUpdate = true;
+      }
     });
 
     // Les grandes images : elles n'existent que dans leur monde, arrivent de
@@ -280,8 +331,10 @@ export function demarrerMondes(canvas, infobulle) {
     plans.forEach((pl)=>{
       // Fenêtre serrée : une image n'existe que dans SON monde, sinon elle
       // déborde sur le monde d'avant et tout se mélange.
+      // Fenêtre resserrée à 0,35 : à 0,5 l'image d'une réalisation était déjà
+      // visible pendant le monde des matières et noyait ses légendes.
       const d = Math.abs(m - pl.userData.monde);
-      const vis = THREE.MathUtils.clamp(1 - d/0.5, 0, 1);
+      const vis = THREE.MathUtils.clamp(1 - d/0.35, 0, 1);
       pl.visible = vis > 0.01;
       if (!pl.visible) return;
       pl.material.opacity = vis;
@@ -335,20 +388,3 @@ export function demarrerMondes(canvas, infobulle) {
   boucle();
 }
 
-/* Three.js n'a pas de boîte à arêtes arrondies : on pousse les sommets vers
-   l'intérieur pour que la lumière accroche comme sur un bloc taillé. */
-function adoucir(geo, r){
-  const pos = geo.attributes.position, v = new THREE.Vector3(), p = geo.parameters;
-  const d = new THREE.Vector3(p.width/2, p.height/2, p.depth/2);
-  for (let i=0;i<pos.count;i++){
-    v.fromBufferAttribute(pos,i);
-    const dedans = new THREE.Vector3(
-      Math.max(-d.x+r, Math.min(d.x-r, v.x)),
-      Math.max(-d.y+r, Math.min(d.y-r, v.y)),
-      Math.max(-d.z+r, Math.min(d.z-r, v.z)));
-    const dir = v.clone().sub(dedans);
-    if (dir.length()>0) v.copy(dedans).add(dir.normalize().multiplyScalar(r));
-    pos.setXYZ(i, v.x, v.y, v.z);
-  }
-  geo.computeVertexNormals();
-}

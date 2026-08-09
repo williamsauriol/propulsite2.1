@@ -44,6 +44,14 @@ Autres règles sans chiffre, mais binaires :
 - **Jamais de complexe sur du complexe.** Du texte sur une scène chargée est
   illisible et sale. Si le fond est riche, le premier plan doit être calme —
   et inversement.
+- **Toute photographie qui porte du texte doit être assombrie à la source**
+  (multiplier sa couleur) **et recevoir un voile dégradé**. Une photo bien
+  exposée est toujours trop lumineuse pour ça, même sombre à l'œil.
+- **Décor fixe + texte qui défile = aucune bande sûre.** Quand un canvas 3D
+  reste fixe derrière un texte qui défile, il n'existe aucune zone de l'écran
+  où la lisibilité soit garantie à tous les niveaux de défilement. Le texte
+  doit alors porter sa propre protection (fond translucide + flou), et
+  l'en-tête fixe aussi.
 - **Une seule technique de profondeur** dans toute l'interface.
 - **La hiérarchie se fait par la taille et la graisse**, pas par la couleur.
 
