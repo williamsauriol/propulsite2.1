@@ -72,7 +72,7 @@ Utiliser des numéros manifestement fictifs (`0000-0000-00`).
 
 ## Composants attendus
 
-Pour rester cohérent avec le niveau d'Spécimen 01 :
+Pour rester cohérent avec le niveau de Spécimen 01 :
 
 - **Rideau d'ouverture** — nom + accroche, se lève après ~2 s, sauté si
   `prefers-reduced-motion`

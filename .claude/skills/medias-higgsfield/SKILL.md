@@ -17,7 +17,7 @@ connecteur — repérer les outils par leur suffixe (`balance`,
 ## Vérifier le solde en premier — toujours
 
 Appeler `balance` **avant** toute génération. Les crédits partent vite :
-le solde est tombé de 10 à 2 pendant la seule refonte d'Spécimen 01
+le solde est tombé de 10 à 2 pendant la seule refonte de Spécimen 01
 (4 textures = 6 crédits, à 2 crédits l'image).
 
 Ne jamais lancer une génération en lot sans avoir annoncé le coût à William.
