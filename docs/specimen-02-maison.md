@@ -66,3 +66,30 @@ attribution : **vérifier chaque modèle avant import**.
 - `noindex,nofollow` + bandeau de démonstration dès le premier commit
 - La fenêtre Blender doit être **visible** pour que la vue rendue calcule ;
   sinon passer par un rendu dans un fichier, qui marche toujours
+
+## Diagnostic cuisine (session du 10 août)
+
+William trouve « des murs un peu partout » dans la cuisine. Vérification faite
+dans Blender : **la cloison est correcte.** `C_Cuisine` est un mur de 10,2 m
+de (-7, 1) à (3.2, 1) avec une ouverture de 3,2 m vers le salon, découpé en
+trois blocs cohérents (4,40 m plein · linteau de 0,60 m · 2,60 m plein).
+
+Le problème est donc le **cadrage**, pas la construction : la caméra attrape
+des cloisons de biais. À corriger en recomposant le plan 03, pas en
+retouchant la géométrie.
+
+**Piège d'outillage :** tous les objets ont leur origine à (0,0,0) parce que
+les transformations ont été appliquées à la construction. Les localiser par
+`matrix_world.translation` ne donne rien — il faut passer par la boîte
+englobante (`bound_box` transformée en coordonnées monde).
+
+## Recherche à faire avant de meubler
+
+William demande une vraie recherche sur ce que contient chaque pièce, avec
+images d'inspiration, avant de fournir la maison. À faire en début de
+prochaine session, pièce par pièce, en notant pour chacune :
+
+- les meubles indispensables et leurs dimensions réelles
+- les objets de décoration qui font « habité » (c'est ce qui manque le plus)
+- l'éclairage propre à la pièce (suspension, lampe, appliques)
+- les modèles Poly Haven correspondants (CC0, usage commercial permis)
