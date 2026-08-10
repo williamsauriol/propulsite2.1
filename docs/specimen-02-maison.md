@@ -1,76 +1,68 @@
 # Spécimen 02 — la maison qu'on traverse
 
-Site de démonstration nº 2. Le visiteur descend dans la page et **se promène
-d'une pièce à l'autre** : entrée, cuisine, salle de bain, chambre, salon,
-sous-sol. Chaque pièce est un décor différent et présente une réalisation.
+Site de démonstration nº 2. Le visiteur descend dans la page et se promène
+d'une pièce à l'autre. Parcours en 9 plans, dans cet ordre :
 
-Statut : **planifié, pas commencé.** Ce document existe pour reprendre le
-travail sans le redécider.
+`00 extérieur` · `01 entrée` · `02 salon` · `03 cuisine` · `04 salle de bain`
+· `05 chambre` · `06 bureau` · `07 cour` · `08 aérien`
 
-## Décision d'architecture
+Fichier Blender : `blender/specimen-02.blend` (hors dépôt, voir .gitignore).
+Rendus de contrôle : `blender/rendus/`.
 
-Approche retenue : **rendus pré-calculés dans Blender + caméra 3D dans le
-navigateur.**
+## Exigence de William sur la caméra — décisive
 
-Écartée : une maison entière modélisée et exportée en GLTF. Un intérieur
-détaillé pèse des dizaines de mégaoctets ; injouable sur le téléphone d'un
-client sur un chantier, et contraire aux budgets de `performance-webgl`.
+**Pas de caméra fixe qui refait le même mouvement à chaque défilement.** Une
+séquence pré-rendue rejouée à l'identique se lit comme une vidéo, pas comme
+un espace.
 
-### Comment ça marche
+Technique retenue : rendre **chaque plan avec sa carte de profondeur**
+(passe Mist ou Z de Cycles), puis appliquer une **parallaxe pilotée par la
+souris** dans le navigateur. Le premier plan se décale plus que l'arrière-
+plan, ce qui recrée un vrai déplacement de tête. Deux visites ne donnent
+jamais le même mouvement, et le poids reste celui d'une image + une carte
+de gris.
 
-Pour chaque pièce, Blender produit **une panoramique équirectangulaire 360°**
-rendue en Cycles. Le navigateur la plaque à l'intérieur d'une sphère Three.js
-et place la caméra au centre : le visiteur est **dans** la pièce et regarde
-autour de lui à la souris.
+À combiner avec le défilement : le scroll change de pièce, la souris fait
+bouger la vue à l'intérieur de la pièce.
 
-Le défilement passe d'une pièce à la suivante par fondu entre deux sphères,
-avec un léger mouvement de caméra pour vendre le déplacement.
+## Ce qui est fait
 
-Ce que ça donne :
+- Coquille : deux étages, plan en L, aile arrière, toit plat
+- 8 ouvertures vitrées avec profils noirs et meneaux, porte de chêne
+- Plancher de bois (texture Poly Haven, projection cubique à l'échelle)
+- Éclairage : HDRI ciel pur + une source de jour dans chaque ouverture,
+  courbe AgX contrastée. **C'est ce qui a débloqué les intérieurs**, qui
+  étaient noirs et bruités.
+- Mobilier provisoire en primitives (à remplacer)
+- Cadrages 1 à 7 recomposés
 
-| | |
-|---|---|
-| Qualité d'image | celle de Cycles — impossible à atteindre en temps réel |
-| Poids | quelques JPEG, pas un modèle 3D |
-| Sensation | on est dans la pièce, on peut regarder partout |
-| Coût de rendu navigateur | une sphère texturée par pièce : négligeable |
+## Décisions de production
 
-### Budget
+**Mobilier importé, pas modélisé.** Des boîtes ne seront jamais belles.
+Vérifié à l'écran : un vrai modèle Poly Haven change tout.
 
-- Panoramique : 2048 × 1024, JPEG qualité 80 → environ 150–250 Ko chacune
-- 6 pièces ≈ 1,2 Mo **au total**, chargées paresseusement au défilement
-- Seule la première pièce est chargée à l'ouverture
+**Licence : usage commercial.** Ce site sert à vendre les services de
+Propulsite. Poly Haven est en CC0 — aucune contrainte. Sur Sketchfab, les
+licences varient et beaucoup interdisent le commercial ou imposent une
+attribution : **vérifier chaque modèle avant import**.
 
-## Pipeline Blender
+**Ne détailler que ce qui entre dans le cadre** des 9 plans (voir la mémoire
+`methode-3d-cadre`). Un mur hors champ ne mérite aucun effort.
 
-1. Modéliser une maison simple mais juste : volumes, ouvertures, mobilier clé
-2. Matériaux et éclairage soignés — c'est là que se joue le réalisme
-3. Caméra panoramique équirectangulaire au centre de chaque pièce
-   (Cycles → Caméra → Type : Panoramique → Équirectangulaire)
-4. Rendre en 4096 × 2048, exporter, réduire à 2048 × 1024 et compresser
-5. Déposer dans `public/exemples/specimen-02/pieces/`
+## Ce qui reste, par ordre d'impact sur le réalisme
 
-## Structure du site
-
-Réutiliser l'architecture à mondes de `specimen-01` (voir la skill
-`scene-3d-defilement`) : un monde par pièce, `data-monde` sur chaque section.
-La différence : au lieu d'objets flottants, chaque monde est une sphère
-panoramique.
-
-Points d'intérêt cliquables dans chaque pièce pour révéler les détails d'une
-réalisation (surface, durée, matériaux).
-
-## Ce qu'il manque pour démarrer
-
-- [ ] **Blender connecté dans une session neuve** — un connecteur ajouté en
-      cours de session n'est pas visible avant redémarrage
-- [ ] Images d'inspiration de William pour le style de la maison
-- [ ] Style arrêté : moderne, chalet, classique ?
-- [ ] Textes des réalisations (voir `redaction-conversion`)
+1. **L'extérieur** — sol gris et ciel vide en ce moment, et ça se voit par
+   *toutes* les fenêtres. Arbres, terrasse, végétation.
+2. **Remplacer tout le mobilier** par des modèles importés.
+3. **La décoration** — plantes, cadres, coussins, livres. C'est littéralement
+   ce qui sépare une maquette d'une photo d'immobilier.
+4. Rendre les plans 4 à 8, corriger leurs cadrages (seuls 1 à 3 vérifiés).
+5. Passe de profondeur sur chaque plan, pour la parallaxe.
+6. Rendu final Cycles, puis assemblage du site.
 
 ## Rappels
 
 - Nom affiché : **Spécimen 02**, jamais un nom d'entreprise crédible
 - `noindex,nofollow` + bandeau de démonstration dès le premier commit
-- Repli obligatoire sous 900 px et si WebGL manque
-- `prefers-reduced-motion` : pas de rotation automatique
+- La fenêtre Blender doit être **visible** pour que la vue rendue calcule ;
+  sinon passer par un rendu dans un fichier, qui marche toujours
