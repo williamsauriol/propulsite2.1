@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="fr-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spécimen 02 — Constructeur de maisons neuves | Exemple par Propulsite</title>
+<!-- Entreprise fictive : hors de l'index de Google pour ne pas brouiller le
+     référencement réel de propulsite.ca. -->
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Site de démonstration réalisé par Propulsite : une maison qu'on traverse au défilement, pour illustrer une présence web haut de gamme en construction résidentielle.">
+<meta name="theme-color" content="#14130F">
+<link rel="preload" as="font" type="font/woff2" href="polices/Geist-wght-500.woff2" crossorigin>
+<link rel="preload" as="image" href="video/affiche-exterieur.jpg">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="rideau">
+  <div class="rideau-in">
+    <div class="rideau-marque">SPÉCIMEN 02</div>
+    <div class="rideau-sous">Une maison qu'on traverse</div>
+    <div class="rideau-barre"><i></i></div>
+  </div>
+</div>
+
+<a class="saut" href="#contenu">Aller au contenu</a>
+
+<header class="hdr">
+  <a class="hdr-marque" href="#haut">SPÉCIMEN 02</a>
+  <nav class="hdr-nav" aria-label="Navigation principale">
+    <a href="#entree">L'entrée</a>
+    <a href="#salon">Le salon</a>
+    <a href="#cuisine">La cuisine</a>
+    <a class="hdr-cta" href="#contact">Planifier une visite</a>
+  </nav>
+</header>
+
+<!-- Jauge de progression : elle nomme la pièce où l'on se trouve. -->
+<div class="jauge" aria-hidden="true">
+  <div class="jauge-piece"><span id="jauge-nom">Extérieur</span></div>
+  <div class="jauge-rail"><i id="jauge-barre"></i></div>
+</div>
+
+<main id="contenu">
+
+  <!-- ACCUEIL — le ciel bouge, l'herbe respire. -->
+  <section class="scene scene-accueil" id="haut" data-piece="Extérieur">
+    <img class="scene-fond" src="video/affiche-exterieur.jpg" alt="" width="1280" height="720">
+    <canvas class="ciel" id="ciel" aria-hidden="true"></canvas>
+    <div class="voile"></div>
+    <div class="scene-texte">
+      <p class="sur">Constructeur — Saint-Jérôme et Laurentides</p>
+      <h1 class="titre" data-mots>On ne visite pas un plan. On visite une maison.</h1>
+      <p class="chapo">Descendez. Vous allez y entrer.</p>
+      <div class="fleche" aria-hidden="true"><i></i></div>
+    </div>
+  </section>
+
+  <!-- TRAVERSÉE 1 — de l'extérieur jusque dans l'entrée -->
+  <section class="marche" data-piece="On entre">
+    <div class="marche-colle">
+      <video class="marche-video" data-video
+             src="video/1-exterieur-entree.mp4"
+             poster="video/affiche-exterieur.jpg"
+             muted playsinline preload="auto" aria-hidden="true"></video>
+      <div class="voile voile-bas"></div>
+      <p class="marche-indice">On franchit la porte</p>
+    </div>
+  </section>
+
+  <!-- ARRIVÉE — l'entrée -->
+  <section class="halte" id="entree" data-piece="L'entrée">
+    <div class="halte-in">
+      <p class="sur">Première arrivée</p>
+      <h2 class="titre-2" data-mots>La lumière entre avant vous.</h2>
+      <p class="texte">
+        Une entrée réussie ne se décore pas, elle se calcule. Orientation du
+        vestibule, hauteur du plafond, position de la première fenêtre : tout
+        est décidé avant que la première pelletée de terre ne soit levée.
+      </p>
+      <ul class="liste">
+        <li><strong>Plans revus avec vous</strong> jusqu'à ce que la circulation soit évidente</li>
+        <li><strong>Orientation étudiée</strong> selon la course du soleil sur votre terrain</li>
+        <li><strong>Aucun changement facturé</strong> avant la mise en chantier</li>
+      </ul>
+      <a class="bouton" href="#contact">Voir nos plans disponibles</a>
+    </div>
+  </section>
+
+  <!-- TRAVERSÉE 2 — de l'entrée au salon -->
+  <section class="marche" data-piece="On avance">
+    <div class="marche-colle">
+      <video class="marche-video" data-video
+             src="video/2-entree-salon.mp4"
+             muted playsinline preload="auto" aria-hidden="true"></video>
+      <div class="voile voile-bas"></div>
+      <p class="marche-indice">Vers l'aire ouverte</p>
+    </div>
+  </section>
+
+  <!-- ARRIVÉE — le salon -->
+  <section class="halte" id="salon" data-piece="Le salon">
+    <div class="halte-in">
+      <p class="sur">Deuxième arrivée</p>
+      <h2 class="titre-2" data-mots>Le silence est un matériau.</h2>
+      <p class="texte">
+        Un plafond de neuf pieds change une pièce plus qu'un meuble ne le fera
+        jamais. Nous construisons avec des membrures d'ingénierie, une
+        insonorisation entre étages et des fenêtres triple vitrage — trois
+        décisions invisibles qui s'entendent tous les jours.
+      </p>
+      <div class="grille">
+        <div class="carte">
+          <span class="carte-n">9 pi</span>
+          <p>Hauteur de plafond au rez-de-chaussée, de série et non en option</p>
+        </div>
+        <div class="carte">
+          <span class="carte-n">R-31</span>
+          <p>Valeur isolante des murs hors sol, au-dessus du code en vigueur</p>
+        </div>
+        <div class="carte">
+          <span class="carte-n">3</span>
+          <p>Vitrages par fenêtre, avec argon et intercalaire chaud</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRAVERSÉE 3 — du salon à la cuisine -->
+  <section class="marche" data-piece="On continue">
+    <div class="marche-colle">
+      <video class="marche-video" data-video
+             src="video/3-salon-cuisine.mp4"
+             muted playsinline preload="auto" aria-hidden="true"></video>
+      <div class="voile voile-bas"></div>
+      <p class="marche-indice">Jusqu'à la cuisine</p>
+    </div>
+  </section>
+
+  <!-- ARRIVÉE — la cuisine -->
+  <section class="halte" id="cuisine" data-piece="La cuisine">
+    <div class="halte-in">
+      <p class="sur">Troisième arrivée</p>
+      <h2 class="titre-2" data-mots>Ici, on répond de tout.</h2>
+      <p class="texte">
+        La cuisine est la pièce où les compromis se voient. C'est pourquoi
+        l'ébénisterie, la plomberie et l'électricité restent chez nous : un
+        seul interlocuteur, un seul responsable, une seule garantie.
+      </p>
+      <ol class="etapes">
+        <li><strong>Rencontre sur votre terrain</strong> — on regarde le sol, la pente, les arbres</li>
+        <li><strong>Plans et prix fermes</strong> — le montant signé est le montant final</li>
+        <li><strong>Un chargé de projet</strong> — la même personne du premier jour aux clés</li>
+        <li><strong>Garantie 10 ans</strong> — structure et enveloppe</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="halte halte-contact" id="contact" data-piece="Nous joindre">
+    <div class="halte-in">
+      <p class="sur">Prochaine étape</p>
+      <h2 class="titre-2" data-mots>Venez voir une maison finie.</h2>
+      <p class="texte">
+        Nos maisons modèles se visitent sur rendez-vous, du lundi au samedi.
+        Comptez une heure : on répond à tout, plans et prix en main.
+      </p>
+      <div class="joindre">
+        <a class="bouton bouton-fort" href="tel:+15550000000">555&nbsp;000-0000</a>
+        <a class="bouton" href="mailto:bonjour@specimen.exemple">bonjour@specimen.exemple</a>
+      </div>
+      <p class="fine">Licence RBQ 0000-0000-00 · Saint-Jérôme, Québec</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="pied">
+  <div class="pied-in">
+    <p class="demo">
+      <strong>Ceci est une démonstration.</strong> « Spécimen 02 » est une
+      entreprise fictive. Les textes, les chiffres, les coordonnées et la
+      licence RBQ sont des exemples, et les visuels sont générés par
+      intelligence artificielle. Rien ici ne décrit une entreprise réelle,
+      un projet réel ou une propriété réelle.
+    </p>
+    <p class="retour">
+      Site conçu par <a href="https://propulsite.ca">Propulsite</a> —
+      conception de sites web pour les métiers de la construction au Québec.
+    </p>
+  </div>
+</footer>
+
+<script src="app.js" type="module"></script>
+</body>
+</html>
