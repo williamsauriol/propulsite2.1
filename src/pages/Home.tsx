@@ -234,7 +234,7 @@ export default function Home() {
               },
               {
                 href: '/exemples/specimen-02/',
-                img: '/exemples/specimen-02/video/affiche-exterieur.jpg',
+                img: '/exemples/specimen-02/video/affiche.jpg',
                 alt: 'Aperçu du site Spécimen 02, réalisé par Propulsite',
                 secteur: 'Construction de maisons neuves',
                 titre: 'Spécimen 02',

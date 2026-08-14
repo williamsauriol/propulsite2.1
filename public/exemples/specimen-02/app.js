@@ -1,30 +1,41 @@
 /* ==========================================================================
    SPÉCIMEN 02
-   Le défilement fait avancer la marche dans la maison. Le ciel bouge tout
-   seul. Tout est en repli : si le JavaScript échoue, la page reste lisible
-   et complète.
+   Une seule vidéo derrière tout le site. Le défilement la fait avancer, ou
+   la tient en arrêt pendant qu'on lit. Elle ne redémarre jamais et n'est
+   jamais remplacée par une autre.
    ========================================================================== */
 
 const doux = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* Amortissement indépendant de la fréquence d'images. Un simple
-   « x += (cible - x) * 0.1 » va deux fois plus vite sur un écran 120 Hz que
-   sur un 60 Hz : le même geste n'a pas la même inertie selon la machine. */
+/* Amortissement indépendant de la fréquence d'images : sans ça, le même
+   geste n'a pas la même inertie sur un écran 60 Hz et sur un 120 Hz. */
 const approche = (actuel, cible, taux, dt) =>
   actuel + (cible - actuel) * (1 - Math.pow(1 - taux, dt * 60));
 
-/* --- Rideau d'ouverture -------------------------------------------------- */
+/* --- Choix de la source vidéo -------------------------------------------- */
+/* Le fichier de bureau pèse 10,9 Mo, celui du mobile 3,3 Mo. On choisit
+   avant le chargement : un <source media> n'est pas fiable sur <video>. */
+const video = document.getElementById('traversee');
+if (video) {
+  const petit = innerWidth < 900 || (navigator.connection?.saveData === true);
+  video.src = petit ? video.dataset.mobile : video.dataset.bureau;
+  video.load();
+}
+
+/* --- Rideau -------------------------------------------------------------- */
 (() => {
   const rideau = document.getElementById('rideau');
   if (!rideau) return;
   if (doux) { rideau.remove(); return; }
   requestAnimationFrame(() => rideau.classList.add('charge'));
   const lever = () => rideau.classList.add('parti');
-  addEventListener('load', () => setTimeout(lever, 1400));
-  setTimeout(lever, 3600);            // filet : on ne bloque jamais la page
+  // On attend que la vidéo puisse jouer, sans jamais bloquer la page.
+  video?.addEventListener('loadeddata', () => setTimeout(lever, 700), { once: true });
+  addEventListener('load', () => setTimeout(lever, 1800));
+  setTimeout(lever, 4000);
 })();
 
-/* --- Titres découpés mot par mot ----------------------------------------- */
+/* --- Titres mot par mot -------------------------------------------------- */
 (() => {
   for (const el of document.querySelectorAll('[data-mots]')) {
     const mots = el.textContent.trim().split(/\s+/);
@@ -41,15 +52,13 @@ const approche = (actuel, cible, taux, dt) =>
   }
 })();
 
-/* --- Apparitions au défilement ------------------------------------------- */
+/* --- Apparitions --------------------------------------------------------- */
 (() => {
   const cibles = [
     ...document.querySelectorAll('[data-mots]'),
-    ...document.querySelectorAll('.texte,.liste,.grille,.etapes,.joindre,.bouton'),
+    ...document.querySelectorAll('.texte,.liste,.grille,.etapes,.joindre,.fine,.chapo'),
   ];
-  cibles.forEach((el) => {
-    if (!el.hasAttribute('data-mots')) el.setAttribute('data-monte', '');
-  });
+  cibles.forEach((el) => { if (!el.hasAttribute('data-mots')) el.setAttribute('data-monte', ''); });
 
   if (doux || !('IntersectionObserver' in window)) {
     cibles.forEach((el) => el.classList.add('vu'));
@@ -59,143 +68,146 @@ const approche = (actuel, cible, taux, dt) =>
     for (const e of entrees) {
       if (e.isIntersecting) { e.target.classList.add('vu'); obs.unobserve(e.target); }
     }
-  }, { threshold: 0.2, rootMargin: '0px 0px -8% 0px' });
+  }, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
   cibles.forEach((el) => obs.observe(el));
 })();
 
-/* --- Jauge de progression ------------------------------------------------ */
+/* --- La carte du parcours ------------------------------------------------ */
+/* Chaque section porte soit data-avance="début,fin" (la vidéo progresse),
+   soit data-halte="t" (la vidéo est tenue sur cette image pendant qu'on
+   lit). Les sections se suivent sans trou : la position de lecture est donc
+   continue, sans saut aux frontières. */
 (() => {
+  if (!video) return;
+
   const barre = document.getElementById('jauge-barre');
-  const nom = document.getElementById('jauge-nom');
-  if (!barre || !nom) return;
-  const sections = [...document.querySelectorAll('[data-piece]')];
+  const nomPiece = document.getElementById('jauge-nom');
+  const voile = document.getElementById('voile');
+  const ciel = document.getElementById('ciel');
 
-  const majuscule = () => {
-    const h = document.documentElement;
-    const total = h.scrollHeight - innerHeight;
-    barre.style.width = `${total > 0 ? Math.min(100, (scrollY / total) * 100) : 0}%`;
+  const sections = [...document.querySelectorAll('[data-avance],[data-halte]')];
+  let segments = [];
 
-    const milieu = scrollY + innerHeight * 0.5;
-    let courante = sections[0];
-    for (const s of sections) {
-      if (s.offsetTop <= milieu) courante = s;
+  const mesurer = () => {
+    segments = sections.map((s, i) => {
+      const suivante = sections[i + 1];
+      const debut = s.offsetTop;
+      const fin = suivante
+        ? suivante.offsetTop
+        : Math.max(debut + 1, document.documentElement.scrollHeight - innerHeight);
+      // Une section peut imposer sa propre densité de voile.
+      const voileVoulu = s.dataset.voile ? Number(s.dataset.voile) : null;
+      if (s.dataset.avance) {
+        const [t0, t1] = s.dataset.avance.split(',').map(Number);
+        return { debut, fin, t0, t1, halte: false, voileVoulu, piece: s.dataset.piece };
+      }
+      const t = Number(s.dataset.halte);
+      return { debut, fin, t0: t, t1: t, halte: true, voileVoulu, piece: s.dataset.piece };
+    });
+  };
+
+  /* Mesurer avant le chargement des polices donne des frontières fausses
+     pour toute la session : la mise en page bouge ensuite. */
+  mesurer();
+  document.fonts?.ready.then(mesurer);
+  addEventListener('load', () => setTimeout(mesurer, 400));
+  addEventListener('resize', mesurer);
+
+  const voileDe = (s) => s.voileVoulu ?? (s.halte ? 0.82 : 0.30);
+
+  const lire = () => {
+    const y = scrollY;
+    if (!segments.length) return { t: 0, voile: 0.4, piece: '' };
+    for (const s of segments) {
+      if (y < s.fin) {
+        const f = Math.max(0, Math.min(1, (y - s.debut) / Math.max(1, s.fin - s.debut)));
+        // Adoucissement aux extrémités : l'arrivée dans une pièce ralentit
+        // au lieu de s'arrêter net.
+        const e = s.halte ? f : f * f * (3 - 2 * f);
+        return { t: s.t0 + (s.t1 - s.t0) * e, voile: voileDe(s), piece: s.piece };
+      }
     }
-    const p = courante?.dataset.piece;
-    if (p && nom.textContent !== p) nom.textContent = p;
-  };
-  addEventListener('scroll', majuscule, { passive: true });
-  addEventListener('resize', majuscule);
-  majuscule();
-})();
-
-/* --- La marche : le défilement pilote la lecture vidéo -------------------- */
-/* Chaque section « marche » est haute de plusieurs écrans. La vidéo est
-   collée en haut ; la fraction parcourue de la section devient la position
-   de lecture. On avance donc dans la maison au rythme du doigt. */
-(() => {
-  const videos = [...document.querySelectorAll('[data-video]')];
-  if (!videos.length) return;
-
-  // Repli : sans défilement animé, on laisse simplement la vidéo jouer.
-  if (doux) {
-    videos.forEach((v) => { v.loop = true; v.play().catch(() => {}); });
-    return;
-  }
-
-  const etats = videos.map((v) => ({
-    video: v,
-    section: v.closest('.marche'),
-    cible: 0,
-    actuel: 0,
-    prete: false,
-  }));
-
-  /* Position de lecture correspondant au défilement actuel. On la calcule
-     aussi hors de la boucle : si celle-ci démarre en retard — onglet en
-     arrière-plan, animation suspendue — la vidéo doit déjà montrer la bonne
-     image, pas la dernière du clip. */
-  const fraction = (e) => {
-    if (!e.section) return 0;
-    const parcours = e.section.offsetHeight - innerHeight;
-    if (parcours <= 0) return 0;
-    return Math.max(0, Math.min(1, (scrollY - e.section.offsetTop) / parcours));
+    const d = segments[segments.length - 1];
+    return { t: d.t1, voile: voileDe(d), piece: d.piece };
   };
 
-  /* On ne lance JAMAIS la lecture. Avec preload="auto", le fichier est
-     entièrement en mémoire et se déplace directement — un amorçage par
-     play() puis pause() paraît anodin, mais la promesse de play() peut
-     tarder à se résoudre : la vidéo joue alors toute seule pendant plusieurs
-     secondes avant d'être arrêtée, et le visiteur arrive au milieu du clip. */
-  const caler = (e) => {
-    if (!e.prete) return;
-    const duree = e.video.duration;
-    if (!Number.isFinite(duree) || duree <= 0) return;
-    e.actuel = e.cible = fraction(e);
-    e.video.currentTime = e.actuel * (duree - 0.05);
+  /* On ne lance JAMAIS la lecture. Avec preload="auto" le fichier est en
+     mémoire et se déplace directement. Un amorçage par play() puis pause()
+     paraît anodin, mais la promesse de play() peut tarder : la vidéo joue
+     alors plusieurs secondes et le visiteur arrive au milieu du plan. */
+  let prete = false;
+  const caler = () => {
+    if (!Number.isFinite(video.duration) || video.duration <= 0) return;
+    prete = true;
+    actuel = lire().t;
+    video.currentTime = Math.min(actuel, video.duration - 0.05);
   };
+  video.pause();
+  if (video.readyState >= 1) caler();
+  video.addEventListener('loadedmetadata', caler, { once: true });
 
-  etats.forEach((e) => {
-    e.video.pause();
-    if (e.video.readyState >= 1) { e.prete = true; caler(e); }
-    e.video.addEventListener('loadedmetadata', () => { e.prete = true; caler(e); }, { once: true });
-  });
+  let actuel = 0, dernier = performance.now(), opaciteVoile = 0.35;
 
-  let dernier = performance.now();
   const trame = (maintenant) => {
     const dt = Math.min((maintenant - dernier) / 1000, 0.1);
     dernier = maintenant;
+    const { t, voile: voileCible, piece } = lire();
 
-    for (const e of etats) {
-      if (!e.prete || !e.section) continue;
-      e.cible = fraction(e);
-
-      // Hors champ : inutile de décoder quoi que ce soit. La marge d'un écran
-      // laisse le temps de préparer la bonne image avant l'entrée — sans elle,
-      // la section pile en bas de fenêtre était exclue et on entrait sur une
-      // vidéo restée à sa position précédente.
-      const haut = e.section.offsetTop;
-      const bas = haut + e.section.offsetHeight;
-      if (scrollY + innerHeight * 2 < haut || scrollY - innerHeight > bas) continue;
-
-      e.actuel = approche(e.actuel, e.cible, 0.12, dt);
-      const duree = e.video.duration;
-      if (Number.isFinite(duree) && duree > 0) {
-        const pos = e.actuel * (duree - 0.05);
-        // On ne redemande une position que si l'écart se voit : sinon on
-        // sature le décodeur de requêtes pour rien.
-        if (Math.abs(e.video.currentTime - pos) > 0.02) e.video.currentTime = pos;
-      }
+    if (prete) {
+      // Assez souple pour absorber une molette brusque, assez ferme pour que
+      // l'image suive le doigt sans traîner.
+      actuel = approche(actuel, t, 0.14, dt);
+      const pos = Math.max(0, Math.min(actuel, video.duration - 0.05));
+      if (Math.abs(video.currentTime - pos) > 0.02) video.currentTime = pos;
     }
+
+    // Le voile s'épaissit quand on lit, s'efface quand on avance. C'est ce
+    // qui rend le texte lisible sans ternir l'image pendant la marche.
+    if (voile) {
+      opaciteVoile = approche(opaciteVoile, voileCible, 0.08, dt);
+      voile.style.opacity = opaciteVoile.toFixed(3);
+    }
+
+    // Le ciel dessiné ne sert que sur la couverture.
+    if (ciel) {
+      const f = Math.max(0, Math.min(1, 1 - scrollY / (innerHeight * 0.85)));
+      ciel.style.opacity = f.toFixed(3);
+    }
+
+    if (barre) {
+      const total = document.documentElement.scrollHeight - innerHeight;
+      barre.style.width = `${total > 0 ? Math.min(100, (scrollY / total) * 100) : 0}%`;
+    }
+    if (nomPiece && piece && nomPiece.textContent !== piece) nomPiece.textContent = piece;
+
     requestAnimationFrame(trame);
   };
   requestAnimationFrame(trame);
 })();
 
-/* --- Le ciel vivant ------------------------------------------------------ */
-/* Des nuages dessinés en dégradés radiaux, sur trois plans qui dérivent à des
-   vitesses différentes. C'est cette différence de vitesse qui donne la
-   profondeur — un seul plan ferait papier peint. */
+/* --- Le ciel de la couverture -------------------------------------------- */
+/* Trois plans de nuages qui dérivent à des vitesses différentes. C'est cette
+   différence qui donne la profondeur — un seul plan ferait papier peint. */
 (() => {
   const canvas = document.getElementById('ciel');
   if (!canvas || doux) return;
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
 
-  let l = 0, h = 0, dpr = 1;
+  let l = 0, h = 0, actif = true;
   const nuages = [];
 
   const semer = () => {
     nuages.length = 0;
-    // Trois plans : le plus lointain est petit, pâle et lent.
     const plans = [
-      { n: 5, taille: 0.16, vitesse: 5,  alpha: 0.10, y: [0.04, 0.22] },
-      { n: 4, taille: 0.26, vitesse: 9,  alpha: 0.14, y: [0.06, 0.30] },
-      { n: 3, taille: 0.40, vitesse: 15, alpha: 0.17, y: [0.02, 0.26] },
+      { n: 6, taille: 0.14, vitesse: 0.0022, alpha: 0.13, y: [0.06, 0.42] },
+      { n: 4, taille: 0.24, vitesse: 0.0038, alpha: 0.17, y: [0.04, 0.34] },
+      { n: 3, taille: 0.38, vitesse: 0.0062, alpha: 0.20, y: [0.02, 0.28] },
     ];
     for (const p of plans) {
       for (let i = 0; i < p.n; i++) {
         nuages.push({
-          x: Math.random() * 1.4 - 0.2,
+          x: Math.random() * 1.5 - 0.25,
           y: p.y[0] + Math.random() * (p.y[1] - p.y[0]),
           r: p.taille * (0.7 + Math.random() * 0.6),
           v: p.vitesse * (0.85 + Math.random() * 0.3),
@@ -209,8 +221,8 @@ const approche = (actuel, cible, taux, dt) =>
 
   const mesurer = () => {
     const r = canvas.getBoundingClientRect();
-    // Plafonner la densité : au-delà de 2, on paie cher pour rien.
-    dpr = Math.min(devicePixelRatio || 1, 2);
+    // Densité plafonnée à 2 : au-delà, on paie cher sans rien gagner.
+    const dpr = Math.min(devicePixelRatio || 1, 2);
     l = r.width; h = r.height;
     canvas.width = Math.round(l * dpr);
     canvas.height = Math.round(h * dpr);
@@ -218,16 +230,16 @@ const approche = (actuel, cible, taux, dt) =>
     semer();
   };
 
-  const dessinerNuage = (n) => {
+  const dessiner = (n) => {
     const cx = n.x * l, cy = n.y * h, base = n.r * Math.min(l, h);
     for (let i = 0; i < n.bosses; i++) {
       const dx = Math.cos(n.graine + i * 2.1) * base * 0.55;
       const dy = Math.sin(n.graine + i * 1.7) * base * 0.16;
       const r = base * (0.42 + 0.2 * Math.sin(n.graine + i));
       const g = ctx.createRadialGradient(cx + dx, cy + dy, 0, cx + dx, cy + dy, r);
-      g.addColorStop(0, `rgba(255,252,244,${n.a})`);
-      g.addColorStop(0.55, `rgba(255,250,238,${n.a * 0.42})`);
-      g.addColorStop(1, 'rgba(255,250,238,0)');
+      g.addColorStop(0, `rgba(255,253,247,${n.a})`);
+      g.addColorStop(0.55, `rgba(255,251,242,${n.a * 0.4})`);
+      g.addColorStop(1, 'rgba(255,251,242,0)');
       ctx.fillStyle = g;
       ctx.beginPath();
       ctx.arc(cx + dx, cy + dy, r, 0, Math.PI * 2);
@@ -235,16 +247,16 @@ const approche = (actuel, cible, taux, dt) =>
     }
   };
 
-  let dernier = performance.now(), actif = true;
+  let dernier = performance.now();
   const trame = (maintenant) => {
     const dt = Math.min((maintenant - dernier) / 1000, 0.1);
     dernier = maintenant;
-    if (actif) {
+    if (actif && canvas.style.opacity !== '0.000') {
       ctx.clearRect(0, 0, l, h);
       for (const n of nuages) {
-        n.x += (n.v / 10000) * dt * 60 * 0.06;
-        if (n.x - n.r > 1.25) n.x = -0.3 - Math.random() * 0.2;
-        dessinerNuage(n);
+        n.x += n.v * dt;
+        if (n.x - n.r > 1.3) n.x = -0.35 - Math.random() * 0.2;
+        dessiner(n);
       }
     }
     requestAnimationFrame(trame);
@@ -252,42 +264,11 @@ const approche = (actuel, cible, taux, dt) =>
 
   // On ne peint pas un ciel que personne ne regarde.
   if ('IntersectionObserver' in window) {
-    new IntersectionObserver(
-      ([e]) => { actif = e.isIntersecting; },
-      { threshold: 0 },
-    ).observe(canvas);
+    new IntersectionObserver(([e]) => { actif = e.isIntersecting; }, { threshold: 0 })
+      .observe(canvas);
   }
 
   mesurer();
   addEventListener('resize', mesurer);
-  requestAnimationFrame(trame);
-})();
-
-/* --- Dérive lente de l'accueil ------------------------------------------- */
-/* Une image parfaitement immobile derrière un texte trahit le montage. Un
-   déplacement très lent, sous le seuil de perception, suffit à donner vie. */
-(() => {
-  const fond = document.querySelector('.scene-accueil .scene-fond');
-  if (!fond || doux) return;
-  let visee = { x: 0, y: 0 }, pos = { x: 0, y: 0 }, dernier = performance.now();
-
-  addEventListener('pointermove', (e) => {
-    visee.x = (e.clientX / innerWidth) * 2 - 1;
-    visee.y = (e.clientY / innerHeight) * 2 - 1;
-  }, { passive: true });
-
-  const trame = (maintenant) => {
-    const dt = Math.min((maintenant - dernier) / 1000, 0.1);
-    dernier = maintenant;
-    pos.x = approche(pos.x, visee.x, 0.05, dt);
-    pos.y = approche(pos.y, visee.y, 0.05, dt);
-    const t = maintenant / 1000;
-    const echelle = 1.06 + Math.sin(t * 0.06) * 0.012;
-    // Amplitude faible : le mouvement doit suggérer la profondeur, pas donner
-    // le vertige.
-    fond.style.transform =
-      `scale(${echelle}) translate(${pos.x * -0.9}%, ${pos.y * -0.7}%)`;
-    requestAnimationFrame(trame);
-  };
   requestAnimationFrame(trame);
 })();

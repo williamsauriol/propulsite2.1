@@ -10,10 +10,24 @@
 <meta name="description" content="Site de démonstration réalisé par Propulsite : une maison qu'on traverse au défilement, pour illustrer une présence web haut de gamme en construction résidentielle.">
 <meta name="theme-color" content="#14130F">
 <link rel="preload" as="font" type="font/woff2" href="polices/Geist-wght-500.woff2" crossorigin>
-<link rel="preload" as="image" href="video/affiche-exterieur.jpg">
+<link rel="preload" as="image" href="video/affiche.jpg">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+<!-- UNE seule vidéo, fixe derrière tout le site. Elle ne redémarre jamais et
+     ne se fait jamais remplacer : le défilement la fait avancer, ou la tient
+     en arrêt pendant qu'on lit. -->
+<div class="fond" aria-hidden="true">
+  <video id="traversee"
+         data-bureau="video/traversee.mp4"
+         data-mobile="video/traversee-mobile.mp4"
+         poster="video/affiche.jpg"
+         muted playsinline preload="auto"></video>
+  <canvas class="ciel" id="ciel"></canvas>
+  <div class="voile" id="voile"></div>
+  <div class="grain"></div>
+</div>
 
 <div id="rideau">
   <div class="rideau-in">
@@ -35,7 +49,6 @@
   </nav>
 </header>
 
-<!-- Jauge de progression : elle nomme la pièce où l'on se trouve. -->
 <div class="jauge" aria-hidden="true">
   <div class="jauge-piece"><span id="jauge-nom">Extérieur</span></div>
   <div class="jauge-rail"><i id="jauge-barre"></i></div>
@@ -43,71 +56,50 @@
 
 <main id="contenu">
 
-  <!-- ACCUEIL — le ciel bouge, l'herbe respire. -->
-  <section class="scene scene-accueil" id="haut" data-piece="Extérieur">
-    <img class="scene-fond" src="video/affiche-exterieur.jpg" alt="" width="1280" height="720">
-    <canvas class="ciel" id="ciel" aria-hidden="true"></canvas>
-    <div class="voile"></div>
-    <div class="scene-texte">
+  <!-- COUVERTURE — la vidéo est tenue sur sa première image, le ciel bouge -->
+  <!-- Voile allégé : la couverture doit montrer la maison, pas la cacher.
+       Le dégradé du bas suffit à porter le titre. -->
+  <section class="couverture" id="haut" data-piece="Extérieur" data-halte="0" data-voile="0.42">
+    <div class="couverture-in">
       <p class="sur">Constructeur — Saint-Jérôme et Laurentides</p>
       <h1 class="titre" data-mots>On ne visite pas un plan. On visite une maison.</h1>
       <p class="chapo">Descendez. Vous allez y entrer.</p>
-      <div class="fleche" aria-hidden="true"><i></i></div>
+      <div class="fleche"><i></i></div>
     </div>
   </section>
 
-  <!-- TRAVERSÉE 1 — de l'extérieur jusque dans l'entrée -->
-  <section class="marche" data-piece="On entre">
-    <div class="marche-colle">
-      <video class="marche-video" data-video
-             src="video/1-exterieur-entree.mp4"
-             poster="video/affiche-exterieur.jpg"
-             muted playsinline preload="auto" aria-hidden="true"></video>
-      <div class="voile voile-bas"></div>
-      <p class="marche-indice">On franchit la porte</p>
-    </div>
-  </section>
+  <!-- La vidéo avance de 0 s à 10 s : on franchit la porte -->
+  <section class="avance" data-piece="On entre" data-avance="0,10"></section>
 
-  <!-- ARRIVÉE — l'entrée -->
-  <section class="halte" id="entree" data-piece="L'entrée">
+  <section class="halte" id="entree" data-piece="L'entrée" data-halte="10">
     <div class="halte-in">
       <p class="sur">Première arrivée</p>
       <h2 class="titre-2" data-mots>La lumière entre avant vous.</h2>
       <p class="texte">
         Une entrée réussie ne se décore pas, elle se calcule. Orientation du
         vestibule, hauteur du plafond, position de la première fenêtre : tout
-        est décidé avant que la première pelletée de terre ne soit levée.
+        est décidé avant la première pelletée de terre.
       </p>
       <ul class="liste">
         <li><strong>Plans revus avec vous</strong> jusqu'à ce que la circulation soit évidente</li>
         <li><strong>Orientation étudiée</strong> selon la course du soleil sur votre terrain</li>
         <li><strong>Aucun changement facturé</strong> avant la mise en chantier</li>
       </ul>
-      <a class="bouton" href="#contact">Voir nos plans disponibles</a>
     </div>
   </section>
 
-  <!-- TRAVERSÉE 2 — de l'entrée au salon -->
-  <section class="marche" data-piece="On avance">
-    <div class="marche-colle">
-      <video class="marche-video" data-video
-             src="video/2-entree-salon.mp4"
-             muted playsinline preload="auto" aria-hidden="true"></video>
-      <div class="voile voile-bas"></div>
-      <p class="marche-indice">Vers l'aire ouverte</p>
-    </div>
-  </section>
+  <!-- 10 s à 20 s : jusqu'au salon -->
+  <section class="avance" data-piece="On avance" data-avance="10,20"></section>
 
-  <!-- ARRIVÉE — le salon -->
-  <section class="halte" id="salon" data-piece="Le salon">
+  <section class="halte" id="salon" data-piece="Le salon" data-halte="20">
     <div class="halte-in">
       <p class="sur">Deuxième arrivée</p>
       <h2 class="titre-2" data-mots>Le silence est un matériau.</h2>
       <p class="texte">
         Un plafond de neuf pieds change une pièce plus qu'un meuble ne le fera
-        jamais. Nous construisons avec des membrures d'ingénierie, une
-        insonorisation entre étages et des fenêtres triple vitrage — trois
-        décisions invisibles qui s'entendent tous les jours.
+        jamais. Membrures d'ingénierie, insonorisation entre étages, fenêtres
+        triple vitrage : trois décisions invisibles qui s'entendent tous les
+        jours.
       </p>
       <div class="grille">
         <div class="carte">
@@ -126,19 +118,10 @@
     </div>
   </section>
 
-  <!-- TRAVERSÉE 3 — du salon à la cuisine -->
-  <section class="marche" data-piece="On continue">
-    <div class="marche-colle">
-      <video class="marche-video" data-video
-             src="video/3-salon-cuisine.mp4"
-             muted playsinline preload="auto" aria-hidden="true"></video>
-      <div class="voile voile-bas"></div>
-      <p class="marche-indice">Jusqu'à la cuisine</p>
-    </div>
-  </section>
+  <!-- 20 s à 30 s : jusqu'à la cuisine -->
+  <section class="avance" data-piece="On continue" data-avance="20,30"></section>
 
-  <!-- ARRIVÉE — la cuisine -->
-  <section class="halte" id="cuisine" data-piece="La cuisine">
+  <section class="halte" id="cuisine" data-piece="La cuisine" data-halte="30">
     <div class="halte-in">
       <p class="sur">Troisième arrivée</p>
       <h2 class="titre-2" data-mots>Ici, on répond de tout.</h2>
@@ -156,8 +139,7 @@
     </div>
   </section>
 
-  <!-- CONTACT -->
-  <section class="halte halte-contact" id="contact" data-piece="Nous joindre">
+  <section class="halte halte-fin" id="contact" data-piece="Nous joindre" data-halte="30">
     <div class="halte-in">
       <p class="sur">Prochaine étape</p>
       <h2 class="titre-2" data-mots>Venez voir une maison finie.</h2>
