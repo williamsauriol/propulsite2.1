@@ -218,60 +218,44 @@ export default function Home() {
               Voyez ce qu'on peut <span className="text-accent-blue">bâtir</span> pour vous
             </h2>
             <p className="text-white/60 max-w-2xl mx-auto">
-              Plutôt que de vous le décrire, on vous le montre. Voici deux sites complets, conçus de A à Z.
+              Plutôt que de vous le décrire, on vous le montre. Voici un site complet conçu pour un entrepreneur en rénovation.
             </p>
           </motion.div>
 
-          <div className="grid gap-6 md:grid-cols-2">
-            {[
-              {
-                href: '/exemples/specimen-01/',
-                img: '/exemples/specimen-01/img/hero.jpg',
-                alt: 'Aperçu du site Spécimen 01, réalisé par Propulsite',
-                secteur: 'Rénovation haut de gamme',
-                titre: 'Spécimen 01',
-                texte: 'Site vitrine, scène 3D pilotée par le défilement, optimisé pour le mobile et pour Google.',
-              },
-              {
-                href: '/exemples/specimen-02/',
-                img: '/exemples/specimen-02/video/affiche.jpg',
-                alt: 'Aperçu du site Spécimen 02, réalisé par Propulsite',
-                secteur: 'Construction de maisons neuves',
-                titre: 'Spécimen 02',
-                texte: 'Une maison qu\'on traverse en défilant : le visiteur entre par la porte et passe de pièce en pièce.',
-              },
-            ].map((r, i) => (
-              <motion.a
-                key={r.href}
-                href={r.href}
-                target="_blank"
-                rel="noopener"
-                initial={{ opacity: 0, y: 28 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-80px' }}
-                transition={{ duration: 0.6, delay: 0.1 + i * 0.1 }}
-                className="group block relative overflow-hidden rounded-2xl border border-white/10 bg-[#0a1628] hover:border-accent-blue/60 transition-colors"
-              >
-                <img
-                  src={r.img}
-                  alt={r.alt}
-                  loading="lazy"
-                  width={1920}
-                  height={1080}
-                  className="w-full h-[280px] md:h-[360px] object-cover opacity-55 group-hover:opacity-70 group-hover:scale-[1.03] transition-all duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#050a15] via-[#050a15]/55 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-6 md:p-8">
-                  <p className="text-[0.7rem] font-bold tracking-[0.2em] uppercase text-accent-blue mb-2">{r.secteur}</p>
-                  <h3 className="text-2xl md:text-3xl font-black text-white leading-tight">{r.titre}</h3>
-                  <p className="text-white/55 text-sm mt-2 mb-5 max-w-md">{r.texte}</p>
-                  <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white border border-white/25 rounded-full px-5 py-3 group-hover:bg-accent-blue group-hover:text-[#050a15] group-hover:border-accent-blue transition-all">
-                    Visiter le site <ArrowRight className="w-4 h-4" />
-                  </span>
-                </div>
-              </motion.a>
-            ))}
-          </div>
+          {/* Spécimen 02 existe sous public/exemples/specimen-02/ mais n'est
+              volontairement pas mis en vitrine : William ne veut pas encore
+              le montrer. Pour le remettre, rajouter une carte identique
+              pointant vers /exemples/specimen-02/. */}
+          <motion.a
+            href="/exemples/specimen-01/"
+            target="_blank"
+            rel="noopener"
+            initial={{ opacity: 0, y: 28 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="group block relative overflow-hidden rounded-2xl border border-white/10 bg-[#0a1628] hover:border-accent-blue/60 transition-colors"
+          >
+            <img
+              src="/exemples/specimen-01/img/hero.jpg"
+              alt="Aperçu du site Spécimen 01, réalisé par Propulsite"
+              loading="lazy"
+              width={1920}
+              height={1080}
+              className="w-full h-[280px] md:h-[420px] object-cover opacity-55 group-hover:opacity-70 group-hover:scale-[1.03] transition-all duration-700"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050a15] via-[#050a15]/55 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 p-6 md:p-10 flex flex-wrap items-end justify-between gap-5">
+              <div>
+                <p className="text-[0.7rem] font-bold tracking-[0.2em] uppercase text-accent-blue mb-2">Rénovation haut de gamme</p>
+                <h3 className="text-2xl md:text-4xl font-black text-white leading-tight">Spécimen 01</h3>
+                <p className="text-white/55 text-sm mt-2 max-w-md">Site vitrine, animations sur mesure, optimisé pour le mobile et pour Google.</p>
+              </div>
+              <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white border border-white/25 rounded-full px-5 py-3 group-hover:bg-accent-blue group-hover:text-[#050a15] group-hover:border-accent-blue transition-all">
+                Visiter le site <ArrowRight className="w-4 h-4" />
+              </span>
+            </div>
+          </motion.a>
         </div>
       </section>
 
