@@ -22,6 +22,7 @@ import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom';
 import { SERVICES } from '../src/constants/services';
 import { PAIN_POINTS_ARTICLES } from '../src/constants/painPointsData';
+import { SECTEURS } from '../src/constants/secteursData';
 import { AppContent } from '../src/App';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -241,6 +242,39 @@ const routes: RouteMeta[] = [
     changefreq: 'monthly',
     lastmod: PAGES_LASTMOD,
   },
+  ...SECTEURS.map((secteur) => ({
+    path: `/secteurs/${secteur.slug}`,
+    title: `${secteur.metaTitle} | Propulsite`,
+    description: secteur.metaDescription,
+    jsonLd: [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'ProfessionalService',
+        name: 'Propulsite',
+        description: secteur.metaDescription,
+        url: `${SITE_URL}/secteurs/${secteur.slug}`,
+        image: OG_IMAGE,
+        inLanguage: 'fr-CA',
+        priceRange: '$$',
+        // areaServed liste les villes reellement desservies : c'est ce champ
+        // que Google lit pour rattacher l'entreprise a un secteur, et c'est
+        // precisement ce qui manquait pour la Rive-Nord.
+        areaServed: secteur.villes.map((ville) => ({
+          '@type': 'City',
+          name: ville,
+          addressRegion: 'QC',
+          addressCountry: 'CA',
+        })),
+      },
+      breadcrumb([
+        { name: 'Accueil', url: `${SITE_URL}/` },
+        { name: secteur.region, url: `${SITE_URL}/secteurs/${secteur.slug}` },
+      ]),
+    ],
+    priority: '0.8',
+    changefreq: 'monthly',
+    lastmod: PAGES_LASTMOD,
+  })),
   {
     path: '/legal',
     title: 'Politique de confidentialité – Propulsite',

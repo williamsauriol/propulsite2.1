@@ -21,6 +21,12 @@ export interface PainPointArticleData {
     paragraphs?: string[];
     listItems?: { text: string; bold?: string }[];
     solutionBox?: { label: string; text: string };
+    /**
+     * Lien interne vers un autre article. Les paragraphes sont rendus en
+     * texte brut : sans ce champ, impossible de tisser un maillage entre
+     * les articles, alors que c'est justement ce qui fait monter une page.
+     */
+    internalLink?: { text: string; to: string };
   }[];
   cta: {
     title: string;
@@ -653,6 +659,87 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
       title: "Un site qui travaille pour vous, pas juste une vitrine",
       desc: "On conçoit des sites web pour les entrepreneurs en construction du Québec : pensés pour le mobile, optimisés pour Google et pour les moteurs de réponse IA. Soumission gratuite, sans engagement.",
       btnText: "Obtenir ma soumission →",
+      btnLink: "/funnel"
+    }
+  },
+  {
+    slug: 'fiche-google-ou-site-web',
+    tag: 'Petit budget',
+    datePublished: '2026-08-17',
+    titlePart1: 'Fiche Google ou ',
+    titleHighlight: 'site web',
+    titlePart3: " : par quoi commencer quand le budget est serré ?",
+    intro: "C'est la question qu'on nous pose le plus souvent. Voici une réponse honnête, avec les cas où elle ne s'applique pas.",
+    metaTitle: 'Fiche Google ou site web : par quoi commencer ?',
+    metaDescription: "Petit budget ? Voici par quoi commencer entre la fiche Google et le site web, pourquoi, et les cas où c'est l'inverse. Pour entrepreneurs en construction du Québec.",
+    blocks: [
+      {
+        title: 'La réponse courte : la fiche Google, presque toujours',
+        paragraphs: [
+          "Quand un entrepreneur nous dit qu'il a 500 $ et pas 5 000 $, on ne lui vend pas un site web. On lui dit de commencer par sa fiche Google Business, parce que c'est gratuit et que c'est ce que les gens voient en premier.",
+          "Quelqu'un qui cherche « couvreur Saint-Eustache » sur son téléphone voit d'abord une carte avec trois entreprises. Pas des sites web : des fiches. Si vous n'êtes pas dans ces trois-là, votre site peut être magnifique, personne ne s'y rendra."
+        ],
+        listItems: [
+          { bold: 'Elle est gratuite :', text: " zéro dollar, seulement du temps. C'est le seul actif marketing dont on peut dire ça." },
+          { bold: 'Elle pèse lourd :', text: " les analyses du secteur situent les signaux de fiche autour du tiers du classement local. Rien d'autre n'a ce poids pour ce prix." },
+          { bold: 'Elle donne des appels directs :', text: " le bouton « Appeler » est sur la fiche. Le client n'a même pas besoin d'ouvrir un site." }
+        ],
+        solutionBox: {
+          label: 'Le minimum qui change tout',
+          text: "Des catégories exactes, la liste complète des services, les vraies heures, et surtout des photos récentes de vos chantiers. Une fiche sans photo se fait dépasser par une fiche qui en a vingt, même si l'entreprise est moins bonne. C'est injuste, mais c'est comme ça que ça marche."
+        }
+      },
+      {
+        title: 'Les trois cas où le site passe en premier',
+        paragraphs: [
+          "On serait malhonnête de dire que la fiche gagne toujours. Il y a des situations claires où c'est l'inverse."
+        ],
+        listItems: [
+          { bold: 'Vous vendez à des entreprises, pas à des particuliers :', text: " un donneur d'ouvrage ou un gestionnaire d'immeubles ne vous cherche pas dans Maps. Il regarde votre site, vos réalisations et votre licence RBQ avant de vous appeler." },
+          { bold: 'Vous travaillez sur un large territoire :', text: " la fiche Google vous ancre à une adresse. Si vous couvrez trois régions, un site avec une page par secteur vous rejoint là où la fiche ne va pas." },
+          { bold: 'Votre métier est très spécialisé :', text: " pour du béton architectural ou de la restauration patrimoniale, les gens veulent voir vos réalisations en détail. Une fiche ne montre pas ça." }
+        ]
+      },
+      {
+        title: 'Ce qui arrive quand les deux se parlent',
+        paragraphs: [
+          "Le vrai gain n'est ni dans l'un ni dans l'autre : il est dans la cohérence entre les deux. Google compare ce que dit votre fiche et ce que dit votre site. Quand les deux racontent la même chose, il vous fait confiance. Quand ils se contredisent, il vous fait descendre.",
+          "Le piège le plus fréquent, c'est le numéro de téléphone. Un vieux cellulaire sur la fiche, le nouveau sur le site, et Google ne sait plus lequel est le bon. Même chose pour le nom d'entreprise : « Constructions Tremblay » sur l'un et « Constructions Tremblay inc. » sur l'autre, c'est déjà une incohérence."
+        ],
+        listItems: [
+          { bold: 'Même nom, même adresse, même téléphone', text: " partout — sur la fiche, sur le site, dans les annuaires." },
+          { bold: 'Les mêmes services nommés pareil :', text: " si la fiche dit « toiture », le site ne devrait pas dire seulement « couverture »." },
+          { bold: 'Un lien de la fiche vers le site', text: " et des coordonnées visibles sur chaque page du site." }
+        ],
+        solutionBox: {
+          label: 'Et si vous partez de zéro ?',
+          text: "Faites la fiche en premier, ce mois-ci. Gardez le budget du site pour quand elle vous amène déjà des appels — vous saurez alors exactement quelles pages construire, parce que vous connaîtrez les vraies questions de vos clients."
+        }
+      },
+      {
+        title: "L'ordre qu'on recommande, dans le vrai monde",
+        listItems: [
+          { text: "Réclamer et compléter la fiche Google Business — gratuit, une soirée de travail" },
+          { text: "Ajouter des photos de chantier et en remettre chaque mois" },
+          { text: "Demander des avis à vos trois derniers clients satisfaits" },
+          { text: "Construire un site simple mais solide, pensé pour le mobile" },
+          { text: "Rendre le site et la fiche parfaitement cohérents" },
+          { text: "Seulement là, envisager la publicité payante" }
+        ],
+        paragraphs: [
+          "Les entrepreneurs qui sautent les trois premières étapes pour aller directement à la publicité paient pour envoyer du monde vers une présence qui n'inspire pas confiance. C'est l'erreur la plus chère qu'on voit.",
+          "Si vous en êtes à l'étape du site, on a détaillé ce qu'il doit absolument contenir dans un autre article."
+        ],
+        internalLink: {
+          text: "Lire : ce que doit contenir un site web pour entrepreneur en construction",
+          to: '/blog/conception-site-web-construction'
+        }
+      }
+    ],
+    cta: {
+      title: "On regarde votre fiche avec vous, gratuitement",
+      desc: "Quinze minutes pour voir ce qui manque à votre fiche Google et ce que ça vous coûte en appels. Sans engagement, et on vous dit franchement si vous n'avez pas besoin de nous.",
+      btnText: "Demander mon analyse gratuite →",
       btnLink: "/funnel"
     }
   }

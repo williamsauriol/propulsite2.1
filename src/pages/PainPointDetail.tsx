@@ -122,6 +122,16 @@ export default function PainPointDetail() {
                        </div>
                      </div>
                    )}
+
+                   {block.internalLink && (
+                     <Link
+                       to={block.internalLink.to}
+                       className="inline-flex items-center gap-2 mt-6 text-accent-blue font-bold hover:underline underline-offset-4 min-h-[24px]"
+                     >
+                       {block.internalLink.text}
+                       <span aria-hidden="true">→</span>
+                     </Link>
+                   )}
               </LiquidGlassCard>
             </motion.div>
           ))}
