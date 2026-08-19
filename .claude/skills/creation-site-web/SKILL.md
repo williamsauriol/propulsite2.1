@@ -14,6 +14,7 @@ spécialisées. Ne pas tout charger d'un coup — suivre l'aiguillage.
 |---|---|
 | Vitesse, Core Web Vitals, poids des pages | `performance-web` |
 | Balises, sitemap, données structurées, indexation | `seo-technique` |
+| Search Console, fiche Google, page non indexée | `google-apres-lancement` |
 | Être cité par ChatGPT / Perplexity / AI Overviews | `geo-visibilite-ia` |
 | Fiche Google, recherche locale, secteur desservi | `seo-local-quebec` |
 | Textes, titres, appels à l'action, offres | `redaction-conversion` |
@@ -51,7 +52,7 @@ Copier cette liste et la cocher au fur et à mesure :
 - [ ] 3. Contenu     — les textes AVANT la mise en page
 - [ ] 4. Construction — sémantique d'abord, décoration ensuite
 - [ ] 5. Vérification — `npm run verifier` doit passer
-- [ ] 6. Lancement   — build, prerender, sitemap, commit
+- [ ] 6. Lancement   — build, prerender, sitemap, commit, PUIS remise à Google
 ```
 
 ### 1. Intention

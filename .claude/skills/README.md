@@ -26,6 +26,7 @@ nouveau site ou toute refonte.
 | `seo-technique` | Balises, canonical, sitemap, JSON-LD, `prerender.ts` |
 | `geo-visibilite-ia` | Être cité par ChatGPT, Perplexity, AI Overviews |
 | `seo-local-quebec` | Fiche Google, secteur desservi, avis, NAP |
+| `google-apres-lancement` | Search Console et fiche Google APRÈS la mise en ligne |
 | `redaction-conversion` | Textes qui convertissent pour la construction |
 
 ### 3D et mouvement

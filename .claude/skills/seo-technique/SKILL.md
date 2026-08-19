@@ -78,3 +78,8 @@ JSON-LD et la cohérence du sitemap. Corriger jusqu'à zéro erreur.
 
 Ensuite seulement : Search Console pour l'indexation réelle, et le test des
 résultats enrichis de Google pour le balisage.
+
+**Le code qui passe ne suffit pas.** Un sitemap généré à chaque build n'est pas
+un sitemap remis à Google : sur ce projet, 25 URLs se généraient depuis le
+lancement et Search Console affichait « Submitted sitemaps : 0 » — 9 pages
+indexées sur 25. Dérouler `google-apres-lancement` après chaque déploiement.
