@@ -12,6 +12,7 @@ import Funnel from './pages/Funnel';
 import Blog from './pages/Blog';
 import Legal from './pages/Legal';
 import PainPointDetail from './pages/PainPointDetail';
+import SecteurDetail from './pages/SecteurDetail';
 import NotFound from './pages/NotFound';
 import Footer from './components/Footer';
 
@@ -53,6 +54,7 @@ export function AppContent() {
             <Route path="/funnel" element={<Funnel />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<PainPointDetail />} />
+            <Route path="/secteurs/:slug" element={<SecteurDetail />} />
             <Route path="/legal" element={<Legal />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
