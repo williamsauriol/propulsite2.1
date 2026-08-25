@@ -742,5 +742,89 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
       btnText: "Demander mon analyse gratuite →",
       btnLink: "/funnel"
     }
+  },
+  {
+    slug: 'prix-site-web-entrepreneur-construction',
+    tag: 'Budget',
+    datePublished: '2026-08-24',
+    titlePart1: 'Combien coûte un ',
+    titleHighlight: 'site web',
+    titlePart3: " pour un entrepreneur en construction au Québec ?",
+    intro: "Personne ne répond franchement à cette question. Voici les vraies fourchettes, ce qui fait monter la facture, et les cas où ça ne vaut pas la peine.",
+    metaTitle: 'Prix d\u2019un site web pour entrepreneur en construction',
+    metaDescription: "Combien coûte vraiment un site web pour un entrepreneur en construction au Québec ? Fourchettes réelles, ce qui fait monter le prix, et quand ne pas en faire faire un.",
+    blocks: [
+      {
+        title: 'Pourquoi personne ne vous donne de prix',
+        paragraphs: [
+          "Cherchez « prix site web » et vous tomberez sur des pages qui parlent de « solutions sur mesure » et vous invitent à demander une soumission. C'est frustrant, et c'est en partie justifié : un site de cinq pages pour un couvreur et une plateforme avec soumissionnement en ligne n'ont rien à voir.",
+          "Mais l'absence totale de repère sert surtout celui qui vend. Alors voici des ordres de grandeur observés au Québec. Ce ne sont pas des soumissions — c'est ce à quoi vous attendre selon ce que vous achetez."
+        ]
+      },
+      {
+        title: 'Les quatre fourchettes',
+        listItems: [
+          { bold: 'Vous le faites vous-même : 300 à 700 $ par année.', text: " Wix, Squarespace, WordPress avec un thème. Vous payez l'hébergement et votre temps. Réaliste si vous êtes patient et que votre besoin est une simple carte de visite en ligne." },
+          { bold: 'Pigiste, site de base : 1 500 à 3 500 $.', text: " Quatre ou cinq pages, un formulaire, une mise en page correcte. Le référencement est souvent minimal et le contenu, c'est vous qui l'écrivez." },
+          { bold: 'Agence, site conçu pour convertir : 3 500 à 8 000 $.', text: " Textes rédigés pour vous, pages par service, structure pensée pour Google, mobile soigné, données structurées. C'est la zone où un site commence à rapporter plutôt qu'à exister." },
+          { bold: 'Site plus ambitieux : 8 000 $ et plus.', text: " Beaucoup de pages, portfolio de réalisations, réservation en ligne, contenu continu. Rarement nécessaire pour un entrepreneur de moins de dix employés." }
+        ],
+        solutionBox: {
+          label: 'Le piège des deux extrêmes',
+          text: "En bas de 1 500 $, vous obtenez généralement un gabarit rempli à la hâte : joli sur l'écran du vendeur, invisible sur Google. Au-dessus de 10 000 $, vérifiez que vous payez pour du travail et non pour une structure d'agence. Entre les deux, la vraie question n'est pas le prix mais ce qui est inclus."
+        }
+      },
+      {
+        title: 'Ce qui fait vraiment monter la facture',
+        paragraphs: [
+          "Le nombre de pages compte moins qu'on le croit. Ce qui coûte cher, c'est le travail qu'on ne voit pas :"
+        ],
+        listItems: [
+          { bold: 'Les textes.', text: " Écrire une page qui convertit prend plus de temps que la construire. Si l'agence vous demande de fournir vos textes, la facture baisse — et le résultat aussi, dans la plupart des cas." },
+          { bold: 'Les photos.', text: " De vraies photos de vos chantiers valent plus que n'importe quel gabarit. Si vous n'en avez pas, quelqu'un devra les prendre." },
+          { bold: 'Le référencement de départ.', text: " Structure des pages, balises, données structurées, sitemap soumis à Google. Invisible sur la maquette, décisif sur le résultat." },
+          { bold: 'Le suivi après la mise en ligne.', text: " Un site qu'on ne touche plus perd du terrain. Demandez ce qui est prévu après le lancement — beaucoup de soumissions s'arrêtent au jour un." }
+        ]
+      },
+      {
+        title: "Les trois cas où ça ne vaut pas la peine",
+        paragraphs: [
+          "On vous vendra rarement le fait de ne pas acheter. Pourtant :"
+        ],
+        listItems: [
+          { bold: 'Votre fiche Google est vide.', text: " Commencez par elle. C'est gratuit, et c'est ce que les gens voient en premier dans Maps. Un site derrière une fiche dormante ne sera pas trouvé." },
+          { bold: 'Votre carnet est plein pour un an.', text: " Un site est un investissement de visibilité. Si vous refusez déjà des contrats, l'argent est mieux placé ailleurs — outillage, main-d'œuvre, ou une simple fiche bien tenue." },
+          { bold: "Vous ne savez pas encore ce que vous vendez.", text: " Un entrepreneur qui fait « un peu de tout » aura un site qui parle à personne. Décidez d'abord vos deux ou trois services principaux." }
+        ],
+        internalLink: {
+          text: "Lire : par quoi commencer entre la fiche Google et le site web",
+          to: '/blog/fiche-google-ou-site-web'
+        }
+      },
+      {
+        title: 'Les questions à poser avant de signer',
+        listItems: [
+          { text: "Qui écrit les textes, et est-ce inclus dans le prix ?" },
+          { text: "Le site sera-t-il à moi, ou loué tant que je paie ?" },
+          { text: "Qui possède le nom de domaine et l'hébergement ?" },
+          { text: "Qu'est-ce qui est prévu après la mise en ligne, et à quel coût ?" },
+          { text: "Puis-je voir un site que vous avez livré et son classement actuel sur Google ?" }
+        ],
+        paragraphs: [
+          "La deuxième question est la plus importante. Certaines offres à faible mensualité sont des locations : le jour où vous arrêtez de payer, le site disparaît, et vous repartez de zéro.",
+          "Si vous voulez savoir ce que doit contenir le site lui-même, on l'a détaillé ailleurs."
+        ],
+        internalLink: {
+          text: "Lire : ce que doit contenir un site web pour entrepreneur en construction",
+          to: '/blog/conception-site-web-construction'
+        }
+      }
+    ],
+    cta: {
+      title: "Un prix clair, avant de commencer",
+      desc: "On regarde votre situation, on vous dit ce dont vous avez besoin — et ce dont vous n'avez pas besoin. Soumission détaillée, sans engagement, et on vous le dit franchement si un site n'est pas votre priorité.",
+      btnText: "Obtenir ma soumission →",
+      btnLink: "/funnel"
+    }
   }
 ];
