@@ -51,6 +51,39 @@ Search Console → **Pages**. Comparer au nombre du sitemap.
 
 C'est le seul chiffre qui mesure vraiment si un site existe pour Google.
 
+### 2 bis. La page est-elle liée depuis le site ?
+
+Découvert le 25 août 2026. Une page peut être dans le sitemap sans qu'aucun
+lien du site n'y mène. Google la voit, ne trouve aucun chemin vers elle, et la
+range en **« Détectée, actuellement non indexée »**. Ce n'est pas un bug
+technique : c'est Google qui conclut qu'une page que personne ne lie ne vaut
+pas la peine d'être indexée.
+
+Aucun validateur ne l'attrape, parce que la page est parfaite prise isolément.
+
+Le test, sur le HTML **pré-rendu** — pas sur le code React, parce que Googlebot
+lit d'abord le HTML servi :
+
+```bash
+grep -rl "secteurs/mon-nouveau-slug" dist/ | head
+```
+
+Zéro résultat hors de `sitemap.xml` et de la page elle-même = page orpheline.
+
+Les deux cas rencontrés sur propulsite.ca :
+
+- **Page de secteur** : ni la navigation, ni le pied de page, ni un article
+  n'y menaient. Corrigé par une section « Secteurs desservis » au pied de page,
+  générée à partir de `SECTEURS` — les prochaines se lient toutes seules.
+- **Articles de blogue** : `Blog.tsx` gardait sa **propre** liste d'articles
+  écrite à la main, doublon de `painPointsData.tsx`. Les deux derniers articles
+  publiés n'apparaissaient nulle part sur `/blog`. Corrigé en dérivant la liste
+  de la source unique.
+
+**La leçon générale :** partout où une liste d'articles ou de pages est écrite
+à la main à côté des données réelles, elle finit par diverger, et les pages
+neuves deviennent invisibles. Toujours dériver de la source unique.
+
 ### 3. Demander l'indexation des pages neuves
 
 Search Console → **Inspection d'URL** → coller l'adresse → **Demander
@@ -127,7 +160,7 @@ Google.
 - [ ] 1. Search Console existe-t-il ? Sinon, le créer en propriété domaine
 - [ ] 2. Sitemap soumis ? Statut Success ? Pages découvertes cohérentes ?
 - [ ] 3. Écart entre pages soumises et indexées
-- [ ] 4. robots.txt et noindex
+- [ ] 4. robots.txt, noindex, et pages orphelines (grep dans dist/)
 - [ ] 5. Fiche Google : photos, cadence de publication, zones, catégorie
 - [ ] 6. Noter le nombre de pages indexées — c'est la mesure de départ
 ```

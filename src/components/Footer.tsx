@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { Facebook, Instagram } from 'lucide-react';
+import { SECTEURS } from '../constants/secteursData';
 
 export default function Footer() {
     return (
@@ -106,6 +107,29 @@ export default function Footer() {
 
                         </div>
                     </div>
+                </div>
+
+                {/* SECTEURS DESSERVIS */}
+                {/* Sans ce lien, les pages de secteur sont orphelines : Google les
+                    trouve dans le sitemap, ne voit aucun lien vers elles, et les
+                    laisse en « Detectee, actuellement non indexee ». */}
+                <div className="mb-12">
+                    <h4 className="text-sm font-bold tracking-widest uppercase text-white mb-6">Secteurs desservis</h4>
+                    <ul className="space-y-4">
+                        {SECTEURS.map((secteur) => (
+                            <li key={secteur.slug}>
+                                <Link
+                                    to={`/secteurs/${secteur.slug}`}
+                                    className="text-white/60 hover:text-accent-blue transition-colors text-sm"
+                                >
+                                    Marketing web pour entrepreneurs &mdash; {secteur.region}
+                                </Link>
+                                <p className="text-white/55 text-xs mt-1 leading-relaxed max-w-3xl">
+                                    {secteur.villes.join(' · ')}
+                                </p>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
 
                 {/* BOTTOM BAR */}
