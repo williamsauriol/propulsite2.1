@@ -1,7 +1,8 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { Rocket, Target, Search, Users, Smartphone, Star, TrendingUp, Send, Zap, Sparkles, ShieldCheck, MonitorSmartphone } from 'lucide-react';
+import { Rocket, Target, Search, Users, Smartphone, Star, TrendingUp, Send, Zap, Sparkles, ShieldCheck, MonitorSmartphone, MapPin, Wallet } from 'lucide-react';
+import { PAIN_POINTS_ARTICLES } from '../constants/painPointsData';
 import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function Blog() {
@@ -9,7 +10,7 @@ export default function Blog() {
         'Blog marketing pour compagnies de construction | Propulsite',
         'Conseils marketing numérique pour entrepreneurs en construction au Québec : SEO local, Google Ads, image de marque, réseaux sociaux et génération de leads.'
     );
-    const painPoints = [
+    const textesRediges = [
         {
             num: "01",
             icon: <TrendingUp className="w-8 h-8 text-accent-blue" />,
@@ -89,6 +90,30 @@ export default function Blog() {
         }
     ];
 
+    // La liste affichee est derivee de PAIN_POINTS_ARTICLES, la seule source de
+    // verite. Avant, elle etait ecrite a la main : les deux derniers articles
+    // publies n'apparaissaient nulle part sur /blog. Aucun lien ne pointait donc
+    // vers eux, et Google les laissait en « Detectee, actuellement non indexee ».
+    // Tout nouvel article s'ajoute maintenant de lui-meme.
+    const iconesParDefaut: Record<string, React.ReactNode> = {
+        'fiche-google-ou-site-web': <MapPin className="w-8 h-8 text-accent-blue" />,
+        'prix-site-web-entrepreneur-construction': <Wallet className="w-8 h-8 text-accent-blue" />,
+    };
+
+    const redigeParLien = new Map(textesRediges.map((texte) => [texte.link, texte]));
+
+    const painPoints = PAIN_POINTS_ARTICLES.map((article, idx) => {
+        const lien = `/blog/${article.slug}`;
+        const redige = redigeParLien.get(lien);
+        return {
+            num: String(idx + 1).padStart(2, '0'),
+            icon: redige?.icon ?? iconesParDefaut[article.slug] ?? <Sparkles className="w-8 h-8 text-accent-blue" />,
+            title: redige?.title ?? `${article.titlePart1}${article.titleHighlight}${article.titlePart3 ?? ''}`,
+            desc: redige?.desc ?? article.metaDescription ?? article.intro,
+            link: lien,
+        };
+    });
+
 
     return (
         <div className="pt-32 pb-24 px-6 relative z-10 overflow-hidden">
@@ -110,7 +135,7 @@ export default function Blog() {
                         Article de Blog
                     </div>
                     <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-                        10 PROBLÈMES QUI FREINENT LES <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-blue to-purple-400">COMPAGNIES DE CONSTRUCTION</span> EN LIGNE
+                        {painPoints.length} PROBLÈMES QUI FREINENT LES <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-blue to-purple-400">COMPAGNIES DE CONSTRUCTION</span> EN LIGNE
                     </h1>
                     <p className="text-xl text-white/60 max-w-2xl mx-auto leading-relaxed">
                         Vous bâtissez des projets solides, mais votre présence numérique ne suit pas? Voici les obstacles les plus fréquents — et comment les surmonter pour exploser vos ventes.
