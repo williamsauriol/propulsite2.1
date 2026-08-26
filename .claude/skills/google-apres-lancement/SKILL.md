@@ -54,12 +54,21 @@ C'est le seul chiffre qui mesure vraiment si un site existe pour Google.
 ### 2 bis. La page est-elle liée depuis le site ?
 
 Découvert le 25 août 2026. Une page peut être dans le sitemap sans qu'aucun
-lien du site n'y mène. Google la voit, ne trouve aucun chemin vers elle, et la
-range en **« Détectée, actuellement non indexée »**. Ce n'est pas un bug
-technique : c'est Google qui conclut qu'une page que personne ne lie ne vaut
-pas la peine d'être indexée.
+lien du site n'y mène. Aucun validateur ne l'attrape, parce que la page est
+parfaite prise isolément.
 
-Aucun validateur ne l'attrape, parce que la page est parfaite prise isolément.
+**Ce que ça coûte, et ce que ça ne coûte pas.** Une page orpheline reçoit zéro
+signal de lien interne, et rien ne mène le visiteur vers elle. Ça vaut d'être
+corrigé. Mais **orpheline ne veut pas dire non indexée** : sur propulsite.ca,
+les deux pages orphelines vérifiées dans Search Console étaient *indexées*. Le
+sitemap avait suffi à les faire découvrir.
+
+**Le piège, et je suis tombé dedans le jour même où j'ai écrit cette section.**
+J'avais trouvé les pages orphelines en lisant le code, ce qui était juste, puis
+j'ai annoncé à William qu'elles étaient forcément coincées en « Détectée,
+actuellement non indexée ». L'inspection d'URL a montré l'inverse. Trouver une
+cause plausible dans le code ne dit rien de ce que Google en a fait :
+**le seul endroit qui répond, c'est Search Console.**
 
 Le test, sur le HTML **pré-rendu** — pas sur le code React, parce que Googlebot
 lit d'abord le HTML servi :
@@ -78,7 +87,9 @@ Les deux cas rencontrés sur propulsite.ca :
 - **Articles de blogue** : `Blog.tsx` gardait sa **propre** liste d'articles
   écrite à la main, doublon de `painPointsData.tsx`. Les deux derniers articles
   publiés n'apparaissaient nulle part sur `/blog`. Corrigé en dérivant la liste
-  de la source unique.
+  de la source unique. Celui-là était d'abord un bug de site, avant d'être une
+  question de SEO : un lecteur du blogue ne pouvait pas trouver les deux
+  articles les plus récents.
 
 **La leçon générale :** partout où une liste d'articles ou de pages est écrite
 à la main à côté des données réelles, elle finit par diverger, et les pages
