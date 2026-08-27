@@ -41,9 +41,12 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
     slug: 'pas-assez-contrats',
     tag: 'Problème 01',
     datePublished: '2026-03-10',
-    titlePart1: 'Pas assez de ',
-    titleHighlight: 'contrats de construction',
-    titlePart3: '?',
+    titlePart1: "Comment trouver des ",
+    titleHighlight: "contrats en construction",
+    titlePart3: " au Québec",
+    metaTitle: "Trouver des contrats en construction au Québec",
+    metaDescription:
+      "D'où viennent vraiment les contrats en construction au Québec, et ce qui fait qu'un entrepreneur est appelé plutôt qu'un autre.",
     intro: 'Votre expertise est réelle, mais votre téléphone reste silencieux. Voici pourquoi — et comment y remédier.',
     blocks: [
       {
@@ -94,8 +97,12 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
     slug: 'image-marque-datee',
     tag: 'Problème 02',
     datePublished: '2026-03-10',
-    titlePart1: '',
-    titleHighlight: 'Une image de marque datée qui repousse les clients',
+    titlePart1: "Refaire l'image de ",
+    titleHighlight: "marque",
+    titlePart3: " d'une entreprise de construction",
+    metaTitle: "Refaire l'image de marque en construction",
+    metaDescription:
+      "Quand une image de marque coûte des contrats à un entrepreneur, et ce qu'il faut refaire en premier quand le budget est limité.",
     intro: 'Votre travail sur le terrain est impeccable. Mais votre image en ligne raconte une autre histoire.',
     blocks: [
       {
@@ -145,8 +152,11 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
     slug: 'invisible-google',
     tag: 'Problème 03',
     datePublished: '2026-03-10',
-    titlePart1: '',
-    titleHighlight: 'Totalement invisible sur Google',
+    titlePart1: "Mon entreprise de construction ",
+    titleHighlight: "n'apparaît pas sur Google",
+    metaTitle: "Mon entreprise de construction n'est pas sur Google",
+    metaDescription:
+      "Les raisons pour lesquelles une entreprise de construction n'apparaît pas dans Google, et par laquelle commencer pour y changer quelque chose.",
     intro: "Vos concurrents apparaissent en premier. Vos clients potentiels ne vous trouvent jamais. Voici comment inverser ça.",
     blocks: [
       {
@@ -196,8 +206,11 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
     slug: 'se-demarquer-concurrence',
     tag: 'Problème 04',
     datePublished: '2026-03-10',
-    titlePart1: '',
-    titleHighlight: 'Difficile de se démarquer de la concurrence',
+    titlePart1: "Se démarquer de la ",
+    titleHighlight: "concurrence en construction",
+    metaTitle: "Se démarquer de la concurrence en construction",
+    metaDescription:
+      "Comment un entrepreneur en construction se distingue autrement que par le prix, quand tous les concurrents disent la même chose.",
     intro: "Quand tout le monde offre les mêmes services au même prix, comment gagner? En étant différent — stratégiquement.",
     blocks: [
       {
@@ -247,8 +260,12 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
     slug: 'reseaux-sociaux',
     tag: 'Problème 05',
     datePublished: '2026-03-10',
-    titlePart1: '',
-    titleHighlight: 'Aucune stratégie sur les réseaux sociaux',
+    titlePart1: "Les ",
+    titleHighlight: "réseaux sociaux",
+    titlePart3: " pour un entrepreneur en construction",
+    metaTitle: "Réseaux sociaux pour entrepreneur en construction",
+    metaDescription:
+      "Quels réseaux sociaux valent le temps d'un entrepreneur en construction, quoi y publier, et lesquels ne servent à rien dans ce métier.",
     intro: "Vos chantiers sont impressionnants. Mais si personne ne les voit en ligne, vous passez à côté d'une vitrine gratuite et puissante.",
     blocks: [
       {
@@ -298,8 +315,12 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
     slug: 'reputation-en-ligne',
     tag: 'Problème 06',
     datePublished: '2026-03-10',
-    titlePart1: '',
-    titleHighlight: 'Gestion de réputation en ligne inexistante',
+    titlePart1: "Les ",
+    titleHighlight: "avis Google",
+    titlePart3: " pour un entrepreneur en construction",
+    metaTitle: "Avis Google pour entrepreneur en construction",
+    metaDescription:
+      "Comment demander des avis Google sans quêter, quoi faire d'un mauvais avis, et pourquoi ça pèse autant dans la recherche locale.",
     intro: "Vos clients sont satisfaits mais silencieux en ligne. Pendant ce temps, un avis négatif peut faire fuir 10 clients potentiels.",
     blocks: [
       {
@@ -349,8 +370,12 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
     slug: 'site-mobile',
     tag: 'Problème 07',
     datePublished: '2026-03-10',
-    titlePart1: '',
-    titleHighlight: 'Site web non adapté aux appareils mobiles',
+    titlePart1: "Un ",
+    titleHighlight: "site web mobile",
+    titlePart3: " pour un entrepreneur en construction",
+    metaTitle: "Site web mobile pour entrepreneur en construction",
+    metaDescription:
+      "La majorité des clients cherchent un entrepreneur sur leur téléphone. Ce qu'un site doit faire sur mobile pour ne pas les perdre.",
     intro: "70% de vos clients potentiels cherchent sur leur téléphone. Si votre site ne fonctionne pas sur mobile, vous perdez ces clients avant même qu'ils vous appellent.",
     blocks: [
       {

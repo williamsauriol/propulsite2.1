@@ -108,7 +108,12 @@ export default function Blog() {
         return {
             num: String(idx + 1).padStart(2, '0'),
             icon: redige?.icon ?? iconesParDefaut[article.slug] ?? <Sparkles className="w-8 h-8 text-accent-blue" />,
-            title: redige?.title ?? `${article.titlePart1}${article.titleHighlight}${article.titlePart3 ?? ''}`,
+            // Le titre vient TOUJOURS des donnees, jamais du texte redige a la
+            // main : les sept plus anciens articles ont ete retitres pour viser
+            // de vraies recherches, et les cartes affichaient encore les
+            // anciens. Un visiteur lisait « Pas assez de contrats » sur la
+            // liste et « Comment trouver des contrats » sur la page.
+            title: `${article.titlePart1}${article.titleHighlight}${article.titlePart3 ?? ''}`,
             desc: redige?.desc ?? article.metaDescription ?? article.intro,
             link: lien,
         };
