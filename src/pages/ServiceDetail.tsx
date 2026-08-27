@@ -14,7 +14,7 @@ export default function ServiceDetail() {
 
   usePageMeta(
     service ? `${service.title} pour entrepreneurs en construction | Propulsite` : 'Service – Propulsite',
-    service ? `${service.shortDesc} Service ${service.title} spécialisé pour les entrepreneurs en construction au Québec.` : undefined
+    service ? (service.metaDescription || `${service.shortDesc} Service ${service.title} spécialisé pour les entrepreneurs en construction au Québec.`) : undefined
   );
 
   if (!service) {
@@ -66,8 +66,11 @@ export default function ServiceDetail() {
             <div className="w-16 h-16 bg-[color:var(--service-bg)] rounded-2xl flex items-center justify-center mb-8 text-[color:var(--service-color)] border border-[color:var(--service-border)]">
               {service.icon}
             </div>
+            {/* `h1` porte la formule complete — celle qui contient les mots
+                pour lesquels la page se classe reellement. `title` reste court
+                pour les cartes. Voir le commentaire dans services.tsx. */}
             <h1 className="text-5xl md:text-7xl font-black mb-8 text-3d uppercase italic">
-              {service.title}
+              {service.h1 || service.title}
             </h1>
             <p className="text-xl text-white/70 leading-relaxed mb-8">
               {highlight(service.fullDesc)}

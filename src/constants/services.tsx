@@ -18,7 +18,36 @@ export interface ServicePillar {
 
 export interface Service {
   slug: string;
+  /** Nom court, pour les cartes et la navigation. */
   title: string;
+  /**
+   * Titre affiche en H1 sur la page de detail.
+   *
+   * Le H1 est le signal le plus fort d'une page, et `title` seul le gaspille :
+   * relevé dans Search Console, /services/conception-site-web reçoit 371
+   * impressions sur « conception site web CONSTRUCTION » et son H1 disait
+   * « Conception de site web ». Le mot pour lequel la page se classe
+   * n'apparaissait nulle part dedans.
+   *
+   * On garde donc `title` court pour les cartes, et on donne au H1 la formule
+   * complète. Absent, il retombe sur `title`.
+   */
+  h1?: string;
+  /**
+   * Description meta. Sans elle, le gabarit produisait « <shortDesc> Service
+   * <title> spécialisé pour les entrepreneurs en construction au Québec » —
+   * une phrase de machine. La description ne classe pas, mais elle décide du
+   * clic : à 0,3 % de taux de clic sur tout le site, c'est là qu'il faut agir.
+   */
+  metaDescription?: string;
+  /**
+   * Titre de la balise <title>. Deux services portaient un nom interne qui ne
+   * correspond a aucune recherche reelle : « Google Ads (SEM) » et
+   * « Domination Google ». Or la page Google Ads se classe 15e sur
+   * « publicite google construction quebec » — avec un titre qui ne contient
+   * ni « publicite », ni « construction ». Absent, il retombe sur `title`.
+   */
+  metaTitle?: string;
   icon: React.ReactNode;
   shortDesc: string;
   fullDesc: string;
@@ -31,6 +60,8 @@ export interface Service {
 export const SERVICES: Service[] = [
   {
     slug: 'conception-site-web',
+    h1: 'Conception de site web pour entrepreneurs en construction',
+    metaDescription: "Conception de site web pour entrepreneurs en construction au Québec : pensé pour le mobile, rapide sur un chantier, et fait pour transformer un visiteur en demande de soumission.",
     title: 'Conception de site web',
     icon: <Layout className="w-8 h-8" />,
     color: '#0ea5e9', // Cyan
@@ -64,6 +95,9 @@ export const SERVICES: Service[] = [
   },
   {
     slug: 'google-ads',
+    h1: 'Publicité Google pour entrepreneurs en construction',
+    metaTitle: 'Publicité Google pour entrepreneurs en construction',
+    metaDescription: "Publicité Google pour entrepreneurs en construction au Québec. On cible les recherches de gens prêts à signer, dans votre région, et on coupe ce qui brûle le budget.",
     title: 'Google Ads (SEM)',
     icon: <Search className="w-8 h-8" />,
     color: '#f59e0b', // Amber
@@ -97,6 +131,9 @@ export const SERVICES: Service[] = [
   },
   {
     slug: 'domination-google',
+    h1: 'Référencement Google pour entrepreneurs en construction',
+    metaTitle: 'Référencement Google pour la construction au Québec',
+    metaDescription: "Référencement Google, fiche Google Business et GEO pour entrepreneurs en construction du Québec : être le nom qui revient partout quand un client cherche.",
     title: 'Domination Google',
     icon: <Globe className="w-8 h-8" />,
     color: '#10b981', // Emerald
@@ -181,6 +218,9 @@ export const SERVICES: Service[] = [
   },
   {
     slug: 'publicite-facebook',
+    h1: 'Publicité Facebook et Instagram pour entrepreneurs en construction',
+    metaTitle: 'Publicité Facebook pour la construction au Québec',
+    metaDescription: "Publicité Facebook et Instagram pour entrepreneurs en construction. Vos chantiers montrés aux propriétaires de votre secteur, avec un ciblage qui ne gaspille pas.",
     title: 'Publicité Facebook (SMM)',
     icon: <Megaphone className="w-8 h-8" />,
     color: '#3b82f6', // Blue
@@ -214,6 +254,8 @@ export const SERVICES: Service[] = [
   },
   {
     slug: 'gestion-medias-sociaux',
+    h1: 'Gestion de médias sociaux pour entrepreneurs en construction',
+    metaDescription: "Gestion de médias sociaux pour entrepreneurs en construction au Québec. On publie vos chantiers pendant que vous êtes dessus. Contenu régulier, sans y penser.",
     title: 'Gestion de médias sociaux',
     icon: <Users className="w-8 h-8" />,
     color: '#ec4899', // Pink
@@ -247,6 +289,8 @@ export const SERVICES: Service[] = [
   },
   {
     slug: 'chatbot-ia',
+    h1: 'Chatbot IA pour entrepreneurs en construction',
+    metaDescription: "Chatbot IA pour entrepreneurs en construction : il répond aux questions et qualifie les demandes 24 h sur 24, même quand vous êtes sur un toit.",
     title: 'Chatbot IA',
     icon: <MessageSquare className="w-8 h-8" />,
     color: '#8b5cf6', // Violet
