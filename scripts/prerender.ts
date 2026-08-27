@@ -116,9 +116,18 @@ const routes: RouteMeta[] = [
     // « pour entrepreneurs en construction | Propulsite » coûtait 47 caractères
     // de gabarit : les titres de service dépassaient la limite d'affichage de
     // Google. La formule courte garde les deux mots-clés qui comptent.
-    title: `${service.title} — construction Québec | Propulsite`,
+    // `metaTitle` l'emporte : il est deja formule pour la recherche et n'a pas
+    // besoin du suffixe « — construction Québec », qui ferait deborder la
+    // limite d'affichage de Google.
+    title: service.metaTitle
+      ? `${service.metaTitle} | Propulsite`
+      : `${service.title} — construction Québec | Propulsite`,
+    // La description ecrite a la main l'emporte sur le gabarit : elle contient
+    // les mots de la requete ET une raison de cliquer. Le gabarit ne faisait ni
+    // l'un ni l'autre, et le site plafonnait a 0,3 % de taux de clic.
     description: metaDesc(
-      `${service.shortDesc} Service ${service.title} spécialisé pour les entrepreneurs en construction au Québec.`,
+      service.metaDescription ||
+        `${service.shortDesc} Service ${service.title} spécialisé pour les entrepreneurs en construction au Québec.`,
     ),
     jsonLd: [
       {
