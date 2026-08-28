@@ -61,7 +61,7 @@ export const SERVICES: Service[] = [
   {
     slug: 'conception-site-web',
     h1: 'Conception de site web pour entrepreneurs en construction',
-    metaDescription: "Conception de site web pour entrepreneurs en construction au Québec : pensé pour le mobile, rapide sur un chantier, et fait pour transformer un visiteur en demande de soumission.",
+    metaDescription: "Conception de site web et création de site internet pour entrepreneurs en construction. Pensé pour le mobile, fait pour générer des soumissions.",
     title: 'Conception de site web',
     icon: <Layout className="w-8 h-8" />,
     color: '#0ea5e9', // Cyan
@@ -95,9 +95,9 @@ export const SERVICES: Service[] = [
   },
   {
     slug: 'google-ads',
-    h1: 'Publicité Google pour entrepreneurs en construction',
-    metaTitle: 'Publicité Google pour entrepreneurs en construction',
-    metaDescription: "Publicité Google pour entrepreneurs en construction au Québec. On cible les recherches de gens prêts à signer, dans votre région, et on coupe ce qui brûle le budget.",
+    h1: 'Publicité Google Ads pour entrepreneurs en construction',
+    metaTitle: 'Google Ads pour la construction au Québec',
+    metaDescription: "Publicité Google Ads pour entrepreneurs en construction au Québec. On cible les recherches de gens prêts à signer et on coupe ce qui brûle le budget.",
     title: 'Google Ads (SEM)',
     icon: <Search className="w-8 h-8" />,
     color: '#f59e0b', // Amber
