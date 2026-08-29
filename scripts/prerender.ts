@@ -23,6 +23,7 @@ import { StaticRouter } from 'react-router-dom';
 import { SERVICES } from '../src/constants/services';
 import { PAIN_POINTS_ARTICLES } from '../src/constants/painPointsData';
 import { SECTEURS } from '../src/constants/secteursData';
+import { FAQ as GEO_FAQ } from '../src/constants/geoData';
 import { AppContent } from '../src/App';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -95,6 +96,59 @@ const routes: RouteMeta[] = [
     priority: '1.0',
     changefreq: 'monthly',
     lastmod: PAGES_LASTMOD,
+  },
+  {
+    // Page vitrine. priority 0.9 comme /services : c'est la page sur laquelle
+    // on veut que Google et les IA atterrissent en premier apres l'accueil.
+    path: '/geo',
+    title: 'GEO : etre recommande par ChatGPT et l’IA de Google | Propulsite',
+    description:
+      'Comment ChatGPT, Gemini et l’IA de Google choisissent l’entrepreneur qu’ils recommandent — et quoi faire pour être ce nom-là. Chiffres et sources.',
+    jsonLd: [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline:
+          'GEO : comment se faire recommander par ChatGPT et l’IA de Google',
+        description:
+          'Ce que le GEO change pour un entrepreneur en construction au Québec, où les IA vont chercher les entreprises qu’elles nomment, et les sept leviers pour être celle-là.',
+        inLanguage: 'fr-CA',
+        image: OG_IMAGE,
+        datePublished: '2026-08-29',
+        dateModified: '2026-08-29',
+        author: { '@type': 'Person', name: 'William Sauriol' },
+        publisher: {
+          '@type': 'Organization',
+          name: 'Propulsite',
+          logo: {
+            '@type': 'ImageObject',
+            url: `${SITE_URL}/images/logo-fuser-sans-backk.png`,
+          },
+        },
+        mainEntityOfPage: `${SITE_URL}/geo`,
+        about: {
+          '@type': 'Thing',
+          name: 'Generative Engine Optimization',
+          alternateName: 'GEO',
+        },
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: GEO_FAQ.map((item) => ({
+          '@type': 'Question',
+          name: item.q,
+          acceptedAnswer: { '@type': 'Answer', text: item.a },
+        })),
+      },
+      breadcrumb([
+        { name: 'Accueil', url: `${SITE_URL}/` },
+        { name: 'GEO', url: `${SITE_URL}/geo` },
+      ]),
+    ],
+    priority: '0.9',
+    changefreq: 'monthly',
+    lastmod: '2026-08-29',
   },
   {
     path: '/services',

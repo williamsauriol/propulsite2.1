@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/react';
 import Navbar from './components/Navbar';
 import RocketBackground from './components/RocketBackground';
 import Home from './pages/Home';
+import Geo from './pages/Geo';
 import Services from './pages/Services';
 import ServiceDetail from './pages/ServiceDetail';
 import About from './pages/About';
@@ -47,6 +48,7 @@ export function AppContent() {
         <main>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/geo" element={<Geo />} />
             <Route path="/services" element={<Services />} />
             <Route path="/services/:slug" element={<ServiceDetail />} />
             <Route path="/a-propos" element={<About />} />
