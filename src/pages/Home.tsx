@@ -1,10 +1,9 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
-import LiquidGlassCard from '../components/LiquidGlassCard';
 import GeoTeaser from '../components/GeoTeaser';
+import ServicesScroll from '../components/ServicesScroll';
 import { ArrowRight, HardHat, ClipboardList, Palette, Search } from 'lucide-react';
-import { SERVICES } from '../constants/services';
 import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function Home() {
@@ -12,7 +11,6 @@ export default function Home() {
     'Marketing construction Québec — plus de contrats | Propulsite',
     'On aide les entrepreneurs en construction du Québec à décrocher plus de contrats grâce au web : site, référencement Google, GEO et pub. Soumission gratuite.'
   );
-  const homeServices = SERVICES.slice(0, 6);
 
   const painPoints = [
     {
@@ -65,42 +63,8 @@ export default function Home() {
       {/* GEO Section - Mise en vedette */}
       <GeoTeaser />
 
-      {/* Services Section - All Services */}
-      <section className="py-32 px-6">
-        <div className="container mx-auto">
-          <div className="text-center mb-20">
-            <h2 className="text-5xl font-black mb-6 text-3d uppercase italic">NOS EXPERTISES</h2>
-            <p className="text-white/50 max-w-xl mx-auto">Tout ce dont un entrepreneur a besoin pour bâtir une présence en ligne indestructible.</p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {homeServices.map((s, i) => (
-              <Link 
-                key={s.slug} 
-                to={`/services/${s.slug}`} 
-                className="group"
-                style={{
-                  '--service-color': s.color,
-                  '--service-bg': `${s.color}1A`, // 10% opacity
-                  '--service-border': `${s.color}33`, // 20% opacity
-                  '--service-shadow': `${s.color}66`, // 40% opacity
-                } as React.CSSProperties}
-              >
-                <LiquidGlassCard delay={i * 0.1} className="h-full transition-all duration-500 transform group-hover:-translate-y-6 group-hover:scale-[1.03] group-hover:shadow-[0_20px_50px_var(--service-shadow)] group-hover:border-[color:var(--service-color)] bg-gradient-to-br hover:bg-[linear-gradient(to_bottom_right,var(--service-bg),transparent)]">
-                  <div className="w-14 h-14 bg-[color:var(--service-bg)] rounded-2xl flex items-center justify-center mb-8 text-[color:var(--service-color)] border border-[color:var(--service-border)] group-hover:scale-110 transition-transform">
-                    {s.icon}
-                  </div>
-                  <h3 className="text-2xl font-bold mb-4 group-hover:text-[color:var(--service-color)] transition-colors uppercase">{s.title}</h3>
-                  <p className="text-white/60 mb-8 leading-relaxed">{s.shortDesc}</p>
-                  <div className="flex items-center gap-2 text-sm font-bold text-[color:var(--service-color)] uppercase tracking-widest">
-                    Découvrir <ArrowRight className="w-4 h-4" />
-                  </div>
-                </LiquidGlassCard>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Nos expertises — defilement, logo colle a droite */}
+      <ServicesScroll />
 
       {/* Pain Points Section - New Design */}
       <section className="py-32 relative overflow-hidden bg-gradient-to-b from-[#060d1f] to-[#0a1628]">
