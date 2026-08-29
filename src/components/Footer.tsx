@@ -17,7 +17,7 @@ export default function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
 
                     {/* Logo + Description */}
-                    <div className="md:col-span-5">
+                    <div className="md:col-span-4">
                         <Link to="/" className="flex items-center gap-3 mb-6 group inline-flex">
                             <img
                                 src="/images/logo-fuser-sans-backk.png"
@@ -48,8 +48,31 @@ export default function Footer() {
                         </ul>
                     </div>
 
+                    {/* NAVIGATION — /contact, /blog et /a-propos n'etaient lies
+                        que depuis la barre du haut. Google le confirme : sur
+                        /contact, l'inspection d'URL affiche « Referring page :
+                        None detected ». Le pied de page est la deuxieme surface
+                        de maillage d'un site, et elle etait vide de ces pages.
+
+                        A noter aussi : le bouton d'appel a l'action pointe vers
+                        /funnel, qui est Disallow dans robots.txt. Quatre liens
+                        par page vers une adresse que le robot n'a pas le droit
+                        de suivre, contre deux vers /contact. C'est voulu pour le
+                        funnel, mais ca rendait /contact d'autant plus important
+                        a lier ici. */}
+                    <div className="md:col-span-2">
+                        <h4 className="text-sm font-bold tracking-widest uppercase text-white mb-6">Le site</h4>
+                        <ul className="space-y-4">
+                            <li><Link to="/" className="text-white/60 hover:text-accent-blue transition-colors text-sm">Accueil</Link></li>
+                            <li><Link to="/services" className="text-white/60 hover:text-accent-blue transition-colors text-sm">Nos services</Link></li>
+                            <li><Link to="/blog" className="text-white/60 hover:text-accent-blue transition-colors text-sm">Blogue</Link></li>
+                            <li><Link to="/a-propos" className="text-white/60 hover:text-accent-blue transition-colors text-sm">À propos</Link></li>
+                            <li><Link to="/contact" className="text-white/60 hover:text-accent-blue transition-colors text-sm">Nous joindre</Link></li>
+                        </ul>
+                    </div>
+
                     {/* Contact Links */}
-                    <div className="md:col-span-4">
+                    <div className="md:col-span-3">
                         <h4 className="text-sm font-bold tracking-widest uppercase text-white mb-6">Contact</h4>
                         <ul className="space-y-4 mb-8">
                             <li><a href="mailto:propulsiteprojet@gmail.com" className="text-white/60 hover:text-accent-blue transition-colors text-sm break-all">propulsiteprojet@gmail.com</a></li>
