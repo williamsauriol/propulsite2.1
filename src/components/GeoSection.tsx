@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { Sparkles, ArrowRight, Check, MessageSquare, TrendingUp, Bot } from 'lucide-react';
+import { Sparkles, ArrowRight, Check, MessageSquare, TrendingUp, Bot, ChevronDown } from 'lucide-react';
 
 /**
  * GeoSection — Section vedette de la page d'accueil dédiée au GEO.
@@ -63,6 +63,9 @@ const WHY_NOW = [
 export default function GeoSection() {
   const [count, setCount] = useState(0);
   const [started, setStarted] = useState(false);
+  // Replie sur telephone uniquement : au-dessus de md, le bloc est toujours
+  // affiche quelle que soit la valeur.
+  const [pourquoiOuvert, setPourquoiOuvert] = useState(false);
   const done = count >= FULL_LENGTH;
 
   useEffect(() => {
@@ -73,7 +76,7 @@ export default function GeoSection() {
 
   return (
     <section className="px-4 md:px-6 mt-20 md:mt-52 mb-12 md:mb-20">
-      <div className="relative overflow-hidden rounded-[32px] md:rounded-[40px] border border-white/10 py-14 md:py-32 px-5 md:px-10 max-w-7xl mx-auto bg-gradient-to-b from-[#060d1f] via-[#081834] to-[#0a1628] shadow-[0_30px_90px_rgba(0,0,0,0.55)]">
+      <div className="relative overflow-hidden rounded-[32px] md:rounded-[40px] border border-white/10 py-10 md:py-32 px-5 md:px-10 max-w-7xl mx-auto bg-gradient-to-b from-[#060d1f] via-[#081834] to-[#0a1628] shadow-[0_30px_90px_rgba(0,0,0,0.55)]">
       {/* Étoiles */}
       <div className="absolute inset-0 z-0 pointer-events-none opacity-70" style={{
         backgroundImage: `
@@ -233,10 +236,26 @@ export default function GeoSection() {
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.6 }}
         >
+          {/* Sur telephone, ces trois cartes pesaient 670 px — c'est le
+              TROISIEME endroit ou la section explique le GEO, apres le
+              paragraphe d'intro et la liste d'arguments. On les replie donc
+              derriere un bouton : le texte reste dans le DOM (donc lu par
+              Google et par le pre-rendu), mais l'ecran arrete de defiler.
+              Au-dessus de md, rien ne change : le titre est un simple libelle
+              et les cartes sont toujours ouvertes. */}
           <div className="text-center mb-6 md:mb-10">
-            <span className="text-accent-blue text-sm font-bold tracking-[2.5px] uppercase">Pourquoi maintenant</span>
+            <button
+              type="button"
+              onClick={() => setPourquoiOuvert((v) => !v)}
+              aria-expanded={pourquoiOuvert}
+              className="md:hidden inline-flex items-center gap-2 text-accent-blue text-sm font-bold tracking-[2.5px] uppercase px-4 py-2 rounded-full border border-accent-blue/30 bg-accent-blue/10"
+            >
+              Pourquoi maintenant
+              <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${pourquoiOuvert ? 'rotate-180' : ''}`} />
+            </button>
+            <span className="hidden md:inline text-accent-blue text-sm font-bold tracking-[2.5px] uppercase">Pourquoi maintenant</span>
           </div>
-          <div className="grid md:grid-cols-3 gap-4 md:gap-6">
+          <div className={`${pourquoiOuvert ? 'grid' : 'hidden md:grid'} md:grid-cols-3 gap-4 md:gap-6`}>
             {WHY_NOW.map((c) => (
               <div
                 key={c.title}
