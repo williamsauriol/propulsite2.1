@@ -72,6 +72,9 @@ export default function Contact() {
 
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
+            <h2 className="text-2xl md:text-3xl font-black mb-6 uppercase italic">
+              Demander une soumission gratuite
+            </h2>
             <LiquidGlassCard>
               {isSuccess ? (
                 <div className="py-12 text-center flex flex-col items-center justify-center h-full">
@@ -187,6 +190,9 @@ export default function Contact() {
           </div>
 
           <div className="space-y-6">
+            <h2 className="text-2xl md:text-3xl font-black mb-6 uppercase italic">
+              Nos coordonnées
+            </h2>
             <LiquidGlassCard>
               <div className="flex items-center gap-4 mb-4">
                 <div className="w-10 h-10 bg-accent-blue/10 rounded-lg flex items-center justify-center text-accent-blue">

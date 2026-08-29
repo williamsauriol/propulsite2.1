@@ -83,7 +83,11 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
           { bold: "Des leads qualifiés", text: " — des gens qui cherchent activement votre type de service dans votre région" },
           { bold: "Un carnet de commandes planifié", text: " sur 2 à 3 mois à l'avance" },
           { bold: "La liberté de choisir", text: " vos projets plutôt que d'accepter n'importe quoi" }
-        ]
+        ],
+        internalLink: {
+          text: "Pourquoi votre entreprise n'apparaît pas sur Google",
+          to: '/blog/invisible-google',
+        },
       }
     ],
     cta: {
@@ -138,7 +142,11 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
           { bold: "Tarification justifiée :", text: " Une image haut de gamme permet de facturer à sa juste valeur" },
           { bold: "Différenciation claire :", text: " Vous sortez du lot face aux concurrents génériques" },
           { bold: "Fierté de partager :", text: " Vous et votre équipe êtes fiers de montrer votre carte d'affaires" }
-        ]
+        ],
+        internalLink: {
+          text: "Ce que doit vraiment faire un site web d'entrepreneur",
+          to: '/blog/conception-site-web-construction',
+        },
       }
     ],
     cta: {
@@ -192,7 +200,11 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
           { bold: "Leads gratuits et récurrents :", text: " Contrairement aux pubs, le SEO travaille 24/7 sans frais par clic" },
           { bold: "Crédibilité accrue :", text: " Apparaître en premier inspire confiance automatiquement" },
           { bold: "Ciblage précis :", text: " Vous attirez des clients dans votre zone de service exacte" }
-        ]
+        ],
+        internalLink: {
+          text: "Fiche Google ou site web : par quoi commencer",
+          to: '/blog/fiche-google-ou-site-web',
+        },
       }
     ],
     cta: {
@@ -246,7 +258,11 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
           { bold: "Justifier vos prix :", text: " La spécialisation commande des tarifs plus élevés" },
           { bold: "Notoriété locale :", text: " Devenir la référence dans votre niche géographique" },
           { bold: "Moins de compétition directe :", text: " Plus votre niche est précise, moins vous avez de rivaux directs" }
-        ]
+        ],
+        internalLink: {
+          text: "Refaire son image de marque en construction",
+          to: '/blog/image-marque-datee',
+        },
       }
     ],
     cta: {
@@ -301,7 +317,11 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
           { bold: "Preuve sociale en temps réel :", text: " Chaque post est une démonstration de votre savoir-faire" },
           { bold: "Leads entrants organiques :", text: " Des clients qui viennent à vous via vos publications" },
           { bold: "Référencement boosté :", text: " Une présence sociale active aide votre SEO Google" }
-        ]
+        ],
+        internalLink: {
+          text: "Les avis Google, l'autre chose que vos clients regardent",
+          to: '/blog/reputation-en-ligne',
+        },
       }
     ],
     cta: {
@@ -356,7 +376,11 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
           { bold: "Meilleur classement Google :", text: " Les avis influencent directement votre position locale" },
           { bold: "Bouche-à-oreille numérique :", text: " Chaque avis est une recommandation publique permanente" },
           { bold: "Avantage concurrentiel durable :", text: " Difficile à rattraper pour vos concurrents une fois établi" }
-        ]
+        ],
+        internalLink: {
+          text: "Pourquoi votre entreprise n'apparaît pas sur Google",
+          to: '/blog/invisible-google',
+        },
       }
     ],
     cta: {
@@ -411,7 +435,11 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
           { bold: "Plus de demandes de soumissions :", text: " Un parcours fluide = plus de conversions" },
           { bold: "Meilleur classement Google :", text: " Google favorise les sites rapides et mobiles" },
           { bold: "Image professionnelle :", text: " Un site moderne inspire confiance instantanément" }
-        ]
+        ],
+        internalLink: {
+          text: "Ce que doit vraiment faire un site web d'entrepreneur",
+          to: '/blog/conception-site-web-construction',
+        },
       }
     ],
     cta: {
@@ -482,7 +510,11 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
           { bold: 'SEO local :', text: " Gratuit à long terme, prend 3 à 6 mois à bâtir, durable et cumulatif." },
           { bold: 'Facebook/Instagram Ads :', text: " Bonne notoriété, intention d'achat plus faible, idéal pour le branding et le remarketing." },
           { bold: 'Bouche-à-oreille :', text: " Gratuit mais imprévisible — ne peut pas être votre seule source de leads." }
-        ]
+        ],
+        internalLink: {
+          text: "Local Services Ads : payer à l'appel plutôt qu'au clic",
+          to: '/blog/local-services-ads-construction',
+        },
       }
     ],
     cta: {
@@ -544,7 +576,11 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
         solutionBox: {
           label: 'Comment Propulsite règle ce problème',
           text: "Avec notre service Domination Google, on bâtit votre SEO ET votre GEO en même temps : contenu qui répond aux vraies questions, données structurées, fiche Google optimisée, avis clients et configuration technique pour les moteurs d'IA. Objectif : être le nom que Google classe en premier ET celui que l'IA recommande."
-        }
+        },
+        internalLink: {
+          text: "Être visible sur Google avant de l'être dans l'IA",
+          to: '/blog/invisible-google',
+        },
       }
     ],
     cta: {
@@ -609,7 +645,11 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
         solutionBox: {
           label: 'Le bon point de départ',
           text: "Comme vous payez au lead, les Local Services Ads sont un excellent moyen de tester Google à faible risque — souvent pendant que votre référencement (SEO) et votre GEO se construisent en arrière-plan. C'est la combinaison qu'on bâtit avec le service Domination Google."
-        }
+        },
+        internalLink: {
+          text: "Google Ads en construction : est-ce rentable ?",
+          to: '/blog/google-ads-construction',
+        },
       }
     ],
     cta: {
@@ -677,7 +717,11 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
           { bold: 'Aucun repère de prix :', text: " vous n’êtes pas obligé d’afficher des tarifs, mais donner un ordre de grandeur ou expliquer votre processus rassure et filtre les mauvais appels." },
           { bold: 'Un site jamais mis à jour :', text: " une dernière réalisation qui date de trois ans donne l’impression d’une entreprise inactive." },
           { bold: 'Une incohérence avec votre fiche Google :', text: " votre site et votre fiche Google Business doivent afficher le même nom, la même adresse et le même téléphone. Une différence affaiblit les deux." }
-        ]
+        ],
+        internalLink: {
+          text: "Combien coûte un site web pour un entrepreneur",
+          to: '/blog/prix-site-web-entrepreneur-construction',
+        },
       }
     ],
     cta: {
