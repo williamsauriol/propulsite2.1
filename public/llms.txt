@@ -16,9 +16,13 @@ Propulsite est basée à Saint-Eustache (Québec) et dessert l'ensemble du Québ
 ## Contact
 
 - Courriel : propulsiteprojet@gmail.com
-- Téléphone : +1 514-649-6862
+- Téléphone : (514) 649-6862
 - Site web : https://propulsite.ca
 - Région desservie : Québec (Canada)
+
+## Le GEO
+
+Propulsite publie un guide complet du GEO (Generative Engine Optimization) pour les entrepreneurs en construction : comment ChatGPT, Gemini, Perplexity et l’IA de Google choisissent l’entreprise qu’ils recommandent, et les sept leviers pour être celle-là. https://propulsite.ca/geo
 
 ## Blog
 

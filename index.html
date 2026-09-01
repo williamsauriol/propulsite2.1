@@ -54,11 +54,16 @@
     {
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
+      "@id": "https://propulsite.ca/#entreprise",
       "name": "Propulsite",
       "description": "Agence marketing numérique spécialisée pour les entrepreneurs en construction au Québec.",
       "url": "https://propulsite.ca",
       "telephone": "+15146496862",
       "email": "propulsiteprojet@gmail.com",
+      "founder": {
+        "@type": "Person",
+        "name": "William Sauriol"
+      },
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Saint-Eustache",
@@ -70,10 +75,19 @@
         "latitude": 45.5667,
         "longitude": -73.9000
       },
-      "areaServed": {
-        "@type": "Province",
-        "name": "Québec"
-      },
+      "areaServed": [
+        { "@type": "City", "name": "Saint-Eustache", "addressRegion": "QC", "addressCountry": "CA" },
+        { "@type": "City", "name": "Deux-Montagnes", "addressRegion": "QC", "addressCountry": "CA" },
+        { "@type": "City", "name": "Boisbriand", "addressRegion": "QC", "addressCountry": "CA" },
+        { "@type": "City", "name": "Sainte-Thérèse", "addressRegion": "QC", "addressCountry": "CA" },
+        { "@type": "City", "name": "Blainville", "addressRegion": "QC", "addressCountry": "CA" },
+        { "@type": "City", "name": "Rosémère", "addressRegion": "QC", "addressCountry": "CA" },
+        { "@type": "City", "name": "Lorraine", "addressRegion": "QC", "addressCountry": "CA" },
+        { "@type": "City", "name": "Mirabel", "addressRegion": "QC", "addressCountry": "CA" },
+        { "@type": "City", "name": "Saint-Jérôme", "addressRegion": "QC", "addressCountry": "CA" },
+        { "@type": "City", "name": "Laval", "addressRegion": "QC", "addressCountry": "CA" },
+        { "@type": "Province", "name": "Québec" }
+      ],
       "serviceType": ["Marketing numérique", "SEO", "GEO", "Google Ads", "Local Services Ads", "Conception web", "Réseaux sociaux"],
       "knowsAbout": [
         "Marketing numérique pour entrepreneurs en construction",
@@ -103,7 +117,7 @@
       "name": "Propulsite",
       "url": "https://propulsite.ca",
       "inLanguage": "fr-CA",
-      "publisher": { "@type": "Organization", "name": "Propulsite", "url": "https://propulsite.ca" }
+      "publisher": { "@id": "https://propulsite.ca/#entreprise" }
     }
     </script>
 

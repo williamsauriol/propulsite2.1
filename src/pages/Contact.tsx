@@ -14,6 +14,7 @@ export default function Contact() {
     email: '',
     telephone: '',
     sujet: 'Audit Gratuit',
+    provenance: '',
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -43,6 +44,7 @@ export default function Contact() {
             Email: formData.email,
             Téléphone: formData.telephone || 'Non fourni',
             Sujet: formData.sujet,
+            'Comment nous a trouvés': formData.provenance || 'Non répondu',
             Message: formData.message
         })
       });
@@ -156,6 +158,26 @@ export default function Contact() {
                       <option className="bg-[#050a15]">Audit Gratuit</option>
                       <option className="bg-[#050a15]">Conception Web</option>
                       <option className="bg-[#050a15]">SEO / Ads</option>
+                      <option className="bg-[#050a15]">Autre</option>
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="contact-provenance" className="text-sm font-bold uppercase tracking-widest text-white/50">
+                      Comment nous avez-vous trouvés ?
+                    </label>
+                    <select
+                      id="contact-provenance"
+                      name="provenance"
+                      value={formData.provenance}
+                      onChange={(e) => setFormData({...formData, provenance: e.target.value})}
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent-blue focus:ring-1 focus:ring-accent-blue transition-all appearance-none cursor-pointer"
+                    >
+                      <option value="" className="bg-[#050a15]">Préférez ne pas le dire</option>
+                      <option className="bg-[#050a15]">Recherche Google</option>
+                      <option className="bg-[#050a15]">ChatGPT ou une autre IA</option>
+                      <option className="bg-[#050a15]">Instagram ou Facebook</option>
+                      <option className="bg-[#050a15]">Bouche-à-oreille</option>
+                      <option className="bg-[#050a15]">On s'est déjà parlé</option>
                       <option className="bg-[#050a15]">Autre</option>
                     </select>
                   </div>
