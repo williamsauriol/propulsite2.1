@@ -1,6 +1,9 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Target, Search, Users, Smartphone, Star, TrendingUp, Handshake, Lightbulb, Zap, Rocket, CheckCircle2, MapPin } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { SERVICES } from '../constants/services';
+import { LOGOS_SERVICES } from '../components/logosServices';
 import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function About() {
@@ -134,12 +137,24 @@ export default function About() {
               </p>
             </div>
 
-            <div className="flex flex-wrap gap-3">
-              {['Google Ads', 'SEO', 'Chatbot IA', 'Facebook Ads', 'Médias sociaux', 'Stratégie numérique'].map((tag, i) => (
-                <span key={i} className="px-4 py-2 rounded-full bg-accent-blue/10 border border-accent-blue/20 text-accent-blue text-xs font-bold tracking-wider uppercase">
-                  {tag}
-                </span>
-              ))}
+            <p className="text-white/35 text-[11px] font-bold tracking-[2.5px] uppercase mb-4">
+              Ce que je fais
+            </p>
+            <div className="flex flex-wrap gap-2.5">
+              {SERVICES.slice(0, 6).map((service) => {
+                const Logo = LOGOS_SERVICES[service.slug];
+                return (
+                  <Link
+                    key={service.slug}
+                    to={`/services/${service.slug}`}
+                    className="group inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full border text-[11px] font-bold tracking-wider uppercase transition-all duration-300 hover:-translate-y-0.5"
+                    style={{ borderColor: `${service.color}44`, color: service.color, backgroundColor: `${service.color}12` }}
+                  >
+                    <Logo className="w-5 h-5 flex-none" />
+                    {service.title}
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </section>
