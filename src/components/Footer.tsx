@@ -79,6 +79,7 @@ export default function Footer() {
                             <li><a href="mailto:propulsiteprojet@gmail.com" className="text-white/60 hover:text-accent-blue transition-colors text-sm break-all">propulsiteprojet@gmail.com</a></li>
                             <li><a href="tel:5146496862" className="text-white/60 hover:text-accent-blue transition-colors text-sm">(514) 649-6862</a></li>
                             <li className="text-white/60 text-sm">Saint-Eustache, Québec</li>
+                            <li><a href="https://www.google.com/maps?cid=6519031247085477855" target="_blank" rel="noreferrer" className="text-white/60 hover:text-accent-blue transition-colors text-sm">Notre fiche Google</a></li>
                         </ul>
 
                         {/* Iso Social Icons */}
