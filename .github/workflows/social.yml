@@ -1,0 +1,79 @@
+name: Publication Instagram hebdomadaire
+
+# Le mercredi 13 h UTC (9 h, heure de l'Est). Pas le lundi : le bot de blogue
+# tourne deja ce jour-la, et deux commits automatiques le meme matin rendent
+# l'historique illisible quand quelque chose casse.
+on:
+  schedule:
+    - cron: '0 13 * * 3'
+  workflow_dispatch:
+    inputs:
+      publier:
+        description: 'Publier sur Instagram (non = generer seulement)'
+        required: false
+        default: 'oui'
+
+jobs:
+  social:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Installer les dependances
+        run: npm ci
+
+      # Puppeteer n'est PAS une dependance du site : il pese ~150 Mo avec son
+      # Chrome, et Vercel l'installerait a chaque deploiement pour rien. On le
+      # pose ici seulement, sans toucher package.json.
+      - name: Installer Chrome pour le rendu de l'image
+        run: npm install --no-save puppeteer@23
+
+      - name: Generer la publication de la semaine
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: npx tsx scripts/social-generer.ts
+
+      # L'image doit etre POUSSEE avant l'appel a Meta : l'API d'Instagram va
+      # chercher l'image elle-meme a une URL publique, elle n'accepte pas qu'on
+      # lui envoie les octets. Le depot etant public, raw.githubusercontent la
+      # sert des que le commit est en ligne.
+      - name: Pousser l'image
+        run: |
+          if git diff --quiet public/social; then
+            echo "Rien de nouveau — on s'arrete ici."
+            exit 0
+          fi
+          git config user.name "Propulsite Social Bot"
+          git config user.email "bot@propulsite.ca"
+          git add public/social
+          git commit -m "social: publication de la semaine [skip ci]"
+          git pull --rebase --autostash
+          git push
+
+      - name: Publier sur Instagram
+        if: ${{ github.event.inputs.publier != 'non' }}
+        env:
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          META_TOKEN: ${{ secrets.META_TOKEN }}
+        run: npx tsx scripts/social-publier.ts
+
+      - name: Enregistrer la publication au journal
+        if: ${{ github.event.inputs.publier != 'non' }}
+        run: |
+          if git diff --quiet public/social/journal.json; then
+            echo "Journal inchange."
+            exit 0
+          fi
+          git config user.name "Propulsite Social Bot"
+          git config user.email "bot@propulsite.ca"
+          git add public/social/journal.json
+          git commit -m "social: publie sur Instagram [skip ci]"
+          git pull --rebase --autostash
+          git push
