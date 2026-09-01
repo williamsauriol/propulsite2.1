@@ -3,7 +3,8 @@ import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import GeoTeaser from '../components/GeoTeaser';
 import ServicesScroll from '../components/ServicesScroll';
-import { ArrowRight, HardHat, ClipboardList, Palette, Search } from 'lucide-react';
+import PourquoiNousChoisissent from '../components/PourquoiNousChoisissent';
+import { ArrowRight, HardHat } from 'lucide-react';
 import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function Home() {
@@ -12,20 +13,6 @@ export default function Home() {
     'On aide les entrepreneurs en construction du Québec à décrocher plus de contrats grâce au web : site, référencement Google, GEO et pub. Soumission gratuite.'
   );
 
-  const painPoints = [
-    {
-      title: "Pas assez de contrats ?",
-      desc: "Votre carnet de commandes est vide ? Nous ciblons les propriétaires qui cherchent activement vos services.",
-    },
-    {
-      title: "Image de marque datée ?",
-      desc: "Votre site web fait peur aux clients ? Modernisez votre image pour refléter la qualité de vos travaux.",
-    },
-    {
-      title: "Perdu dans Google ?",
-      desc: "Vos concurrents prennent toute la place ? Nous vous propulsons en tête des résultats locaux.",
-    }
-  ];
 
   return (
     <div className="relative z-10">
@@ -67,106 +54,8 @@ export default function Home() {
           services vus, on decouvre celui dont personne ne parle encore. */}
       <GeoTeaser />
 
-      {/* Pain Points Section - New Design */}
-      <section className="py-32 relative overflow-hidden bg-gradient-to-b from-[#060d1f] to-[#0a1628]">
-        {/* Background Stars / Dots */}
-        <div className="absolute inset-0 z-0 pointer-events-none opacity-60" style={{
-          backgroundImage: `
-            radial-gradient(1.5px 1.5px at 8%  15%, rgba(255,255,255,0.45) 0%, transparent 100%),
-            radial-gradient(1px   1px   at 22% 72%, rgba(255,255,255,0.3)  0%, transparent 100%),
-            radial-gradient(2px   2px   at 45% 10%, rgba(255,255,255,0.25) 0%, transparent 100%),
-            radial-gradient(1px   1px   at 68% 88%, rgba(255,255,255,0.35) 0%, transparent 100%),
-            radial-gradient(1.5px 1.5px at 85% 30%, rgba(255,255,255,0.2)  0%, transparent 100%),
-            radial-gradient(1px   1px   at 93% 65%, rgba(255,255,255,0.3)  0%, transparent 100%),
-            radial-gradient(1px   1px   at 33% 50%, rgba(255,255,255,0.15) 0%, transparent 100%),
-            radial-gradient(1.5px 1.5px at 57% 38%, rgba(255,255,255,0.2)  0%, transparent 100%)
-          `
-        }} />
-
-        {/* Glow Orb */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-accent-blue/10 blur-[100px] pointer-events-none z-0" />
-
-        <div className="container mx-auto relative z-10 px-6 max-w-6xl">
-          {/* Header */}
-          <div className="text-center mb-20">
-            <div className="inline-block bg-accent-blue/15 border border-accent-blue/30 text-accent-blue text-xs font-bold tracking-[2.5px] uppercase px-5 py-2 rounded-full mb-6">
-              Pourquoi nous choisir
-            </div>
-            <h2 className="text-4xl md:text-5xl lg:text-[52px] font-black leading-tight text-white uppercase tracking-tight mb-6">
-              Pourquoi les entrepreneurs<br />
-              <span className="text-accent-blue">nous choisissent ?</span>
-            </h2>
-            <div className="w-16 h-1 bg-gradient-to-r from-accent-blue to-cyan-300 rounded-full mx-auto" />
-          </div>
-
-          {/* Cards Grid with Images */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Card 1 */}
-            <div className="bg-[#0a1628] rounded-3xl overflow-hidden border border-white/10 group flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(0,210,255,0.15)] hover:border-accent-blue/40">
-              <div className="relative h-64 overflow-hidden">
-                <img src="/images/contrat-signe-construction.webp" alt="Contrat de construction, plans et casque de chantier" loading="lazy" width={900} height={600} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] to-transparent opacity-90" />
-                <div className="absolute top-4 right-6 text-5xl font-black text-white/10">01</div>
-              </div>
-              <div className="p-8 flex-grow flex flex-col relative z-10 -mt-10">
-                <div className="w-12 h-12 rounded-xl bg-accent-blue/20 border border-accent-blue/30 flex items-center justify-center text-accent-blue mb-4 backdrop-blur-md">
-                  <ClipboardList className="w-6 h-6" />
-                </div>
-                <h3 className="text-2xl font-bold text-white mb-4 leading-tight">Pas assez de contrats ?</h3>
-                <p className="text-white/60 text-sm leading-relaxed mb-8 flex-grow">
-                  Votre carnet de commandes est vide ? Nous ciblons les propriétaires qui cherchent activement vos services et les convertissons en clients.
-                </p>
-                <Link to="/blog/pas-assez-contrats" className="inline-flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest transition-all hover:text-cyan-300 hover:gap-3 mt-auto">
-                  En savoir plus <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-            </div>
-
-            {/* Card 2 */}
-            <div className="bg-[#0a1628] rounded-3xl overflow-hidden border border-white/10 group flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(0,210,255,0.15)] hover:border-accent-blue/40">
-              <div className="relative h-64 overflow-hidden">
-                <img src="/images/maison-terminee-crepuscule.webp" alt="Maison neuve terminée, éclairée au crépuscule" loading="lazy" width={900} height={600} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] to-transparent opacity-90" />
-                <div className="absolute top-4 right-6 text-5xl font-black text-white/10">02</div>
-              </div>
-              <div className="p-8 flex-grow flex flex-col relative z-10 -mt-10">
-                <div className="w-12 h-12 rounded-xl bg-accent-blue/20 border border-accent-blue/30 flex items-center justify-center text-accent-blue mb-4 backdrop-blur-md">
-                  <Palette className="w-6 h-6" />
-                </div>
-                <h3 className="text-2xl font-bold text-white mb-4 leading-tight">Image de marque datée ?</h3>
-                <p className="text-white/60 text-sm leading-relaxed mb-8 flex-grow">
-                  Votre site web fait peur aux clients ? Modernisez votre image pour refléter la qualité réelle de vos travaux et inspirer confiance dès le premier regard.
-                </p>
-                <Link to="/blog/image-marque-datee" className="inline-flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest transition-all hover:text-cyan-300 hover:gap-3 mt-auto">
-                  En savoir plus <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-            </div>
-
-            {/* Card 3 */}
-            <div className="bg-[#0a1628] rounded-3xl overflow-hidden border border-white/10 group flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(0,210,255,0.15)] hover:border-accent-blue/40">
-              <div className="relative h-64 overflow-hidden">
-                <img src="/images/entrepreneur-au-telephone.webp" alt="Entrepreneur en construction répondant à un appel de client" loading="lazy" width={900} height={600} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] to-transparent opacity-90" />
-                <div className="absolute top-4 right-6 text-5xl font-black text-white/10">03</div>
-              </div>
-              <div className="p-8 flex-grow flex flex-col relative z-10 -mt-10">
-                <div className="w-12 h-12 rounded-xl bg-accent-blue/20 border border-accent-blue/30 flex items-center justify-center text-accent-blue mb-4 backdrop-blur-md">
-                  <Search className="w-6 h-6" />
-                </div>
-                <h3 className="text-2xl font-bold text-white mb-4 leading-tight">Perdu dans Google ?</h3>
-                <p className="text-white/60 text-sm leading-relaxed mb-8 flex-grow">
-                  Vos concurrents prennent toute la place ? Nous vous propulsons en tête des résultats locaux pour que les bons clients vous trouvent en premier.
-                </p>
-                <Link to="/blog/invisible-google" className="inline-flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest transition-all hover:text-cyan-300 hover:gap-3 mt-auto">
-                  En savoir plus <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
+      {/* Pourquoi nous choisissent — pile de cartes, ecran accroche */}
+      <PourquoiNousChoisissent />
 
       {/* Réalisations — vitrine des sites de démonstration */}
       <section className="py-32 px-6 relative">
