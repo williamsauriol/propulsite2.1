@@ -49,61 +49,6 @@ const COURT: Record<string, string> = {
 export default function ServicesScroll() {
   const [actif, setActif] = useState(0);
   const blocs = useRef<(HTMLDivElement | null)[]>([]);
-  const cadre = useRef<HTMLDivElement>(null);
-  const pastilles = useRef<(HTMLAnchorElement | null)[]>([]);
-
-  // Amene la pastille courante au bord gauche du cadre. On ecrit `scrollLeft`
-  // image par image : le defilement doux natif est ignore ici (mesure —
-  // `behavior:'auto'` deplace bien le cadre, `behavior:'smooth'` ne fait
-  // rien), et le faire soi-meme donne en prime la meme courbe de deceleration
-  // que le reste du site. Ecrire au-dela du maximum est ramene au maximum par
-  // le navigateur : aucune borne a calculer.
-  useEffect(() => {
-    let image = 0;
-    const glisser = () => {
-      const el = pastilles.current[actif];
-      const c = cadre.current;
-      if (!el || !c) return;
-      cancelAnimationFrame(image);
-      const depart = c.scrollLeft;
-      const delta = el.offsetLeft - depart;
-      if (Math.abs(delta) < 2) return;
-      const debut = performance.now();
-      const pas = (t: number) => {
-        const p = Math.min(1, (t - debut) / 600);
-        c.scrollLeft = depart + delta * (1 - Math.pow(1 - p, 3));
-        if (p < 1) image = requestAnimationFrame(pas);
-      };
-      image = requestAnimationFrame(pas);
-    };
-    glisser();
-    window.addEventListener('resize', glisser);
-    // Les polices arrivent apres le premier rendu et changent les largeurs.
-    const t = setTimeout(glisser, 600);
-    return () => {
-      cancelAnimationFrame(image);
-      window.removeEventListener('resize', glisser);
-      clearTimeout(t);
-    };
-  }, [actif]);
-
-  useEffect(() => {
-    const observateur = new IntersectionObserver(
-      (entrees) => {
-        entrees.forEach((e) => {
-          // On ne reagit qu'a l'entree : la sortie d'un bloc coincide avec
-          // l'entree du suivant, et traiter les deux ferait clignoter.
-          if (!e.isIntersecting) return;
-          const i = blocs.current.indexOf(e.target as HTMLDivElement);
-          if (i !== -1) setActif(i);
-        });
-      },
-      // Ecrase la zone d'observation en une ligne au milieu de l'ecran.
-      { rootMargin: '-50% 0px -50% 0px', threshold: 0 },
-    );
-    blocs.current.forEach((el) => el && observateur.observe(el));
-    return () => observateur.disconnect();
-  }, []);
 
   const service = SERVICES_ACCUEIL[actif];
   const LogoActif = LOGOS_SERVICES[service.slug];
@@ -126,69 +71,68 @@ export default function ServicesScroll() {
           </p>
         </div>
 
-        {/* La piste. Elle reste a l'ecran pendant tout le parcours et glisse
-            vers la gauche a mesure qu'on descend : la pastille courante vient
-            se placer au bord gauche. */}
-        <div className="sticky top-0 z-30 -mx-5 md:-mx-6 px-5 md:px-6 pt-[80px] md:pt-[88px] pb-6 mb-8 md:mb-12 bg-gradient-to-b from-[#050a15] via-[#050a15]/95 to-transparent">
-          <div className="rounded-2xl border border-white/10 bg-[#050a15]/85 backdrop-blur-xl p-2 shadow-[0_10px_30px_rgba(0,0,0,0.4)]">
-            <div ref={cadre} className="overflow-x-auto piste-sans-barre">
-              <nav aria-label="Les six expertises" className="relative flex w-max gap-2">
-                {SERVICES_ACCUEIL.map((s, i) => {
-                  const Logo = LOGOS_SERVICES[s.slug];
-                  const courant = actif === i;
-                  return (
-                    <a
-                      key={s.slug}
-                      ref={(el) => { pastilles.current[i] = el; }}
-                      href={`#expertise-${s.slug}`}
-                      aria-current={courant ? 'true' : undefined}
-                      className="flex-none inline-flex items-center gap-2.5 rounded-xl border px-4 py-3 md:px-5 md:py-3.5 text-[12px] md:text-sm font-bold uppercase tracking-wider transition-colors duration-500"
-                      style={
-                        courant
-                          ? { backgroundColor: `${s.color}1F`, borderColor: s.color, color: s.color }
-                          : { backgroundColor: 'transparent', borderColor: 'rgba(255,255,255,0.10)', color: 'rgba(255,255,255,0.5)' }
-                      }
-                    >
-                      <Logo
-                        className="w-6 h-6 md:w-7 md:h-7 flex-none transition-opacity duration-500"
-                        style={{ color: s.color, opacity: courant ? 1 : 0.45 }}
-                      />
-                      {COURT[s.slug] || s.title}
-                    </a>
-                  );
-                })}
-              </nav>
-            </div>
-          </div>
-        </div>
+        <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-4 md:gap-8 lg:grid-cols-[auto_minmax(0,1fr)_360px] lg:gap-12 xl:gap-16">
 
-        <div className="grid lg:grid-cols-[minmax(0,1fr)_400px] lg:gap-16 xl:gap-24">
+          {/* ── Rail gauche : les six, empilees, toujours a l'ecran ──────
+              Il colle sous la barre de navigation et n'a pas besoin de
+              defiler : six tuiles tiennent dans un ecran. Sur telephone il
+              se reduit au logo seul pour laisser la place au texte. */}
+          <div>
+            <nav
+              aria-label="Les six expertises"
+              className="sticky top-24 md:top-28 flex flex-col gap-2 md:gap-2.5"
+            >
+              {SERVICES_ACCUEIL.map((s, i) => {
+                const Logo = LOGOS_SERVICES[s.slug];
+                const courant = actif === i;
+                return (
+                  <a
+                    key={s.slug}
+                    href={`#expertise-${s.slug}`}
+                    aria-current={courant ? 'true' : undefined}
+                    title={s.title}
+                    className="group flex items-center gap-3 rounded-xl border p-2 md:p-2.5 transition-all duration-500"
+                    style={
+                      courant
+                        ? { backgroundColor: `${s.color}1F`, borderColor: s.color, boxShadow: `0 0 18px ${s.color}44` }
+                        : { backgroundColor: 'transparent', borderColor: 'rgba(255,255,255,0.10)' }
+                    }
+                  >
+                    <span
+                      className="flex-none w-7 h-7 md:w-8 md:h-8 flex items-center justify-center transition-opacity duration-500"
+                      style={{ color: s.color, opacity: courant ? 1 : 0.4 }}
+                    >
+                      <Logo className="w-full h-full" />
+                    </span>
+                    <span
+                      className="hidden xl:block pr-1 text-[11px] font-bold uppercase tracking-wider whitespace-nowrap transition-colors duration-500"
+                      style={{ color: courant ? s.color : 'rgba(255,255,255,0.45)' }}
+                    >
+                      {COURT[s.slug] || s.title}
+                    </span>
+                  </a>
+                );
+              })}
+            </nav>
+          </div>
 
           {/* ── Gauche : les services, l'un après l'autre ───────────────── */}
           <div>
             {SERVICES_ACCUEIL.map((s, i) => {
-              const Logo = LOGOS_SERVICES[s.slug];
               const courant = actif === i;
               return (
                 <div
                   key={s.slug}
                   ref={(el) => { blocs.current[i] = el; }}
                   id={`expertise-${s.slug}`}
-                  className="scroll-mt-[170px] md:scroll-mt-[190px] py-6 md:py-10 lg:min-h-[72vh] lg:flex lg:flex-col lg:justify-center border-b border-white/[0.07] lg:border-0"
+                  className="scroll-mt-28 md:scroll-mt-32 py-6 md:py-10 lg:min-h-[72vh] lg:flex lg:flex-col lg:justify-center border-b border-white/[0.07] lg:border-0"
                 >
                   {/* Sur telephone, le logo se met SUR la ligne du titre plutot
                       qu'au-dessus : empile, il coutait 76 px par service pour
                       ne rien dire de plus. Au-dessus de lg, cette rangee
                       redevient un simple bloc et le logo disparait — il est
                       alors dans le panneau colle. */}
-                  <div className="flex items-center gap-4 mb-3.5 lg:block lg:mb-0">
-                    <div
-                      className="lg:hidden w-12 h-12 flex-shrink-0 rounded-xl flex items-center justify-center border"
-                      style={{ color: s.color, backgroundColor: `${s.color}1A`, borderColor: `${s.color}44` }}
-                    >
-                      <Logo className="w-7 h-7" />
-                    </div>
-
+                  <div className="mb-3.5 lg:mb-0">
                     <span
                       className="hidden lg:block text-sm font-black tabular-nums tracking-widest mb-4 transition-colors duration-500"
                       style={{ color: courant ? s.color : 'rgba(255,255,255,0.18)' }}
