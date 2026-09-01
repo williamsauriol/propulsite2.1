@@ -35,6 +35,17 @@ import { LOGOS_SERVICES } from './logosServices';
 
 const SERVICES_ACCUEIL = SERVICES.slice(0, 6);
 
+// Le nom court pour les pastilles. Le nom complet reste dans le bloc du
+// service : ici on veut la reconnaissance, pas l'exactitude commerciale.
+const COURT: Record<string, string> = {
+  'conception-site-web': 'Site web',
+  'google-ads': 'Google Ads',
+  'domination-google': 'Domination Google',
+  'publicite-facebook': 'Pub Facebook',
+  'gestion-medias-sociaux': 'Médias sociaux',
+  'chatbot-ia': 'Chatbot IA',
+};
+
 export default function ServicesScroll() {
   const [actif, setActif] = useState(0);
   const blocs = useRef<(HTMLDivElement | null)[]>([]);
@@ -73,9 +84,34 @@ export default function ServicesScroll() {
             Nos expertises
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-accent-blue to-cyan-300 rounded-full mx-auto mb-6" />
-          <p className="text-white/50 text-[15px] md:text-lg max-w-xl mx-auto">
+          <p className="text-white/50 text-[15px] md:text-lg max-w-xl mx-auto mb-9 md:mb-12">
             Tout ce dont un entrepreneur a besoin pour bâtir une présence en ligne indestructible.
           </p>
+
+          {/* Les six, annoncees avant le parcours. Chacune saute a son service :
+              la carte pour celui qui decouvre, un raccourci pour celui qui sait
+              deja ce qu'il cherche. */}
+          <nav aria-label="Les six expertises" className="flex flex-wrap justify-center gap-2 md:gap-2.5">
+            {SERVICES_ACCUEIL.map((s, i) => {
+              const Logo = LOGOS_SERVICES[s.slug];
+              const courant = actif === i;
+              return (
+                <a
+                  key={s.slug}
+                  href={`#expertise-${s.slug}`}
+                  className="inline-flex items-center gap-2 rounded-full border px-3.5 py-2 md:px-4 md:py-2.5 text-[11px] md:text-xs font-bold uppercase tracking-wider transition-all duration-500 hover:-translate-y-0.5"
+                  style={
+                    courant
+                      ? { backgroundColor: `${s.color}1F`, borderColor: s.color, color: s.color }
+                      : { backgroundColor: 'transparent', borderColor: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.55)' }
+                  }
+                >
+                  <Logo className="w-4 h-4" style={{ color: s.color }} />
+                  {COURT[s.slug] || s.title}
+                </a>
+              );
+            })}
+          </nav>
         </div>
 
         <div className="grid lg:grid-cols-[minmax(0,1fr)_400px] lg:gap-16 xl:gap-24">
@@ -89,7 +125,8 @@ export default function ServicesScroll() {
                 <div
                   key={s.slug}
                   ref={(el) => { blocs.current[i] = el; }}
-                  className="py-6 md:py-10 lg:min-h-[72vh] lg:flex lg:flex-col lg:justify-center border-b border-white/[0.07] lg:border-0"
+                  id={`expertise-${s.slug}`}
+                  className="scroll-mt-24 py-6 md:py-10 lg:min-h-[72vh] lg:flex lg:flex-col lg:justify-center border-b border-white/[0.07] lg:border-0"
                 >
                   {/* Sur telephone, le logo se met SUR la ligne du titre plutot
                       qu'au-dessus : empile, il coutait 76 px par service pour
@@ -142,7 +179,7 @@ export default function ServicesScroll() {
                       exact ou le visiteur lit ce service-la. */}
                   <Link
                     to={`/services/${s.slug}`}
-                    className="group inline-flex items-center gap-2.5 px-6 py-3 md:px-7 md:py-3.5 rounded-full border text-xs font-bold uppercase tracking-widest transition-all duration-500 hover:gap-4"
+                    className="group self-start inline-flex items-center gap-2.5 px-6 py-3 md:px-7 md:py-3.5 rounded-full border text-xs font-bold uppercase tracking-widest transition-all duration-500 hover:gap-4"
                     style={
                       courant
                         ? {

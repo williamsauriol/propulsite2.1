@@ -60,11 +60,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* GEO Section - Mise en vedette */}
-      <GeoTeaser />
-
       {/* Nos expertises — defilement, logo colle a droite */}
       <ServicesScroll />
+
+      {/* La notification GEO vient APRES les expertises : une fois les six
+          services vus, on decouvre celui dont personne ne parle encore. */}
+      <GeoTeaser />
 
       {/* Pain Points Section - New Design */}
       <section className="py-32 relative overflow-hidden bg-gradient-to-b from-[#060d1f] to-[#0a1628]">
