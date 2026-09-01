@@ -51,6 +51,16 @@
       0 0 45px rgba(0, 210, 255, 0.12);
   }
 
+  /* Piste horizontale sans barre de defilement visible : le glissement est
+     pilote par le defilement de la page, la barre ne ferait que salir. */
+  .piste-sans-barre {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .piste-sans-barre::-webkit-scrollbar {
+    display: none;
+  }
+
   .text-glow-blue {
     text-shadow: 0 0 20px rgba(0, 210, 255, 0.8), 0 0 40px rgba(0, 210, 255, 0.4);
   }

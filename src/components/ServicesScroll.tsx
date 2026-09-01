@@ -49,6 +49,43 @@ const COURT: Record<string, string> = {
 export default function ServicesScroll() {
   const [actif, setActif] = useState(0);
   const blocs = useRef<(HTMLDivElement | null)[]>([]);
+  const cadre = useRef<HTMLDivElement>(null);
+  const pastilles = useRef<(HTMLAnchorElement | null)[]>([]);
+
+  // Amene la pastille courante au bord gauche du cadre. On ecrit `scrollLeft`
+  // image par image : le defilement doux natif est ignore ici (mesure —
+  // `behavior:'auto'` deplace bien le cadre, `behavior:'smooth'` ne fait
+  // rien), et le faire soi-meme donne en prime la meme courbe de deceleration
+  // que le reste du site. Ecrire au-dela du maximum est ramene au maximum par
+  // le navigateur : aucune borne a calculer.
+  useEffect(() => {
+    let image = 0;
+    const glisser = () => {
+      const el = pastilles.current[actif];
+      const c = cadre.current;
+      if (!el || !c) return;
+      cancelAnimationFrame(image);
+      const depart = c.scrollLeft;
+      const delta = el.offsetLeft - depart;
+      if (Math.abs(delta) < 2) return;
+      const debut = performance.now();
+      const pas = (t: number) => {
+        const p = Math.min(1, (t - debut) / 600);
+        c.scrollLeft = depart + delta * (1 - Math.pow(1 - p, 3));
+        if (p < 1) image = requestAnimationFrame(pas);
+      };
+      image = requestAnimationFrame(pas);
+    };
+    glisser();
+    window.addEventListener('resize', glisser);
+    // Les polices arrivent apres le premier rendu et changent les largeurs.
+    const t = setTimeout(glisser, 600);
+    return () => {
+      cancelAnimationFrame(image);
+      window.removeEventListener('resize', glisser);
+      clearTimeout(t);
+    };
+  }, [actif]);
 
   useEffect(() => {
     const observateur = new IntersectionObserver(
@@ -72,7 +109,7 @@ export default function ServicesScroll() {
   const LogoActif = LOGOS_SERVICES[service.slug];
 
   return (
-    <section className="px-5 md:px-6 py-16 md:py-32">
+    <section className="px-5 md:px-6 py-28 md:py-48">
       <div className="container mx-auto max-w-6xl">
 
         {/* En-tête */}
@@ -87,31 +124,42 @@ export default function ServicesScroll() {
           <p className="text-white/50 text-[15px] md:text-lg max-w-xl mx-auto mb-9 md:mb-12">
             Tout ce dont un entrepreneur a besoin pour bâtir une présence en ligne indestructible.
           </p>
+        </div>
 
-          {/* Les six, annoncees avant le parcours. Chacune saute a son service :
-              la carte pour celui qui decouvre, un raccourci pour celui qui sait
-              deja ce qu'il cherche. */}
-          <nav aria-label="Les six expertises" className="flex flex-wrap justify-center gap-2 md:gap-2.5">
-            {SERVICES_ACCUEIL.map((s, i) => {
-              const Logo = LOGOS_SERVICES[s.slug];
-              const courant = actif === i;
-              return (
-                <a
-                  key={s.slug}
-                  href={`#expertise-${s.slug}`}
-                  className="inline-flex items-center gap-2 rounded-full border px-3.5 py-2 md:px-4 md:py-2.5 text-[11px] md:text-xs font-bold uppercase tracking-wider transition-all duration-500 hover:-translate-y-0.5"
-                  style={
-                    courant
-                      ? { backgroundColor: `${s.color}1F`, borderColor: s.color, color: s.color }
-                      : { backgroundColor: 'transparent', borderColor: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.55)' }
-                  }
-                >
-                  <Logo className="w-4 h-4" style={{ color: s.color }} />
-                  {COURT[s.slug] || s.title}
-                </a>
-              );
-            })}
-          </nav>
+        {/* La piste. Elle reste a l'ecran pendant tout le parcours et glisse
+            vers la gauche a mesure qu'on descend : la pastille courante vient
+            se placer au bord gauche. */}
+        <div className="sticky top-0 z-30 -mx-5 md:-mx-6 px-5 md:px-6 pt-[80px] md:pt-[88px] pb-6 mb-8 md:mb-12 bg-gradient-to-b from-[#050a15] via-[#050a15]/95 to-transparent">
+          <div className="rounded-2xl border border-white/10 bg-[#050a15]/85 backdrop-blur-xl p-2 shadow-[0_10px_30px_rgba(0,0,0,0.4)]">
+            <div ref={cadre} className="overflow-x-auto piste-sans-barre">
+              <nav aria-label="Les six expertises" className="relative flex w-max gap-2">
+                {SERVICES_ACCUEIL.map((s, i) => {
+                  const Logo = LOGOS_SERVICES[s.slug];
+                  const courant = actif === i;
+                  return (
+                    <a
+                      key={s.slug}
+                      ref={(el) => { pastilles.current[i] = el; }}
+                      href={`#expertise-${s.slug}`}
+                      aria-current={courant ? 'true' : undefined}
+                      className="flex-none inline-flex items-center gap-2.5 rounded-xl border px-4 py-3 md:px-5 md:py-3.5 text-[12px] md:text-sm font-bold uppercase tracking-wider transition-colors duration-500"
+                      style={
+                        courant
+                          ? { backgroundColor: `${s.color}1F`, borderColor: s.color, color: s.color }
+                          : { backgroundColor: 'transparent', borderColor: 'rgba(255,255,255,0.10)', color: 'rgba(255,255,255,0.5)' }
+                      }
+                    >
+                      <Logo
+                        className="w-6 h-6 md:w-7 md:h-7 flex-none transition-opacity duration-500"
+                        style={{ color: s.color, opacity: courant ? 1 : 0.45 }}
+                      />
+                      {COURT[s.slug] || s.title}
+                    </a>
+                  );
+                })}
+              </nav>
+            </div>
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-[minmax(0,1fr)_400px] lg:gap-16 xl:gap-24">
@@ -126,7 +174,7 @@ export default function ServicesScroll() {
                   key={s.slug}
                   ref={(el) => { blocs.current[i] = el; }}
                   id={`expertise-${s.slug}`}
-                  className="scroll-mt-24 py-6 md:py-10 lg:min-h-[72vh] lg:flex lg:flex-col lg:justify-center border-b border-white/[0.07] lg:border-0"
+                  className="scroll-mt-[170px] md:scroll-mt-[190px] py-6 md:py-10 lg:min-h-[72vh] lg:flex lg:flex-col lg:justify-center border-b border-white/[0.07] lg:border-0"
                 >
                   {/* Sur telephone, le logo se met SUR la ligne du titre plutot
                       qu'au-dessus : empile, il coutait 76 px par service pour
@@ -212,7 +260,7 @@ export default function ServicesScroll() {
                 Nos expertises
               </span>
 
-              <div className="relative w-[300px] h-[300px] flex items-center justify-center">
+              <div className="relative w-[340px] h-[340px] flex items-center justify-center">
 
                 {/* Le halo prend la couleur du service courant. */}
                 <motion.div
@@ -231,25 +279,11 @@ export default function ServicesScroll() {
                     className="relative"
                     style={{ color: service.color }}
                   >
-                    <LogoActif className="w-[190px] h-[190px]" />
+                    <LogoActif className="w-[230px] h-[230px]" />
                   </motion.div>
                 </AnimatePresence>
               </div>
 
-              {/* Six segments : ou on est, et combien il en reste. */}
-              <div className="flex items-center gap-2" aria-hidden="true">
-                {SERVICES_ACCUEIL.map((autre, i) => (
-                  <span
-                    key={autre.slug}
-                    className="h-1 rounded-full transition-all duration-500"
-                    style={{
-                      width: actif === i ? 34 : 14,
-                      backgroundColor: actif === i ? autre.color : 'rgba(255,255,255,0.15)',
-                      boxShadow: actif === i ? `0 0 12px ${autre.color}88` : 'none',
-                    }}
-                  />
-                ))}
-              </div>
             </div>
           </div>
 
