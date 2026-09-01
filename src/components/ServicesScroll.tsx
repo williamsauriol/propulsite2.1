@@ -94,7 +94,6 @@ export default function ServicesScroll() {
   const [hauteurRangee, setHauteurRangee] = useState<number>();
 
   const blocs = useRef<(HTMLDivElement | null)[]>([]);
-  const sentinelle = useRef<HTMLDivElement>(null);
   const zoneRangee = useRef<HTMLDivElement>(null);
 
   // Le service courant : celui dont le bloc traverse le milieu de l'ecran.
@@ -123,17 +122,25 @@ export default function ServicesScroll() {
     if (el && hauteurRangee === undefined) setHauteurRangee(el.offsetHeight);
   }, [hauteurRangee]);
 
-  // Bascule rangee / rail : la sentinelle est posee juste sous la rangee.
+  // Bascule rangee / rail. On observe LA RANGEE, pas un marqueur vide : un
+  // element de hauteur zero a un rapport d'intersection toujours nul, qui ne
+  // franchit jamais de seuil — l'observateur emettait son appel initial puis
+  // se taisait, et la rangee ne partait jamais au defilement.
+  //
+  // La rangee garde sa hauteur reservee meme vide, donc elle reste un
+  // declencheur fiable dans les deux sens. Et la bascule se fait au moment ou
+  // elle atteint le haut de l'ecran : les pastilles sont encore visibles quand
+  // elles s'envolent, au lieu de surgir de nulle part.
   useEffect(() => {
-    const el = sentinelle.current;
+    const el = zoneRangee.current;
     if (!el) return;
     const obs = new IntersectionObserver(
       ([e]) => setEnRail(!e.isIntersecting && e.boundingClientRect.top < 0),
-      { rootMargin: '-100px 0px 0px 0px', threshold: 0 },
+      { rootMargin: '-96px 0px 0px 0px', threshold: 0 },
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, []);
+  }, [hauteurRangee]);
 
   const service = SERVICES_ACCUEIL[actif];
   const LogoActif = LOGOS_SERVICES[service.slug];
@@ -166,7 +173,6 @@ export default function ServicesScroll() {
             <Pastille key={s.slug} service={s} courant={actif === i} />
           ))}
         </div>
-        <div ref={sentinelle} aria-hidden="true" />
 
         {/* ── Le parcours ──────────────────────────────────────────────── */}
         <div className="grid grid-cols-[56px_minmax(0,1fr)] gap-3 md:gap-8 lg:grid-cols-[200px_minmax(0,1fr)_420px] lg:gap-10 xl:gap-20">
