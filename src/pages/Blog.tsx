@@ -1,228 +1,206 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { Rocket, Target, Search, Users, Smartphone, Star, TrendingUp, Send, Zap, Sparkles, ShieldCheck, MonitorSmartphone, MapPin, Wallet } from 'lucide-react';
+import { ArrowRight, Send } from 'lucide-react';
 import { PAIN_POINTS_ARTICLES } from '../constants/painPointsData';
 import { usePageMeta } from '../hooks/usePageMeta';
 
+/**
+ * Le blogue.
+ *
+ * CE QUI CHANGE
+ *
+ * Treize cartes identiques empilées, sans hiérarchie : rien ne disait quel
+ * article était le plus récent, ni lequel valait la peine d'être lu en
+ * premier. Le plus récent passe donc en vedette, et les autres suivent en
+ * grille, du plus neuf au plus vieux.
+ *
+ * Les descriptions étaient écrites À LA MAIN dans ce fichier, en double des
+ * articles — quatre-vingt-dix lignes de texte qui ne pouvaient que dériver.
+ * C'est exactement ce qui s'était déjà produit avec les titres : sept articles
+ * retitrés, et la liste affichait encore les anciens. On lit donc maintenant
+ * `metaDescription`, qui vit avec l'article.
+ *
+ * Les dates sont affichées. Pour un lecteur, ça dit si le conseil est encore
+ * bon ; pour un moteur de réponse, la fraîcheur d'un contenu compte.
+ *
+ * Comme ailleurs, les révélations n'animent que la position et jamais
+ * l'opacité : le HTML pré-rendu reste lisible par un robot qui n'exécute pas
+ * le JavaScript — et /blog est justement une des pages que Google n'a jamais
+ * explorées.
+ */
+
+function dateLisible(iso?: string) {
+  if (!iso) return null;
+  return new Date(`${iso}T00:00:00`).toLocaleDateString('fr-CA', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+}
+
+function titreComplet(a: (typeof PAIN_POINTS_ARTICLES)[number]) {
+  return `${a.titlePart1}${a.titleHighlight}${a.titlePart3 ?? ''}`;
+}
+
 export default function Blog() {
-    usePageMeta(
-        'Blog marketing pour compagnies de construction | Propulsite',
-        'Conseils marketing numérique pour entrepreneurs en construction au Québec : SEO local, Google Ads, image de marque, réseaux sociaux et génération de leads.'
-    );
-    const textesRediges = [
-        {
-            num: "01",
-            icon: <TrendingUp className="w-8 h-8 text-accent-blue" />,
-            title: "Pas assez de contrats de construction ?",
-            desc: "Le carnet de commandes se vide entre deux projets de rénovation ou de construction neuve, et les appels entrants se font rares. Sans stratégie de marketing numérique ciblée pour les entrepreneurs, les clients potentiels (résidentiels ou commerciaux) ne peuvent tout simplement pas vous trouver. Une présence en ligne bien optimisée transforme votre site web en un véritable générateur de leads qualifiés, travaillant pour vous 24/7, même quand vous êtes sur le chantier.",
-            link: "/blog/pas-assez-contrats"
-        },
-        {
-            num: "02",
-            icon: <Target className="w-8 h-8 text-accent-blue" />,
-            title: "Une image de marque datée qui repousse les clients",
-            desc: "Un logo vieillissant, des couleurs passées, un site web d'une autre époque : votre identité visuelle ne reflète plus la qualité exceptionnelle de votre travail sur le terrain. Dans un secteur de la construction hautement compétitif, la première impression se fait désormais à 100% en ligne. Une image de marque moderne, professionnelle et rassurante inspire confiance dès le premier regard et justifie votre tarification auprès des clients.",
-            link: "/blog/image-marque-datee"
-        },
-        {
-            num: "03",
-            icon: <Search className="w-8 h-8 text-accent-blue" />,
-            title: "Totalement invisible sur Google (SEO et Local)",
-            desc: "Vos principaux concurrents apparaissent en premier dans les résultats Google pendant que votre entreprise de construction est reléguée à la page 3. La grande majorité des clients cherchent « entrepreneur général près de moi » avant de décrocher leur téléphone. Sans un référencement naturel (SEO) puissant et adapté aux requêtes locales de la construction, vous laissez des dizaines de chantiers lucratifs sur la table chaque mois.",
-            link: "/blog/invisible-google"
-        },
-        {
-            num: "04",
-            icon: <Users className="w-8 h-8 text-accent-blue" />,
-            title: "Difficulté à se démarquer de la concurrence",
-            desc: "Trop d'entreprises de construction se ressemblent : mêmes services (rénovation, agrandissement, toiture), même discours promotionnel, même visuel générique. Sans un positionnement stratégique clair, vous vous battez uniquement sur le prix, ce qui réduit vos marges de profit. Définir votre proposition de valeur unique (expertise spécialisée, rapidité, finition haut de gamme) vous permet d'attirer les clients idéaux.",
-            link: "/blog/se-demarquer-concurrence"
-        },
-        {
-            num: "05",
-            icon: <Rocket className="w-8 h-8 text-accent-blue" />,
-            title: "Aucune stratégie sur les réseaux sociaux",
-            desc: "Vos chantiers avancent vite et les transformations (avant/après) sont impressionnantes, mais personne ne le voit. Les plateformes sociales (Facebook, Instagram, LinkedIn) sont des vitrines gratuites et extrêmement puissantes pour prouver votre savoir-faire en temps réel. Partager l'avancement d'un chantier, la finition détaillée ou l'équipe au travail renforce instantanément votre crédibilité et bâtit une communauté engagée autour de votre marque.",
-            link: "/blog/reseaux-sociaux"
-        },
-        {
-            num: "06",
-            icon: <Star className="w-8 h-8 text-accent-blue" />,
-            title: "Gestion de réputation en ligne inexistante",
-            desc: "Vos clients finaux sont extrêmement satisfaits de leurs travaux, mais ils ne pensent pas à laisser d'avis sur Google ou Facebook. Or, plus de 90% des consommateurs lisent attentivement les avis (reviews) avant de signer un contrat avec un entrepreneur. Mettre en place une stratégie simple et automatisée de collecte d'avis 5 étoiles (et de gestion des commentaires) deviendra votre outil de vente le plus persuasif.",
-            link: "/blog/reputation-en-ligne"
-        },
-        {
-            num: "07",
-            icon: <Smartphone className="w-8 h-8 text-accent-blue" />,
-            title: "Site web non adapté aux appareils mobiles",
-            desc: "Aujourd'hui, plus de 70% des recherches pour trouver un entrepreneur se font directement depuis un téléphone intelligent (smartphone). Si votre site web est lent à charger, difficile à lire sans zoomer, ou s'il plante sur mobile, les clients potentiels quittent immédiatement pour aller chez le concurrent. Un site web responsif, ultra-rapide et clair est la base absolue de toute tactique numérique réussie.",
-            link: "/blog/site-mobile"
-        },
-        {
-            num: "08",
-            icon: <Zap className="w-8 h-8 text-accent-blue" />,
-            title: "Google Ads pour entrepreneurs en construction : ça vaut-il vraiment la peine ?",
-            desc: "Contrairement aux réseaux sociaux, Google Ads place votre entreprise devant des gens qui cherchent EXACTEMENT vos services en ce moment. Un seul contrat décroché via une campagne bien configurée peut rapporter 10x à 50x votre investissement publicitaire. Leads qualifiés dès 48h, géociblage précis, et retour mesurable à chaque dollar investi — voici pourquoi c'est l'outil le plus puissant pour les entrepreneurs en construction.",
-            link: "/blog/google-ads-construction"
-        },
-        {
-            num: "09",
-            icon: <Sparkles className="w-8 h-8 text-accent-blue" />,
-            title: "Invisible quand vos clients posent leurs questions à l'IA",
-            desc: "De plus en plus de propriétaires demandent directement à ChatGPT ou à l'IA de Google « quel entrepreneur engager dans ma région ? » — et reçoivent une réponse avec quelques noms, sans jamais ouvrir Google. Si votre entreprise n'est pas optimisée pour ces moteurs de réponse IA (c'est ce qu'on appelle le GEO, Generative Engine Optimization), vous perdez des clients avant même qu'ils visitent un site. Le GEO, c'est le nouveau référencement : être la réponse que l'IA recommande, pas juste un lien parmi d'autres.",
-            link: "/blog/geo-chatgpt-construction"
-        },
-        {
-            num: "10",
-            icon: <ShieldCheck className="w-8 h-8 text-accent-blue" />,
-            title: "Vous payez pour des clics qui n'appellent jamais ?",
-            desc: "Avec la publicité Google classique, vous payez chaque clic — même les curieux qui ne vous contacteront jamais. Les Local Services Ads (le badge « Garanti par Google ») renversent la logique : votre entreprise s'affiche tout en haut de Google avec un badge de confiance vérifié, et vous ne payez que lorsqu'un vrai client vous appelle ou vous écrit. Au lead, pas au clic — souvent le levier le plus rentable pour un entrepreneur qui démarre sur Google.",
-            link: "/blog/local-services-ads-construction"
-        },
-        {
-            num: "11",
-            icon: <MonitorSmartphone className="w-8 h-8 text-accent-blue" />,
-            title: "Votre site web ne transforme pas les visiteurs en appels ?",
-            desc: "Un site de construction n'est pas une carte d'affaires en ligne : c'est l'outil qui transforme une recherche Google en appel téléphonique. Téléphone cliquable, vraies photos de chantier, zones de service nommées, preuves de légitimité, avis visibles — voici ce que doit contenir un site web pour entrepreneur en construction au Québec, ce que Google et les moteurs de réponse IA doivent pouvoir y lire, et les erreurs qui font fuir les clients avant même le premier appel.",
-            link: "/blog/conception-site-web-construction"
-        }
-    ];
+  usePageMeta(
+    'Blog marketing pour compagnies de construction | Propulsite',
+    'Conseils marketing numérique pour entrepreneurs en construction au Québec : SEO local, Google Ads, image de marque, réseaux sociaux et génération de leads.',
+  );
 
-    // La liste affichee est derivee de PAIN_POINTS_ARTICLES, la seule source de
-    // verite. Avant, elle etait ecrite a la main : les deux derniers articles
-    // publies n'apparaissaient nulle part sur /blog. Aucun lien ne pointait donc
-    // vers eux, et Google les laissait en « Detectee, actuellement non indexee ».
-    // Tout nouvel article s'ajoute maintenant de lui-meme.
-    const iconesParDefaut: Record<string, React.ReactNode> = {
-        'fiche-google-ou-site-web': <MapPin className="w-8 h-8 text-accent-blue" />,
-        'prix-site-web-entrepreneur-construction': <Wallet className="w-8 h-8 text-accent-blue" />,
-    };
+  // Du plus récent au plus ancien. Les articles sans date passent à la fin.
+  const articles = [...PAIN_POINTS_ARTICLES].sort((a, b) =>
+    (b.datePublished ?? '').localeCompare(a.datePublished ?? ''),
+  );
+  const [vedette, ...suite] = articles;
 
-    const redigeParLien = new Map(textesRediges.map((texte) => [texte.link, texte]));
+  return (
+    <div className="pt-32 pb-24 px-5 md:px-6 relative z-10 overflow-hidden">
 
-    const painPoints = PAIN_POINTS_ARTICLES.map((article, idx) => {
-        const lien = `/blog/${article.slug}`;
-        const redige = redigeParLien.get(lien);
-        return {
-            num: String(idx + 1).padStart(2, '0'),
-            icon: redige?.icon ?? iconesParDefaut[article.slug] ?? <Sparkles className="w-8 h-8 text-accent-blue" />,
-            // Le titre vient TOUJOURS des donnees, jamais du texte redige a la
-            // main : les sept plus anciens articles ont ete retitres pour viser
-            // de vraies recherches, et les cartes affichaient encore les
-            // anciens. Un visiteur lisait « Pas assez de contrats » sur la
-            // liste et « Comment trouver des contrats » sur la page.
-            title: `${article.titlePart1}${article.titleHighlight}${article.titlePart3 ?? ''}`,
-            desc: redige?.desc ?? article.metaDescription ?? article.intro,
-            link: lien,
-        };
-    });
+      <div className="absolute top-40 left-10 w-96 h-96 bg-accent-blue/20 rounded-full blur-[120px] -z-10 pointer-events-none" />
+      <div className="absolute bottom-40 right-10 w-96 h-96 bg-purple-600/20 rounded-full blur-[120px] -z-10 pointer-events-none" />
 
+      <div className="container mx-auto max-w-5xl">
 
-    return (
-        <div className="pt-32 pb-24 px-6 relative z-10 overflow-hidden">
+        {/* ── Titre ─────────────────────────────────────────────────────── */}
+        <motion.div
+          initial={{ y: 24 }}
+          animate={{ y: 0 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="text-center mb-14 md:mb-20"
+        >
+          <span className="inline-block text-accent-blue text-[11px] md:text-xs font-bold tracking-[3px] uppercase mb-5">
+            {articles.length} articles · Écrits pour le chantier
+          </span>
+          <h1 className="text-[40px] md:text-6xl font-black mb-6 leading-[0.98] text-white uppercase italic text-3d">
+            Le blogue
+          </h1>
+          <p className="text-white/55 text-[15px] md:text-lg max-w-2xl mx-auto leading-relaxed">
+            Ce qu'un entrepreneur en construction du Québec a besoin de savoir sur
+            Google, la publicité, son image et l'IA. Pas de théorie : ce qui change
+            le nombre d'appels.
+          </p>
+        </motion.div>
 
-            {/* Background Glows Specific to Blog */}
-            <div className="absolute top-40 left-10 w-96 h-96 bg-accent-blue/20 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
-            <div className="absolute bottom-40 right-10 w-96 h-96 bg-purple-600/20 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
+        {/* ── L'article en vedette ──────────────────────────────────────── */}
+        {vedette && (
+          <motion.div
+            initial={{ y: 24 }}
+            whileInView={{ y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            className="mb-12 md:mb-16"
+          >
+            <Link
+              to={`/blog/${vedette.slug}`}
+              className="group block rounded-[28px] border border-accent-blue/30 bg-gradient-to-br from-[#0a1930] to-[#050a15] p-7 md:p-12 transition-all duration-500 hover:border-accent-blue/60 hover:-translate-y-1 shadow-[0_0_50px_rgba(0,210,255,0.08)]"
+            >
+              <div className="flex flex-wrap items-center gap-3 mb-5">
+                <span className="inline-block px-3.5 py-1.5 rounded-full bg-accent-blue text-[#050a15] text-[10px] font-black tracking-[2px] uppercase">
+                  Le plus récent
+                </span>
+                <span className="text-accent-blue/80 text-[11px] font-bold tracking-[2px] uppercase">
+                  {vedette.tag}
+                </span>
+                {dateLisible(vedette.datePublished) && (
+                  <span className="text-white/30 text-[12px]">{dateLisible(vedette.datePublished)}</span>
+                )}
+              </div>
 
-            <div className="container mx-auto max-w-4xl">
+              <h2 className="text-2xl md:text-[40px] font-black text-white leading-[1.1] mb-5 group-hover:text-accent-blue transition-colors duration-300">
+                {vedette.titlePart1}
+                <span className="text-accent-blue">{vedette.titleHighlight}</span>
+                {vedette.titlePart3}
+              </h2>
 
-                {/* HERO SECTION */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    className="text-center mb-16"
-                >
-                    <div className="inline-block px-4 py-1.5 rounded-full bg-accent-blue/10 border border-accent-blue/30 text-accent-blue text-sm font-bold tracking-widest uppercase mb-6 shadow-[0_0_15px_rgba(0,198,255,0.3)]">
-                        Article de Blog
-                    </div>
-                    <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-                        {painPoints.length} PROBLÈMES QUI FREINENT LES <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-blue to-purple-400">COMPAGNIES DE CONSTRUCTION</span> EN LIGNE
-                    </h1>
-                    <p className="text-xl text-white/60 max-w-2xl mx-auto leading-relaxed">
-                        Vous bâtissez des projets solides, mais votre présence numérique ne suit pas? Voici les obstacles les plus fréquents — et comment les surmonter pour exploser vos ventes.
-                    </p>
-                </motion.div>
+              <p className="text-white/60 text-[15px] md:text-lg leading-relaxed mb-7 max-w-3xl">
+                {vedette.metaDescription ?? vedette.intro}
+              </p>
 
-                {/* DIVIDER */}
-                <div className="w-24 h-1 bg-gradient-to-r from-transparent via-accent-blue to-transparent mx-auto mb-20 opacity-50"></div>
+              <span className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-accent-blue text-[#050a15] text-xs font-black uppercase tracking-widest transition-all duration-300 group-hover:gap-4">
+                Lire l'article <ArrowRight className="w-4 h-4" />
+              </span>
+            </Link>
+          </motion.div>
+        )}
 
-                {/* PAIN POINTS LIST */}
-                <div className="space-y-8 mb-20">
-                    {painPoints.map((point, idx) => (
-                        <motion.div
-                            key={idx}
-                            initial={{ opacity: 0, x: -30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true, margin: "-50px" }}
-                            transition={{ duration: 0.5, delay: idx * 0.1 }}
-                            className="bg-white/5 border border-white/10 p-8 rounded-2xl backdrop-blur-md hover:border-accent-blue/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(0,198,255,0.15)] group flex flex-col md:flex-row gap-6 items-start"
-                        >
-                            <div className="flex-shrink-0 w-16 h-16 rounded-xl bg-accent-blue/10 flex items-center justify-center border border-accent-blue/20 group-hover:scale-110 transition-transform duration-300 shadow-[0_0_15px_rgba(0,198,255,0.2)]">
-                                {point.icon}
-                            </div>
-                            <div>
-                                <div className="flex items-center gap-4 mb-3">
-                                    <span className="text-3xl font-black text-white/10 group-hover:text-accent-blue/30 transition-colors">
-                                        {point.num}
-                                    </span>
-                                    <h2 className="text-2xl font-bold text-white group-hover:text-accent-blue transition-colors">
-                                        {point.title}
-                                    </h2>
-                                </div>
-                                <p className="text-white/60 leading-relaxed text-lg mb-6">
-                                    {point.desc}
-                                </p>
-                                <Link
-                                    to={point.link}
-                                    className="inline-flex items-center gap-2 text-sm font-bold tracking-widest uppercase text-accent-blue hover:text-white transition-colors"
-                                >
-                                    En savoir plus <span className="text-lg leading-none transition-transform group-hover:translate-x-1">→</span>
-                                </Link>
-                            </div>
-                        </motion.div>
-                    ))}
+        {/* ── Les autres ────────────────────────────────────────────────── */}
+        <div className="grid md:grid-cols-2 gap-4 md:gap-5 mb-16 md:mb-24">
+          {suite.map((a, i) => (
+            <motion.div
+              key={a.slug}
+              initial={{ y: 20 }}
+              whileInView={{ y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.5, delay: (i % 2) * 0.06, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <Link
+                to={`/blog/${a.slug}`}
+                className="group h-full flex flex-col rounded-2xl border border-white/10 bg-white/[0.02] p-6 md:p-7 transition-all duration-300 hover:border-accent-blue/45 hover:-translate-y-1 hover:bg-white/[0.04]"
+              >
+                <div className="flex flex-wrap items-center gap-2.5 mb-3.5">
+                  <span className="text-accent-blue/70 text-[10px] font-bold tracking-[2px] uppercase">
+                    {a.tag}
+                  </span>
+                  {dateLisible(a.datePublished) && (
+                    <span className="text-white/25 text-[11px]">{dateLisible(a.datePublished)}</span>
+                  )}
                 </div>
 
-                {/* CTA SECTION */}
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    className="relative bg-gradient-to-br from-[#0a1930] to-[#050a15] border border-accent-blue/30 p-10 md:p-14 rounded-3xl text-center overflow-hidden shadow-[0_0_50px_rgba(0,198,255,0.2)]"
-                >
-                    {/* Decorative background elements inside CTA */}
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-accent-blue/10 rounded-full blur-[80px]"></div>
-                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/10 rounded-full blur-[80px]"></div>
+                <h2 className="text-[18px] md:text-xl font-bold text-white leading-snug mb-3 group-hover:text-accent-blue transition-colors duration-300">
+                  {titreComplet(a)}
+                </h2>
 
-                    <div className="relative z-10">
-                        <h2 className="text-3xl md:text-5xl font-black mb-6 text-white">
-                            VOTRE ENTREPRISE SE <span className="italic text-accent-blue">RECONNAÎT</span> LÀ-DEDANS?
-                        </h2>
-                        <p className="text-xl text-white/70 mb-10 max-w-2xl mx-auto">
-                            Propulsite aide les compagnies de construction à prendre leur place en ligne et à générer des leads de qualité. Parlons de votre situation.
-                        </p>
-                        <div className="flex flex-col sm:flex-row justify-center gap-4">
-                            <a
-                                href="mailto:propulsiteprojet@gmail.com"
-                                className="px-8 py-4 bg-white/5 border border-white/20 rounded-full text-white font-bold tracking-widest uppercase hover:bg-white/10 transition-all duration-300 flex items-center justify-center transform hover:-translate-y-1"
-                            >
-                                Contactez-nous
-                            </a>
-                            <Link
-                                to="/funnel"
-                                className="px-8 py-4 bg-accent-blue rounded-full text-[#050a15] font-black uppercase tracking-widest hover:bg-white transition-all duration-300 shadow-[0_0_20px_rgba(0,198,255,0.5)] hover:shadow-[0_0_30px_rgba(255,255,255,0.8)] flex items-center justify-center gap-3 transform hover:-translate-y-1"
-                            >
-                                Démarrer un projet <Send className="w-5 h-5" />
-                            </Link>
-                        </div>
-                    </div>
-                </motion.div>
+                <p className="text-white/50 text-[14px] leading-relaxed mb-5 flex-grow">
+                  {a.metaDescription ?? a.intro}
+                </p>
 
-            </div>
+                <span className="mt-auto inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-accent-blue transition-all duration-300 group-hover:gap-3.5">
+                  Lire <ArrowRight className="w-3.5 h-3.5" />
+                </span>
+              </Link>
+            </motion.div>
+          ))}
         </div>
-    );
+
+        {/* ── Appel ─────────────────────────────────────────────────────── */}
+        <motion.div
+          initial={{ y: 24 }}
+          whileInView={{ y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.55 }}
+          className="relative bg-gradient-to-br from-[#0a1930] to-[#050a15] border border-accent-blue/30 p-8 md:p-14 rounded-[32px] text-center overflow-hidden shadow-[0_0_50px_rgba(0,198,255,0.12)]"
+        >
+          <div className="absolute top-0 right-0 w-64 h-64 bg-accent-blue/10 rounded-full blur-[80px]" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/10 rounded-full blur-[80px]" />
+
+          <div className="relative z-10">
+            <h2 className="text-2xl md:text-5xl font-black mb-5 text-white leading-tight">
+              Votre entreprise se <span className="italic text-accent-blue">reconnaît</span> là-dedans ?
+            </h2>
+            <p className="text-white/60 text-[15px] md:text-xl mb-9 max-w-2xl mx-auto leading-relaxed">
+              On regarde votre situation ensemble, gratuitement. Pas de présentation
+              de vente : un diagnostic et des chiffres.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center gap-3">
+              <Link
+                to="/contact"
+                className="px-7 py-4 bg-white/5 border border-white/20 rounded-full text-white font-bold text-sm tracking-widest uppercase hover:bg-white/10 transition-all duration-300 flex items-center justify-center transform hover:-translate-y-1"
+              >
+                Nous joindre
+              </Link>
+              <Link
+                to="/funnel"
+                className="px-7 py-4 bg-accent-blue rounded-full text-[#050a15] font-black text-sm uppercase tracking-widest hover:bg-white transition-all duration-300 shadow-[0_0_20px_rgba(0,198,255,0.5)] flex items-center justify-center gap-3 transform hover:-translate-y-1"
+              >
+                Démarrer un projet <Send className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+        </motion.div>
+
+      </div>
+    </div>
+  );
 }

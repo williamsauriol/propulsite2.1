@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import LiquidGlassCard from '../components/LiquidGlassCard';
-import { Mail, Phone, MapPin, Send, CheckCircle2 } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, CheckCircle2, Star, ArrowRight } from 'lucide-react';
 import { usePageMeta } from '../hooks/usePageMeta';
 
 export default function Contact() {
@@ -236,6 +236,32 @@ export default function Contact() {
                   <p className="font-bold mt-1">(514) 649-6862</p>
                 </div>
               </div>
+
+                {/* Les avis : c'est ici que quelqu'un pense deja a nous. Le
+                    volume d'avis est un des premiers signaux que les moteurs
+                    de reponse lisent pour decider qui recommander. */}
+                <a
+                  href="https://www.google.com/maps?cid=6519031247085477855"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group mt-8 flex items-start gap-4 rounded-2xl border border-accent-blue/30 bg-accent-blue/[0.07] p-5 transition-all duration-300 hover:border-accent-blue/60 hover:-translate-y-0.5"
+                >
+                  <span className="flex-none w-11 h-11 rounded-xl bg-accent-blue/15 border border-accent-blue/30 flex items-center justify-center text-accent-blue">
+                    <Star className="w-5 h-5" />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-white font-bold text-[15px] mb-1">
+                      Déjà travaillé avec nous ?
+                    </span>
+                    <span className="block text-white/55 text-[13.5px] leading-relaxed mb-2">
+                      Un avis sur notre fiche Google prend trente secondes et nous
+                      aide plus que n'importe quelle publicité.
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 text-accent-blue text-[11px] font-bold uppercase tracking-widest transition-all group-hover:gap-3">
+                      Laisser un avis <ArrowRight className="w-3.5 h-3.5" />
+                    </span>
+                  </span>
+                </a>
             </LiquidGlassCard>
             <LiquidGlassCard>
               <div className="flex items-center gap-4 mb-4">
