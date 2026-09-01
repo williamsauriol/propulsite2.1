@@ -1,36 +1,39 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import { ArrowRight, Check } from 'lucide-react';
 import { SERVICES } from '../constants/services';
 import { LOGOS_SERVICES } from './logosServices';
 
 /**
- * ServicesScroll — « Nos expertises », en défilement.
+ * ServicesScroll — « Nos expertises ».
  *
- * Remplace la grille de six cartes, qui faisait 2930 px sur un téléphone : la
- * section la plus longue du site, plus grosse que la section GEO ne l'a jamais
- * été. Six cartes côte à côte demandent au visiteur de choisir avant d'avoir
- * compris ; ici il descend, et chaque service se présente à son tour.
+ * CE QUE WILLIAM A DEMANDE, MOT POUR MOT
  *
- * Sur grand écran : le texte défile à gauche, le logo reste collé à droite et
- * change quand on passe d'un service au suivant. Rien d'autre dans le panneau
- * de droite — juste le logo et son halo, qui prend la couleur du service.
+ * « Mettre les pastilles des expertises en ligne de gauche a droite, en dessous
+ * de Nos expertises. Et puis quand je scroll down, apres deux, trois mouvements,
+ * elles se placent toutes visuellement vers la gauche. Et quand je descends, a
+ * chaque section, le logo change et la pastille de gauche s'allume. »
  *
- * Sur téléphone : pas de panneau collé (il n'y a pas deux colonnes), donc le
- * logo passe au-dessus de son texte, en plus petit. Le contenu est le même.
+ * COMMENT LE DEPLACEMENT EST FAIT
  *
- * Le service actif est celui dont le bloc traverse le milieu de l'écran. C'est
- * un IntersectionObserver avec `rootMargin: '-50% 0px -50% 0px'` : la marge
- * ecrase la zone d'observation en une ligne d'un pixel au centre de l'ecran,
- * et un bloc « intersecte » exactement quand il la croise. Les blocs se
- * touchent, donc il y en a toujours un et un seul.
+ * Les pastilles ne sont pas dupliquees puis fondues d'un endroit a l'autre :
+ * ce sont les MEMES elements qui changent de parent. Chacune porte un
+ * `layoutId`, et motion se charge de la transition entre sa place dans la
+ * rangee et sa place dans le rail. C'est la seule facon d'obtenir un vrai
+ * deplacement plutot qu'une disparition suivie d'une apparition.
  *
- * Une premiere version ecoutait l'evenement `scroll` sur window. Mesure dans
- * le navigateur : `window.scrollY` bougeait bien, mais AUCUN evenement scroll
- * n'etait emis — ni sur window, ni sur html, ni sur body — et le logo restait
- * bloque sur le premier service. L'IntersectionObserver ne depend d'aucun
- * evenement de defilement, donc la question ne se pose plus.
+ * Le passage se declenche sur une sentinelle posee sous la rangee : des
+ * qu'elle sort par le haut de l'ecran, on est en rail ; des qu'elle revient,
+ * la rangee se reforme. La hauteur de la rangee est mesuree une fois et
+ * reservee, sinon la page sauterait au moment ou les pastilles la quittent.
+ *
+ * LARGEUR
+ *
+ * « Plus large, plus apaisant pour les yeux » : le rail colle a gauche, le logo
+ * colle a droite. Le conteneur monte a 1700 px au lieu de 1152, et la grille
+ * reserve ses trois colonnes en permanence — le rail ne flotte pas par-dessus
+ * le texte, il a sa place.
  */
 
 const SERVICES_ACCUEIL = SERVICES.slice(0, 6);
@@ -46,19 +49,101 @@ const COURT: Record<string, string> = {
   'chatbot-ia': 'Chatbot IA',
 };
 
+function Pastille({
+  service,
+  courant,
+}: {
+  service: (typeof SERVICES)[number];
+  courant: boolean;
+  key?: string;
+}) {
+  const Logo = LOGOS_SERVICES[service.slug];
+  return (
+    <motion.a
+      layoutId={`pastille-${service.slug}`}
+      href={`#expertise-${service.slug}`}
+      aria-current={courant ? 'true' : undefined}
+      title={service.title}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      className="flex items-center gap-2.5 rounded-xl border px-3 py-2.5 lg:px-3.5 lg:py-3 transition-colors duration-500"
+      style={
+        courant
+          ? { backgroundColor: `${service.color}1F`, borderColor: service.color, boxShadow: `0 0 20px ${service.color}44` }
+          : { backgroundColor: 'transparent', borderColor: 'rgba(255,255,255,0.10)' }
+      }
+    >
+      <span
+        className="flex-none w-6 h-6 lg:w-7 lg:h-7 transition-opacity duration-500"
+        style={{ color: service.color, opacity: courant ? 1 : 0.42 }}
+      >
+        <Logo className="w-full h-full" />
+      </span>
+      <span
+        className="hidden sm:block whitespace-nowrap text-[11px] lg:text-xs font-bold uppercase tracking-wider transition-colors duration-500"
+        style={{ color: courant ? service.color : 'rgba(255,255,255,0.45)' }}
+      >
+        {COURT[service.slug] || service.title}
+      </span>
+    </motion.a>
+  );
+}
+
 export default function ServicesScroll() {
   const [actif, setActif] = useState(0);
+  const [enRail, setEnRail] = useState(false);
+  const [hauteurRangee, setHauteurRangee] = useState<number>();
+
   const blocs = useRef<(HTMLDivElement | null)[]>([]);
+  const sentinelle = useRef<HTMLDivElement>(null);
+  const zoneRangee = useRef<HTMLDivElement>(null);
+
+  // Le service courant : celui dont le bloc traverse le milieu de l'ecran.
+  // Un IntersectionObserver plutot qu'un ecouteur de defilement — mesure dans
+  // le navigateur, aucun evenement `scroll` n'est emis ici, ni sur window, ni
+  // sur html, ni sur body.
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      (entrees) => {
+        entrees.forEach((e) => {
+          if (!e.isIntersecting) return;
+          const i = blocs.current.indexOf(e.target as HTMLDivElement);
+          if (i !== -1) setActif(i);
+        });
+      },
+      { rootMargin: '-50% 0px -50% 0px', threshold: 0 },
+    );
+    blocs.current.forEach((el) => el && obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+
+  // La rangee garde sa hauteur reservee quand les pastilles la quittent,
+  // sinon toute la page remonte d'un coup au moment du passage en rail.
+  useLayoutEffect(() => {
+    const el = zoneRangee.current;
+    if (el && hauteurRangee === undefined) setHauteurRangee(el.offsetHeight);
+  }, [hauteurRangee]);
+
+  // Bascule rangee / rail : la sentinelle est posee juste sous la rangee.
+  useEffect(() => {
+    const el = sentinelle.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([e]) => setEnRail(!e.isIntersecting && e.boundingClientRect.top < 0),
+      { rootMargin: '-100px 0px 0px 0px', threshold: 0 },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   const service = SERVICES_ACCUEIL[actif];
   const LogoActif = LOGOS_SERVICES[service.slug];
 
   return (
-    <section className="px-5 md:px-6 py-28 md:py-48">
-      <div className="container mx-auto max-w-6xl">
+    <section className="px-4 md:px-6 xl:px-10 py-28 md:py-44">
+      <div className="mx-auto max-w-[1700px]">
 
-        {/* En-tête */}
-        <div className="text-center mb-10 md:mb-24">
+        {/* ── En-tête ──────────────────────────────────────────────────── */}
+        <div className="text-center mb-10 md:mb-14">
           <span className="inline-block text-accent-blue text-[11px] md:text-xs font-bold tracking-[3px] uppercase mb-5">
             Six services · Un seul métier
           </span>
@@ -66,57 +151,36 @@ export default function ServicesScroll() {
             Nos expertises
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-accent-blue to-cyan-300 rounded-full mx-auto mb-6" />
-          <p className="text-white/50 text-[15px] md:text-lg max-w-xl mx-auto mb-9 md:mb-12">
+          <p className="text-white/50 text-[15px] md:text-lg max-w-xl mx-auto">
             Tout ce dont un entrepreneur a besoin pour bâtir une présence en ligne indestructible.
           </p>
         </div>
 
-        <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-4 md:gap-8 lg:grid-cols-[auto_minmax(0,1fr)_360px] lg:gap-12 xl:gap-16">
+        {/* ── La rangée, de gauche à droite ────────────────────────────── */}
+        <div
+          ref={zoneRangee}
+          style={{ minHeight: hauteurRangee }}
+          className="flex flex-wrap justify-center gap-2 mb-14 md:mb-20"
+        >
+          {!enRail && SERVICES_ACCUEIL.map((s, i) => (
+            <Pastille key={s.slug} service={s} courant={actif === i} />
+          ))}
+        </div>
+        <div ref={sentinelle} aria-hidden="true" />
 
-          {/* ── Rail gauche : les six, empilees, toujours a l'ecran ──────
-              Il colle sous la barre de navigation et n'a pas besoin de
-              defiler : six tuiles tiennent dans un ecran. Sur telephone il
-              se reduit au logo seul pour laisser la place au texte. */}
+        {/* ── Le parcours ──────────────────────────────────────────────── */}
+        <div className="grid grid-cols-[56px_minmax(0,1fr)] gap-3 md:gap-8 lg:grid-cols-[200px_minmax(0,1fr)_420px] lg:gap-10 xl:gap-20">
+
+          {/* Rail gauche : les pastilles viennent s'y ranger. */}
           <div>
-            <nav
-              aria-label="Les six expertises"
-              className="sticky top-24 md:top-28 flex flex-col gap-2 md:gap-2.5"
-            >
-              {SERVICES_ACCUEIL.map((s, i) => {
-                const Logo = LOGOS_SERVICES[s.slug];
-                const courant = actif === i;
-                return (
-                  <a
-                    key={s.slug}
-                    href={`#expertise-${s.slug}`}
-                    aria-current={courant ? 'true' : undefined}
-                    title={s.title}
-                    className="group flex items-center gap-3 rounded-xl border p-2 md:p-2.5 transition-all duration-500"
-                    style={
-                      courant
-                        ? { backgroundColor: `${s.color}1F`, borderColor: s.color, boxShadow: `0 0 18px ${s.color}44` }
-                        : { backgroundColor: 'transparent', borderColor: 'rgba(255,255,255,0.10)' }
-                    }
-                  >
-                    <span
-                      className="flex-none w-7 h-7 md:w-8 md:h-8 flex items-center justify-center transition-opacity duration-500"
-                      style={{ color: s.color, opacity: courant ? 1 : 0.4 }}
-                    >
-                      <Logo className="w-full h-full" />
-                    </span>
-                    <span
-                      className="hidden xl:block pr-1 text-[11px] font-bold uppercase tracking-wider whitespace-nowrap transition-colors duration-500"
-                      style={{ color: courant ? s.color : 'rgba(255,255,255,0.45)' }}
-                    >
-                      {COURT[s.slug] || s.title}
-                    </span>
-                  </a>
-                );
-              })}
+            <nav aria-label="Les six expertises" className="sticky top-28 flex flex-col gap-2">
+              {enRail && SERVICES_ACCUEIL.map((s, i) => (
+                <Pastille key={s.slug} service={s} courant={actif === i} />
+              ))}
             </nav>
           </div>
 
-          {/* ── Gauche : les services, l'un après l'autre ───────────────── */}
+          {/* Les services, l'un après l'autre. */}
           <div>
             {SERVICES_ACCUEIL.map((s, i) => {
               const courant = actif === i;
@@ -127,36 +191,27 @@ export default function ServicesScroll() {
                   id={`expertise-${s.slug}`}
                   className="scroll-mt-28 md:scroll-mt-32 py-6 md:py-10 lg:min-h-[72vh] lg:flex lg:flex-col lg:justify-center border-b border-white/[0.07] lg:border-0"
                 >
-                  {/* Sur telephone, le logo se met SUR la ligne du titre plutot
-                      qu'au-dessus : empile, il coutait 76 px par service pour
-                      ne rien dire de plus. Au-dessus de lg, cette rangee
-                      redevient un simple bloc et le logo disparait — il est
-                      alors dans le panneau colle. */}
-                  <div className="mb-3.5 lg:mb-0">
-                    <span
-                      className="hidden lg:block text-sm font-black tabular-nums tracking-widest mb-4 transition-colors duration-500"
-                      style={{ color: courant ? s.color : 'rgba(255,255,255,0.18)' }}
-                    >
-                      {String(i + 1).padStart(2, '0')} / 06
-                    </span>
+                  <span
+                    className="hidden lg:block text-sm font-black tabular-nums tracking-widest mb-4 transition-colors duration-500"
+                    style={{ color: courant ? s.color : 'rgba(255,255,255,0.18)' }}
+                  >
+                    {String(i + 1).padStart(2, '0')} / 06
+                  </span>
 
-                    <h3
-                      className="text-[21px] md:text-4xl font-black uppercase leading-[1.12] lg:mb-4 transition-colors duration-500"
-                      style={{ color: courant ? s.color : undefined }}
-                    >
-                      {s.title}
-                    </h3>
-                  </div>
+                  <h3
+                    className="text-[21px] md:text-4xl font-black uppercase leading-[1.12] mb-3.5 lg:mb-4 transition-colors duration-500"
+                    style={{ color: courant ? s.color : undefined }}
+                  >
+                    {s.title}
+                  </h3>
 
                   <p className="text-white/60 text-[15px] md:text-lg leading-relaxed mb-4 lg:mb-6 max-w-xl">
                     {s.shortDesc}
                   </p>
 
-                  {/* Le detail des prestations n'apparait qu'a partir de lg :
-                      la grille de cartes qu'on remplace ne le montrait pas non
-                      plus, et sur telephone il rallongeait la section de
-                      660 px sans rien ajouter que la page du service ne dise
-                      deja mieux. */}
+                  {/* Le détail ne s'affiche qu'à partir de lg : la grille de
+                      cartes qu'on remplace ne le montrait pas non plus, et sur
+                      téléphone il rallongeait la section de 660 px. */}
                   <ul className="hidden lg:block space-y-2.5 mb-7 max-w-xl">
                     {s.features.slice(0, 3).map((f) => (
                       <li key={f} className="flex items-start gap-3 text-white/50 text-[13px] md:text-sm">
@@ -166,68 +221,48 @@ export default function ServicesScroll() {
                     ))}
                   </ul>
 
-                  {/* Allume sur le service courant : rempli et halo. Les
-                      autres restent en contour. Le clic se propose au moment
-                      exact ou le visiteur lit ce service-la. */}
+                  {/* Allumé sur le service courant, en contour sinon. */}
                   <Link
                     to={`/services/${s.slug}`}
                     className="group self-start inline-flex items-center gap-2.5 px-6 py-3 md:px-7 md:py-3.5 rounded-full border text-xs font-bold uppercase tracking-widest transition-all duration-500 hover:gap-4"
                     style={
                       courant
-                        ? {
-                            backgroundColor: s.color,
-                            borderColor: s.color,
-                            color: '#050a15',
-                            boxShadow: `0 0 28px ${s.color}66`,
-                          }
-                        : {
-                            backgroundColor: 'transparent',
-                            borderColor: `${s.color}55`,
-                            color: s.color,
-                          }
+                        ? { backgroundColor: s.color, borderColor: s.color, color: '#050a15', boxShadow: `0 0 28px ${s.color}66` }
+                        : { backgroundColor: 'transparent', borderColor: `${s.color}55`, color: s.color }
                     }
                   >
-                    Découvrir <ArrowRight className="w-4 h-4 transition-transform duration-300" />
+                    Découvrir <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
               );
             })}
           </div>
 
-          {/* ── Droite : le logo collé, et rien d'autre ─────────────────── */}
+          {/* Le logo collé à droite, et rien d'autre. */}
           <div className="hidden lg:block">
             <div className="sticky top-0 h-screen flex flex-col items-center justify-center gap-8">
-
-              {/* L'etiquette de section : le seul element toujours a l'ecran
-                  pendant qu'on traverse les six services. */}
-              <span className="text-white/35 text-[11px] font-bold tracking-[3px] uppercase">
+              <span className="text-white/30 text-[11px] font-bold tracking-[3px] uppercase">
                 Nos expertises
               </span>
 
               <div className="relative w-[340px] h-[340px] flex items-center justify-center">
-
-                {/* Le halo prend la couleur du service courant. */}
                 <motion.div
                   className="absolute inset-0 rounded-full blur-[80px]"
                   animate={{ backgroundColor: `${service.color}33` }}
                   transition={{ duration: 0.6 }}
                 />
 
-                <AnimatePresence mode="wait" initial={false}>
-                  <motion.div
-                    key={service.slug}
-                    initial={{ opacity: 0, scale: 0.86, y: 14 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.94, y: -14 }}
-                    transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
-                    className="relative"
-                    style={{ color: service.color }}
-                  >
-                    <LogoActif className="w-[230px] h-[230px]" />
-                  </motion.div>
-                </AnimatePresence>
+                <motion.div
+                  key={service.slug}
+                  initial={{ opacity: 0, scale: 0.88, y: 16 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                  className="relative"
+                  style={{ color: service.color }}
+                >
+                  <LogoActif className="w-[250px] h-[250px]" />
+                </motion.div>
               </div>
-
             </div>
           </div>
 
