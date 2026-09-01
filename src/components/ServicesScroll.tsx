@@ -95,6 +95,7 @@ export default function ServicesScroll() {
 
   const blocs = useRef<(HTMLDivElement | null)[]>([]);
   const zoneRangee = useRef<HTMLDivElement>(null);
+  const parcours = useRef<HTMLDivElement>(null);
 
   // Le service courant : celui dont le bloc traverse le milieu de l'ecran.
   // Un IntersectionObserver plutot qu'un ecouteur de defilement — mesure dans
@@ -122,25 +123,31 @@ export default function ServicesScroll() {
     if (el && hauteurRangee === undefined) setHauteurRangee(el.offsetHeight);
   }, [hauteurRangee]);
 
-  // Bascule rangee / rail. On observe LA RANGEE, pas un marqueur vide : un
-  // element de hauteur zero a un rapport d'intersection toujours nul, qui ne
-  // franchit jamais de seuil — l'observateur emettait son appel initial puis
-  // se taisait, et la rangee ne partait jamais au defilement.
+  // Bascule rangee / rail.
   //
-  // La rangee garde sa hauteur reservee meme vide, donc elle reste un
-  // declencheur fiable dans les deux sens. Et la bascule se fait au moment ou
-  // elle atteint le haut de l'ecran : les pastilles sont encore visibles quand
-  // elles s'envolent, au lieu de surgir de nulle part.
+  // On observe LA GRILLE du parcours — plusieurs ecrans de haut — avec une
+  // bande d'observation au milieu de l'ecran. La condition se reduit alors a
+  // `isIntersecting`, sans lecture de coordonnees.
+  //
+  // C'est le troisieme essai, et les deux premiers ont echoue pour la meme
+  // raison : la condition lisait `boundingClientRect.top < 0` au moment du
+  // franchissement. Or la rangee sort de l'ecran par le BAS de sa boite —
+  // quand son bord inferieur passe la ligne, son bord superieur est encore
+  // positif de toute sa hauteur. La condition etait donc fausse au seul
+  // instant ou elle etait evaluee. Elle ne devenait vraie que si le
+  // defilement se faisait par bonds assez gros pour que le rectangle
+  // enregistre soit deja au-dessus — ce qui etait le cas de mes essais, et
+  // jamais celui d'un vrai visiteur qui defile doucement.
   useEffect(() => {
-    const el = zoneRangee.current;
+    const el = parcours.current;
     if (!el) return;
     const obs = new IntersectionObserver(
-      ([e]) => setEnRail(!e.isIntersecting && e.boundingClientRect.top < 0),
-      { rootMargin: '-96px 0px 0px 0px', threshold: 0 },
+      ([e]) => setEnRail(e.isIntersecting),
+      { rootMargin: '-45% 0px -45% 0px', threshold: 0 },
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, [hauteurRangee]);
+  }, []);
 
   const service = SERVICES_ACCUEIL[actif];
   const LogoActif = LOGOS_SERVICES[service.slug];
@@ -175,7 +182,7 @@ export default function ServicesScroll() {
         </div>
 
         {/* ── Le parcours ──────────────────────────────────────────────── */}
-        <div className="grid grid-cols-[56px_minmax(0,1fr)] gap-3 md:gap-8 lg:grid-cols-[200px_minmax(0,1fr)_420px] lg:gap-10 xl:gap-20">
+        <div ref={parcours} className="grid grid-cols-[56px_minmax(0,1fr)] gap-3 md:gap-8 lg:grid-cols-[200px_minmax(0,1fr)_420px] lg:gap-10 xl:gap-20">
 
           {/* Rail gauche : les pastilles viennent s'y ranger. */}
           <div>
