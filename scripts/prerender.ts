@@ -31,7 +31,7 @@ const DIST = path.resolve(__dirname, '../dist');
 const SITE_URL = 'https://propulsite.ca';
 const OG_IMAGE = `${SITE_URL}/images/og-image.jpg`;
 // Date de dernière mise à jour des pages statiques (à ajuster lors de refontes majeures)
-const PAGES_LASTMOD = '2026-06-11';
+const PAGES_LASTMOD = '2026-09-01';
 const DEFAULT_ARTICLE_DATE = '2026-03-10';
 
 interface RouteMeta {
@@ -115,7 +115,7 @@ const routes: RouteMeta[] = [
         inLanguage: 'fr-CA',
         image: OG_IMAGE,
         datePublished: '2026-08-29',
-        dateModified: '2026-08-29',
+        dateModified: '2026-09-01',
         author: { '@type': 'Person', name: 'William Sauriol' },
         publisher: {
           '@type': 'Organization',
@@ -148,7 +148,7 @@ const routes: RouteMeta[] = [
     ],
     priority: '0.9',
     changefreq: 'monthly',
-    lastmod: '2026-08-29',
+    lastmod: '2026-09-01',
   },
   {
     path: '/services',

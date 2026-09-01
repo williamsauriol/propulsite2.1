@@ -301,23 +301,125 @@ export const MYTHES = [
   },
 ];
 
-/** Le test : huit questions, pondérées par ce qui pèse vraiment. */
+/** Les familles du diagnostic, dans l’ordre ou elles pesent. */
+export const FAMILLES = [
+  { id: 'index', titre: 'Les index que l’IA consulte' },
+  { id: 'autorite', titre: 'Autorité et contenu' },
+  { id: 'reputation', titre: 'Réputation' },
+  { id: 'coherence', titre: 'Cohérence de l’identité' },
+];
+
 export interface Question {
   id: string;
+  famille: string;
   texte: string;
   points: number;
   indice: string;
+  /**
+   * Ce qu'il faut faire quand la reponse est non. C'est ce que le rapport
+   * renvoie au visiteur, et ce que William recoit par courriel.
+   */
+  action: string;
 }
 
 export const QUESTIONS: Question[] = [
-  { id: 'q1', texte: 'Ma fiche Google est vérifiée, avec la bonne catégorie et le bon secteur desservi.', points: 18, indice: 'La base de tout. Sans elle, rien ne tient.' },
-  { id: 'q2', texte: "J'ai une fiche Bing Places vérifiée.", points: 16, indice: "C'est l'index que ChatGPT interroge." },
-  { id: 'q3', texte: 'Mon nom, mon adresse et mon numéro sont identiques partout.', points: 14, indice: 'Une divergence et la machine vous écarte.' },
-  { id: 'q4', texte: "J'ai plus de 50 avis et je réponds à tous.", points: 14, indice: 'Volume, note et taux de réponse sont lus ensemble.' },
-  { id: 'q5', texte: 'Mon site a une page distincte par service et par ville desservie.', points: 12, indice: 'Une page fourre-tout ne se fait citer sur rien.' },
-  { id: 'q6', texte: 'Mes pages répondent à de vraies questions de clients, dès la première phrase.', points: 10, indice: "C'est le passage que l'IA reprend." },
-  { id: 'q7', texte: 'On parle de mon entreprise ailleurs que sur mon propre site.', points: 10, indice: 'Le plafond réel de tout le reste.' },
-  { id: 'q8', texte: 'Mes pages contiennent des données structurées (schema).', points: 6, indice: '71 % des pages citées par ChatGPT en ont.' },
+  // ── Les index que l’IA consulte ──
+  {
+    id: 'gbp', famille: 'index', points: 10,
+    texte: 'Ma fiche Google est vérifiée, avec la bonne catégorie et le bon secteur desservi.',
+    indice: 'La base de tout. Sans elle, rien ne tient.',
+    action: 'Créer ou revendiquer la fiche Google Business, choisir la catégorie exacte du métier et déclarer le secteur réellement desservi.',
+  },
+  {
+    id: 'bing', famille: 'index', points: 9,
+    texte: 'J’ai une fiche Bing Places vérifiée.',
+    indice: 'C’est l’index que ChatGPT interroge, pas celui de Google.',
+    action: 'Créer la fiche Bing Places et la faire vérifier. Gratuit, vingt minutes, et c’est le geste au meilleur rendement de toute la liste.',
+  },
+  {
+    id: 'foursquare', famille: 'index', points: 5,
+    texte: 'Mon profil Foursquare est revendiqué et à jour.',
+    indice: 'Foursquare alimente une grande partie des données locales de ChatGPT.',
+    action: 'Revendiquer le profil Foursquare, corriger l’adresse et la catégorie, ajouter le site web.',
+  },
+  {
+    id: 'apple', famille: 'index', points: 4,
+    texte: 'Je suis inscrit sur Apple Business Connect.',
+    indice: 'C’est ce que voit un client qui cherche depuis un iPhone.',
+    action: 'Créer la fiche Apple Business Connect — gratuit, et la moitié des téléphones au Québec sont des iPhone.',
+  },
+
+  // ── Autorite et contenu ──
+  {
+    id: 'mentions', famille: 'autorite', points: 10,
+    texte: 'On parle de mon entreprise ailleurs que sur mon propre site.',
+    indice: 'Le plafond réel de tout le reste.',
+    action: 'Obtenir cinq mentions réelles : association de métier, chambre de commerce, RBQ, fournisseur qui liste ses installateurs, journal local.',
+  },
+  {
+    id: 'page-service', famille: 'autorite', points: 6,
+    texte: 'Mon site a une page distincte par service.',
+    indice: 'Une page fourre-tout ne se fait citer sur rien.',
+    action: 'Créer une page par service, avec son propre titre et ses propres questions.',
+  },
+  {
+    id: 'page-ville', famille: 'autorite', points: 5,
+    texte: 'Mon site a une page par ville réellement desservie.',
+    indice: 'Attention : dupliquer la même page en changeant le nom de ville est pénalisé.',
+    action: 'Créer une page par secteur, avec un contenu propre à chaque marché — jamais un copier-coller avec le nom de ville changé.',
+  },
+  {
+    id: 'reponses', famille: 'autorite', points: 5,
+    texte: 'Mes pages répondent à de vraies questions de clients, dès la première phrase.',
+    indice: 'C’est le passage que l’IA reprend mot pour mot.',
+    action: 'Réécrire les titres sous forme de question réelle, et donner la réponse dans les deux premières phrases.',
+  },
+  {
+    id: 'schema', famille: 'autorite', points: 4,
+    texte: 'Mes pages contiennent des données structurées (schema).',
+    indice: '71 % des pages citées par ChatGPT en contiennent.',
+    action: 'Ajouter LocalBusiness avec le secteur desservi, Service par prestation, FAQPage sur les pages de questions.',
+  },
+
+  // ── Reputation ──
+  {
+    id: 'avis-volume', famille: 'reputation', points: 8,
+    texte: 'J’ai plus de 50 avis Google.',
+    indice: 'Sous un certain volume, une entreprise n’est pas classée plus bas : elle est écartée.',
+    action: 'Demander un avis après chaque chantier livré, systématiquement, avec un lien direct envoyé par texto.',
+  },
+  {
+    id: 'avis-note', famille: 'reputation', points: 6,
+    texte: 'Ma note moyenne dépasse 4,2 étoiles.',
+    indice: 'Les entreprises recommandées par ChatGPT tournent autour de 4,3.',
+    action: 'Traiter les avis négatifs un par un, et augmenter le volume : c’est le volume qui relève la moyenne.',
+  },
+  {
+    id: 'avis-reponse', famille: 'reputation', points: 8,
+    texte: 'Je réponds à tous mes avis, même les cinq étoiles.',
+    indice: 'Le taux de réponse est lu comme un signal à part entière.',
+    action: 'Répondre à chaque avis dans la semaine. Une entreprise qui ne répond jamais ressemble à une entreprise qui n’existe plus.',
+  },
+
+  // ── Coherence de l’identite ──
+  {
+    id: 'nap', famille: 'coherence', points: 8,
+    texte: 'Mon nom, mon adresse et mon numéro sont identiques partout, au caractère près.',
+    indice: 'Une seule divergence et la machine passe à une réponse plus sûre.',
+    action: 'Lister tous les endroits où l’entreprise apparaît et uniformiser le nom légal, l’adresse et le numéro.',
+  },
+  {
+    id: 'villes', famille: 'coherence', points: 8,
+    texte: 'Mon site nomme les villes que je dessers vraiment.',
+    indice: 'L’IA a besoin de savoir où vous vous déplacez, pas seulement où vous êtes.',
+    action: 'Écrire la liste des villes desservies sur le site et la répliquer dans le schema (areaServed).',
+  },
+  {
+    id: 'doublons', famille: 'coherence', points: 4,
+    texte: 'Aucune fiche en double ne traîne d’un ancien fournisseur.',
+    indice: 'Deux fiches pour la même entreprise, c’est deux entreprises pour une machine.',
+    action: 'Chercher le nom de l’entreprise sur Google, Bing et Yelp, et faire fermer les fiches en double.',
+  },
 ];
 
 export const VERDICTS = [

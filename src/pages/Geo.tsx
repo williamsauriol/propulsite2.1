@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { usePageMeta } from '../hooks/usePageMeta';
 import {
-  CHIFFRES, MOTEURS, SOURCES_IA, LEVIERS, MYTHES, QUESTIONS, VERDICTS, FAQ, SOURCES,
+  CHIFFRES, MOTEURS, SOURCES_IA, LEVIERS, MYTHES, FAMILLES, QUESTIONS, VERDICTS, FAQ, SOURCES,
 } from '../constants/geoData';
 
 /**
@@ -353,56 +353,142 @@ function Leviers() {
 }
 
 // ─── Le test ─────────────────────────────────────────────────────────────────
+
+/**
+ * Le diagnostic.
+ *
+ * Trois choses qu'il fait et que l'ancienne version ne faisait pas :
+ *
+ *   1. Il RESTITUE. Le score seul ne dit rien ; ce qui compte, c'est la liste
+ *      de ce qui manque, triee par ce que ca coute de ne pas l'avoir, avec le
+ *      geste exact a poser.
+ *   2. Il TRANSPORTE. « Faire corriger » envoyait vers un formulaire vide et
+ *      tout le travail du visiteur etait perdu. Le diagnostic complet part
+ *      maintenant dans le courriel — William sait exactement quoi corriger
+ *      avant meme de rappeler.
+ *   3. Il RESTE HONNETE. Rien n'est envoye tant que la personne n'a pas ecrit
+ *      son courriel elle-meme. Le score se calcule dans le navigateur.
+ */
 function Test() {
   const [coches, setCoches] = useState<Record<string, boolean>>({});
-  const [lance, setLance] = useState(false);
+  const [touche, setTouche] = useState(false);
+  const [envoi, setEnvoi] = useState<'repos' | 'encours' | 'fait' | 'erreur'>('repos');
+  const [identite, setIdentite] = useState({ nom: '', entreprise: '', courriel: '', ville: '' });
 
   const total = QUESTIONS.reduce((n, q) => n + (coches[q.id] ? q.points : 0), 0);
-  const repondu = Object.values(coches).some(Boolean);
   const verdict = VERDICTS.find((v) => total >= v.min) || VERDICTS[VERDICTS.length - 1];
 
-  // Jauge : 2πr avec r = 54.
+  // Ce qui manque, du plus couteux au moins couteux.
+  const manques = QUESTIONS.filter((q) => !coches[q.id]).sort((a, b) => b.points - a.points);
+
   const CIRC = 2 * Math.PI * 54;
 
+  function basculer(id: string) {
+    setCoches((c) => ({ ...c, [id]: !c[id] }));
+    setTouche(true);
+  }
+
+  async function envoyer(e: React.FormEvent) {
+    e.preventDefault();
+    if (!identite.courriel) return;
+    setEnvoi('encours');
+
+    // Le diagnostic complet, lisible tel quel dans le courriel.
+    const rapport = FAMILLES.map((f) => {
+      const qs = QUESTIONS.filter((q) => q.famille === f.id);
+      const obtenus = qs.reduce((n, q) => n + (coches[q.id] ? q.points : 0), 0);
+      const possibles = qs.reduce((n, q) => n + q.points, 0);
+      const lignes = qs.map((q) => `  ${coches[q.id] ? '[OUI]' : '[NON]'} ${q.texte}`).join('\n');
+      return `${f.titre} — ${obtenus}/${possibles}\n${lignes}`;
+    }).join('\n\n');
+
+    const aFaire = manques
+      .map((q, i) => `${i + 1}. (${q.points} pts) ${q.action}`)
+      .join('\n');
+
+    try {
+      const r = await fetch('https://formsubmit.co/ajax/propulsiteprojet@gmail.com', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          _subject: `Diagnostic GEO — ${identite.entreprise || identite.nom} — ${total}/100`,
+          Nom: identite.nom || 'Non fourni',
+          Entreprise: identite.entreprise || 'Non fournie',
+          Courriel: identite.courriel,
+          Ville: identite.ville || 'Non fournie',
+          Score: `${total} / 100 — ${verdict.titre}`,
+          Diagnostic: rapport,
+          'À corriger, par ordre de priorité': aFaire || 'Rien : tout est déjà en place.',
+        }),
+      });
+      setEnvoi(r.ok ? 'fait' : 'erreur');
+    } catch {
+      setEnvoi('erreur');
+    }
+  }
+
   return (
-    <div className="grid lg:grid-cols-[1.3fr_minmax(0,1fr)] gap-8 lg:gap-12 items-start">
-      <div className="space-y-2.5">
-        {QUESTIONS.map((q) => {
-          const coche = !!coches[q.id];
+    <div className="grid lg:grid-cols-[1.25fr_minmax(0,1fr)] gap-8 lg:gap-12 items-start">
+
+      {/* ── Les questions, par famille ─────────────────────────────────── */}
+      <div className="space-y-8">
+        {FAMILLES.map((f) => {
+          const qs = QUESTIONS.filter((q) => q.famille === f.id);
+          const obtenus = qs.reduce((n, q) => n + (coches[q.id] ? q.points : 0), 0);
+          const possibles = qs.reduce((n, q) => n + q.points, 0);
           return (
-            <button
-              key={q.id}
-              type="button"
-              role="checkbox"
-              aria-checked={coche}
-              onClick={() => {
-                setCoches((c) => ({ ...c, [q.id]: !c[q.id] }));
-                setLance(true);
-              }}
-              className={`w-full text-left flex items-start gap-4 rounded-2xl border p-4 md:p-5 transition-all duration-200 ${
-                coche
-                  ? 'bg-accent-blue/10 border-accent-blue/45'
-                  : 'bg-white/[0.02] border-white/10 hover:border-white/25'
-              }`}
-            >
-              <span
-                className={`w-6 h-6 flex-shrink-0 rounded-lg border flex items-center justify-center mt-0.5 transition-all ${
-                  coche ? 'bg-accent-blue border-accent-blue text-[#050a15]' : 'border-white/25 text-transparent'
-                }`}
-              >
-                <Check className="w-4 h-4" />
-              </span>
-              <span className="flex-1 min-w-0">
-                <span className="block text-white/90 text-[14px] md:text-[15px] leading-snug">{q.texte}</span>
-                <span className="block text-white/35 text-[12px] mt-1.5 leading-snug">{q.indice}</span>
-              </span>
-            </button>
+            <div key={f.id}>
+              <div className="flex items-baseline justify-between gap-4 mb-3">
+                <h3 className="text-accent-blue text-[11px] md:text-xs font-bold tracking-[2.5px] uppercase">
+                  {f.titre}
+                </h3>
+                <span className="text-white/35 text-[11px] font-bold tabular-nums">
+                  {obtenus} / {possibles}
+                </span>
+              </div>
+              <div className="space-y-2.5">
+                {qs.map((q) => {
+                  const coche = !!coches[q.id];
+                  return (
+                    <button
+                      key={q.id}
+                      type="button"
+                      role="checkbox"
+                      aria-checked={coche}
+                      onClick={() => basculer(q.id)}
+                      className={`w-full text-left flex items-start gap-4 rounded-2xl border p-4 transition-all duration-200 ${
+                        coche
+                          ? 'bg-accent-blue/10 border-accent-blue/45'
+                          : 'bg-white/[0.02] border-white/10 hover:border-white/25'
+                      }`}
+                    >
+                      <span
+                        className={`w-6 h-6 flex-shrink-0 rounded-lg border flex items-center justify-center mt-0.5 transition-all ${
+                          coche ? 'bg-accent-blue border-accent-blue text-[#050a15]' : 'border-white/25 text-transparent'
+                        }`}
+                      >
+                        <Check className="w-4 h-4" />
+                      </span>
+                      <span className="flex-1 min-w-0">
+                        <span className="block text-white/90 text-[14px] md:text-[15px] leading-snug">{q.texte}</span>
+                        <span className="block text-white/35 text-[12px] mt-1.5 leading-snug">{q.indice}</span>
+                      </span>
+                      <span className="flex-none text-white/25 text-[11px] font-bold tabular-nums mt-0.5">
+                        {q.points}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           );
         })}
       </div>
 
-      <div className="lg:sticky lg:top-28 bg-gradient-to-b from-white/[0.06] to-transparent border border-white/10 rounded-3xl p-6 md:p-8 text-center">
-        <div className="relative w-[140px] h-[140px] mx-auto mb-6">
+      {/* ── Le résultat ────────────────────────────────────────────────── */}
+      <div className="lg:sticky lg:top-24 bg-gradient-to-b from-white/[0.06] to-transparent border border-white/10 rounded-3xl p-6 md:p-7">
+
+        <div className="relative w-[128px] h-[128px] mx-auto mb-5">
           <svg viewBox="0 0 128 128" className="w-full h-full -rotate-90">
             <circle cx="64" cy="64" r="54" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="10" />
             <motion.circle
@@ -420,30 +506,102 @@ function Test() {
           </div>
         </div>
 
-        {repondu ? (
+        {touche ? (
           <>
-            <h3 className="text-xl font-bold text-white mb-3 leading-tight">{verdict.titre}</h3>
-            <p className="text-white/60 text-sm leading-relaxed mb-6">{verdict.texte}</p>
+            <h3 className="text-lg font-bold text-white mb-2 leading-tight text-center">{verdict.titre}</h3>
+            <p className="text-white/55 text-[13.5px] leading-relaxed mb-6 text-center">{verdict.texte}</p>
+
+            {manques.length > 0 && (
+              <div className="mb-6">
+                <p className="text-white/35 text-[10px] font-bold tracking-[2px] uppercase mb-3">
+                  Vos trois priorités
+                </p>
+                <ol className="space-y-3">
+                  {manques.slice(0, 3).map((q) => (
+                    <li key={q.id} className="flex items-start gap-3">
+                      <span className="flex-none mt-0.5 text-accent-blue text-[11px] font-black tabular-nums">
+                        +{q.points}
+                      </span>
+                      <span className="text-white/65 text-[13px] leading-relaxed">{q.action}</span>
+                    </li>
+                  ))}
+                </ol>
+                {manques.length > 3 && (
+                  <p className="text-white/30 text-[12px] mt-3">
+                    Et {manques.length - 3} autre{manques.length - 3 > 1 ? 's' : ''} point
+                    {manques.length - 3 > 1 ? 's' : ''} dans le rapport complet.
+                  </p>
+                )}
+              </div>
+            )}
           </>
         ) : (
-          <p className="text-white/50 text-sm leading-relaxed mb-6">
-            Cochez ce qui est déjà vrai chez vous. Le score se calcule tout seul — rien
-            n'est envoyé nulle part.
+          <p className="text-white/50 text-[13.5px] leading-relaxed mb-6 text-center">
+            Cochez ce qui est déjà vrai chez vous. Le score se calcule tout seul,
+            et rien ne part avant que vous ne le demandiez.
           </p>
         )}
 
-        <Link
-          to="/contact"
-          className="inline-flex items-center justify-center gap-2 w-full px-6 py-4 bg-accent-blue rounded-full text-[#050a15] font-black uppercase tracking-widest text-xs hover:bg-white transition-all duration-300"
-        >
-          Faire corriger ça <ArrowRight className="w-4 h-4" />
-        </Link>
+        {/* ── Recevoir le rapport ──────────────────────────────────────── */}
+        {envoi === 'fait' ? (
+          <div className="rounded-2xl border border-accent-blue/40 bg-accent-blue/10 p-4 text-center">
+            <Check className="w-5 h-5 text-accent-blue mx-auto mb-2" />
+            <p className="text-white text-sm font-bold mb-1">Rapport envoyé</p>
+            <p className="text-white/55 text-[13px] leading-relaxed">
+              On vous écrit dans les prochaines heures avec le détail des
+              {' '}{manques.length} point{manques.length > 1 ? 's' : ''} à corriger.
+            </p>
+          </div>
+        ) : (
+          <form onSubmit={envoyer} className="space-y-2.5 pt-5 border-t border-white/10">
+            <p className="text-white/35 text-[10px] font-bold tracking-[2px] uppercase mb-1">
+              Recevoir le rapport complet
+            </p>
+            <input
+              type="text" required value={identite.nom} placeholder="Votre nom"
+              onChange={(e) => setIdentite({ ...identite, nom: e.target.value })}
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-white text-sm placeholder:text-white/25 focus:outline-none focus:border-accent-blue transition-colors"
+            />
+            <input
+              type="text" value={identite.entreprise} placeholder="Nom de l'entreprise"
+              onChange={(e) => setIdentite({ ...identite, entreprise: e.target.value })}
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-white text-sm placeholder:text-white/25 focus:outline-none focus:border-accent-blue transition-colors"
+            />
+            <input
+              type="text" value={identite.ville} placeholder="Ville"
+              onChange={(e) => setIdentite({ ...identite, ville: e.target.value })}
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-white text-sm placeholder:text-white/25 focus:outline-none focus:border-accent-blue transition-colors"
+            />
+            <input
+              type="email" required value={identite.courriel} placeholder="Courriel"
+              onChange={(e) => setIdentite({ ...identite, courriel: e.target.value })}
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-white text-sm placeholder:text-white/25 focus:outline-none focus:border-accent-blue transition-colors"
+            />
 
-        {lance && (
+            {envoi === 'erreur' && (
+              <p className="text-red-400 text-[12px]">
+                L'envoi a échoué. Écrivez-nous directement à propulsiteprojet@gmail.com.
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={envoi === 'encours'}
+              className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-accent-blue rounded-full text-[#050a15] font-black uppercase tracking-widest text-xs hover:bg-white transition-all duration-300 disabled:opacity-60"
+            >
+              {envoi === 'encours' ? 'Envoi…' : 'Faire corriger ça'} <ArrowRight className="w-4 h-4" />
+            </button>
+            <p className="text-white/25 text-[11px] leading-snug text-center pt-1">
+              Vos réponses partent avec le message. Aucune autre utilisation.
+            </p>
+          </form>
+        )}
+
+        {touche && envoi !== 'fait' && (
           <button
             type="button"
-            onClick={() => { setCoches({}); setLance(false); }}
-            className="inline-flex items-center gap-2 text-white/35 hover:text-white/70 text-xs mt-4 transition-colors"
+            onClick={() => { setCoches({}); setTouche(false); }}
+            className="w-full inline-flex items-center justify-center gap-2 text-white/35 hover:text-white/70 text-xs mt-4 transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" /> Recommencer
           </button>
@@ -738,7 +896,7 @@ export default function Geo() {
             etiquette="Deux minutes"
             titre="Est-ce qu'une IA"
             accent="sait que vous existez ?"
-            intro="Cochez ce qui est déjà vrai chez vous. Le score se calcule tout de suite, rien n'est envoyé nulle part."
+            intro="Quinze questions, deux minutes. Vous obtenez votre score, vos priorités, et le rapport complet par courriel si vous le voulez."
           />
           <Reveal>
             <Test />
