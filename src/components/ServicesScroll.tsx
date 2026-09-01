@@ -66,8 +66,14 @@ export default function ServicesScroll() {
 
         {/* En-tête */}
         <div className="text-center mb-10 md:mb-24">
-          <h2 className="text-4xl md:text-5xl font-black mb-5 text-3d uppercase italic">Nos expertises</h2>
-          <p className="text-white/50 text-[15px] md:text-base max-w-xl mx-auto">
+          <span className="inline-block text-accent-blue text-[11px] md:text-xs font-bold tracking-[3px] uppercase mb-5">
+            Six services · Un seul métier
+          </span>
+          <h2 className="text-[42px] md:text-7xl font-black mb-6 text-3d uppercase italic leading-[0.95]">
+            Nos expertises
+          </h2>
+          <div className="w-20 h-1 bg-gradient-to-r from-accent-blue to-cyan-300 rounded-full mx-auto mb-6" />
+          <p className="text-white/50 text-[15px] md:text-lg max-w-xl mx-auto">
             Tout ce dont un entrepreneur a besoin pour bâtir une présence en ligne indestructible.
           </p>
         </div>
@@ -131,12 +137,28 @@ export default function ServicesScroll() {
                     ))}
                   </ul>
 
+                  {/* Allume sur le service courant : rempli et halo. Les
+                      autres restent en contour. Le clic se propose au moment
+                      exact ou le visiteur lit ce service-la. */}
                   <Link
                     to={`/services/${s.slug}`}
-                    className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest transition-all hover:gap-3.5"
-                    style={{ color: s.color }}
+                    className="group inline-flex items-center gap-2.5 px-6 py-3 md:px-7 md:py-3.5 rounded-full border text-xs font-bold uppercase tracking-widest transition-all duration-500 hover:gap-4"
+                    style={
+                      courant
+                        ? {
+                            backgroundColor: s.color,
+                            borderColor: s.color,
+                            color: '#050a15',
+                            boxShadow: `0 0 28px ${s.color}66`,
+                          }
+                        : {
+                            backgroundColor: 'transparent',
+                            borderColor: `${s.color}55`,
+                            color: s.color,
+                          }
+                    }
                   >
-                    Découvrir <ArrowRight className="w-4 h-4" />
+                    Découvrir <ArrowRight className="w-4 h-4 transition-transform duration-300" />
                   </Link>
                 </div>
               );
@@ -145,7 +167,14 @@ export default function ServicesScroll() {
 
           {/* ── Droite : le logo collé, et rien d'autre ─────────────────── */}
           <div className="hidden lg:block">
-            <div className="sticky top-0 h-screen flex items-center justify-center">
+            <div className="sticky top-0 h-screen flex flex-col items-center justify-center gap-8">
+
+              {/* L'etiquette de section : le seul element toujours a l'ecran
+                  pendant qu'on traverse les six services. */}
+              <span className="text-white/35 text-[11px] font-bold tracking-[3px] uppercase">
+                Nos expertises
+              </span>
+
               <div className="relative w-[300px] h-[300px] flex items-center justify-center">
 
                 {/* Le halo prend la couleur du service courant. */}
@@ -168,6 +197,21 @@ export default function ServicesScroll() {
                     <LogoActif className="w-[190px] h-[190px]" />
                   </motion.div>
                 </AnimatePresence>
+              </div>
+
+              {/* Six segments : ou on est, et combien il en reste. */}
+              <div className="flex items-center gap-2" aria-hidden="true">
+                {SERVICES_ACCUEIL.map((autre, i) => (
+                  <span
+                    key={autre.slug}
+                    className="h-1 rounded-full transition-all duration-500"
+                    style={{
+                      width: actif === i ? 34 : 14,
+                      backgroundColor: actif === i ? autre.color : 'rgba(255,255,255,0.15)',
+                      boxShadow: actif === i ? `0 0 12px ${autre.color}88` : 'none',
+                    }}
+                  />
+                ))}
               </div>
             </div>
           </div>
