@@ -144,13 +144,36 @@ async function main() {
     );
   }
 
-  console.log('4/4  Verification de la duree de vie du jeton de Page...');
+  console.log('4/4  Verification du jeton de Page...');
   const debug = await appeler(
     `debug_token?input_token=${encodeURIComponent(page.access_token)}` +
       `&access_token=${encodeURIComponent(long.access_token)}`,
   );
   const expire = debug.data?.expires_at;
-  const permanent = expire === 0 || expire === undefined;
+  const sansExpiration = expire === 0 || expire === undefined;
+
+  // `expires_at: 0` ne suffit PAS, et ca a coute une publication.
+  //
+  // Un jeton de Page « sans expiration » meurt quand meme si la SESSION dont
+  // il descend se termine -- et rechiquer « Generate Access Token » dans
+  // l'Explorateur termine la session precedente. Meta a alors repondu
+  // « Session has expired », code 190 sous-code 463, sur un jeton que cet
+  // outil venait de declarer permanent.
+  //
+  // On l'essaie donc pour de vrai : un appel de lecture sur le compte
+  // Instagram vise. S'il passe, le jeton fonctionne maintenant.
+  let vivant = false;
+  let raisonMorte = '';
+  try {
+    const essai = await appeler(
+      `${ig.id}?fields=username&access_token=${encodeURIComponent(page.access_token)}`,
+    );
+    vivant = essai?.username === ig.username;
+  } catch (e: any) {
+    raisonMorte = (e.message || String(e)).slice(0, 160);
+  }
+
+  const permanent = sansExpiration && vivant;
 
   fs.writeFileSync(DESTINATION, page.access_token + '\n', 'utf8');
 
@@ -168,9 +191,9 @@ async function main() {
   console.log('─────────────────────────────────────────────');
   console.log(`  Compte Instagram vise : @${ig.username}`);
   console.log(`  IG_USER_ID            : ${ig.id}`);
-  console.log(
-    `  Jeton de Page         : ${permanent ? 'permanent ✅' : `EXPIRE le ${new Date(expire * 1000).toISOString().slice(0, 10)} ⚠️`}`,
-  );
+  console.log(`  Sans date d'expiration : ${sansExpiration ? 'oui' : `non — expire le ${new Date(expire * 1000).toISOString().slice(0, 10)}`}`);
+  console.log(`  Fonctionne maintenant  : ${vivant ? 'oui' : `NON — ${raisonMorte}`}`);
+  console.log(`  Verdict                : ${permanent ? 'utilisable ✅' : 'A NE PAS POSER ⚠️'}`);
   console.log('─────────────────────────────────────────────');
   console.log('');
   console.log(`Le jeton est dans ${path.basename(DESTINATION)} (ignore par git).`);
