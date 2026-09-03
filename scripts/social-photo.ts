@@ -97,7 +97,8 @@ async function pexels(motCle: string, combien: number, rang: number): Promise<Ph
       `&orientation=portrait&size=large&per_page=${Math.max(combien * 3, 15)}`;
     const r = await fetch(url, { headers: { Authorization: CLE } });
     if (!r.ok) {
-      console.log(`  Pexels ${r.status} — on passe a la suite.`);
+      const detail = (await r.text()).slice(0, 120);
+      console.log(`  Pexels ${r.status} : ${detail}`);
       return null;
     }
     const data = await r.json();
@@ -134,26 +135,36 @@ async function pexels(motCle: string, combien: number, rang: number): Promise<Ph
 }
 
 /**
- * Trouve `combien` vraies photos. Rend `null` si aucune source n'a repondu —
- * l'appelant retombe alors sur l'image generee.
+ * Trouve `combien` vraies photos.
+ *
+ * Rend toujours un objet, jamais `null` tout sec : quand aucune source ne
+ * repond, `photos` est nul et `note` dit POURQUOI. Sans cette note, une
+ * publication qui retombe sur l'image generee n'a l'air de rien — l'execution
+ * reste verte — et il faut deplier le bon journal de la bonne execution pour
+ * comprendre. C'est exactement l'angle mort qui a coute trois allers-retours
+ * du cote de Gemini.
  */
 export async function vraiesPhotos(
   motCle: string,
   combien: number,
   rang: number,
-): Promise<Photo[] | null> {
+): Promise<{ photos: Photo[] | null; note: string }> {
   const miennes = mesPhotos(combien, rang);
   if (miennes) {
     console.log(`  Fond : ${miennes.length} photo(s) du dossier public/social/photos`);
-    return miennes;
+    return { photos: miennes, note: miennes[0].note };
+  }
+
+  if (!CLE) {
+    console.log("  PEXELS_API_KEY absente — on passe a l'image generee.");
+    return { photos: null, note: 'PEXELS_API_KEY absente' };
   }
 
   const trouvees = await pexels(motCle, combien, rang);
   if (trouvees) {
     console.log(`  Fond : ${trouvees.length} photo(s) Pexels pour « ${motCle} »`);
-    return trouvees;
+    return { photos: trouvees, note: trouvees[0].note };
   }
 
-  if (!CLE) console.log('  PEXELS_API_KEY absente — on passe a l\'image generee.');
-  return null;
+  return { photos: null, note: `Pexels n'a rien rendu pour « ${motCle} »` };
 }

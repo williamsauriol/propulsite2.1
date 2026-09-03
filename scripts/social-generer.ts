@@ -19,9 +19,10 @@
  * COÛT
  *
  * Un appel Sonnet à effort « high » par semaine : de l'ordre de 0,15 $.
- * S'ajoutent cinq matières de fond peintes par Gemini, une par diapo, à
- * 0,134 $ US chacune (voir social-fond.ts). Total : environ 0,82 $ par
- * publication, moins de 3,50 $ par mois.
+ * Les fonds sont gratuits quand ce sont de vraies photos — celles de William
+ * ou celles de Pexels (voir social-photo.ts). Gemini ne prend le relais que si
+ * aucune n'est disponible, et coûte alors 0,67 $ pour les cinq diapos.
+ * Donc 0,15 $ la plupart des semaines, 0,82 $ au pire.
  *
  * L'effort « high » est la dépense la plus rentable des deux. Le point faible
  * d'une publication n'est jamais le pixel, c'est la phrase.
@@ -178,8 +179,11 @@ CE QUE TU PRODUIS :
   - titre : MAXIMUM 46 caracteres. Court, frappant, lisible en une seconde.
   - lignes : de 1 a 3 lignes, MAXIMUM 62 caracteres chacune. VIDE sur la
     diapo 1 seulement.
-  - alt : ce que montre l'image, en francais, une phrase. Pour les lecteurs
-    d'ecran et pour qu'Instagram comprenne le sujet.
+  - alt : ce que montre LA DIAPO, en francais, une phrase.
+    Decris le TEXTE et la mise en page, jamais la photo de fond : tu ne sais
+    pas encore quelle photo sera choisie, et decrire une image imaginaire est
+    pire que ne rien decrire. Exemple : « Diapo 3 sur 5 : le chiffre 68 % en
+    gros titre blanc sur fond sombre texture, aux couleurs de Propulsite. »
 - photo : le mot-cle ANGLAIS qui servira a chercher la photo de fond dans une
   banque d'images. Deux a quatre mots.
   UNE MATIERE OU UN LIEU VIDE, JAMAIS DES GENS AU TRAVAIL. « concrete wall
@@ -282,6 +286,13 @@ async function demander(dejaFaits: string[]): Promise<Publication> {
 
 async function demanderUneFois(dejaFaits: string[]): Promise<Publication> {
   if (!CLE) throw new Error('ANTHROPIC_API_KEY absente.');
+
+  // Le modele n'a aucune idee de la date. Sans cette ligne il a ecrit « en
+  // 2025 » dans une publication de septembre 2026 -- le genre de detail qui
+  // fait paraitre une entreprise endormie.
+  const aujourdhui = new Date().toLocaleDateString('fr-CA', {
+    year: 'numeric', month: 'long', day: 'numeric',
+  });
   const evite = dejaFaits.length
     ? `\n\nDÉJÀ PUBLIÉ — trouve autre chose :\n${dejaFaits.map((a) => `- ${a}`).join('\n')}`
     : '';
@@ -302,7 +313,13 @@ async function demanderUneFois(dejaFaits: string[]): Promise<Publication> {
       // que le lecteur remarque.
       output_config: { effort: 'high', format: { type: 'json_schema', schema: SCHEMA } },
       messages: [
-        { role: 'user', content: `${matierePremiere()}\n\n---\n\n${REGLES}${evite}` },
+        {
+          role: 'user',
+          content:
+            `Nous sommes le ${aujourdhui}. Toute année que tu écris doit être ` +
+            `cohérente avec cette date.\n\n` +
+            `${matierePremiere()}\n\n---\n\n${REGLES}${evite}`,
+        },
       ],
     }),
   });
@@ -541,10 +558,11 @@ async function main() {
     const avecFond = process.argv.includes('--fond');
     let fonds: (string | null)[] = new Array(NB_DIAPOS).fill(null);
     if (avecFond) {
-      const photos = await vraiesPhotos(ESSAI.photo, NB_DIAPOS, 0);
-      if (photos) {
-        fonds = photos.map((ph) => ph.image);
+      const reel = await vraiesPhotos(ESSAI.photo, NB_DIAPOS, 0);
+      if (reel.photos) {
+        fonds = reel.photos.map((ph) => ph.image);
       } else {
+        console.log(`  ${reel.note}`);
         fonds = [];
         for (let i = 0; i < NB_DIAPOS; i++) {
           fonds.push((await fabriquerFond(ESSAI.angle, 0)).image);
@@ -575,13 +593,16 @@ async function main() {
   const fonds: (string | null)[] = [];
   const notes: string[] = [];
 
-  const photos = await vraiesPhotos(p.photo, p.diapos.length, journal.length);
-  if (photos) {
-    photos.forEach((ph) => {
+  const reel = await vraiesPhotos(p.photo, p.diapos.length, journal.length);
+  if (reel.photos) {
+    reel.photos.forEach((ph) => {
       fonds.push(ph.image);
       notes.push(ph.note);
     });
   } else {
+    // La raison de l'echec entre au journal AVANT le repli. Sans elle, une
+    // publication qui retombe sur Gemini n'a l'air de rien.
+    notes.push(`vraies photos ecartees : ${reel.note}`);
     // Le rang fait tourner les matieres : la publication n de l'annee ne peut
     // pas retomber sur le beton de la publication n-1. Les cinq diapos
     // partagent le meme rang, donc la meme matiere — cinq rendus differents du
