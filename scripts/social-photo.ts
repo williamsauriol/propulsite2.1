@@ -83,18 +83,33 @@ function mesPhotos(combien: number, rang: number): Photo[] | null {
   return choisies.length ? choisies : null;
 }
 
-/** Un essai de recherche. Rend les photos brutes, ou une liste vide. */
-async function chercher(motCle: string, large: boolean, combien: number): Promise<any[]> {
+/**
+ * Un essai de recherche.
+ *
+ * Rend les photos ET la raison quand il n'y en a pas. « Aucun resultat » et
+ * « cle refusee » demandent deux corrections opposees, et une note qui dit
+ * seulement « rien rendu » les confond -- ce qui a deja coute deux executions.
+ */
+async function chercher(
+  motCle: string,
+  large: boolean,
+  combien: number,
+): Promise<{ photos: any[]; probleme?: string }> {
   const url =
     `https://api.pexels.com/v1/search?query=${encodeURIComponent(motCle)}` +
     `&orientation=portrait${large ? '&size=large' : ''}` +
     `&per_page=${Math.max(combien * 3, 15)}`;
   const r = await fetch(url, { headers: { Authorization: CLE as string } });
   if (!r.ok) {
-    console.log(`  Pexels ${r.status} : ${(await r.text()).slice(0, 120)}`);
-    return [];
+    const detail = (await r.text()).slice(0, 100).replace(/\s+/g, ' ');
+    // 401 : la cle est absente, tronquee ou revoquee. C'est le cas le plus
+    // frequent, et le seul qui se corrige ailleurs que dans le code.
+    const probleme = `HTTP ${r.status}${r.status === 401 ? ' (cle refusee)' : ''} : ${detail}`;
+    console.log(`  Pexels ${probleme}`);
+    return { photos: [], probleme };
   }
-  return (await r.json()).photos || [];
+  const photos = (await r.json()).photos || [];
+  return { photos, probleme: photos.length ? undefined : 'aucun resultat' };
 }
 
 /**
@@ -109,8 +124,12 @@ async function chercher(motCle: string, large: boolean, combien: number): Promis
  * d'abord la taille, puis les mots en trop, puis on retombe sur une matiere
  * generique. Une recherche trop precise ne doit pas couter 0,67 $.
  */
-async function pexels(motCle: string, combien: number, rang: number): Promise<Photo[] | null> {
-  if (!CLE) return null;
+async function pexels(
+  motCle: string,
+  combien: number,
+  rang: number,
+): Promise<{ photos: Photo[] | null; probleme?: string }> {
+  if (!CLE) return { photos: null, probleme: 'cle absente' };
   try {
     const mots = motCle.trim().split(/\s+/);
     const essais: { q: string; large: boolean }[] = [
@@ -123,19 +142,24 @@ async function pexels(motCle: string, combien: number, rang: number): Promise<Ph
 
     let photos: any[] = [];
     let retenu = motCle;
+    const problemes: string[] = [];
     for (const essai of essais) {
-      photos = await chercher(essai.q, essai.large, combien);
-      if (photos.length) {
+      const r = await chercher(essai.q, essai.large, combien);
+      if (r.photos.length) {
+        photos = r.photos;
         retenu = essai.q;
         if (essai.q !== motCle) {
           console.log(`  « ${motCle} » n'a rien donne — replie sur « ${essai.q} »`);
         }
         break;
       }
+      problemes.push(`${essai.q} → ${r.probleme}`);
+      // Une cle refusee le sera aux quatre essais. Inutile de les faire.
+      if (r.probleme?.startsWith('HTTP 401')) break;
     }
     if (!photos.length) {
-      console.log(`  Pexels n'a rien, meme apres avoir elargi.`);
-      return null;
+      console.log("  Pexels n'a rien, meme apres avoir elargi.");
+      return { photos: null, probleme: problemes.join(' | ') };
     }
 
     const choisies: Photo[] = [];
@@ -157,10 +181,13 @@ async function pexels(motCle: string, combien: number, rang: number): Promise<Ph
         note: `Pexels « ${retenu} » — ${p.photographer || 'inconnu'}`,
       });
     }
-    return choisies.length ? choisies : null;
+    return choisies.length
+      ? { photos: choisies }
+      : { photos: null, probleme: 'aucune image telechargeable' };
   } catch (e: any) {
-    console.log(`  Pexels a echoue (${(e.message || e).toString().slice(0, 120)})`);
-    return null;
+    const message = (e.message || e).toString().slice(0, 140);
+    console.log(`  Pexels a echoue (${message})`);
+    return { photos: null, probleme: message };
   }
 }
 
@@ -190,11 +217,11 @@ export async function vraiesPhotos(
     return { photos: null, note: 'PEXELS_API_KEY absente' };
   }
 
-  const trouvees = await pexels(motCle, combien, rang);
-  if (trouvees) {
-    console.log(`  Fond : ${trouvees.length} photo(s) Pexels pour « ${motCle} »`);
-    return { photos: trouvees, note: trouvees[0].note };
+  const r = await pexels(motCle, combien, rang);
+  if (r.photos) {
+    console.log(`  Fond : ${r.photos.length} photo(s) Pexels pour « ${motCle} »`);
+    return { photos: r.photos, note: r.photos[0].note };
   }
 
-  return { photos: null, note: `Pexels n'a rien rendu pour « ${motCle} »` };
+  return { photos: null, note: `Pexels : ${r.probleme || 'raison inconnue'}` };
 }
