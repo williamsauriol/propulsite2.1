@@ -1,0 +1,78 @@
+[
+  {
+    "slug": "invisible-sans-clic",
+    "angle": "68% des clics Google disparaissent",
+    "diapos": [
+      {
+        "titre": "Ton client t'a cherché. Il ne t'a pas trouvé.",
+        "lignes": [],
+        "alt": "Diapo 1 sur 5 : titre blanc centré sur fond sombre, texte unique sans sous-titre, style épuré aux couleurs de Propulsite."
+      },
+      {
+        "titre": "Le problème, c'est pas Google.",
+        "lignes": [
+          "Ton client tape ton métier dans Google.",
+          "Une réponse apparaît. Il n'a plus besoin de cliquer.",
+          "Il appelle quelqu'un d'autre."
+        ],
+        "alt": "Diapo 2 sur 5 : titre en gros et trois lignes explicatives en blanc sur fond sombre, mise en page sobre centrée."
+      },
+      {
+        "titre": "68 % des recherches = zéro clic.",
+        "lignes": [
+          "(SparkToro, 2026)",
+          "Google répond avant même que tu existes.",
+          "Si t'es pas dans la réponse, t'es nulle part."
+        ],
+        "alt": "Diapo 3 sur 5 : chiffre 68 % en très grand, source en petit dessous, deux lignes d'explication, fond texturé sombre aux couleurs de Propulsite."
+      },
+      {
+        "titre": "Sois dans la réponse, pas en dessous.",
+        "lignes": [
+          "Fiche Google à jour. Avis récents.",
+          "Contenu qui répond aux vraies questions.",
+          "L'IA cite ce qu'elle trouve. Donne-lui quoi citer."
+        ],
+        "alt": "Diapo 4 sur 5 : titre accrocheur suivi de trois actions concrètes listées en blanc sur fond sombre, mise en page claire."
+      },
+      {
+        "titre": "On regarde ça ensemble ?",
+        "lignes": [
+          "Dis-moi ton métier et ta région.",
+          "Je te dis ce qui manque pour être visible.",
+          "Écris-moi en privé — c'est gratuit."
+        ],
+        "alt": "Diapo 5 sur 5 : invitation directe en trois lignes courtes sur fond sombre, ton conversationnel, couleurs Propulsite."
+      }
+    ],
+    "photo": "empty construction site dusk",
+    "legende": "Entrepreneur en construction au Québec : si tu n'apparais pas dans les réponses Google, tes clients partent chez le voisin sans même le savoir. Depuis 2026, 68 % des recherches ne génèrent aucun clic — Google répond tout seul, en haut de la page. Ton site peut être parfait, si t'es pas dans cette réponse, tu n'existes pas. La bonne nouvelle : ça se travaille. Écris-moi en privé ou visite propulsite.ca — on regarde ensemble ce qui bloque.",
+    "hashtags": [
+      "#construction",
+      "#constructionquebec",
+      "#entrepreneurconstruction",
+      "#renovationquebec",
+      "#visibilitegoogle",
+      "#referencementlocal",
+      "#googlequebec",
+      "#marketingconstruction",
+      "#rivenord",
+      "#laval",
+      "#sainteustache",
+      "#terrebonne",
+      "#blainville",
+      "#mirabel",
+      "#entrepreneurquebecois"
+    ],
+    "date": "2026-09-03",
+    "images": [
+      "2026-09-03-invisible-sans-clic-1.png",
+      "2026-09-03-invisible-sans-clic-2.png",
+      "2026-09-03-invisible-sans-clic-3.png",
+      "2026-09-03-invisible-sans-clic-4.png",
+      "2026-09-03-invisible-sans-clic-5.png"
+    ],
+    "publie": false,
+    "fond": "5/5 — vraies photos ecartees : Pexels n'a rien rendu pour « empty construction site dusk »"
+  }
+]
