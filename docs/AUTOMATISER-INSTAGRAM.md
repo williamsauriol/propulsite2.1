@@ -158,17 +158,32 @@ précédentes sont mortes. **Demande-moi et on le fait ensemble, écran par
 
 ---
 
-## Le piège qui casse ça dans deux mois
+## Les trois pièges qui cassent ça sans prévenir
 
-Un jeton d'utilisateur Meta **expire après 60 jours**. Si tu poses celui-là, le
-robot marchera jusqu'à la fin octobre puis s'arrêtera sans prévenir — et tu
-conclueras encore une fois que « ça a lâché ».
+**1. Le mauvais type de jeton.** Un jeton d'utilisateur Meta expire après
+60 jours. Ce qu'il faut, c'est un **jeton de Page dérivé d'un jeton utilisateur
+de longue durée** — celui-là n'expire pas. `meta-jetons.ts` fait l'échange.
 
-Ce qu'il faut poser à la place : un **jeton de Page dérivé d'un jeton
-utilisateur de longue durée**. Celui-là n'expire pas tant que tu ne changes pas
-ton mot de passe et que tu ne révoques pas l'app. C'est une étape de plus, et
-c'est la différence entre un robot qui tient un an et un robot qui tient huit
-semaines.
+**2. Recliquer « Generate Access Token ».** Le pire des trois, parce qu'il ne
+ressemble à rien. Chaque nouveau jeton généré dans l'Explorateur **tue la
+session du précédent**, y compris celui qui dort déjà dans les secrets GitHub.
+Meta répond alors `Session has expired`, code 190, sous-code 463 — sur un jeton
+qui n'a pourtant aucune date d'expiration.
+
+C'est arrivé le 3 septembre 2026 : la première tentative de publication a
+échoué pour cette seule raison. **Une fois le jeton posé dans GitHub, ne
+retourne plus dans l'Explorateur.**
+
+**3. Croire `expires_at: 0`.** Meta dit vrai — le jeton n'a pas de date — et il
+peut être mort quand même (voir le piège 2). C'est pourquoi `meta-jetons.ts`
+fait maintenant un vrai appel avec le jeton obtenu et affiche deux verdicts
+séparés : « sans date d'expiration » et « fonctionne maintenant ». Ne pose que
+ce qui affiche **utilisable ✅**.
+
+**À surveiller vers le 2 décembre 2026 :** Meta place une échéance d'accès aux
+données 90 jours après l'autorisation. Le jeton reste valide, mais il faudra
+probablement réautoriser l'app. Si la publication casse à ce moment-là, c'est
+la première chose à regarder.
 
 ---
 

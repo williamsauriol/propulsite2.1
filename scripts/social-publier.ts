@@ -219,12 +219,30 @@ ${e.hashtags.map((h) => (h.startsWith('#') ? h : `#${h}`)).join(' ')}`;
     creation_id: parent.id,
   });
 
+  // Le vrai lien se DEMANDE, il ne se construit pas.
+  //
+  // `publie.id` est l'identifiant du media, un nombre. Le permalien d'Instagram
+  // utilise un code court en base 64 qui n'a rien a voir avec lui : coller le
+  // nombre dans /p/<...>/ donne une adresse qui ne mene nulle part, et qui
+  // repond quand meme 200 parce qu'Instagram sert son mur de connexion.
+  let lien = `https://www.instagram.com/${process.env.IG_NOM || 'propulsite_'}/`;
+  try {
+    const r = await fetch(
+      `${API}/${publie.id}?fields=permalink&access_token=${encodeURIComponent(META_TOKEN)}`,
+    );
+    const data = await r.json();
+    if (data.permalink) lien = data.permalink;
+    else console.log(`  permalien indisponible — on garde le lien du profil`);
+  } catch {
+    console.log('  permalien indisponible — on garde le lien du profil');
+  }
+
   e.publie = true;
   e.publieLe = new Date().toISOString();
-  e.urlInstagram = `https://www.instagram.com/p/${publie.id}/`;
+  e.urlInstagram = lien;
   fs.writeFileSync(JOURNAL, JSON.stringify(entrees, null, 2) + '\n', 'utf8');
 
-  console.log(`✅ Publié — média ${publie.id}`);
+  console.log(`✅ Publié — ${lien}`);
 }
 
 main().catch((e) => {
