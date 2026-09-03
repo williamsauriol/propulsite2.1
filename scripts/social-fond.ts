@@ -23,17 +23,25 @@
  * ou un appel qui echoue ne doit jamais empecher la publication de la semaine
  * de partir.
  *
- * COUT : gemini-3-pro-image-preview, 0,134 $ US par image en 1K/2K.
- * Une par semaine = environ 0,55 $ US par mois.
+ * COUT : 0,134 $ US par image avec Nano Banana Pro, gratuit avec son petit
+ * frere sur le palier gratuit. Une par semaine : moins de 0,55 $ US par mois.
  */
 import { GoogleGenAI } from '@google/genai';
 
 const CLE = process.env.GEMINI_API_KEY;
 
-// Nano Banana Pro. Son petit frere (gemini-2.5-flash-image) coute 3,4 fois
-// moins cher, mais sur une image par semaine l'ecart est de 40 cents par mois
-// et le rendu des matieres est nettement meilleur ici.
-const MODELE = 'gemini-3-pro-image-preview';
+/**
+ * Deux modeles, essayes dans l'ordre.
+ *
+ * Nano Banana Pro rend mieux les matieres, mais Google ne l'offre PAS sur le
+ * palier gratuit de l'API : une cle creee dans AI Studio sans facturation
+ * activee se fait refuser le modele, et le fond disparait sans que rien ne
+ * rougisse. Son petit frere est disponible gratuitement (500 images par jour)
+ * et fait tres bien le travail sur une texture abstraite.
+ *
+ * On demande donc le meilleur, et on retombe sur celui qui marche partout.
+ */
+const MODELES = ['gemini-3-pro-image-preview', 'gemini-2.5-flash-image'];
 
 /**
  * Les matieres tournent dans cet ordre, pilotees par le nombre de
@@ -84,54 +92,83 @@ function invite(matiere: string, angle: string): string {
   ].join('\n');
 }
 
+export interface Fond {
+  /** Data URI pret a poser dans un `background-image`, ou null. */
+  image: string | null;
+  /**
+   * Ce qui s'est passe, en clair. Recopie dans journal.json.
+   *
+   * Un fond absent ne casse rien et ne fait pas rougir l'execution : sans
+   * cette note, il faut deplier le bon journal de la bonne execution pour
+   * apprendre pourquoi l'image est plate. La raison doit vivre a cote du
+   * resultat, pas dans un journal qui expire.
+   */
+  note: string;
+}
+
 /**
- * Rend une image de fond en « data URI », prete a poser dans un
- * `background-image` CSS. Rend `null` si la cle manque ou si l'appel echoue.
+ * Peint la matiere de fond. N'echoue jamais : rend `image: null` et une note
+ * qui dit pourquoi.
  */
-export async function fabriquerFond(
-  angle: string,
-  rang: number,
-): Promise<string | null> {
+export async function fabriquerFond(angle: string, rang: number): Promise<Fond> {
   if (!CLE) {
     console.log('  GEMINI_API_KEY absente — fond plat conserve.');
-    return null;
+    return { image: null, note: 'GEMINI_API_KEY absente' };
   }
 
   const matiere = MATIERES[rang % MATIERES.length];
-  console.log(`  Fond : ${matiere.split(',')[0]}`);
+  console.log(`  Fond demande : ${matiere.split(',')[0]}`);
 
-  try {
-    const genai = new GoogleGenAI({ apiKey: CLE });
-    const reponse = await genai.models.generateContent({
-      model: MODELE,
-      contents: invite(matiere, angle),
-      config: {
-        responseModalities: ['IMAGE'],
-        imageConfig: {
-          // 4:5 n'est pas propose par l'API. 3:4 est le plus proche, et le
-          // `background-size: cover` du gabarit recadre la difference sans
-          // deformer quoi que ce soit.
-          aspectRatio: '3:4',
-          // 1K fait 1024 px de large, soit un poil moins que les 1080 du
-          // gabarit : l'image serait etiree. 2K coute le meme prix.
-          imageSize: '2K',
-          personGeneration: 'ALLOW_NONE',
+  const genai = new GoogleGenAI({ apiKey: CLE });
+  const echecs: string[] = [];
+
+  for (const modele of MODELES) {
+    try {
+      const reponse = await genai.models.generateContent({
+        model: modele,
+        contents: invite(matiere, angle),
+        config: {
+          responseModalities: ['IMAGE'],
+          imageConfig: {
+            // 4:5 n'est pas propose par l'API. 3:4 est le plus proche, et le
+            // `background-size: cover` du gabarit recadre la difference sans
+            // deformer quoi que ce soit.
+            aspectRatio: '3:4',
+            // 1K fait 1024 px de large, soit un poil moins que les 1080 du
+            // gabarit : l'image serait etiree. 2K coute le meme prix.
+            imageSize: '2K',
+            personGeneration: 'ALLOW_NONE',
+          },
         },
-      },
-    });
+      });
 
-    const parties = reponse.candidates?.[0]?.content?.parts ?? [];
-    const image = parties.find((p: any) => p.inlineData?.data);
-    if (!image?.inlineData?.data) {
-      console.log('  Gemini n\'a pas renvoye d\'image — fond plat conserve.');
-      return null;
+      const parties = reponse.candidates?.[0]?.content?.parts ?? [];
+      const image = parties.find((p: any) => p.inlineData?.data);
+
+      if (!image?.inlineData?.data) {
+        // Gemini repond parfois du texte au lieu d'une image — un refus de
+        // securite, le plus souvent. La raison vaut d'etre gardee : c'est elle
+        // qui dit s'il faut adoucir l'invite.
+        const raison = reponse.candidates?.[0]?.finishReason || 'sans raison donnee';
+        echecs.push(`${modele} : aucune image (${raison})`);
+        console.log(`  ${modele} n'a pas renvoye d'image (${raison})`);
+        continue;
+      }
+
+      const type = image.inlineData.mimeType || 'image/png';
+      console.log(`  Fond peint par ${modele}`);
+      return {
+        image: `data:${type};base64,${image.inlineData.data}`,
+        note: `${modele} — ${matiere}`,
+      };
+    } catch (e: any) {
+      const message = (e.message || String(e)).slice(0, 160);
+      echecs.push(`${modele} : ${message}`);
+      console.log(`  ${modele} a echoue (${message})`);
     }
-
-    const type = image.inlineData.mimeType || 'image/png';
-    return `data:${type};base64,${image.inlineData.data}`;
-  } catch (e: any) {
-    // Un fond rate ne doit jamais couter la publication de la semaine.
-    console.log(`  Gemini a echoue (${e.message?.slice(0, 120)}) — fond plat conserve.`);
-    return null;
   }
+
+  // Un fond rate ne doit jamais couter la publication de la semaine.
+  console.log("  Aucun modele n'a rendu de fond — fond plat conserve.");
+  return { image: null, note: echecs.join(' | ') };
 }

@@ -60,6 +60,8 @@ interface EntreeJournal extends Publication {
   date: string;
   image: string;
   publie: boolean;
+  /** La matiere peinte par Gemini, ou la raison pour laquelle il n'y en a pas. */
+  fond?: string;
   publieLe?: string;
   urlInstagram?: string;
 }
@@ -376,7 +378,7 @@ async function main() {
     const avecFond = process.argv.includes('--fond');
     const fond = avecFond ? await fabriquerFond(ESSAI.angle, 0) : null;
     const dest = path.join(DOSSIER, 'essai-gabarit.png');
-    await rendre(ESSAI, dest, fond);
+    await rendre(ESSAI, dest, fond?.image ?? null);
     console.log(`Essai rendu : ${dest}`);
     return;
   }
@@ -398,9 +400,9 @@ async function main() {
   const fond = await fabriquerFond(p.angle, journal.length);
 
   const nomImage = `${jour}-${p.slug}.png`;
-  await rendre(p, path.join(DOSSIER, nomImage), fond);
+  await rendre(p, path.join(DOSSIER, nomImage), fond.image);
 
-  journal.push({ ...p, date: jour, image: nomImage, publie: false });
+  journal.push({ ...p, date: jour, image: nomImage, publie: false, fond: fond.note });
   fs.writeFileSync(JOURNAL, JSON.stringify(journal, null, 2) + '\n', 'utf8');
 
   console.log(`✅ ${nomImage} écrit, en attente de publication.`);
