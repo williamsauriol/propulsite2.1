@@ -19,7 +19,9 @@
  * COÛT
  *
  * Un appel Sonnet à effort « low » par semaine, environ 8 000 jetons en entrée
- * et 1 200 en sortie : de l'ordre de 0,05 $. Sur un mois, moins qu'un café.
+ * et 1 200 en sortie : de l'ordre de 0,05 $. S'ajoute la matière de fond
+ * peinte par Gemini, 0,13 $ US (voir social-fond.ts). Total : moins de 0,20 $
+ * par publication, environ 0,80 $ par mois.
  * Le rendu de l'image ne coûte rien (Chrome sans écran, sur GitHub Actions,
  * gratuit et illimité pour un dépôt public).
  *
@@ -31,6 +33,7 @@ import { fileURLToPath } from 'node:url';
 import { SERVICES } from '../src/constants/services';
 import { PAIN_POINTS_ARTICLES } from '../src/constants/painPointsData';
 import { CHIFFRES, SOURCES } from '../src/constants/geoData';
+import { fabriquerFond } from './social-fond';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const RACINE = path.resolve(__dirname, '..');
@@ -182,8 +185,15 @@ async function demander(dejaFaits: string[]): Promise<Publication> {
  * Le fil d'un entrepreneur est rempli de photos de chantier. Une image de
  * typographie sur fond sombre y détonne : c'est ce qui avait le mieux marché
  * dans les publications précédentes, et c'est reconduit ici.
+ *
+ * `fond` est une matière photographiée par Gemini (voir social-fond.ts), posée
+ * sous un voile sombre. Le voile n'est pas décoratif : il garantit que le texte
+ * blanc reste lisible quoi que le modèle ait rendu. Sans lui, une image un peu
+ * trop claire rendrait l'accroche illisible et personne ne s'en apercevrait
+ * avant que ce soit publié. Si `fond` est nul, l'aplat d'origine reprend sa
+ * place et rien ne bouge.
  */
-function gabarit(p: Publication): string {
+function gabarit(p: Publication, fond: string | null = null): string {
   const lignes = p.lignes
     .map((l) => `<p class="ligne">${l.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</p>`)
     .join('');
@@ -200,6 +210,18 @@ function gabarit(p: Publication): string {
     font-family:Archivo, system-ui, sans-serif; overflow:hidden; position:relative;
     display:flex; flex-direction:column; justify-content:space-between;
     padding:96px 84px;
+  }
+  .fond {
+    position:absolute; inset:0;
+    background-size:cover; background-position:center;
+  }
+  /* Le voile fixe le contraste. Au plus clair (72 % d'opacite en haut), du
+     blanc pur sur #050a15 garde un rapport bien au-dela du 4,5:1 exige, quelle
+     que soit la matiere rendue en dessous. */
+  .voile {
+    position:absolute; inset:0;
+    background:linear-gradient(180deg,
+      rgba(5,10,21,.72) 0%, rgba(5,10,21,.84) 42%, rgba(5,10,21,.94) 100%);
   }
   .halo {
     position:absolute; top:-260px; left:50%; transform:translateX(-50%);
@@ -230,6 +252,7 @@ function gabarit(p: Publication): string {
     color:#00d2ff; text-align:right; line-height:1.6;
   }
 </style></head><body>
+  ${fond ? `<div class="fond" style="background-image:url('${fond}')"></div><div class="voile"></div>` : ''}
   <div class="halo"></div>
   <div class="filet haut"></div>
   <header><span class="etiquette">Propulsite · Marketing construction</span></header>
@@ -248,7 +271,11 @@ function gabarit(p: Publication): string {
 </body></html>`;
 }
 
-async function rendre(p: Publication, destination: string): Promise<void> {
+async function rendre(
+  p: Publication,
+  destination: string,
+  fond: string | null = null,
+): Promise<void> {
   // Puppeteer est installé par le workflow avec --no-save : le rendu de texte
   // par un vrai navigateur est fiable et charge les polices Google, alors que
   // rasteriser un SVG dépend des polices installées sur la machine — ce qui
@@ -260,7 +287,7 @@ async function rendre(p: Publication, destination: string): Promise<void> {
   try {
     const page = await navigateur.newPage();
     await page.setViewport({ width: 1080, height: 1350, deviceScaleFactor: 1 });
-    await page.setContent(gabarit(p), { waitUntil: 'networkidle0' });
+    await page.setContent(gabarit(p, fond), { waitUntil: 'networkidle0' });
     // Laisser les polices Google finir de s'appliquer.
     await page.evaluateHandle('document.fonts.ready');
     await new Promise((r) => setTimeout(r, 400));
@@ -290,9 +317,15 @@ async function main() {
 
   // node scripts/social-generer.ts --essai : rend le visuel a partir d'un
   // contenu fixe, sans appeler l'API. Pour verifier le gabarit gratuitement.
+  //
+  // Ajouter --fond y ajoute la matiere generee par Gemini. Ca coute 0,13 $ US
+  // et ca n'appelle toujours pas Anthropic : c'est la façon de juger le
+  // nouveau visuel sans depenser une publication.
   if (process.argv.includes('--essai')) {
+    const avecFond = process.argv.includes('--fond');
+    const fond = avecFond ? await fabriquerFond(ESSAI.angle, 0) : null;
     const dest = path.join(DOSSIER, 'essai-gabarit.png');
-    await rendre(ESSAI, dest);
+    await rendre(ESSAI, dest, fond);
     console.log(`Essai rendu : ${dest}`);
     return;
   }
@@ -309,8 +342,12 @@ async function main() {
   console.log(`Angle : ${p.angle}`);
   console.log(`Accroche : ${p.accroche} (${p.accroche.length} car.)`);
 
+  // Le rang fait tourner les matieres : la publication n de l'annee ne peut
+  // pas retomber sur le beton de la publication n-1.
+  const fond = await fabriquerFond(p.angle, journal.length);
+
   const nomImage = `${jour}-${p.slug}.png`;
-  await rendre(p, path.join(DOSSIER, nomImage));
+  await rendre(p, path.join(DOSSIER, nomImage), fond);
 
   journal.push({ ...p, date: jour, image: nomImage, publie: false });
   fs.writeFileSync(JOURNAL, JSON.stringify(journal, null, 2) + '\n', 'utf8');

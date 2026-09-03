@@ -13,3 +13,8 @@ coverage/
 
 # Fichiers Blender : binaires et lourds, ils vivent hors du depot.
 blender/
+
+# Jeton Meta recupere en local, ne doit jamais partir dans git
+.meta-token.txt
+.meta-secret.txt
+.meta-court.txt

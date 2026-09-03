@@ -35,7 +35,16 @@ const DEPOT = process.env.GITHUB_REPOSITORY || 'williamsauriol/propulsite2.1';
 const BRANCHE = process.env.GITHUB_REF_NAME || 'main';
 const BASE_IMAGES = `https://raw.githubusercontent.com/${DEPOT}/${BRANCHE}/public/social`;
 
-const API = 'https://graph.facebook.com/v21.0';
+// Meta retire chaque version de l'API environ deux ans apres sa sortie, et
+// sans prevenir autrement que par une erreur au moment de publier. v21.0
+// datait d'octobre 2024 : elle arrivait a echeance. v26.0 est la plus recente
+// encore servie en septembre 2026.
+//
+// Pour verifier laquelle est vivante sans jeton :
+//   curl -s https://graph.facebook.com/v27.0/me
+// « An active access token must be used » = la version existe.
+// « Unknown path components » = elle n'existe pas.
+const API = 'https://graph.facebook.com/v26.0';
 
 interface Entree {
   slug: string; angle: string; accroche: string; lignes: string[];
