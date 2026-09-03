@@ -83,28 +83,58 @@ function mesPhotos(combien: number, rang: number): Photo[] | null {
   return choisies.length ? choisies : null;
 }
 
+/** Un essai de recherche. Rend les photos brutes, ou une liste vide. */
+async function chercher(motCle: string, large: boolean, combien: number): Promise<any[]> {
+  const url =
+    `https://api.pexels.com/v1/search?query=${encodeURIComponent(motCle)}` +
+    `&orientation=portrait${large ? '&size=large' : ''}` +
+    `&per_page=${Math.max(combien * 3, 15)}`;
+  const r = await fetch(url, { headers: { Authorization: CLE as string } });
+  if (!r.ok) {
+    console.log(`  Pexels ${r.status} : ${(await r.text()).slice(0, 120)}`);
+    return [];
+  }
+  return (await r.json()).photos || [];
+}
+
 /**
- * Cinq photos differentes d'une meme recherche Pexels.
+ * Cinq photos differentes, en elargissant la recherche jusqu'a trouver.
  *
- * `orientation=portrait` n'est pas un detail : une photo paysage recadree en
- * 1080 x 1350 perd les deux tiers de son sujet, et ca se voit.
+ * `orientation=portrait` n'est pas negociable : une photo paysage recadree en
+ * 1080 x 1350 perd les deux tiers de son sujet, et ca se voit. Le reste, si.
+ *
+ * Le modele produit parfois un mot-cle trop pointu pour une banque d'images —
+ * « empty construction site dusk » n'a rendu aucune photo portrait. Plutot que
+ * d'abandonner et de payer Gemini, on relache une contrainte a la fois :
+ * d'abord la taille, puis les mots en trop, puis on retombe sur une matiere
+ * generique. Une recherche trop precise ne doit pas couter 0,67 $.
  */
 async function pexels(motCle: string, combien: number, rang: number): Promise<Photo[] | null> {
   if (!CLE) return null;
   try {
-    const url =
-      `https://api.pexels.com/v1/search?query=${encodeURIComponent(motCle)}` +
-      `&orientation=portrait&size=large&per_page=${Math.max(combien * 3, 15)}`;
-    const r = await fetch(url, { headers: { Authorization: CLE } });
-    if (!r.ok) {
-      const detail = (await r.text()).slice(0, 120);
-      console.log(`  Pexels ${r.status} : ${detail}`);
-      return null;
+    const mots = motCle.trim().split(/\s+/);
+    const essais: { q: string; large: boolean }[] = [
+      { q: motCle, large: true },
+      { q: motCle, large: false },
+      // Les deux premiers mots portent presque toujours le sujet.
+      ...(mots.length > 2 ? [{ q: mots.slice(0, 2).join(' '), large: false }] : []),
+      { q: 'concrete texture', large: false },
+    ];
+
+    let photos: any[] = [];
+    let retenu = motCle;
+    for (const essai of essais) {
+      photos = await chercher(essai.q, essai.large, combien);
+      if (photos.length) {
+        retenu = essai.q;
+        if (essai.q !== motCle) {
+          console.log(`  « ${motCle} » n'a rien donne — replie sur « ${essai.q} »`);
+        }
+        break;
+      }
     }
-    const data = await r.json();
-    const photos: any[] = data.photos || [];
-    if (photos.length === 0) {
-      console.log(`  Pexels n'a rien pour « ${motCle} » — on passe a la suite.`);
+    if (!photos.length) {
+      console.log(`  Pexels n'a rien, meme apres avoir elargi.`);
       return null;
     }
 
@@ -124,7 +154,7 @@ async function pexels(motCle: string, combien: number, rang: number): Promise<Ph
         image: `data:${type};base64,${octets.toString('base64')}`,
         // Le nom du photographe est garde : Pexels ne l'exige pas, mais savoir
         // d'ou vient une image evite d'avoir a le redecouvrir plus tard.
-        note: `Pexels « ${motCle} » — ${p.photographer || 'inconnu'}`,
+        note: `Pexels « ${retenu} » — ${p.photographer || 'inconnu'}`,
       });
     }
     return choisies.length ? choisies : null;

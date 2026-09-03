@@ -185,7 +185,11 @@ CE QUE TU PRODUIS :
     pire que ne rien decrire. Exemple : « Diapo 3 sur 5 : le chiffre 68 % en
     gros titre blanc sur fond sombre texture, aux couleurs de Propulsite. »
 - photo : le mot-cle ANGLAIS qui servira a chercher la photo de fond dans une
-  banque d'images. Deux a quatre mots.
+  banque d'images. DEUX MOTS, courants, concrets.
+  Une banque d'images n'a pas de « empty construction site at dusk » en
+  portrait : elle a du « concrete texture », du « steel beam », du « wood
+  planks », du « construction site ». Vise le mot que porterait l'etiquette
+  d'une photo, pas la description d'une scene.
   UNE MATIERE OU UN LIEU VIDE, JAMAIS DES GENS AU TRAVAIL. « concrete wall
   texture », « empty construction site », « steel beams », « lumber stack »
   conviennent. « construction workers », « happy contractor », « team meeting »
