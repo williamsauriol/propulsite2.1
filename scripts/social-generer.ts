@@ -136,16 +136,67 @@ const SCHEMA = {
   properties: {
     slug: { type: 'string', description: 'identifiant court en minuscules avec des tirets' },
     angle: { type: 'string', description: 'le sujet en 5 mots, pour ne pas le répéter plus tard' },
-    accroche: { type: 'string', maxLength: 52 },
-    lignes: { type: 'array', items: { type: 'string', maxLength: 68 }, minItems: 2, maxItems: 4 },
+    // AUCUNE contrainte de taille ici, et c'est volontaire.
+    //
+    // L'API d'Anthropic rejette le schema en entier, erreur 400, des qu'un
+    // tableau porte un `minItems` autre que 0 ou 1. Le message ne nomme qu'une
+    // contrainte a la fois : corriger celle qu'il pointe pour decouvrir la
+    // suivante coute un aller-retour par contrainte. On les enleve donc toutes.
+    //
+    // Les limites vivent en francais dans les REGLES ci-dessus, ou le modele
+    // les lit, et `verifier()` refuse le resultat qui ne les respecte pas.
+    accroche: { type: 'string' },
+    lignes: { type: 'array', items: { type: 'string' } },
     legende: { type: 'string' },
-    hashtags: { type: 'array', items: { type: 'string' }, minItems: 12, maxItems: 15 },
+    hashtags: { type: 'array', items: { type: 'string' } },
   },
   required: ['slug', 'angle', 'accroche', 'lignes', 'legende', 'hashtags'],
   additionalProperties: false,
 };
 
+/**
+ * Ce que le schema ne peut plus exiger, on le verifie ici.
+ *
+ * Le gabarit tombe a plat sans au moins deux lignes sous l'accroche, et une
+ * publication a moins de douze mots-cles se prive de la moitie de sa portee.
+ * Le modele respecte les REGLES presque toujours ; « presque » suffit a
+ * publier un visuel casse un mercredi matin sans que personne regarde.
+ */
+function verifier(p: Publication): string | null {
+  if (!p.lignes || p.lignes.length < 2) {
+    return `${p.lignes?.length ?? 0} ligne(s) sous l'accroche, il en faut 2`;
+  }
+  if (p.lignes.length > 4) {
+    return `${p.lignes.length} lignes, le gabarit en tient 4`;
+  }
+  const tropLongue = p.lignes.find((l) => l.length > 68);
+  if (tropLongue) {
+    return `ligne de ${tropLongue.length} caracteres, maximum 68`;
+  }
+  if (!p.hashtags || p.hashtags.length < 12) {
+    return `${p.hashtags?.length ?? 0} hashtags, il en faut 12`;
+  }
+  if (p.accroche.length > 52) {
+    return `accroche de ${p.accroche.length} caracteres, maximum 52`;
+  }
+  return null;
+}
+
 async function demander(dejaFaits: string[]): Promise<Publication> {
+  // Deux essais. Le modele derape rarement, et quand il derape c'est sur une
+  // contrainte de comptage qu'un second tirage corrige — relancer coute cinq
+  // cents, publier un visuel casse coute une semaine.
+  for (let essai = 1; essai <= 2; essai++) {
+    const p = await demanderUneFois(dejaFaits);
+    const probleme = verifier(p);
+    if (!probleme) return p;
+    console.log(`  Essai ${essai} rejete : ${probleme}`);
+    if (essai === 2) throw new Error(`Deux essais rejetes. Dernier : ${probleme}`);
+  }
+  throw new Error('inatteignable');
+}
+
+async function demanderUneFois(dejaFaits: string[]): Promise<Publication> {
   if (!CLE) throw new Error('ANTHROPIC_API_KEY absente.');
   const evite = dejaFaits.length
     ? `\n\nDÉJÀ PUBLIÉ — trouve autre chose :\n${dejaFaits.map((a) => `- ${a}`).join('\n')}`
