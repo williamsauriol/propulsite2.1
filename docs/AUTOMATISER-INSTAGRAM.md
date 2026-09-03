@@ -1,10 +1,14 @@
 # Automatiser Instagram
 
-Tout est bâti. Il manque **deux valeurs** que Meta ne donne qu'à toi.
+Tout est branché et vérifié depuis le 3 septembre 2026 : le robot écrit,
+illustre et publie seul sur **@propulsite_** chaque mercredi.
 
-Tant qu'elles ne sont pas là, le robot génère quand même l'image et la légende
-chaque mercredi et les dépose dans `public/social/` — rien n'est perdu, tu peux
-publier à la main. Dès que les deux valeurs sont posées, il publie tout seul.
+Ce document sert à deux choses : comprendre ce qui tourne, et pouvoir tout
+refaire le jour où un jeton est révoqué.
+
+Si les secrets Meta disparaissent, rien n'est perdu : le robot génère quand
+même le carrousel et le dépose dans `public/social/`, prêt à publier à la
+main.
 
 ---
 
@@ -14,19 +18,26 @@ Chaque mercredi 9 h (heure de l'Est), sur GitHub Actions :
 
 1. Il lit **les données de ton propre site** — tes six services, tes treize
    articles, les chiffres GEO avec leurs sources.
-2. Il écrit une publication : accroche, trois lignes, légende, hashtags.
-3. Il fabrique l'image 1080 × 1350 aux couleurs de Propulsite.
-4. Il la pousse dans le dépôt.
+2. Il écrit un **carrousel de cinq diapos** : l'arrêt, le problème, la preuve
+   chiffrée, quoi faire, l'invitation.
+3. Il fabrique les cinq images 1080 × 1350 aux couleurs de Propulsite.
+4. Il les pousse dans le dépôt.
 5. Il publie sur Instagram — **si les deux secrets existent**.
 
 Il ne peut pas inventer de statistique : les seuls chiffres qu'il a le droit
 d'utiliser sont ceux du site, et ils portent tous leur source. Il n'a pas le
 droit non plus de prétendre que tu as des clients ou des résultats.
 
-**Coût : environ 0,20 $ US par semaine.** Un appel à Sonnet en effort bas
-(0,05 $) plus la matière de fond peinte par Gemini (0,13 $). Le rendu de
-l'image et l'exécution ne coûtent rien — GitHub Actions est gratuit et
-illimité pour un dépôt public. Sur un mois : moins d'un dollar.
+**Coût : environ 0,82 $ US par semaine.** Un appel à Sonnet en effort élevé
+(0,15 $) plus cinq matières de fond peintes par Gemini (0,67 $). Le rendu des
+images et l'exécution ne coûtent rien — GitHub Actions est gratuit et illimité
+pour un dépôt public. Sur un mois : moins de 3,50 $.
+
+**Pourquoi cinq diapos et pas une image.** Si quelqu'un ne réagit pas à la
+première image, Instagram lui remontre la publication en affichant la
+**deuxième**. Une publication, deux chances d'être vue — aucun autre format
+n'obtient ça. C'est aussi pourquoi chaque diapo doit tenir debout toute seule :
+si la diapo 2 n'a aucun sens sans la 1, la deuxième chance est perdue.
 
 ---
 
@@ -63,16 +74,18 @@ Trois choses doivent être vraies avant même de commencer :
    cinq minutes. C'est aussi, au passage, un des liens externes qui te manquent.
 3. **Un compte développeur Meta**, sur `developers.facebook.com`. Gratuit.
 
-Le point 2 est celui qui bloque la plupart du monde. Ton `sameAs` sur le site
-pointe aujourd'hui vers ton profil Facebook **personnel** — donc il y a de
-bonnes chances que la Page n'existe pas encore.
+Le point 2 est celui qui bloque la plupart du monde. La Page a été créée le
+3 septembre 2026 (`1277763615427534`), et le lien du pied de page du site
+pointe désormais sur elle plutôt que sur le profil personnel.
 
 ---
 
 ## Le chemin
 
 Dans `developers.facebook.com` : créer une app de type **Business**, y ajouter
-le produit **Instagram**, puis générer un jeton avec ces quatre permissions :
+le produit **Instagram** — en choisissant bien la **connexion Facebook**, pas
+la connexion Instagram, dont le jeton meurt tous les 60 jours — puis générer un
+jeton avec ces cinq permissions :
 
 ```
 instagram_basic
@@ -139,11 +152,11 @@ semaines.
 npx tsx scripts/social-generer.ts --essai
 ```
 
-Rend `public/social/essai-gabarit.png` à partir d'un texte fixe, sans appeler
-l'IA. Sert à vérifier le visuel après une retouche du gabarit.
+Rend les cinq `public/social/essai-gabarit-N.png` à partir d'un texte fixe,
+sans appeler l'IA. Sert à vérifier le gabarit après une retouche.
 
-Pour voir le visuel **avec** la matière de fond, pour 0,13 $ US et sans toucher
-à une vraie publication :
+Pour voir le carrousel **avec** les matières de fond, pour 0,67 $ US et sans
+toucher à une vraie publication :
 
 ```bash
 npx tsx scripts/social-generer.ts --essai --fond

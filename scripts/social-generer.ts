@@ -1,5 +1,5 @@
 /**
- * social-generer.ts — Fabrique la publication Instagram de la semaine.
+ * social-generer.ts — Fabrique le carrousel Instagram de la semaine.
  *
  * POURQUOI CE SCRIPT VIT DANS LE DÉPÔT DU SITE
  *
@@ -18,10 +18,13 @@
  *
  * COÛT
  *
- * Un appel Sonnet à effort « low » par semaine, environ 8 000 jetons en entrée
- * et 1 200 en sortie : de l'ordre de 0,05 $. S'ajoute la matière de fond
- * peinte par Gemini, 0,13 $ US (voir social-fond.ts). Total : moins de 0,20 $
- * par publication, environ 0,80 $ par mois.
+ * Un appel Sonnet à effort « high » par semaine : de l'ordre de 0,15 $.
+ * S'ajoutent cinq matières de fond peintes par Gemini, une par diapo, à
+ * 0,134 $ US chacune (voir social-fond.ts). Total : environ 0,82 $ par
+ * publication, moins de 3,50 $ par mois.
+ *
+ * L'effort « high » est la dépense la plus rentable des deux. Le point faible
+ * d'une publication n'est jamais le pixel, c'est la phrase.
  * Le rendu de l'image ne coûte rien (Chrome sans écran, sur GitHub Actions,
  * gratuit et illimité pour un dépôt public).
  *
@@ -42,23 +45,40 @@ const JOURNAL = path.join(DOSSIER, 'journal.json');
 
 const CLE = process.env.ANTHROPIC_API_KEY;
 
-// Sonnet, effort bas : on demande un texte court et cadré, pas un raisonnement.
-// Opus ici coûterait dix fois plus pour un résultat que personne ne saurait
-// distinguer sur une publication de 200 mots.
+// Sonnet, mais à effort « high » (voir l'appel plus bas). Opus coûterait dix
+// fois plus pour un écart que personne ne saurait distinguer sur un carrousel
+// de 200 mots ; monter l'effort de Sonnet, lui, se voit tout de suite.
 const MODELE = 'claude-sonnet-4-6';
+
+/**
+ * Cinq diapos. Instagram en accepte dix, mais au-dela de cinq le taux de
+ * defilement jusqu'a la fin s'effondre : mieux vaut cinq diapos lues que dix
+ * abandonnees a la troisieme.
+ */
+const NB_DIAPOS = 5;
+
+/**
+ * Une diapo du carrousel. `lignes` est vide sur l'ouverture : la premiere
+ * image ne porte qu'un titre, parce qu'un pouce qui defile ne lit pas un
+ * paragraphe.
+ */
+interface Diapo {
+  titre: string;
+  lignes: string[];
+}
 
 interface Publication {
   slug: string;
   angle: string;
-  accroche: string;
-  lignes: string[];
+  diapos: Diapo[];
   legende: string;
   hashtags: string[];
 }
 
 interface EntreeJournal extends Publication {
   date: string;
-  image: string;
+  /** Les images du carrousel, dans l'ordre de defilement. */
+  images: string[];
   publie: boolean;
   /** La matiere peinte par Gemini, ou la raison pour laquelle il n'y en a pas. */
   fond?: string;
@@ -120,18 +140,38 @@ INTERDITS ABSOLUS :
 - Pas d'emoji dans l'accroche ni dans les lignes du visuel. Au plus un seul
   dans la légende, et seulement s'il sert.
 
+POURQUOI UN CARROUSEL DE 5 ET PAS UNE IMAGE
+
+Instagram fait une chose qu'aucun autre format n'obtient : si quelqu'un ne
+reagit pas a la premiere image, il lui remontre la publication en affichant la
+DEUXIEME. Une publication, deux chances d'etre vue.
+
+Consequence directe sur ton travail : chaque diapo doit tenir debout toute
+seule. Si la diapo 2 n'a aucun sens sans la 1, la deuxieme chance est perdue.
+
+LA STRUCTURE, DANS CET ORDRE :
+
+- Diapo 1 — L'ARRET. Un titre, rien d'autre, et une liste "lignes" vide. C'est ce qui
+  arrete le pouce. Une affirmation qui derange ou une question qui pique.
+  MAXIMUM 46 caracteres.
+- Diapo 2 — LE PROBLEME. Ce que l'entrepreneur vit sans le nommer.
+- Diapo 3 — LA PREUVE. Un des chiffres fournis plus haut, avec ce qu'il veut
+  dire pour lui. Jamais un chiffre invente.
+- Diapo 4 — QUOI FAIRE. Concret, faisable, pas une liste de services.
+- Diapo 5 — L'INVITATION. Ce qu'il gagne a repondre. Pas de « lien en bio ».
+
 CE QUE TU PRODUIS :
-- accroche : le titre sur l'image. MAXIMUM 52 caractères. Une phrase qui
-  arrête le pouce. Une affirmation ou une question, jamais un slogan.
-- lignes : 2 à 4 lignes courtes qui vont sur l'image sous l'accroche.
-  Maximum 68 caractères chacune. C'est le corps de l'argument.
-- legende : le texte sous la publication. 60 à 110 mots. La PREMIÈRE PHRASE
+- diapos : EXACTEMENT 5. Chacune a :
+  - titre : MAXIMUM 46 caracteres. Court, frappant, lisible en une seconde.
+  - lignes : de 1 a 3 lignes, MAXIMUM 62 caracteres chacune. VIDE sur la
+    diapo 1 seulement.
+- legende : le texte sous la publication. 60 a 110 mots. La PREMIERE PHRASE
   doit contenir les mots que quelqu'un taperait dans Google — depuis 2026 les
-  publications des comptes professionnels peuvent sortir dans les résultats,
-  et Instagram coupe à 125 caractères. Termine par une invitation simple à
-  écrire en privé ou à visiter propulsite.ca. Pas de « lien en bio ».
-- hashtags : 12 à 15, en français, mélange de métier (#construction,
-  #renovationquebec) et de région (#rivenord, #sainteustache, #laval).`;
+  publications des comptes professionnels peuvent sortir dans les resultats,
+  et Instagram coupe a 125 caracteres. Termine par une invitation simple a
+  ecrire en prive ou a visiter propulsite.ca.
+- hashtags : 12 a 15, en francais, melange de metier (#construction,
+  #renovationquebec) et de region (#rivenord, #sainteustache, #laval).`;
 
 const SCHEMA = {
   type: 'object',
@@ -147,12 +187,22 @@ const SCHEMA = {
     //
     // Les limites vivent en francais dans les REGLES ci-dessus, ou le modele
     // les lit, et `verifier()` refuse le resultat qui ne les respecte pas.
-    accroche: { type: 'string' },
-    lignes: { type: 'array', items: { type: 'string' } },
+    diapos: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          titre: { type: 'string' },
+          lignes: { type: 'array', items: { type: 'string' } },
+        },
+        required: ['titre', 'lignes'],
+        additionalProperties: false,
+      },
+    },
     legende: { type: 'string' },
     hashtags: { type: 'array', items: { type: 'string' } },
   },
-  required: ['slug', 'angle', 'accroche', 'lignes', 'legende', 'hashtags'],
+  required: ['slug', 'angle', 'diapos', 'legende', 'hashtags'],
   additionalProperties: false,
 };
 
@@ -165,21 +215,28 @@ const SCHEMA = {
  * publier un visuel casse un mercredi matin sans que personne regarde.
  */
 function verifier(p: Publication): string | null {
-  if (!p.lignes || p.lignes.length < 2) {
-    return `${p.lignes?.length ?? 0} ligne(s) sous l'accroche, il en faut 2`;
+  if (!p.diapos || p.diapos.length !== NB_DIAPOS) {
+    return `${p.diapos?.length ?? 0} diapos, il en faut exactement ${NB_DIAPOS}`;
   }
-  if (p.lignes.length > 4) {
-    return `${p.lignes.length} lignes, le gabarit en tient 4`;
-  }
-  const tropLongue = p.lignes.find((l) => l.length > 68);
-  if (tropLongue) {
-    return `ligne de ${tropLongue.length} caracteres, maximum 68`;
+  for (let i = 0; i < p.diapos.length; i++) {
+    const d = p.diapos[i];
+    const n = i + 1;
+    if (!d.titre || d.titre.length > 46) {
+      return `diapo ${n} : titre de ${d.titre?.length ?? 0} caracteres, maximum 46`;
+    }
+    // La premiere image doit rester nue. Un pouce qui defile ne lit pas un
+    // paragraphe : c'est le titre seul qui l'arrete, ou rien.
+    if (i === 0 && d.lignes.length > 0) {
+      return `diapo 1 : elle doit n'avoir qu'un titre, ${d.lignes.length} ligne(s) en trop`;
+    }
+    if (i > 0 && (d.lignes.length < 1 || d.lignes.length > 3)) {
+      return `diapo ${n} : ${d.lignes.length} ligne(s), il en faut 1 a 3`;
+    }
+    const trop = d.lignes.find((l) => l.length > 62);
+    if (trop) return `diapo ${n} : ligne de ${trop.length} caracteres, maximum 62`;
   }
   if (!p.hashtags || p.hashtags.length < 12) {
     return `${p.hashtags?.length ?? 0} hashtags, il en faut 12`;
-  }
-  if (p.accroche.length > 52) {
-    return `accroche de ${p.accroche.length} caracteres, maximum 52`;
   }
   return null;
 }
@@ -213,8 +270,12 @@ async function demanderUneFois(dejaFaits: string[]): Promise<Publication> {
     },
     body: JSON.stringify({
       model: MODELE,
-      max_tokens: 2000,
-      output_config: { effort: 'low', format: { type: 'json_schema', schema: SCHEMA } },
+      max_tokens: 4000,
+      // Effort 'high', et c'est la depense la plus rentable du script. Le point
+      // faible d'une publication n'est jamais le pixel, c'est la phrase. Passer
+      // de 'low' a 'high' coute une dizaine de cents et change la seule chose
+      // que le lecteur remarque.
+      output_config: { effort: 'high', format: { type: 'json_schema', schema: SCHEMA } },
       messages: [
         { role: 'user', content: `${matierePremiere()}\n\n---\n\n${REGLES}${evite}` },
       ],
@@ -246,11 +307,25 @@ async function demanderUneFois(dejaFaits: string[]): Promise<Publication> {
  * avant que ce soit publié. Si `fond` est nul, l'aplat d'origine reprend sa
  * place et rien ne bouge.
  */
-function gabarit(p: Publication, fond: string | null = null): string {
-  const lignes = p.lignes
-    .map((l) => `<p class="ligne">${l.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</p>`)
+function gabarit(
+  d: Diapo,
+  index: number,
+  total: number,
+  fond: string | null = null,
+): string {
+  const echapper = (t: string) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+
+  // Trois roles, trois mises en page. L'ouverture n'a qu'un titre, enorme. La
+  // fin porte l'invitation. Entre les deux, le corps de l'argument.
+  const ouverture = index === 0;
+  const fin = index === total - 1;
+  const role = ouverture ? 'ouverture' : fin ? 'fin' : 'corps';
+
+  const lignes = d.lignes
+    .map((l) => `<p class="ligne">${echapper(l)}</p>`)
     .join('');
-  const accroche = p.accroche.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+
+  const compteur = `${String(index + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
 
   return `<!doctype html><html lang="fr"><head><meta charset="utf-8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -264,10 +339,7 @@ function gabarit(p: Publication, fond: string | null = null): string {
     display:flex; flex-direction:column; justify-content:space-between;
     padding:96px 84px;
   }
-  .fond {
-    position:absolute; inset:0;
-    background-size:cover; background-position:center;
-  }
+  .fond { position:absolute; inset:0; background-size:cover; background-position:center; }
   /* Le voile fixe le contraste. Au plus clair (72 % d'opacite en haut), du
      blanc pur sur #050a15 garde un rapport bien au-dela du 4,5:1 exige, quelle
      que soit la matiere rendue en dessous. */
@@ -281,21 +353,31 @@ function gabarit(p: Publication, fond: string | null = null): string {
     width:1200px; height:700px; border-radius:50%;
     background:#00d2ff; opacity:.14; filter:blur(170px);
   }
-  .filet { position:absolute; left:0; right:0; height:6px; background:#00d2ff; }
-  .filet.haut { top:0; }
+  .filet { position:absolute; left:0; right:0; top:0; height:6px; background:#00d2ff; }
   header, main, footer { position:relative; }
+  header { display:flex; align-items:baseline; justify-content:space-between; }
   .etiquette {
     font-weight:600; font-size:24px; letter-spacing:.28em; text-transform:uppercase;
     color:#00d2ff;
   }
-  .accroche {
-    font-weight:900; font-size:92px; line-height:1.02; letter-spacing:-.03em;
+  .compteur {
+    font-weight:600; font-size:22px; letter-spacing:.2em;
+    color:rgba(255,255,255,.34);
+  }
+  /* L'ouverture centre son titre : elle n'a que lui a montrer. */
+  body.ouverture main { display:flex; flex-direction:column; justify-content:center; flex:1; }
+  .titre {
+    font-weight:900; line-height:1.0; letter-spacing:-.03em;
     text-transform:uppercase; text-wrap:balance;
   }
+  body.ouverture .titre { font-size:112px; }
+  body.corps .titre    { font-size:70px; }
+  body.fin .titre      { font-size:80px; }
   .barre { width:96px; height:8px; background:#00d2ff; border-radius:4px; margin:44px 0 40px; }
+  body.ouverture .barre { margin-bottom:0; }
   .ligne {
-    font-weight:600; font-size:38px; line-height:1.45; color:rgba(255,255,255,.72);
-    margin-bottom:18px;
+    font-weight:600; font-size:40px; line-height:1.4; color:rgba(255,255,255,.74);
+    margin-bottom:22px;
   }
   footer { display:flex; align-items:flex-end; justify-content:space-between; }
   .marque { font-weight:900; font-size:34px; letter-spacing:.12em; text-transform:uppercase; }
@@ -304,13 +386,22 @@ function gabarit(p: Publication, fond: string | null = null): string {
     font-weight:600; font-size:22px; letter-spacing:.16em; text-transform:uppercase;
     color:#00d2ff; text-align:right; line-height:1.6;
   }
-</style></head><body>
+  /* Le seul mouvement du carrousel : dire au pouce ou aller. */
+  .glisse {
+    font-weight:900; font-size:26px; letter-spacing:.24em; text-transform:uppercase;
+    color:#00d2ff; display:flex; align-items:center; gap:14px;
+  }
+  .fleche { font-size:34px; line-height:1; }
+</style></head><body class="${role}">
   ${fond ? `<div class="fond" style="background-image:url('${fond}')"></div><div class="voile"></div>` : ''}
   <div class="halo"></div>
-  <div class="filet haut"></div>
-  <header><span class="etiquette">Propulsite · Marketing construction</span></header>
+  <div class="filet"></div>
+  <header>
+    <span class="etiquette">Propulsite · Marketing construction</span>
+    <span class="compteur">${compteur}</span>
+  </header>
   <main>
-    <h1 class="accroche">${accroche}</h1>
+    <h1 class="titre">${echapper(d.titre)}</h1>
     <div class="barre"></div>
     ${lignes}
   </main>
@@ -319,16 +410,24 @@ function gabarit(p: Publication, fond: string | null = null): string {
       <div class="marque">Propulsite</div>
       <div class="site">propulsite.ca</div>
     </div>
-    <div class="metier">Entrepreneurs<br>en construction<br>du Québec</div>
+    ${
+      ouverture
+        ? '<div class="glisse">Glisse<span class="fleche">&rsaquo;</span></div>'
+        : '<div class="metier">Entrepreneurs<br>en construction<br>du Québec</div>'
+    }
   </footer>
 </body></html>`;
 }
 
+/**
+ * Rend les cinq images du carrousel. Un seul navigateur pour les cinq : le
+ * lancer coute plus cher que les cinq captures reunies.
+ */
 async function rendre(
   p: Publication,
-  destination: string,
-  fond: string | null = null,
-): Promise<void> {
+  fonds: (string | null)[],
+  nomFichier: (index: number) => string,
+): Promise<string[]> {
   // Puppeteer est installé par le workflow avec --no-save : le rendu de texte
   // par un vrai navigateur est fiable et charge les polices Google, alors que
   // rasteriser un SVG dépend des polices installées sur la machine — ce qui
@@ -337,17 +436,25 @@ async function rendre(
   const navigateur = await puppeteer.launch({
     args: ['--no-sandbox', '--disable-dev-shm-usage'],
   });
+  const noms: string[] = [];
   try {
     const page = await navigateur.newPage();
     await page.setViewport({ width: 1080, height: 1350, deviceScaleFactor: 1 });
-    await page.setContent(gabarit(p, fond), { waitUntil: 'networkidle0' });
-    // Laisser les polices Google finir de s'appliquer.
-    await page.evaluateHandle('document.fonts.ready');
-    await new Promise((r) => setTimeout(r, 400));
-    await page.screenshot({ path: destination, type: 'png' });
+
+    for (let i = 0; i < p.diapos.length; i++) {
+      const html = gabarit(p.diapos[i], i, p.diapos.length, fonds[i] ?? null);
+      await page.setContent(html, { waitUntil: 'networkidle0' });
+      // Laisser les polices Google finir de s'appliquer.
+      await page.evaluateHandle('document.fonts.ready');
+      await new Promise((r) => setTimeout(r, 400));
+      const nom = nomFichier(i);
+      await page.screenshot({ path: path.join(DOSSIER, nom), type: 'png' });
+      noms.push(nom);
+    }
   } finally {
     await navigateur.close();
   }
+  return noms;
 }
 
 // ─── Programme ──────────────────────────────────────────────────────────────
@@ -355,11 +462,33 @@ async function rendre(
 const ESSAI: Publication = {
   slug: 'essai-gabarit',
   angle: 'essai du gabarit',
-  accroche: 'Ton site est beau. Google ne le voit pas.',
-  lignes: [
-    'Un site parfait dans le code peut rester',
-    'invisible : sitemap jamais soumis, pages',
-    'jamais explorees. On verifie du cote de Google.',
+  diapos: [
+    { titre: 'Ton site est beau. Google ne le voit pas.', lignes: [] },
+    {
+      titre: 'Le probleme',
+      lignes: [
+        'Un site parfait dans le code peut rester invisible.',
+        'Sitemap jamais soumis, pages jamais explorees.',
+      ],
+    },
+    {
+      titre: '9 pages sur 25',
+      lignes: [
+        "C'est ce que Google avait reellement indexe",
+        "sur un site qu'on croyait complet.",
+      ],
+    },
+    {
+      titre: 'Quoi faire',
+      lignes: [
+        'Ouvrir Search Console. Soumettre le sitemap.',
+        'Verifier page par page ce qui est indexe.',
+      ],
+    },
+    {
+      titre: 'On regarde ensemble ?',
+      lignes: ['Ecris-nous en prive. Le diagnostic ne coute rien.'],
+    },
   ],
   legende: 'Essai de gabarit — ce texte ne sera jamais publie.',
   hashtags: ['#construction', '#rivenord'],
@@ -368,18 +497,20 @@ const ESSAI: Publication = {
 async function main() {
   fs.mkdirSync(DOSSIER, { recursive: true });
 
-  // node scripts/social-generer.ts --essai : rend le visuel a partir d'un
+  // node scripts/social-generer.ts --essai : rend le carrousel a partir d'un
   // contenu fixe, sans appeler l'API. Pour verifier le gabarit gratuitement.
   //
-  // Ajouter --fond y ajoute la matiere generee par Gemini. Ca coute 0,13 $ US
-  // et ca n'appelle toujours pas Anthropic : c'est la façon de juger le
-  // nouveau visuel sans depenser une publication.
+  // Ajouter --fond y ajoute les matieres generees par Gemini. Ca coute environ
+  // 0,67 $ US et ca n'appelle toujours pas Anthropic : c'est la façon de juger
+  // le visuel sans depenser une publication.
   if (process.argv.includes('--essai')) {
     const avecFond = process.argv.includes('--fond');
-    const fond = avecFond ? await fabriquerFond(ESSAI.angle, 0) : null;
-    const dest = path.join(DOSSIER, 'essai-gabarit.png');
-    await rendre(ESSAI, dest, fond?.image ?? null);
-    console.log(`Essai rendu : ${dest}`);
+    const fonds: (string | null)[] = [];
+    for (let i = 0; i < NB_DIAPOS; i++) {
+      fonds.push(avecFond ? (await fabriquerFond(ESSAI.angle, 0)).image : null);
+    }
+    const noms = await rendre(ESSAI, fonds, (i) => `essai-gabarit-${i + 1}.png`);
+    console.log(`Essai rendu : ${noms.join(', ')}`);
     return;
   }
 
@@ -393,19 +524,34 @@ async function main() {
   // On donne les douze derniers angles pour éviter de tourner en rond.
   const p = await demander(journal.slice(-12).map((e) => e.angle));
   console.log(`Angle : ${p.angle}`);
-  console.log(`Accroche : ${p.accroche} (${p.accroche.length} car.)`);
+  p.diapos.forEach((d, i) => console.log(`  ${i + 1}. ${d.titre}`));
 
   // Le rang fait tourner les matieres : la publication n de l'annee ne peut
-  // pas retomber sur le beton de la publication n-1.
-  const fond = await fabriquerFond(p.angle, journal.length);
+  // pas retomber sur le beton de la publication n-1. Les cinq diapos partagent
+  // le meme rang, donc la meme matiere — cinq rendus differents du meme beton,
+  // pour que le carrousel se tienne comme une seule piece.
+  const fonds: (string | null)[] = [];
+  const notes: string[] = [];
+  for (let i = 0; i < p.diapos.length; i++) {
+    const f = await fabriquerFond(p.angle, journal.length);
+    fonds.push(f.image);
+    notes.push(f.note);
+  }
 
-  const nomImage = `${jour}-${p.slug}.png`;
-  await rendre(p, path.join(DOSSIER, nomImage), fond.image);
+  const noms = await rendre(p, fonds, (i) => `${jour}-${p.slug}-${i + 1}.png`);
 
-  journal.push({ ...p, date: jour, image: nomImage, publie: false, fond: fond.note });
+  journal.push({
+    ...p,
+    date: jour,
+    images: noms,
+    publie: false,
+    // Une note par diapo serait illisible : on garde la premiere, et le compte
+    // de celles qui ont vraiment recu une matiere.
+    fond: `${fonds.filter(Boolean).length}/${noms.length} — ${notes[0]}`,
+  });
   fs.writeFileSync(JOURNAL, JSON.stringify(journal, null, 2) + '\n', 'utf8');
 
-  console.log(`✅ ${nomImage} écrit, en attente de publication.`);
+  console.log(`✅ ${noms.length} images écrites, en attente de publication.`);
 }
 
 main().catch((e) => {

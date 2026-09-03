@@ -35,9 +35,9 @@ jobs:
       - name: Installer Chrome pour le rendu de l'image
         run: npm install --no-save puppeteer@23
 
-      # GEMINI_API_KEY peint la matiere derriere la typographie (~0,13 $ US par
-      # publication). Si le secret n'existe pas, le gabarit reprend son fond
-      # plat et la publication part quand meme.
+      # GEMINI_API_KEY peint la matiere derriere la typographie, une fois par
+      # diapo (~0,67 $ US pour les cinq). Si le secret n'existe pas, le gabarit
+      # reprend son fond plat et la publication part quand meme.
       - name: Generer la publication de la semaine
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}

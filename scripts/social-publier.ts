@@ -1,11 +1,20 @@
 /**
- * social-publier.ts — Publie sur Instagram la dernière image en attente.
+ * social-publier.ts — Publie sur Instagram le carrousel en attente.
  *
- * L'API de publication d'Instagram se fait en deux temps : on crée un
- * « conteneur média » en lui donnant l'URL de l'image, puis on publie ce
- * conteneur. Elle ne prend jamais les octets de l'image — d'où l'obligation
+ * L'API de publication d'Instagram ne prend jamais les octets d'une image :
+ * elle exige une URL publique qu'elle va chercher elle-même — d'où l'obligation
  * d'un hébergement public, réglée en écrivant dans `public/social/` d'un dépôt
  * public.
+ *
+ * UN CARROUSEL SE PUBLIE EN TROIS TEMPS, PAS DEUX
+ *
+ *   1. Un conteneur par image, chacun marqué `is_carousel_item=true`.
+ *      Ceux-là ne portent PAS la légende.
+ *   2. Un conteneur `CAROUSEL` qui liste les enfants et porte la légende.
+ *   3. La publication de ce dernier conteneur.
+ *
+ * Poser la légende sur les enfants la fait disparaître : c'est le conteneur
+ * parent qui la porte, et lui seul.
  *
  * IL FAUT DEUX SECRETS DANS LE DÉPÔT (voir docs/AUTOMATISER-INSTAGRAM.md) :
  *   IG_USER_ID     l'identifiant du compte Instagram professionnel
@@ -46,10 +55,13 @@ const BASE_IMAGES = `https://raw.githubusercontent.com/${DEPOT}/${BRANCHE}/publi
 // « Unknown path components » = elle n'existe pas.
 const API = 'https://graph.facebook.com/v26.0';
 
+interface Diapo { titre: string; lignes: string[] }
+
 interface Entree {
-  slug: string; angle: string; accroche: string; lignes: string[];
+  slug: string; angle: string; diapos: Diapo[];
   legende: string; hashtags: string[];
-  date: string; image: string; publie: boolean;
+  date: string; images: string[]; publie: boolean;
+  fond?: string;
   publieLe?: string; urlInstagram?: string;
 }
 
@@ -88,7 +100,12 @@ async function appeler(chemin: string, corps: Record<string, string>) {
 
 async function main() {
   const entrees = journal();
-  const enAttente = entrees.filter((e) => !e.publie);
+
+  // `e.images?.length` et pas `!e.publie` tout court : le journal peut encore
+  // contenir des entrees de l'epoque « une seule image », qui n'ont pas de
+  // tableau `images`. Les lire les ferait planter ici, sur une ligne qui n'a
+  // rien a voir avec la vraie cause.
+  const enAttente = entrees.filter((e) => !e.publie && e.images?.length);
 
   if (enAttente.length === 0) {
     console.log('Rien en attente de publication.');
@@ -98,35 +115,62 @@ async function main() {
   // que les jetons manquaient, publier tout d'un coup ferait trois posts à la
   // même minute — le meilleur moyen de se faire limiter par Instagram.
   const e = enAttente[enAttente.length - 1];
-  console.log(`À publier : ${e.image} — « ${e.accroche} »`);
+  console.log(`À publier : ${e.images.length} diapos — « ${e.diapos[0].titre} »`);
 
   if (!IG_USER_ID || !META_TOKEN) {
     console.log('');
-    console.log('⏸  IG_USER_ID ou META_TOKEN absent : rien n\'est publié.');
-    console.log('   L\'image reste dans public/social/ et repartira au prochain');
-    console.log('   passage. Voir docs/AUTOMATISER-INSTAGRAM.md.');
+    console.log("⏸  IG_USER_ID ou META_TOKEN absent : rien n'est publié.");
+    console.log('   Les images restent dans public/social/ et repartiront au');
+    console.log('   prochain passage. Voir docs/AUTOMATISER-INSTAGRAM.md.');
     return;
   }
 
-  const urlImage = `${BASE_IMAGES}/${e.image}`;
-  console.log(`  URL : ${urlImage}`);
-  if (!(await attendreImage(urlImage))) {
-    throw new Error("L'image n'est pas servie publiquement — publication annulée.");
+  const urls = e.images.map((nom) => `${BASE_IMAGES}/${nom}`);
+
+  // Meta ira chercher chaque image lui-même : si une seule n'est pas encore
+  // servie, le carrousel part incomplet ou echoue. On les verifie toutes
+  // avant de creer quoi que ce soit.
+  for (const url of urls) {
+    console.log(`  vérification : ${url.split('/').pop()}`);
+    if (!(await attendreImage(url))) {
+      throw new Error(`${url} n'est pas servie publiquement — publication annulée.`);
+    }
   }
 
-  const legende = `${e.legende}\n\n.\n.\n${e.hashtags.map((h) => (h.startsWith('#') ? h : `#${h}`)).join(' ')}`;
+  // 1. Un conteneur par diapo. Pas de légende ici : elle irait se perdre.
+  const enfants: string[] = [];
+  for (let i = 0; i < urls.length; i++) {
+    const c = await appeler(`${IG_USER_ID}/media`, {
+      image_url: urls[i],
+      is_carousel_item: 'true',
+    });
+    console.log(`  diapo ${i + 1}/${urls.length} — conteneur ${c.id}`);
+    enfants.push(c.id);
+  }
 
-  const conteneur = await appeler(`${IG_USER_ID}/media`, {
-    image_url: urlImage,
+  // Meta télécharge les images en arrière-plan. Créer le parent trop tôt le
+  // fait échouer sur un enfant pas encore prêt.
+  await new Promise((r) => setTimeout(r, 10000));
+
+  // 2. Le conteneur du carrousel. C'est lui, et lui seul, qui porte la légende.
+  const legende = `${e.legende}
+
+.
+.
+${e.hashtags.map((h) => (h.startsWith('#') ? h : `#${h}`)).join(' ')}`;
+
+  const parent = await appeler(`${IG_USER_ID}/media`, {
+    media_type: 'CAROUSEL',
+    children: enfants.join(','),
     caption: legende,
   });
-  console.log(`  conteneur ${conteneur.id} créé`);
+  console.log(`  carrousel ${parent.id} assemblé`);
 
-  // Meta a besoin d'un moment pour télécharger l'image avant de pouvoir publier.
   await new Promise((r) => setTimeout(r, 8000));
 
+  // 3. La publication.
   const publie = await appeler(`${IG_USER_ID}/media_publish`, {
-    creation_id: conteneur.id,
+    creation_id: parent.id,
   });
 
   e.publie = true;
