@@ -37,6 +37,7 @@ import { SERVICES } from '../src/constants/services';
 import { PAIN_POINTS_ARTICLES } from '../src/constants/painPointsData';
 import { CHIFFRES, SOURCES } from '../src/constants/geoData';
 import { fabriquerFond } from './social-fond';
+import { vraiesPhotos } from './social-photo';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const RACINE = path.resolve(__dirname, '..');
@@ -65,12 +66,24 @@ const NB_DIAPOS = 5;
 interface Diapo {
   titre: string;
   lignes: string[];
+  /**
+   * Le texte alternatif de l'image, en francais.
+   *
+   * Instagram le lit aux lecteurs d'ecran et s'en sert pour comprendre de quoi
+   * parle la publication. Sans lui, il en invente un, souvent faux.
+   */
+  alt: string;
 }
 
 interface Publication {
   slug: string;
   angle: string;
   diapos: Diapo[];
+  /**
+   * Le mot-cle anglais qui sert a chercher les vraies photos de fond.
+   * Anglais parce que les banques d'images sont indexees en anglais.
+   */
+  photo: string;
   legende: string;
   hashtags: string[];
 }
@@ -165,6 +178,15 @@ CE QUE TU PRODUIS :
   - titre : MAXIMUM 46 caracteres. Court, frappant, lisible en une seconde.
   - lignes : de 1 a 3 lignes, MAXIMUM 62 caracteres chacune. VIDE sur la
     diapo 1 seulement.
+  - alt : ce que montre l'image, en francais, une phrase. Pour les lecteurs
+    d'ecran et pour qu'Instagram comprenne le sujet.
+- photo : le mot-cle ANGLAIS qui servira a chercher la photo de fond dans une
+  banque d'images. Deux a quatre mots.
+  UNE MATIERE OU UN LIEU VIDE, JAMAIS DES GENS AU TRAVAIL. « concrete wall
+  texture », « empty construction site », « steel beams », « lumber stack »
+  conviennent. « construction workers », « happy contractor », « team meeting »
+  sont interdits : une photo de banque montrant une equipe laisserait croire
+  que c'est celle de Propulsite, et un homme de metier verrait le mensonge.
 - legende : le texte sous la publication. 60 a 110 mots. La PREMIERE PHRASE
   doit contenir les mots que quelqu'un taperait dans Google — depuis 2026 les
   publications des comptes professionnels peuvent sortir dans les resultats,
@@ -194,15 +216,17 @@ const SCHEMA = {
         properties: {
           titre: { type: 'string' },
           lignes: { type: 'array', items: { type: 'string' } },
+          alt: { type: 'string' },
         },
-        required: ['titre', 'lignes'],
+        required: ['titre', 'lignes', 'alt'],
         additionalProperties: false,
       },
     },
+    photo: { type: 'string', description: 'mot-cle anglais pour chercher la photo de fond' },
     legende: { type: 'string' },
     hashtags: { type: 'array', items: { type: 'string' } },
   },
-  required: ['slug', 'angle', 'diapos', 'legende', 'hashtags'],
+  required: ['slug', 'angle', 'diapos', 'photo', 'legende', 'hashtags'],
   additionalProperties: false,
 };
 
@@ -234,6 +258,7 @@ function verifier(p: Publication): string | null {
     }
     const trop = d.lignes.find((l) => l.length > 62);
     if (trop) return `diapo ${n} : ligne de ${trop.length} caracteres, maximum 62`;
+    if (!d.alt || d.alt.length < 10) return `diapo ${n} : texte alternatif absent ou trop court`;
   }
   if (!p.hashtags || p.hashtags.length < 12) {
     return `${p.hashtags?.length ?? 0} hashtags, il en faut 12`;
@@ -462,14 +487,20 @@ async function rendre(
 const ESSAI: Publication = {
   slug: 'essai-gabarit',
   angle: 'essai du gabarit',
+  photo: 'concrete wall texture',
   diapos: [
-    { titre: 'Ton site est beau. Google ne le voit pas.', lignes: [] },
+    {
+      titre: 'Ton site est beau. Google ne le voit pas.',
+      lignes: [],
+      alt: 'Mur de beton brut, texte blanc par dessus.',
+    },
     {
       titre: 'Le probleme',
       lignes: [
         'Un site parfait dans le code peut rester invisible.',
         'Sitemap jamais soumis, pages jamais explorees.',
       ],
+      alt: 'Mur de beton brut, texte expliquant le probleme.',
     },
     {
       titre: '9 pages sur 25',
@@ -477,6 +508,7 @@ const ESSAI: Publication = {
         "C'est ce que Google avait reellement indexe",
         "sur un site qu'on croyait complet.",
       ],
+      alt: 'Mur de beton brut, le chiffre 9 pages sur 25.',
     },
     {
       titre: 'Quoi faire',
@@ -484,10 +516,12 @@ const ESSAI: Publication = {
         'Ouvrir Search Console. Soumettre le sitemap.',
         'Verifier page par page ce qui est indexe.',
       ],
+      alt: 'Mur de beton brut, les etapes a suivre.',
     },
     {
       titre: 'On regarde ensemble ?',
       lignes: ['Ecris-nous en prive. Le diagnostic ne coute rien.'],
+      alt: 'Mur de beton brut, invitation a ecrire en prive.',
     },
   ],
   legende: 'Essai de gabarit — ce texte ne sera jamais publie.',
@@ -505,9 +539,17 @@ async function main() {
   // le visuel sans depenser une publication.
   if (process.argv.includes('--essai')) {
     const avecFond = process.argv.includes('--fond');
-    const fonds: (string | null)[] = [];
-    for (let i = 0; i < NB_DIAPOS; i++) {
-      fonds.push(avecFond ? (await fabriquerFond(ESSAI.angle, 0)).image : null);
+    let fonds: (string | null)[] = new Array(NB_DIAPOS).fill(null);
+    if (avecFond) {
+      const photos = await vraiesPhotos(ESSAI.photo, NB_DIAPOS, 0);
+      if (photos) {
+        fonds = photos.map((ph) => ph.image);
+      } else {
+        fonds = [];
+        for (let i = 0; i < NB_DIAPOS; i++) {
+          fonds.push((await fabriquerFond(ESSAI.angle, 0)).image);
+        }
+      }
     }
     const noms = await rendre(ESSAI, fonds, (i) => `essai-gabarit-${i + 1}.png`);
     console.log(`Essai rendu : ${noms.join(', ')}`);
@@ -526,16 +568,34 @@ async function main() {
   console.log(`Angle : ${p.angle}`);
   p.diapos.forEach((d, i) => console.log(`  ${i + 1}. ${d.titre}`));
 
-  // Le rang fait tourner les matieres : la publication n de l'annee ne peut
-  // pas retomber sur le beton de la publication n-1. Les cinq diapos partagent
-  // le meme rang, donc la meme matiere — cinq rendus differents du meme beton,
-  // pour que le carrousel se tienne comme une seule piece.
+  // Les vraies photos d'abord. Le fil d'un entrepreneur est fait de photos, et
+  // l'oeil repere une image de synthese plus vite qu'on ne le croit. Gemini ne
+  // sert que si aucune vraie photo n'est disponible — et il coute 0,67 $ de
+  // plus.
   const fonds: (string | null)[] = [];
   const notes: string[] = [];
-  for (let i = 0; i < p.diapos.length; i++) {
-    const f = await fabriquerFond(p.angle, journal.length);
-    fonds.push(f.image);
-    notes.push(f.note);
+
+  const photos = await vraiesPhotos(p.photo, p.diapos.length, journal.length);
+  if (photos) {
+    photos.forEach((ph) => {
+      fonds.push(ph.image);
+      notes.push(ph.note);
+    });
+  } else {
+    // Le rang fait tourner les matieres : la publication n de l'annee ne peut
+    // pas retomber sur le beton de la publication n-1. Les cinq diapos
+    // partagent le meme rang, donc la meme matiere — cinq rendus differents du
+    // meme beton, pour que le carrousel se tienne comme une seule piece.
+    for (let i = 0; i < p.diapos.length; i++) {
+      const f = await fabriquerFond(p.angle, journal.length);
+      fonds.push(f.image);
+      notes.push(f.note);
+    }
+  }
+
+  // Le dernier fond comble si une source en a rendu moins que cinq.
+  while (fonds.length < p.diapos.length) {
+    fonds.push(fonds[fonds.length - 1] ?? null);
   }
 
   const noms = await rendre(p, fonds, (i) => `${jour}-${p.slug}-${i + 1}.png`);

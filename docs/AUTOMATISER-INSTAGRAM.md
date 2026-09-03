@@ -19,19 +19,39 @@ Chaque mercredi 9 h (heure de l'Est), sur GitHub Actions :
 1. Il lit **les données de ton propre site** — tes six services, tes treize
    articles, les chiffres GEO avec leurs sources.
 2. Il écrit un **carrousel de cinq diapos** : l'arrêt, le problème, la preuve
-   chiffrée, quoi faire, l'invitation.
-3. Il fabrique les cinq images 1080 × 1350 aux couleurs de Propulsite.
-4. Il les pousse dans le dépôt.
-5. Il publie sur Instagram — **si les deux secrets existent**.
+   chiffrée, quoi faire, l'invitation. Plus un texte alternatif par diapo et
+   un mot-clé anglais pour chercher les photos de fond.
+3. Il trouve les fonds — **tes photos d'abord, Pexels ensuite, l'IA en dernier**
+   (voir plus bas).
+4. Il fabrique les cinq images 1080 × 1350 aux couleurs de Propulsite.
+5. Il les pousse dans le dépôt.
+6. Il publie sur Instagram, avec le lieu et les textes alternatifs — **si les
+   deux secrets existent**.
 
 Il ne peut pas inventer de statistique : les seuls chiffres qu'il a le droit
 d'utiliser sont ceux du site, et ils portent tous leur source. Il n'a pas le
 droit non plus de prétendre que tu as des clients ou des résultats.
 
-**Coût : environ 0,82 $ US par semaine.** Un appel à Sonnet en effort élevé
-(0,15 $) plus cinq matières de fond peintes par Gemini (0,67 $). Le rendu des
-images et l'exécution ne coûtent rien — GitHub Actions est gratuit et illimité
-pour un dépôt public. Sur un mois : moins de 3,50 $.
+**Coût : de 0,15 $ à 0,82 $ US par semaine.** Un appel à Sonnet en effort élevé
+(0,15 $), plus les fonds — **gratuits** si ce sont tes photos ou Pexels, 0,67 $
+seulement quand Gemini doit prendre le relais. Le rendu des images et
+l'exécution ne coûtent rien — GitHub Actions est gratuit et illimité
+pour un dépôt public. Sur un mois : entre 0,60 $ et 3,50 $.
+
+**D'où viennent les fonds, dans l'ordre :**
+
+1. **`public/social/photos/`** — tes propres photos. Elles gagnent toujours.
+   Dépose-les en portrait, au moins 1080 × 1350.
+2. **Pexels** — de vraies photographies, gratuites, choisies selon le sujet de
+   la semaine.
+3. **Gemini** — une matière abstraite générée, 0,67 $ US pour les cinq. Le
+   dernier recours seulement.
+
+Une photo de fond ne doit **jamais** laisser croire que c'est un chantier de
+Propulsite ou une équipe de Propulsite. L'entreprise est jeune ; un homme de
+métier verrait le mensonge. C'est pourquoi les recherches Pexels visent des
+matières et des lieux vides, jamais des travailleurs en action — la consigne
+est écrite dans les règles de rédaction, là où le modèle choisit le mot-clé.
 
 **Pourquoi cinq diapos et pas une image.** Si quelqu'un ne réagit pas à la
 première image, Instagram lui remontre la publication en affichant la
@@ -47,10 +67,16 @@ si la diapo 2 n'a aucun sens sans la 1, la deuxième chance est perdue.
 |---|---|---|
 | `IG_USER_ID` | L'identifiant numérique de ton compte Instagram professionnel | Rien n'est publié |
 | `META_TOKEN` | Un jeton d'accès qui autorise la publication | Rien n'est publié |
-| `GEMINI_API_KEY` | Une clé d'API Google, pour peindre la matière derrière le texte | Le visuel reste sur son fond plat |
+| `PEXELS_API_KEY` | Une clé gratuite pour de **vraies photos** de fond | On retombe sur l'image générée |
+| `GEMINI_API_KEY` | Une clé d'API Google, pour peindre une matière quand aucune photo n'est trouvée | Le visuel reste sur son fond plat |
+| `IG_LOCATION_ID` | Facultatif. Force le lieu au lieu de le chercher par son nom | Le lieu est cherché, et sauté s'il résiste |
 
-Les deux premières bloquent la publication. La troisième ne bloque rien : elle
-ne change que l'allure du visuel.
+Les deux premières bloquent la publication. Les autres ne bloquent rien : elles
+ne changent que l'allure du visuel.
+
+**Où prendre la clé Pexels :** `pexels.com/api`. Gratuite, sans carte, sans
+limite pratique pour un usage hebdomadaire. Tu en as déjà une dans le projet
+`claude assistant`.
 
 **Où prendre la clé Gemini :** `aistudio.google.com` → *Get API key*. Gratuit à
 créer, facturé à l'image. Ce n'est **pas** ton abonnement Google AI Pro — celui-là

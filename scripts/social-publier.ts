@@ -37,6 +37,18 @@ const JOURNAL = path.join(DOSSIER, 'journal.json');
 const IG_USER_ID = process.env.IG_USER_ID;
 const META_TOKEN = process.env.META_TOKEN;
 
+/**
+ * Le lieu de la publication. Facultatif, mais il compte : une publication
+ * geolocalisee sort dans le fil du lieu, et c'est du monde de la region qui
+ * cherche justement un entrepreneur.
+ *
+ * `IG_LOCATION_ID` en secret GitHub court-circuite la recherche. Sans lui, on
+ * cherche le nom ci-dessous — et si Meta refuse la recherche, la publication
+ * part quand meme, sans lieu. Un lieu manquant ne vaut pas une semaine perdue.
+ */
+const LIEU = process.env.IG_LOCATION_NOM || 'Sainte-Eustache, Quebec';
+const LIEU_ID = process.env.IG_LOCATION_ID;
+
 // Le dépôt est public : raw.githubusercontent sert le fichier dès que le
 // commit est poussé, sans attendre le déploiement de Vercel. C'est ce qui
 // permet de générer et publier dans la même exécution.
@@ -55,7 +67,7 @@ const BASE_IMAGES = `https://raw.githubusercontent.com/${DEPOT}/${BRANCHE}/publi
 // « Unknown path components » = elle n'existe pas.
 const API = 'https://graph.facebook.com/v26.0';
 
-interface Diapo { titre: string; lignes: string[] }
+interface Diapo { titre: string; lignes: string[]; alt?: string }
 
 interface Entree {
   slug: string; angle: string; diapos: Diapo[];
@@ -83,6 +95,31 @@ async function attendreImage(url: string, essaisMax = 20): Promise<boolean> {
     await new Promise((r) => setTimeout(r, 6000));
   }
   return false;
+}
+
+/** Cherche l'identifiant du lieu. Rend null des que quelque chose resiste. */
+async function trouverLieu(): Promise<string | null> {
+  if (LIEU_ID) {
+    console.log(`  lieu impose par secret : ${LIEU_ID}`);
+    return LIEU_ID;
+  }
+  try {
+    const url =
+      `${API}/pages/search?q=${encodeURIComponent(LIEU)}&type=place` +
+      `&fields=id,name&limit=1&access_token=${encodeURIComponent(META_TOKEN as string)}`;
+    const r = await fetch(url);
+    const data = await r.json();
+    const lieu = data?.data?.[0];
+    if (!r.ok || data.error || !lieu?.id) {
+      console.log(`  lieu introuvable (${data?.error?.message || 'aucun resultat'}) — on publie sans.`);
+      return null;
+    }
+    console.log(`  lieu : ${lieu.name} (${lieu.id})`);
+    return lieu.id;
+  } catch {
+    console.log('  recherche de lieu impossible — on publie sans.');
+    return null;
+  }
 }
 
 async function appeler(chemin: string, corps: Record<string, string>) {
@@ -138,11 +175,17 @@ async function main() {
   }
 
   // 1. Un conteneur par diapo. Pas de légende ici : elle irait se perdre.
+  //
+  // `alt_text` va en revanche sur chaque enfant, et nulle part ailleurs :
+  // c'est ce que lit un lecteur d'ecran, et ce dont Instagram se sert pour
+  // comprendre de quoi parle l'image. Sans lui, il en invente un.
   const enfants: string[] = [];
   for (let i = 0; i < urls.length; i++) {
+    const alt = e.diapos[i]?.alt;
     const c = await appeler(`${IG_USER_ID}/media`, {
       image_url: urls[i],
       is_carousel_item: 'true',
+      ...(alt ? { alt_text: alt } : {}),
     });
     console.log(`  diapo ${i + 1}/${urls.length} — conteneur ${c.id}`);
     enfants.push(c.id);
@@ -159,10 +202,13 @@ async function main() {
 .
 ${e.hashtags.map((h) => (h.startsWith('#') ? h : `#${h}`)).join(' ')}`;
 
+  const lieuId = await trouverLieu();
+
   const parent = await appeler(`${IG_USER_ID}/media`, {
     media_type: 'CAROUSEL',
     children: enfants.join(','),
     caption: legende,
+    ...(lieuId ? { location_id: lieuId } : {}),
   });
   console.log(`  carrousel ${parent.id} assemblé`);
 

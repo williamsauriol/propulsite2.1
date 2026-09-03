@@ -35,12 +35,20 @@ jobs:
       - name: Installer Chrome pour le rendu de l'image
         run: npm install --no-save puppeteer@23
 
-      # GEMINI_API_KEY peint la matiere derriere la typographie, une fois par
-      # diapo (~0,67 $ US pour les cinq). Si le secret n'existe pas, le gabarit
-      # reprend son fond plat et la publication part quand meme.
+      # Trois cles, dans l'ordre d'importance.
+      #
+      # ANTHROPIC_API_KEY ecrit le carrousel. Sans elle, rien ne part.
+      # PEXELS_API_KEY trouve de VRAIES photos de fond. Gratuite, et prioritaire
+      #   sur l'image generee : le fil d'un entrepreneur est fait de photos.
+      # GEMINI_API_KEY peint une matiere quand aucune vraie photo n'est
+      #   disponible (~0,67 $ US pour les cinq diapos).
+      #
+      # Sans les deux dernieres, le gabarit reprend son fond plat et la
+      # publication part quand meme.
       - name: Generer la publication de la semaine
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: npx tsx scripts/social-generer.ts
 
@@ -71,6 +79,8 @@ jobs:
         env:
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
           META_TOKEN: ${{ secrets.META_TOKEN }}
+          # Facultatif : force le lieu au lieu de le chercher par son nom.
+          IG_LOCATION_ID: ${{ secrets.IG_LOCATION_ID }}
         run: npx tsx scripts/social-publier.ts
 
       - name: Enregistrer la publication au journal
