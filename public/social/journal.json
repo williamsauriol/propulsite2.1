@@ -1,0 +1,78 @@
+[
+  {
+    "slug": "ges-pas-sur-lia",
+    "angle": "IA ne cite pas ton entreprise",
+    "diapos": [
+      {
+        "titre": "L'IA ne sait pas que t'existes.",
+        "lignes": [],
+        "alt": "Diapo 1 sur 5 : titre choc en grandes lettres blanches centré sur fond sombre, aux couleurs de Propulsite."
+      },
+      {
+        "titre": "Tu perds des contrats en silence.",
+        "lignes": [
+          "Un client cherche un entrepreneur.",
+          "Il pose la question à ChatGPT ou à Google.",
+          "Ton nom n'apparaît pas. Un concurrent, oui."
+        ],
+        "alt": "Diapo 2 sur 5 : trois lignes de texte blanc sur fond sombre, hiérarchie claire, aux couleurs de Propulsite."
+      },
+      {
+        "titre": "Moins de 20 % de recoupement",
+        "lignes": [
+          "Les sites que Google classe en premier",
+          "et ceux que l'IA cite : presque pas les mêmes.",
+          "(Source : Omnibound, 2026)"
+        ],
+        "alt": "Diapo 3 sur 5 : le chiffre « moins de 20 % » en très grand, suivi de deux lignes explicatives en blanc sur fond sombre texturé, aux couleurs de Propulsite."
+      },
+      {
+        "titre": "Ce que tu peux faire dès cette semaine",
+        "lignes": [
+          "Vérifie que ta fiche Google est complète.",
+          "Publie des réponses aux vraies questions",
+          "que tes clients posent en ligne."
+        ],
+        "alt": "Diapo 4 sur 5 : titre en gras suivi de deux actions concrètes en texte blanc sur fond sombre, mise en page épurée, aux couleurs de Propulsite."
+      },
+      {
+        "titre": "On peut regarder ça ensemble.",
+        "lignes": [
+          "Écris-nous en privé.",
+          "On te dit où tu en es,",
+          "sans pression, sans jargon."
+        ],
+        "alt": "Diapo 5 sur 5 : invitation en trois courtes lignes centrées, ton chaleureux, texte blanc sur fond sombre, aux couleurs de Propulsite."
+      }
+    ],
+    "photo": "concrete wall",
+    "legende": "Ton entreprise de construction est invisible sur l'IA — et tu le sais même pas encore. Depuis 2026, ChatGPT et Google IA répondent directement aux clients avant même qu'ils visitent un site. Si ton nom n'est pas cité, c'est un concurrent qui ramasse le contrat. La bonne nouvelle : ça se règle. Écris-nous en privé ou visite propulsite.ca/blog/geo-chatgpt-construction pour comprendre comment être recommandé par l'IA.",
+    "hashtags": [
+      "#construction",
+      "#entrepreneurquebec",
+      "#renovationquebec",
+      "#marketingconstruction",
+      "#referencementlocal",
+      "#googlequebec",
+      "#visibiliteweb",
+      "#rivenord",
+      "#laval",
+      "#sainteustache",
+      "#terrebonne",
+      "#chatgpt",
+      "#intelligenceartificielle",
+      "#constructionquebec",
+      "#propulsite"
+    ],
+    "date": "2026-09-03",
+    "images": [
+      "2026-09-03-ges-pas-sur-lia-1.png",
+      "2026-09-03-ges-pas-sur-lia-2.png",
+      "2026-09-03-ges-pas-sur-lia-3.png",
+      "2026-09-03-ges-pas-sur-lia-4.png",
+      "2026-09-03-ges-pas-sur-lia-5.png"
+    ],
+    "publie": false,
+    "fond": "5/5 — Pexels « concrete wall » — cottonbro studio"
+  }
+]
