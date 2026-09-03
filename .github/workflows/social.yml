@@ -48,9 +48,14 @@ jobs:
       # chercher l'image elle-meme a une URL publique, elle n'accepte pas qu'on
       # lui envoie les octets. Le depot etant public, raw.githubusercontent la
       # sert des que le commit est en ligne.
+      # `git status --porcelain`, PAS `git diff`. L'image de la semaine vient
+      # d'etre creee : elle n'est suivie par personne, et `git diff` ne regarde
+      # que les fichiers deja suivis. Il repondait donc « rien de nouveau » sur
+      # une image bel et bien la, l'etape sortait en vert, et le robot jetait
+      # son travail sans que rien n'ait l'air casse.
       - name: Pousser l'image
         run: |
-          if git diff --quiet public/social; then
+          if [ -z "$(git status --porcelain public/social)" ]; then
             echo "Rien de nouveau — on s'arrete ici."
             exit 0
           fi
@@ -71,7 +76,7 @@ jobs:
       - name: Enregistrer la publication au journal
         if: ${{ github.event.inputs.publier != 'non' }}
         run: |
-          if git diff --quiet public/social/journal.json; then
+          if [ -z "$(git status --porcelain public/social/journal.json)" ]; then
             echo "Journal inchange."
             exit 0
           fi
