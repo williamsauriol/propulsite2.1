@@ -14,8 +14,9 @@
  * l'asphalte mouille. Jamais un chantier, jamais une equipe, jamais un projet
  * fini. Propulsite est jeune : une image generee qui laisse croire a une
  * realisation est un mensonge, et les gens du metier le voient tout de suite.
- * `personGeneration: ALLOW_NONE` verrouille l'absence de personnes cote API,
- * en plus de la consigne texte.
+ * L'invite le dit deux fois, en toutes lettres. Il n'y a pas de verrou cote
+ * API : `personGeneration` existe dans le type du SDK mais l'API Gemini le
+ * refuse (voir le commentaire dans l'appel).
  *
  * SI GEMINI N'EST PAS LA
  *
@@ -41,7 +42,13 @@ const CLE = process.env.GEMINI_API_KEY;
  *
  * On demande donc le meilleur, et on retombe sur celui qui marche partout.
  */
-const MODELES = ['gemini-3-pro-image-preview', 'gemini-2.5-flash-image'];
+const MODELES = [
+  // `imageSize` n'est accepte que par le Pro. Le petit rend en 1024 px, un peu
+  // moins que les 1080 du gabarit — le `cover` du CSS agrandit de 5 %, ce qui
+  // ne se voit pas sur une texture.
+  { id: 'gemini-3-pro-image-preview', imageSize: '2K' as string | undefined },
+  { id: 'gemini-2.5-flash-image', imageSize: undefined },
+];
 
 /**
  * Les matieres tournent dans cet ordre, pilotees par le nombre de
@@ -125,7 +132,7 @@ export async function fabriquerFond(angle: string, rang: number): Promise<Fond> 
   for (const modele of MODELES) {
     try {
       const reponse = await genai.models.generateContent({
-        model: modele,
+        model: modele.id,
         contents: invite(matiere, angle),
         config: {
           responseModalities: ['IMAGE'],
@@ -134,10 +141,17 @@ export async function fabriquerFond(angle: string, rang: number): Promise<Fond> 
             // `background-size: cover` du gabarit recadre la difference sans
             // deformer quoi que ce soit.
             aspectRatio: '3:4',
-            // 1K fait 1024 px de large, soit un poil moins que les 1080 du
-            // gabarit : l'image serait etiree. 2K coute le meme prix.
-            imageSize: '2K',
-            personGeneration: 'ALLOW_NONE',
+            ...(modele.imageSize ? { imageSize: modele.imageSize } : {}),
+            // PAS de `personGeneration` ici, meme si le type l'accepte.
+            //
+            // `ImageConfig` est partage entre Vertex AI et l'API Gemini. Vertex
+            // connait ce champ, l'API Gemini le refuse et rejette l'appel en
+            // entier : « personGeneration parameter is not supported in Gemini
+            // API ». Le code compilait, et echouait sur les deux modeles.
+            // Le type qui passe ne dit rien de ce que l'API accepte.
+            //
+            // L'absence de personnes reste demandee dans l'invite, en toutes
+            // lettres et deux fois.
           },
         },
       });
@@ -150,21 +164,21 @@ export async function fabriquerFond(angle: string, rang: number): Promise<Fond> 
         // securite, le plus souvent. La raison vaut d'etre gardee : c'est elle
         // qui dit s'il faut adoucir l'invite.
         const raison = reponse.candidates?.[0]?.finishReason || 'sans raison donnee';
-        echecs.push(`${modele} : aucune image (${raison})`);
-        console.log(`  ${modele} n'a pas renvoye d'image (${raison})`);
+        echecs.push(`${modele.id} : aucune image (${raison})`);
+        console.log(`  ${modele.id} n'a pas renvoye d'image (${raison})`);
         continue;
       }
 
       const type = image.inlineData.mimeType || 'image/png';
-      console.log(`  Fond peint par ${modele}`);
+      console.log(`  Fond peint par ${modele.id}`);
       return {
         image: `data:${type};base64,${image.inlineData.data}`,
-        note: `${modele} — ${matiere}`,
+        note: `${modele.id} — ${matiere}`,
       };
     } catch (e: any) {
       const message = (e.message || String(e)).slice(0, 160);
-      echecs.push(`${modele} : ${message}`);
-      console.log(`  ${modele} a echoue (${message})`);
+      echecs.push(`${modele.id} : ${message}`);
+      console.log(`  ${modele.id} a echoue (${message})`);
     }
   }
 
