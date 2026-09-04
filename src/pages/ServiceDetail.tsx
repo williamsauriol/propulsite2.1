@@ -5,6 +5,7 @@ import { SERVICES } from '../constants/services';
 import LiquidGlassCard from '../components/LiquidGlassCard';
 import ServicePillars from '../components/ServicePillars';
 import { highlight } from '../components/highlight';
+import { LOGOS_SERVICES } from '../components/logosServices';
 import { ArrowRight, CheckCircle2, ChevronLeft } from 'lucide-react';
 import { usePageMeta } from '../hooks/usePageMeta';
 
@@ -22,6 +23,7 @@ export default function ServiceDetail() {
   }
 
   const otherServices = SERVICES.filter((s) => s.slug !== slug);
+  const LogoService = LOGOS_SERVICES[service.slug];
 
   return (
     <div 
@@ -63,8 +65,16 @@ export default function ServiceDetail() {
             animate={{ x: 0 }}
             transition={{ duration: 0.8 }}
           >
+            {/* Le logo maison, pas l'icone lucide de services.tsx. Cette page
+                etait la derniere a montrer les anciennes : l'accueil, la liste
+                des services et la page a-propos affichaient deja les nouvelles,
+                donc on changeait de logo en cliquant sur une carte. */}
             <div className="w-16 h-16 bg-[color:var(--service-bg)] rounded-2xl flex items-center justify-center mb-8 text-[color:var(--service-color)] border border-[color:var(--service-border)]">
-              {service.icon}
+              {LogoService ? (
+                <LogoService className="w-9 h-9" style={{ color: 'var(--service-color)' }} />
+              ) : (
+                service.icon
+              )}
             </div>
             {/* `h1` porte la formule complete — celle qui contient les mots
                 pour lesquels la page se classe reellement. `title` reste court
@@ -137,7 +147,9 @@ export default function ServiceDetail() {
         <div className="mt-32">
           <h2 className="text-4xl font-black mb-12 text-3d uppercase italic">Autres Expertises</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {otherServices.map((s, i) => (
+            {otherServices.map((s, i) => {
+              const LogoAutre = LOGOS_SERVICES[s.slug];
+              return (
               <Link 
                 key={s.slug} 
                 to={`/services/${s.slug}`} 
@@ -150,7 +162,13 @@ export default function ServiceDetail() {
                 } as React.CSSProperties}
               >
                 <LiquidGlassCard className="h-full group-hover:border-[color:var(--other-color)] group-hover:shadow-[0_20px_50px_var(--other-shadow)] transition-all bg-gradient-to-br hover:bg-[linear-gradient(to_bottom_right,var(--other-bg),transparent)]">
-                  <div className="text-[color:var(--other-color)] mb-6 group-hover:scale-110 transition-transform">{s.icon}</div>
+                  <div className="text-[color:var(--other-color)] mb-6 group-hover:scale-110 transition-transform">
+                    {LogoAutre ? (
+                      <LogoAutre className="w-14 h-14" style={{ color: s.color }} />
+                    ) : (
+                      s.icon
+                    )}
+                  </div>
                   <h3 className="text-xl font-bold mb-4 group-hover:text-[color:var(--other-color)] transition-colors uppercase">{s.title}</h3>
                   <p className="text-white/60 text-sm mb-6 line-clamp-2">{s.shortDesc}</p>
                   <div className="flex items-center gap-2 text-xs font-bold text-[color:var(--other-color)] uppercase tracking-widest">
@@ -158,7 +176,8 @@ export default function ServiceDetail() {
                   </div>
                 </LiquidGlassCard>
               </Link>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
