@@ -20,8 +20,8 @@ export default function Home() {
       <section className="min-h-screen flex items-center px-6 relative pt-24">
         <div className="container mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ y: 50 }}
+            animate={{ y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
             className="max-w-4xl mx-auto flex flex-col items-center text-center"
           >
@@ -61,8 +61,8 @@ export default function Home() {
       <section className="py-32 px-6 relative">
         <div className="container mx-auto max-w-6xl">
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ y: 24 }}
+            whileInView={{ y: 0 }}
             viewport={{ once: true, margin: '-80px' }}
             transition={{ duration: 0.6 }}
             className="text-center mb-14"
@@ -84,8 +84,8 @@ export default function Home() {
             href="/exemples/specimen-01/"
             target="_blank"
             rel="noopener"
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ y: 28 }}
+            whileInView={{ y: 0 }}
             viewport={{ once: true, margin: '-80px' }}
             transition={{ duration: 0.6, delay: 0.1 }}
             className="group block relative overflow-hidden rounded-2xl border border-white/10 bg-[#0a1628] hover:border-accent-blue/60 transition-colors"

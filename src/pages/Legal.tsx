@@ -72,9 +72,9 @@ export default function Legal() {
                         {activeTab === 'confidentialite' && (
                             <motion.div
                                 key="confidentialite"
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
+                                initial={{ y: 10 }}
+                                animate={{ y: 0 }}
+                                exit={{ y: -10 }}
                                 transition={{ duration: 0.3 }}
                                 className="space-y-8"
                             >

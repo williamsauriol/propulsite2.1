@@ -10,9 +10,12 @@ interface LiquidGlassCardProps {
 
 export default function LiquidGlassCard({ children, className = '', delay = 0 }: LiquidGlassCardProps) {
   return (
+    // On anime `y` seulement, jamais `opacity`. En SSR, motion écrit l'état
+    // initial en style inline : un `opacity: 0` laisserait tout le contenu des
+    // cartes invisible dans le HTML pré-rendu que lisent Google et les IA.
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ y: 20 }}
+      whileInView={{ y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6, delay }}
       className={`bubble-glass p-10 ${className}`}

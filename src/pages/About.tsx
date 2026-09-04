@@ -22,8 +22,8 @@ export default function About() {
 
         {/* HERO */}
         <motion.section
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ y: 30 }}
+          animate={{ y: 0 }}
           transition={{ duration: 0.6 }}
           className="text-center mb-24"
         >
@@ -42,8 +42,8 @@ export default function About() {
         <section className="mb-32">
           <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ x: -30 }}
+              whileInView={{ x: 0 }}
               viewport={{ once: true }}
               className="space-y-6"
             >
@@ -63,8 +63,8 @@ export default function About() {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              initial={{ scale: 0.9 }}
+              whileInView={{ scale: 1 }}
               viewport={{ once: true }}
               className="flex flex-col items-center justify-center gap-6 p-8 relative group"
             >
@@ -100,8 +100,8 @@ export default function About() {
             ].map((val, idx) => (
               <motion.div
                 key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ y: 20 }}
+                whileInView={{ y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
                 className="bg-white/5 border border-white/10 p-8 rounded-2xl hover:border-accent-blue/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(0,198,255,0.15)] group"
@@ -161,8 +161,8 @@ export default function About() {
 
         {/* CTA */}
         <motion.section
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ scale: 0.95 }}
+          whileInView={{ scale: 1 }}
           viewport={{ once: true }}
           className="text-center relative py-16"
         >

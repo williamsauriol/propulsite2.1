@@ -42,8 +42,8 @@ export default function ServicePillars({ pillars }: { pillars: ServicePillar[] }
             key={p.title}
             type="button"
             onClick={() => setOpen(i)}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ y: 30 }}
+            whileInView={{ y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.5, delay: i * 0.1 }}
             className="group text-left relative rounded-3xl border border-white/10 bg-white/[0.03] p-8 backdrop-blur-sm transition-all duration-300 hover:-translate-y-2"

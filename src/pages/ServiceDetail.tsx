@@ -59,8 +59,8 @@ export default function ServiceDetail() {
 
         <div className="grid lg:grid-cols-2 gap-16 items-start mb-24">
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ x: -50 }}
+            animate={{ x: 0 }}
             transition={{ duration: 0.8 }}
           >
             <div className="w-16 h-16 bg-[color:var(--service-bg)] rounded-2xl flex items-center justify-center mb-8 text-[color:var(--service-color)] border border-[color:var(--service-border)]">
@@ -92,8 +92,8 @@ export default function ServiceDetail() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ x: 50 }}
+            animate={{ x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <LiquidGlassCard className="h-full">

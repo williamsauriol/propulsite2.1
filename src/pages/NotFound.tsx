@@ -16,8 +16,8 @@ export default function NotFound() {
 
         {/* Animated 404 */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={{ scale: 0.8 }}
+          animate={{ scale: 1 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <h1 className="text-[10rem] md:text-[14rem] font-black leading-none text-white/5 select-none">
@@ -26,8 +26,8 @@ export default function NotFound() {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ y: 20 }}
+          animate={{ y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           className="-mt-16 md:-mt-24 relative z-10"
         >

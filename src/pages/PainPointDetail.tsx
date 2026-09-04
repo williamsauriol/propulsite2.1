@@ -36,8 +36,8 @@ export default function PainPointDetail() {
         
         {/* HERO SECTION */}
         <motion.div
-           initial={{ opacity: 0, y: 30 }}
-           animate={{ opacity: 1, y: 0 }}
+           initial={{ y: 30 }}
+           animate={{ y: 0 }}
            transition={{ duration: 0.6 }}
            className="text-center mb-16"
         >
@@ -74,8 +74,8 @@ export default function PainPointDetail() {
           {article.blocks.map((block, index) => (
             <motion.div 
               key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ y: 30 }}
+              whileInView={{ y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
@@ -139,8 +139,8 @@ export default function PainPointDetail() {
 
         {/* CTA SECTION */}
         <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            initial={{ scale: 0.95 }}
+            whileInView={{ scale: 1 }}
             viewport={{ once: true }}
             className="relative bg-gradient-to-br from-[#0a1930] to-[#050a15] border border-accent-blue/30 p-10 md:p-14 rounded-3xl text-center overflow-hidden shadow-[0_0_50px_rgba(0,198,255,0.2)]"
         >

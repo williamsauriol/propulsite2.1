@@ -29,8 +29,8 @@ export default function SecteurDetail() {
         </Link>
 
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ y: 24 }}
+          animate={{ y: 0 }}
           transition={{ duration: 0.6 }}
           className="mb-14"
         >
@@ -61,8 +61,8 @@ export default function SecteurDetail() {
         {secteur.blocs.map((bloc, i) => (
           <motion.div
             key={bloc.titre}
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ y: 24 }}
+            whileInView={{ y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.5, delay: i * 0.08 }}
             className="mb-8"
@@ -109,8 +109,8 @@ export default function SecteurDetail() {
         ))}
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ scale: 0.96 }}
+          whileInView={{ scale: 1 }}
           viewport={{ once: true }}
           className="relative bg-gradient-to-br from-[#0a1930] to-[#050a15] border border-accent-blue/30 p-10 md:p-14 rounded-3xl text-center mt-14"
         >

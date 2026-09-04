@@ -267,8 +267,8 @@ export default function ServicesScroll() {
 
                 <motion.div
                   key={service.slug}
-                  initial={{ opacity: 0, scale: 0.88, y: 16 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  initial={{ scale: 0.88, y: 16 }}
+                  animate={{ scale: 1, y: 0 }}
                   transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                   className="relative"
                   style={{ color: service.color }}
