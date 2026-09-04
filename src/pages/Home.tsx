@@ -5,6 +5,7 @@ import GeoTeaser from '../components/GeoTeaser';
 import ServicesScroll from '../components/ServicesScroll';
 import PourquoiNousChoisissent from '../components/PourquoiNousChoisissent';
 import CarteRelief from '../components/CarteRelief';
+import PretADecoller from '../components/PretADecoller';
 import { ArrowRight, HardHat } from 'lucide-react';
 import { usePageMeta } from '../hooks/usePageMeta';
 
@@ -122,177 +123,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Banner Section */}
-      <section className="py-32 px-6 flex justify-center">
-        <style>{`
-          .widget-container {
-            position: relative;
-            width: 100%;
-            max-width: 560px;
-            height: 280px;
-            transition: 200ms;
-            user-select: none;
-            margin: 0 auto;
-          }
-          .widget-container:active { height: 270px; }
-          .widget-canvas {
-            perspective: 800px;
-            position: absolute;
-            inset: 0;
-            z-index: 200;
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            grid-template-rows: repeat(5, 1fr);
-          }
-          .widget-tracker {
-            position: absolute;
-            z-index: 200;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-          }
-          #widget-card {
-            position: absolute;
-            inset: 0;
-            z-index: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            align-items: flex-start;
-            padding: 28px 32px;
-            border-radius: 24px;
-            transition: 700ms;
-            background: linear-gradient(135deg, #0a1628 0%, #0f2044 50%, #0a1628 100%);
-            border: 1px solid rgba(0, 210, 255, 0.25);
-            overflow: hidden;
-          }
-          #widget-card::before {
-            content: "";
-            position: absolute;
-            inset: -2px;
-            border-radius: 26px;
-            background: linear-gradient(135deg, #00d2ff, #0077b6, #7ee8ff);
-            opacity: 0;
-            z-index: -1;
-            transition: opacity 300ms;
-          }
-          .widget-container:hover #widget-card::before { opacity: 0.6; }
-          #widget-card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image:
-              radial-gradient(1.5px 1.5px at 15% 25%, rgba(255,255,255,0.5) 0%, transparent 100%),
-              radial-gradient(1px 1px at 40% 70%, rgba(255,255,255,0.4) 0%, transparent 100%),
-              radial-gradient(2px 2px at 60% 15%, rgba(255,255,255,0.3) 0%, transparent 100%),
-              radial-gradient(1px 1px at 80% 80%, rgba(255,255,255,0.35) 0%, transparent 100%),
-              radial-gradient(1.5px 1.5px at 92% 40%, rgba(255,255,255,0.25) 0%, transparent 100%);
-            pointer-events: none;
-          }
-          #widget-prompt {
-            font-size: 42px;
-            font-weight: 900;
-            color: #ffffff;
-            text-transform: uppercase;
-            letter-spacing: -1px;
-            line-height: 1.1;
-            transition: 300ms ease-in-out;
-            z-index: 10;
-            text-shadow: 0 0 40px rgba(0, 210, 255, 0.6);
-            margin: 0;
-          }
-          .widget-description {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 32px;
-            opacity: 0;
-            transition: opacity 300ms ease-in-out;
-            transition-delay: 100ms;
-            z-index: 10;
-            text-align: center;
-            gap: 20px;
-          }
-          .widget-description p { font-size: 17px; color: #e2e8f0; line-height: 1.6; max-width: 380px; margin: 0; }
-          .widget-description .cta-btn {
-            display: inline-block;
-            background: #00d2ff;
-            color: #050a15;
-            font-size: 15px;
-            font-weight: 700;
-            padding: 12px 28px;
-            border-radius: 50px;
-            text-decoration: none;
-            box-shadow: 0 0 20px rgba(0, 210, 255, 0.5);
-          }
-          .widget-rocket {
-            position: absolute;
-            top: 24px;
-            right: 28px;
-            font-size: 36px;
-            z-index: 10;
-            transition: transform 300ms ease-in-out;
-            filter: drop-shadow(0 0 12px rgba(0,210,255,0.8));
-          }
-          .widget-tracker:hover ~ #widget-card #widget-prompt { opacity: 0; }
-          .widget-tracker:hover ~ #widget-card .widget-description { opacity: 1; }
-          .widget-tracker:hover ~ #widget-card .widget-rocket { transform: translateY(-8px) rotate(15deg); }
-          .widget-tracker:hover ~ #widget-card { filter: brightness(1.15); }
-          .w-tr-1  { grid-area: 1/1; } .w-tr-2  { grid-area: 1/2; } .w-tr-3  { grid-area: 1/3; }
-          .w-tr-4  { grid-area: 1/4; } .w-tr-5  { grid-area: 1/5; } .w-tr-6  { grid-area: 2/1; }
-          .w-tr-7  { grid-area: 2/2; } .w-tr-8  { grid-area: 2/3; } .w-tr-9  { grid-area: 2/4; }
-          .w-tr-10 { grid-area: 2/5; } .w-tr-11 { grid-area: 3/1; } .w-tr-12 { grid-area: 3/2; }
-          .w-tr-13 { grid-area: 3/3; } .w-tr-14 { grid-area: 3/4; } .w-tr-15 { grid-area: 3/5; }
-          .w-tr-16 { grid-area: 4/1; } .w-tr-17 { grid-area: 4/2; } .w-tr-18 { grid-area: 4/3; }
-          .w-tr-19 { grid-area: 4/4; } .w-tr-20 { grid-area: 4/5; } .w-tr-21 { grid-area: 5/1; }
-          .w-tr-22 { grid-area: 5/2; } .w-tr-23 { grid-area: 5/3; } .w-tr-24 { grid-area: 5/4; }
-          .w-tr-25 { grid-area: 5/5; }
-          .w-tr-1:hover  ~ #widget-card { transform: rotateX(20deg) rotateY(-10deg); transition: 125ms ease-in-out; }
-          .w-tr-2:hover  ~ #widget-card { transform: rotateX(20deg) rotateY(-5deg);  transition: 125ms ease-in-out; }
-          .w-tr-3:hover  ~ #widget-card { transform: rotateX(20deg) rotateY(0deg);   transition: 125ms ease-in-out; }
-          .w-tr-4:hover  ~ #widget-card { transform: rotateX(20deg) rotateY(5deg);   transition: 125ms ease-in-out; }
-          .w-tr-5:hover  ~ #widget-card { transform: rotateX(20deg) rotateY(10deg);  transition: 125ms ease-in-out; }
-          .w-tr-6:hover  ~ #widget-card { transform: rotateX(10deg) rotateY(-10deg); transition: 125ms ease-in-out; }
-          .w-tr-7:hover  ~ #widget-card { transform: rotateX(10deg) rotateY(-5deg);  transition: 125ms ease-in-out; }
-          .w-tr-8:hover  ~ #widget-card { transform: rotateX(10deg) rotateY(0deg);   transition: 125ms ease-in-out; }
-          .w-tr-9:hover  ~ #widget-card { transform: rotateX(10deg) rotateY(5deg);   transition: 125ms ease-in-out; }
-          .w-tr-10:hover ~ #widget-card { transform: rotateX(10deg) rotateY(10deg);  transition: 125ms ease-in-out; }
-          .w-tr-11:hover ~ #widget-card { transform: rotateX(0deg)  rotateY(-10deg); transition: 125ms ease-in-out; }
-          .w-tr-12:hover ~ #widget-card { transform: rotateX(0deg)  rotateY(-5deg);  transition: 125ms ease-in-out; }
-          .w-tr-13:hover ~ #widget-card { transform: rotateX(0deg)  rotateY(0deg);   transition: 125ms ease-in-out; }
-          .w-tr-14:hover ~ #widget-card { transform: rotateX(0deg)  rotateY(5deg);   transition: 125ms ease-in-out; }
-          .w-tr-15:hover ~ #widget-card { transform: rotateX(0deg)  rotateY(10deg);  transition: 125ms ease-in-out; }
-          .w-tr-16:hover ~ #widget-card { transform: rotateX(-10deg) rotateY(-10deg);transition: 125ms ease-in-out; }
-          .w-tr-17:hover ~ #widget-card { transform: rotateX(-10deg) rotateY(-5deg); transition: 125ms ease-in-out; }
-          .w-tr-18:hover ~ #widget-card { transform: rotateX(-10deg) rotateY(0deg);  transition: 125ms ease-in-out; }
-          .w-tr-19:hover ~ #widget-card { transform: rotateX(-10deg) rotateY(5deg);  transition: 125ms ease-in-out; }
-          .w-tr-20:hover ~ #widget-card { transform: rotateX(-10deg) rotateY(10deg); transition: 125ms ease-in-out; }
-          .w-tr-21:hover ~ #widget-card { transform: rotateX(-20deg) rotateY(-10deg);transition: 125ms ease-in-out; }
-          .w-tr-22:hover ~ #widget-card { transform: rotateX(-20deg) rotateY(-5deg); transition: 125ms ease-in-out; }
-          .w-tr-23:hover ~ #widget-card { transform: rotateX(-20deg) rotateY(0deg);  transition: 125ms ease-in-out; }
-          .w-tr-24:hover ~ #widget-card { transform: rotateX(-20deg) rotateY(5deg);  transition: 125ms ease-in-out; }
-          .w-tr-25:hover ~ #widget-card { transform: rotateX(-20deg) rotateY(10deg); transition: 125ms ease-in-out; }
-        `}</style>
-
-        <Link to="/funnel" className="widget-container block">
-          <div className="widget-canvas">
-            {Array.from({ length: 25 }).map((_, i) => (
-              <div key={i} className={`widget-tracker w-tr-${i + 1}`} />
-            ))}
-            <div id="widget-card">
-              <div className="widget-rocket"><img src="/images/logo-fuser-sans-backk.png" alt="Propulsite" width={450} height={450} style={{ height: '40px', width: 'auto', filter: 'drop-shadow(0 0 12px rgba(255,255,255,0.9))' }} /></div>
-              <p id="widget-prompt">Prêt à<br />décoller?</p>
-              <div className="widget-description">
-                <p>Propulsez votre entreprise en ligne dès aujourd'hui avec une stratégie numérique sur mesure.</p>
-                <span className="cta-btn cursor-pointer">Démarrer maintenant →</span>
-              </div>
-            </div>
-          </div>
-        </Link>
-      </section>
+      {/* Prêt à décoller — la console de lancement.
+          Voir le composant : l'ancienne carte cachait l'offre et le bouton
+          derrière un survol, donc le trafic mobile ne les voyait jamais. */}
+      <PretADecoller />
     </div>
   );
 }
