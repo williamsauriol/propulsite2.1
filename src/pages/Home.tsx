@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import GeoTeaser from '../components/GeoTeaser';
 import ServicesScroll from '../components/ServicesScroll';
 import PourquoiNousChoisissent from '../components/PourquoiNousChoisissent';
+import CarteRelief from '../components/CarteRelief';
 import { ArrowRight, HardHat } from 'lucide-react';
 import { usePageMeta } from '../hooks/usePageMeta';
 
@@ -57,11 +58,8 @@ export default function Home() {
       {/* Pourquoi nous choisissent — pile de cartes, ecran accroche */}
       <PourquoiNousChoisissent />
 
-      {/* Réalisations — vitrine des sites de démonstration.
-          En dalle : c'est un changement de sujet, on passe de ce qu'on dit à
-          ce qu'on montre. Le hero et la bannière d'appel restent à même la
-          page — trois dalles d'affilée feraient une pile de cartes. */}
-      <section className="py-32 px-6 relative dalle dalle-fond">
+      {/* Réalisations — vitrine des sites de démonstration */}
+      <section className="py-32 px-6 relative">
         <div className="container mx-auto max-w-6xl">
           <motion.div
             initial={{ y: 24 }}
@@ -83,14 +81,20 @@ export default function Home() {
               volontairement pas mis en vitrine : William ne veut pas encore
               le montrer. Pour le remettre, rajouter une carte identique
               pointant vers /exemples/specimen-02/. */}
-          <motion.a
-            href="/exemples/specimen-01/"
-            target="_blank"
-            rel="noopener"
+          {/* La carte s'incline vers le curseur et une lueur la balaie. Le
+              relief vit dans son enveloppe, pas ici : la mise en page, les
+              classes et le contenu de la carte n'ont pas bougé. */}
+          <motion.div
             initial={{ y: 28 }}
             whileInView={{ y: 0 }}
             viewport={{ once: true, margin: '-80px' }}
             transition={{ duration: 0.6, delay: 0.1 }}
+          >
+          <CarteRelief classeObjet="rounded-2xl">
+          <a
+            href="/exemples/specimen-01/"
+            target="_blank"
+            rel="noopener"
             className="group block relative overflow-hidden rounded-2xl border border-white/10 bg-[#0a1628] hover:border-accent-blue/60 transition-colors"
           >
             <img
@@ -112,7 +116,9 @@ export default function Home() {
                 Visiter le site <ArrowRight className="w-4 h-4" />
               </span>
             </div>
-          </motion.a>
+          </a>
+          </CarteRelief>
+          </motion.div>
         </div>
       </section>
 
