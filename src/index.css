@@ -31,7 +31,12 @@
      PAS d'`overflow: hidden` ici : il casserait le `position: sticky` des
      panneaux qui vivent à l'intérieur. */
   .dalle {
-    margin-inline: 0.75rem;
+    /* Elle touche les bords gauche et droit. Avec une marge latérale, on voyait
+       une bande de fond de page de chaque côté, plus le liseré cyan qui courait
+       le long : ça donnait un panneau posé de travers sur l'écran, pas une pièce
+       dans laquelle on entre. Les coins arrondis du haut et du bas suffisent à
+       dire que c'est un objet. */
+    margin-inline: 0;
     /* Un peu d'air VERTICAL aussi : deux dalles qui se touchent bord à bord
        redonnent la ligne droite qu'on cherchait à supprimer, coins arrondis ou
        pas. C'est le fond de page visible entre les deux qui fait la coupure. */
@@ -45,7 +50,6 @@
 
   @media (min-width: 768px) {
     .dalle {
-      margin-inline: 1.5rem;
       border-radius: 3rem;
     }
   }

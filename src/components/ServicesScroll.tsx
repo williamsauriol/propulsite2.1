@@ -153,7 +153,7 @@ export default function ServicesScroll() {
   const LogoActif = LOGOS_SERVICES[service.slug];
 
   return (
-    <section className="relative dalle dalle-fond px-4 md:px-6 xl:px-10 py-28 md:py-44">
+    <section className="px-4 md:px-6 xl:px-10 py-28 md:py-44">
       <div className="mx-auto max-w-[1700px]">
 
         {/* ── En-tête ──────────────────────────────────────────────────── */}
