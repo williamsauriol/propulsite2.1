@@ -488,14 +488,22 @@ export default function PourquoiNousChoisissent() {
   }, []);
 
   return (
-    /* Le dégradé PART et REVIENT à #050a15, la couleur du corps de page.
-       Il allait de #060d1f à #0a1628 : deux couleurs qui ne sont celles
-       d'aucune section voisine, donc une ligne droite bien nette en haut ET en
-       bas de la section. On voyait la couture. Ici les deux bouts se confondent
-       avec la page, et le bleu ne monte qu'au milieu — là où personne ne peut
-       le comparer à autre chose. La salle s'ouvre et se referme au lieu de
-       commencer d'un coup. */
-    <section className="relative bg-gradient-to-b from-[#050a15] via-[#0a1628] to-[#050a15]">
+    /* UNE DALLE POSÉE SUR LA PAGE, pas une bande collée bord à bord.
+
+       Le fond allait de #060d1f à #0a1628 sur toute la largeur : deux couleurs
+       qui ne sont celles d'aucune section voisine, donc un trait droit bien net
+       en haut ET en bas. On voyait la couture.
+
+       Fondre les bords dans la couleur de la page réglait le trait, mais ne
+       donnait plus rien à voir : on ne savait plus qu'on changeait d'endroit.
+       Ici c'est l'inverse — la section s'écarte des bords de l'écran, prend des
+       coins arrondis, un liseré cyan d'un pixel et une ombre portée profonde.
+       Elle FLOTTE au-dessus de la page au lieu d'y être découpée.
+
+       Plus de ligne droite nulle part, et le passage se voit enfin : on entre
+       dans un objet, on en ressort. Pas d'`overflow-hidden` ici, il casserait
+       le `position: sticky` du panneau intérieur. */
+    <section className="relative dalle dalle-fond">
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
 
       <div className="relative h-[340vh]">

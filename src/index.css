@@ -13,6 +13,49 @@
 }
 
 @layer components {
+  /* ── La dalle ──────────────────────────────────────────────────────────
+     Une section posée SUR la page au lieu d'y être découpée.
+
+     Avant, chaque section touchait les bords de l'écran et la suivante
+     commençait sur une ligne droite nette. On voyait la couture, et rien ne
+     disait qu'on changeait d'endroit dans le site.
+
+     Une dalle s'écarte des bords, prend des coins arrondis, un liseré cyan
+     d'un pixel et une ombre portée profonde. Le fond de page reste visible
+     tout autour : c'est ce vide qui fait l'épaisseur. On entre dans un objet,
+     on en ressort.
+
+     À réserver aux sections qui portent un vrai changement de sujet. Toutes
+     les sections en dalle donnerait une pile de cartes, et plus aucun rythme.
+
+     PAS d'`overflow: hidden` ici : il casserait le `position: sticky` des
+     panneaux qui vivent à l'intérieur. */
+  .dalle {
+    margin-inline: 0.75rem;
+    /* Un peu d'air VERTICAL aussi : deux dalles qui se touchent bord à bord
+       redonnent la ligne droite qu'on cherchait à supprimer, coins arrondis ou
+       pas. C'est le fond de page visible entre les deux qui fait la coupure. */
+    margin-block: 1rem;
+    border-radius: 2rem;
+    box-shadow:
+      0 0 0 1px rgba(0, 210, 255, 0.12),
+      0 40px 120px rgba(0, 0, 0, 0.7),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  @media (min-width: 768px) {
+    .dalle {
+      margin-inline: 1.5rem;
+      border-radius: 3rem;
+    }
+  }
+
+  /* Le fond d'une dalle : plus clair au centre qu'à ses deux bouts, pour que
+     la lumière ait l'air de venir du milieu de la pièce. */
+  .dalle-fond {
+    background-image: linear-gradient(to bottom, #070f22 0%, #0d1c33 50%, #070f22 100%);
+  }
+
   .bubble-glass {
     @apply rounded-[50px] border border-white/5;
     background: rgba(255, 255, 255, 0.01);

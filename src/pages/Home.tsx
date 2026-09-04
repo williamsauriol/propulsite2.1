@@ -57,8 +57,11 @@ export default function Home() {
       {/* Pourquoi nous choisissent — pile de cartes, ecran accroche */}
       <PourquoiNousChoisissent />
 
-      {/* Réalisations — vitrine des sites de démonstration */}
-      <section className="py-32 px-6 relative">
+      {/* Réalisations — vitrine des sites de démonstration.
+          En dalle : c'est un changement de sujet, on passe de ce qu'on dit à
+          ce qu'on montre. Le hero et la bannière d'appel restent à même la
+          page — trois dalles d'affilée feraient une pile de cartes. */}
+      <section className="py-32 px-6 relative dalle dalle-fond">
         <div className="container mx-auto max-w-6xl">
           <motion.div
             initial={{ y: 24 }}
