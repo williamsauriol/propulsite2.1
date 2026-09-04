@@ -17,8 +17,15 @@ export default function SecteurDetail() {
 
   if (!secteur) return <Navigate to="/" replace />;
 
+  /* `relative z-10` est obligatoire ici, pas décoratif. RocketBackground est posé
+     en `fixed inset-0 z-0` avec un fond OPAQUE. Un contenu laissé dans le flux
+     normal se peint AVANT les éléments positionnés du même plan, donc ce fond le
+     recouvrait : le titre et l'intro de cette page étaient invisibles en
+     production. Les cartes y échappaient parce que leur `transform` leur crée un
+     contexte d'empilement ; l'en-tête, non. Toutes les autres pages du site
+     portent déjà ces deux classes. */
   return (
-    <div className="pt-32 pb-24 px-6">
+    <div className="pt-32 pb-24 px-6 relative z-10">
       <div className="max-w-4xl mx-auto">
         <Link
           to="/"
