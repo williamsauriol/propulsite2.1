@@ -1,425 +1,614 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import LiquidGlassCard from '../components/LiquidGlassCard';
+import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowLeft, Check, Clock, ShieldCheck } from 'lucide-react';
 import { usePageMeta } from '../hooks/usePageMeta';
 
-type FunnelData = {
-    role: string;
-    tailleEntreprise: string;
-    defi: string;
-    solutionActuelle: string;
-    declencheur: string;
-    objectif: string;
-    nom: string;
-    email: string;
-    telephone: string;
-    message: string;
+/**
+ * Funnel — le questionnaire de soumission.
+ *
+ * CE QUI A CHANGÉ, ET POURQUOI
+ *
+ * 1. PLUS D'ÉCRAN D'ACCUEIL. « Prêt pour le décollage ? » demandait un clic
+ *    pour arriver à la première question. La personne venait de cliquer sur
+ *    « Obtenir mon analyse gratuite » : elle a déjà dit oui. Lui redemander,
+ *    c'est une porte de sortie offerte gratuitement.
+ *
+ * 2. UN SEUL CLIC PAR QUESTION. Avant, il fallait choisir PUIS appuyer sur
+ *    « Suivant » : deux gestes pour une réponse, sept fois de suite. Le choix
+ *    fait maintenant avancer tout seul. C'est le gain de conversion le plus
+ *    important de cette refonte, et le moins visible.
+ *
+ * 3. PLUS DE TEXTE OBLIGATOIRE. La troisième question demandait d'écrire un
+ *    paragraphe sur son plus grand défi. Un champ libre obligatoire en milieu
+ *    de parcours, sur un téléphone, avec des mains de chantier : c'est là que
+ *    le formulaire perdait le plus de monde. Le champ libre existe encore, à
+ *    la fin, et il est facultatif.
+ *
+ * 4. LES QUESTIONS SONT CELLES D'UN ENTREPRENEUR. « Développeur / Technique »
+ *    et « solopreneur » ne sont pas des mots de chantier. On demande
+ *    maintenant le métier, la région, l'état du site actuel, ce qui manque, le
+ *    volume visé et l'échéance — c'est-à-dire ce qu'il faut vraiment savoir
+ *    pour préparer l'analyse, et rien d'autre.
+ *
+ * 5. LA DURÉE EST ANNONCÉE. « Six questions, moins de deux minutes » en haut de
+ *    page. Un formulaire dont on ne voit pas la fin est un formulaire qu'on
+ *    abandonne.
+ *
+ * 6. LES RÉPONSES SURVIVENT À UNE FERMETURE. Elles sont gardées dans le
+ *    navigateur et rechargées au retour. Un entrepreneur interrompu par un
+ *    appel ne recommence pas à zéro.
+ *
+ * NOTE SUR LES ANIMATIONS
+ *
+ * Elles n'animent que `y` et jamais `opacity`, comme partout dans le projet.
+ * Cette page n'est pas pré-rendue (robots.txt la bloque), mais un contenu
+ * caché par du CSS reste un contenu invisible si le JavaScript tarde.
+ */
+
+type Reponses = {
+  metier: string;
+  region: string;
+  site: string;
+  manque: string;
+  volume: string;
+  echeance: string;
+  nom: string;
+  email: string;
+  telephone: string;
+  message: string;
 };
 
-const STEPS = ['welcome', 'role', 'taille', 'defi', 'solution', 'declencheur', 'objectif', 'contact', 'success'];
+const VIDE: Reponses = {
+  metier: '', region: '', site: '', manque: '', volume: '', echeance: '',
+  nom: '', email: '', telephone: '', message: '',
+};
 
-const SelectButton = ({ value, selected, onClick }: { key?: string; value: string; selected: boolean; onClick: () => void }) => (
-    <button
-        onClick={onClick}
-        className={`w-full text-left px-6 py-4 rounded-2xl border transition-all duration-300 font-medium ${selected
-            ? 'bg-accent-blue/10 border-accent-blue text-white shadow-[0_0_15px_rgba(0,210,255,0.2)]'
-            : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:border-white/20'
-            }`}
-    >
-        <div className="flex items-center gap-4">
-            <div className={`w-5 h-5 rounded-full border-2 flex shrink-0 items-center justify-center ${selected ? 'border-accent-blue bg-accent-blue' : 'border-white/30'}`}>
-                {selected && <div className="w-2 h-2 rounded-full bg-[#050a15]" />}
-            </div>
-            <span className="leading-tight">{value}</span>
-        </div>
-    </button>
-);
+interface Question {
+  cle: keyof Reponses;
+  titre: string;
+  aide: string;
+  options: string[];
+  /** Une réponse écrite plutôt qu'un choix (la région varie trop pour une liste). */
+  libre?: boolean;
+  placeholder?: string;
+}
+
+/**
+ * Six questions, et chacune sert à quelque chose de précis dans l'analyse.
+ * Une question qui ne change rien à ce qu'on répondra est une question qui
+ * coûte des soumissions.
+ */
+const QUESTIONS: Question[] = [
+  {
+    cle: 'metier',
+    titre: 'Vous faites quoi, au juste ?',
+    aide: 'Les mots que vos clients tapent dans Google changent complètement d’un métier à l’autre.',
+    options: [
+      'Toiture',
+      'Rénovation générale',
+      'Construction neuve',
+      'Excavation / terrassement',
+      'Électricité',
+      'Plomberie / chauffage',
+      'Paysagement',
+      'Un autre métier du bâtiment',
+    ],
+  },
+  {
+    cle: 'region',
+    titre: 'Vous travaillez dans quel coin ?',
+    aide: 'Votre ville et celles autour. C’est ce qui décide sur quelles recherches on vous fait sortir.',
+    options: [],
+    libre: true,
+    placeholder: 'Ex. : Saint-Eustache, Deux-Montagnes, Blainville',
+  },
+  {
+    cle: 'site',
+    titre: 'Vous avez un site web en ce moment ?',
+    aide: 'Refaire et repartir de zéro, ce n’est pas le même travail ni le même prix.',
+    options: [
+      'Non, aucun site',
+      'Juste une page Facebook',
+      'Oui, mais il est vieux et je n’en suis pas fier',
+      'Oui, il est correct, mais personne ne le trouve',
+      'Oui, et il m’amène déjà des clients',
+    ],
+  },
+  {
+    cle: 'manque',
+    titre: 'Qu’est-ce qui vous manque le plus ?',
+    aide: 'Une seule réponse. Celle qui vous dérange le plus en ce moment.',
+    options: [
+      'Le téléphone ne sonne pas assez',
+      'On ne me trouve pas sur Google',
+      'J’ai l’air moins sérieux que mes concurrents',
+      'J’ai des appels, mais pas les bons projets',
+      'Je n’ai pas le temps de m’en occuper',
+    ],
+  },
+  {
+    cle: 'volume',
+    titre: 'Vous voulez combien de contrats de plus par mois ?',
+    aide: 'Ça détermine le budget et les moyens. Répondez ce que vous êtes capable de livrer.',
+    options: [
+      '1 ou 2 de plus, ce serait déjà bien',
+      '3 à 5 de plus',
+      '6 à 10 de plus',
+      'Le plus possible, j’ai l’équipe pour',
+    ],
+  },
+  {
+    cle: 'echeance',
+    titre: 'Vous voulez commencer quand ?',
+    aide: 'Réponse honnête. Magasiner est une réponse tout à fait correcte.',
+    options: [
+      'Tout de suite',
+      'D’ici un mois',
+      'D’ici trois mois',
+      'Je magasine, je regarde ce que ça donne',
+    ],
+  },
+];
+
+const CLE_SAUVEGARDE = 'propulsite-funnel-v2';
+
+/** Ce qui lève les objections juste avant le bouton d'envoi. */
+const GARANTIES = [
+  { icone: <Clock className="w-4 h-4" />, texte: 'Réponse en 24 h ouvrables' },
+  { icone: <ShieldCheck className="w-4 h-4" />, texte: 'Aucune relance automatique' },
+];
 
 export default function Funnel() {
-    usePageMeta(
-        'Soumission gratuite – Propulsite | Propulsez votre entreprise',
-        'Répondez à quelques questions et obtenez une stratégie numérique sur mesure pour votre entreprise de construction. C’est gratuit et sans engagement.'
-    );
-    const [currentStep, setCurrentStep] = useState(0);
-    const [data, setData] = useState<FunnelData>({
-        role: '',
-        tailleEntreprise: '',
-        defi: '',
-        solutionActuelle: '',
-        declencheur: '',
-        objectif: '',
-        nom: '',
-        email: '',
-        telephone: '',
-        message: ''
-    });
-    const [error, setError] = useState('');
-    const [isSubmitting, setIsSubmitting] = useState(false);
+  usePageMeta(
+    'Analyse gratuite – Propulsite | 6 questions, moins de 2 minutes',
+    'Six questions et on regarde votre fiche Google, votre site et vos concurrents directs. Gratuit, sans engagement, réponse en 24 h ouvrables.',
+  );
 
-    const stepId = STEPS[currentStep];
-    const totalSteps = STEPS.length - 2;
+  /** 0 à 5 : les questions. 6 : les coordonnées. 7 : le merci. */
+  const [etape, setEtape] = useState(0);
+  const [rep, setRep] = useState<Reponses>(VIDE);
+  const [erreur, setErreur] = useState('');
+  const [envoiEnCours, setEnvoiEnCours] = useState(false);
+  const champRegion = useRef<HTMLInputElement | null>(null);
 
-    const progressPercent = () => {
-        if (currentStep === 0) return 0;
-        if (currentStep === STEPS.length - 1) return 100;
-        return Math.round((currentStep / totalSteps) * 100);
-    };
+  const DERNIERE_Q = QUESTIONS.length - 1;
+  const ETAPE_CONTACT = QUESTIONS.length;
+  const ETAPE_MERCI = QUESTIONS.length + 1;
 
-    const handleNext = async () => {
-        setError('');
-
-        if (stepId === 'role' && !data.role) {
-            setError('Veuillez choisir votre rôle.');
-            return;
+  /* Reprise. Un entrepreneur interrompu par un appel de chantier ne doit pas
+     retrouver un formulaire vide. On ne restaure jamais l'étape de fin : on
+     n'envoie pas deux fois. */
+  useEffect(() => {
+    try {
+      const brut = localStorage.getItem(CLE_SAUVEGARDE);
+      if (!brut) return;
+      const sauve = JSON.parse(brut);
+      if (sauve && typeof sauve === 'object' && sauve.rep) {
+        setRep({ ...VIDE, ...sauve.rep });
+        if (typeof sauve.etape === 'number' && sauve.etape > 0 && sauve.etape <= ETAPE_CONTACT) {
+          setEtape(sauve.etape);
         }
-        if (stepId === 'taille' && !data.tailleEntreprise) {
-            setError('Veuillez choisir la taille de votre équipe.');
-            return;
-        }
-        if (stepId === 'defi' && !data.defi.trim()) {
-            setError('Veuillez décrire votre défi principal.');
-            return;
-        }
-        if (stepId === 'solution' && !data.solutionActuelle) {
-            setError('Veuillez choisir une option.');
-            return;
-        }
-        if (stepId === 'declencheur' && !data.declencheur) {
-            setError('Veuillez choisir une option.');
-            return;
-        }
-        if (stepId === 'objectif' && !data.objectif) {
-            setError('Veuillez choisir votre objectif principal.');
-            return;
-        }
-        if (stepId === 'contact') {
-            if (!data.nom.trim() || !data.email.trim()) {
-                setError('Veuillez remplir votre nom et email.');
-                return;
-            }
-            await sendEmail();
-            return; // on attend que l'email s'envoie avant de changer d'étape
-        }
+      }
+    } catch {
+      /* Navigation privée ou stockage bloqué : on repart de zéro, sans bruit. */
+    }
+  }, [ETAPE_CONTACT]);
 
-        setCurrentStep(prev => prev + 1);
-    };
+  useEffect(() => {
+    if (etape >= ETAPE_MERCI) return;
+    try {
+      localStorage.setItem(CLE_SAUVEGARDE, JSON.stringify({ etape, rep }));
+    } catch {
+      /* Idem : la sauvegarde est un confort, pas une condition. */
+    }
+  }, [etape, rep, ETAPE_MERCI]);
 
-    const handleBack = () => {
-        setError('');
-        setCurrentStep(prev => prev - 1);
-    };
+  /* Le champ de région prend le focus tout seul : c'est la seule question qui
+     demande de taper, et sans ça il faut viser le champ avant d'écrire. */
+  useEffect(() => {
+    if (QUESTIONS[etape]?.libre) champRegion.current?.focus();
+  }, [etape]);
 
-    const sendEmail = async () => {
-        setIsSubmitting(true);
-        // Si ton email Propulsite est différent, change cette variable (ex: info@propulsite.ca)
-        const targetEmail = 'propulsiteprojet@gmail.com'; 
-        
-        try {
-            const response = await fetch(`https://formsubmit.co/ajax/${targetEmail}`, {
-                method: "POST",
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    _subject: `Nouveau lead Funnel – ${data.nom}`,
-                    Nom: data.nom,
-                    Email: data.email,
-                    Téléphone: data.telephone || 'N/A',
-                    Rôle: data.role,
-                    "Taille d'entreprise": data.tailleEntreprise,
-                    "Défi": data.defi,
-                    "Solution actuelle": data.solutionActuelle,
-                    "Déclencheur": data.declencheur,
-                    "Objectif 3 mois": data.objectif,
-                    "Message": data.message || 'Aucun'
-                })
-            });
-            
-            if (response.ok) {
-                setCurrentStep(prev => prev + 1);
-            } else {
-                setError("Une erreur est survenue lors de l'envoi de l'email.");
-            }
-        } catch (err) {
-            setError("Impossible de contacter le serveur d'envoi.");
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
+  const q = QUESTIONS[etape];
+  const enQuestion = etape <= DERNIERE_Q;
 
-    return (
-        <div className="min-h-screen pt-32 pb-24 px-6 relative z-10 flex items-center justify-center">
-            <div className="container mx-auto max-w-2xl">
-                <LiquidGlassCard className="relative overflow-hidden shadow-[0_0_50px_rgba(0,210,255,0.15)] ring-1 ring-white/10">
+  /** Le choix fait avancer. Deux gestes par question, sept fois de suite,
+   *  c'était quatorze occasions d'abandonner. */
+  const repondre = (cle: keyof Reponses, valeur: string) => {
+    setErreur('');
+    setRep((r) => ({ ...r, [cle]: valeur }));
+    setTimeout(() => setEtape((e) => Math.min(e + 1, ETAPE_CONTACT)), 180);
+  };
 
-                    {/* Progress Bar */}
-                    {currentStep > 0 && currentStep < STEPS.length - 1 && (
-                        <div className="mb-10">
-                            <div className="flex justify-between text-xs font-bold text-accent-blue uppercase tracking-widest mb-3">
-                                <span>Étape {currentStep} sur {totalSteps}</span>
-                                <span>{progressPercent()}%</span>
-                            </div>
-                            <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                                <motion.div
-                                    className="h-full bg-accent-blue shadow-[0_0_10px_rgba(0,210,255,0.8)]"
-                                    initial={{ width: 0 }}
-                                    animate={{ width: `${progressPercent()}%` }}
-                                    transition={{ duration: 0.5, ease: "easeOut" }}
-                                />
-                            </div>
-                        </div>
-                    )}
+  const suivant = () => {
+    setErreur('');
+    if (enQuestion && q.libre && !rep[q.cle].trim()) {
+      setErreur('Écrivez au moins votre ville.');
+      return;
+    }
+    setEtape((e) => Math.min(e + 1, ETAPE_CONTACT));
+  };
 
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={stepId}
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                            transition={{ duration: 0.3 }}
-                        >
+  const retour = () => {
+    setErreur('');
+    setEtape((e) => Math.max(0, e - 1));
+  };
 
-                            {/* WELCOME */}
-                            {stepId === 'welcome' && (
-                                <div className="text-center py-8">
-                                    <motion.div
-                                        animate={{ y: [0, -10, 0] }}
-                                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                                        className="flex justify-center mb-6"
-                                    >
-                                        <img
-                                            src="/images/logo-fuser-sans-backk.png"
-                                            alt="Propulsite"
-                                            width={450}
-                                            height={450}
-                                            className="h-24 w-auto object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.7)]"
-                                        />
-                                    </motion.div>
-                                    <h2 className="text-4xl font-black mb-4 text-3d uppercase italic">Prêt pour le décollage ?</h2>
-                                    <p className="text-white/70 text-lg mb-10 leading-relaxed">
-                                        Trouvons ensemble la trajectoire idéale pour votre entreprise. Répondez à ces quelques questions pour lancer la mission.
-                                    </p>
-                                    <button onClick={handleNext} className="w-full md:w-auto px-10 py-5 bg-accent-blue rounded-[50px] text-[#050a15] font-black tracking-widest hover:bg-white transition-colors shadow-[0_0_15px_rgba(0,210,255,0.5)] hover:shadow-[0_0_30px_rgba(255,255,255,0.8)] hover:-translate-y-1 transform duration-200">
-                                        DÉMARRER L'EXPLORATION →
-                                    </button>
-                                </div>
-                            )}
+  const envoyer = async () => {
+    setErreur('');
+    if (!rep.nom.trim()) { setErreur('Il me faut votre nom.'); return; }
+    if (!rep.email.trim() && !rep.telephone.trim()) {
+      setErreur('Laissez au moins un courriel ou un téléphone, sinon je ne peux pas vous répondre.');
+      return;
+    }
+    setEnvoiEnCours(true);
+    try {
+      const reponse = await fetch('https://formsubmit.co/ajax/propulsiteprojet@gmail.com', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          _subject: `Analyse gratuite — ${rep.nom} (${rep.metier || 'métier non précisé'})`,
+          Nom: rep.nom,
+          Courriel: rep.email || 'N/A',
+          Téléphone: rep.telephone || 'N/A',
+          Métier: rep.metier,
+          'Secteur desservi': rep.region,
+          'Site actuel': rep.site,
+          'Ce qui manque': rep.manque,
+          'Contrats visés par mois': rep.volume,
+          Échéance: rep.echeance,
+          Message: rep.message || 'Aucun',
+        }),
+      });
+      if (!reponse.ok) {
+        setErreur("L'envoi a échoué. Réessayez, ou écrivez directement à propulsiteprojet@gmail.com.");
+        return;
+      }
+      try { localStorage.removeItem(CLE_SAUVEGARDE); } catch { /* sans importance */ }
+      setEtape(ETAPE_MERCI);
+    } catch {
+      setErreur("Impossible de joindre le serveur. Vérifiez votre connexion, ou écrivez à propulsiteprojet@gmail.com.");
+    } finally {
+      setEnvoiEnCours(false);
+    }
+  };
 
-                            {/* Q1 — RÔLE */}
-                            {stepId === 'role' && (
-                                <div>
-                                    <h2 className="text-3xl font-black mb-2 text-white">Quel est votre rôle dans l'entreprise ?</h2>
-                                    <p className="text-white/50 mb-8">Cela nous aide à mieux adapter notre approche.</p>
-                                    <div className="space-y-4 mb-8">
-                                        {['Fondateur / Propriétaire', 'Directeur / Manager', 'Responsable marketing', 'Développeur / Technique', 'Autre'].map(opt => (
-                                            <SelectButton key={opt} value={opt} selected={data.role === opt} onClick={() => setData({ ...data, role: opt })} />
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
+  const avancement = Math.round((Math.min(etape, ETAPE_CONTACT) / (ETAPE_CONTACT + 1)) * 100);
 
-                            {/* Q2 — TAILLE */}
-                            {stepId === 'taille' && (
-                                <div>
-                                    <h2 className="text-3xl font-black mb-2 text-white">Quelle est la taille de votre équipe ?</h2>
-                                    <p className="text-white/50 mb-8">Pour personnaliser nos recommandations.</p>
-                                    <div className="space-y-4 mb-8">
-                                        {['Juste moi (solopreneur)', '2 – 5 personnes', '6 – 20 personnes', '20 – 50 personnes', '50+ personnes'].map(opt => (
-                                            <SelectButton key={opt} value={opt} selected={data.tailleEntreprise === opt} onClick={() => setData({ ...data, tailleEntreprise: opt })} />
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
+  return (
+    <div className="min-h-screen pt-28 md:pt-32 pb-20 px-5 md:px-6 relative z-10">
+      <style dangerouslySetInnerHTML={{ __html: CSS }} />
 
-                            {/* Q3 — DÉFI */}
-                            {stepId === 'defi' && (
-                                <div>
-                                    <h2 className="text-3xl font-black mb-2 text-white">Quel est votre plus grand défi en ce moment ?</h2>
-                                    <p className="text-white/50 mb-8">Décrivez le problème principal que vous souhaitez résoudre.</p>
-                                    <div className="mb-8">
-                                        <textarea
-                                            placeholder="Ex : Je n'arrive pas à attirer suffisamment de clients en ligne, ma visibilité est très faible..."
-                                            value={data.defi}
-                                            onChange={e => setData({ ...data, defi: e.target.value })}
-                                            rows={5}
-                                            className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-white placeholder-white/30 focus:outline-none focus:border-accent-blue focus:ring-1 focus:ring-accent-blue transition-all resize-none"
-                                        />
-                                    </div>
-                                </div>
-                            )}
+      <div className="max-w-2xl mx-auto">
+        {/* Le retour au site vit ici, pas dans la carte : il ne doit pas
+            concurrencer le bouton qui fait avancer. */}
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 text-white/40 hover:text-accent-blue text-sm mb-8 min-h-[24px]"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Retour au site
+        </Link>
 
-                            {/* Q4 — SOLUTION ACTUELLE */}
-                            {stepId === 'solution' && (
-                                <div>
-                                    <h2 className="text-3xl font-black mb-2 text-white">Comment gérez-vous ce problème actuellement ?</h2>
-                                    <p className="text-white/50 mb-8">Votre situation actuelle nous aide à trouver la meilleure solution.</p>
-                                    <div className="space-y-4 mb-8">
-                                        {[
-                                            'Je n\'ai aucune solution en place',
-                                            'Je gère ça moi-même, sans outil précis',
-                                            'J\'utilise des outils gratuits (réseaux sociaux, etc.)',
-                                            'Je travaille déjà avec une agence ou un freelance',
-                                            'J\'ai une solution interne mais elle ne fonctionne pas bien'
-                                        ].map(opt => (
-                                            <SelectButton key={opt} value={opt} selected={data.solutionActuelle === opt} onClick={() => setData({ ...data, solutionActuelle: opt })} />
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Q5 — DÉCLENCHEUR */}
-                            {stepId === 'declencheur' && (
-                                <div>
-                                    <h2 className="text-3xl font-black mb-2 text-white">Qu'est-ce qui vous a poussé à chercher une solution maintenant ?</h2>
-                                    <p className="text-white/50 mb-8">Comprendre votre moment nous aide à prioriser.</p>
-                                    <div className="space-y-4 mb-8">
-                                        {[
-                                            'Je perds des clients face à la concurrence',
-                                            'Je viens de lancer mon entreprise',
-                                            'Ma croissance est bloquée depuis un moment',
-                                            'J\'ai eu une mauvaise expérience avec une autre agence',
-                                            'C\'est le bon moment pour investir',
-                                            'Autre'
-                                        ].map(opt => (
-                                            <SelectButton key={opt} value={opt} selected={data.declencheur === opt} onClick={() => setData({ ...data, declencheur: opt })} />
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Q6 — OBJECTIF 3 MOIS */}
-                            {stepId === 'objectif' && (
-                                <div>
-                                    <h2 className="text-3xl font-black mb-2 text-white">Quel est votre objectif principal pour les 3 prochains mois ?</h2>
-                                    <p className="text-white/50 mb-8">Choisissez la destination prioritaire de votre mission.</p>
-                                    <div className="space-y-4 mb-8">
-                                        {[
-                                            'Attirer plus de clients',
-                                            'Améliorer ma visibilité en ligne',
-                                            'Lancer ou refaire mon site web',
-                                            'Augmenter mes ventes en ligne',
-                                            'Renforcer mon image de marque',
-                                            'Autre'
-                                        ].map(opt => (
-                                            <SelectButton key={opt} value={opt} selected={data.objectif === opt} onClick={() => setData({ ...data, objectif: opt })} />
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* CONTACT */}
-                            {stepId === 'contact' && (
-                                <div>
-                                    <h2 className="text-3xl font-black mb-2 text-white">Dernière étape</h2>
-                                    <p className="text-white/50 mb-8">Configurez vos coordonnées de contact pour l'atterrissage.</p>
-                                    <div className="space-y-4 mb-8">
-                                        <input
-                                            type="text"
-                                            name="nom"
-                                            autoComplete="name"
-                                            aria-label="Nom complet"
-                                            placeholder="Nom complet *"
-                                            value={data.nom}
-                                            onChange={e => setData({ ...data, nom: e.target.value })}
-                                            className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-white placeholder-white/30 focus:outline-none focus:border-accent-blue focus:ring-1 focus:ring-accent-blue transition-all"
-                                        />
-                                        <div className="grid sm:grid-cols-2 gap-4">
-                                            <input
-                                                type="email"
-                                                name="email"
-                                                autoComplete="email"
-                                                aria-label="Adresse courriel"
-                                                placeholder="Adresse courriel *"
-                                                value={data.email}
-                                                onChange={e => setData({ ...data, email: e.target.value })}
-                                                className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-white placeholder-white/30 focus:outline-none focus:border-accent-blue focus:ring-1 focus:ring-accent-blue transition-all"
-                                            />
-                                            <input
-                                                type="tel"
-                                                name="telephone"
-                                                autoComplete="tel"
-                                                aria-label="Téléphone"
-                                                placeholder="Téléphone"
-                                                value={data.telephone}
-                                                onChange={e => setData({ ...data, telephone: e.target.value })}
-                                                className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-white placeholder-white/30 focus:outline-none focus:border-accent-blue focus:ring-1 focus:ring-accent-blue transition-all"
-                                            />
-                                        </div>
-                                        <textarea
-                                            placeholder="Détails supplémentaires (optionnel)"
-                                            value={data.message}
-                                            onChange={e => setData({ ...data, message: e.target.value })}
-                                            rows={4}
-                                            className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-white placeholder-white/30 focus:outline-none focus:border-accent-blue focus:ring-1 focus:ring-accent-blue transition-all resize-none"
-                                        />
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* SUCCESS */}
-                            {stepId === 'success' && (
-                                <div className="text-center py-12">
-                                    <motion.div
-                                        initial={{ scale: 0 }}
-                                        animate={{ scale: 1, rotate: 360 }}
-                                        transition={{ type: "spring", damping: 15, stiffness: 100 }}
-                                        className="w-24 h-24 bg-accent-blue/20 text-accent-blue rounded-full flex items-center justify-center mx-auto mb-8"
-                                    >
-                                        <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </motion.div>
-                                    <h2 className="text-4xl font-black mb-4 text-white">Mission accomplie !</h2>
-                                    <p className="text-white/60 text-lg leading-relaxed max-w-md mx-auto">
-                                        Vos coordonnées de vol ont été transmises. L'équipe Propulsite vous contactera sur <strong className="text-white">{data.email}</strong> d'ici peu.
-                                    </p>
-                                </div>
-                            )}
-
-                            {/* Error */}
-                            {error && (
-                                <motion.p
-                                    initial={{ opacity: 0, y: -10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className="text-red-400 text-sm font-medium mb-4"
-                                >
-                                    {error}
-                                </motion.p>
-                            )}
-
-                            {/* Navigation */}
-                            {currentStep > 0 && currentStep < STEPS.length - 1 && (
-                                <div className="flex items-center justify-between pt-6 mt-4 border-t border-white/10">
-                                    <button
-                                        onClick={handleBack}
-                                        disabled={isSubmitting}
-                                        className="px-6 py-3 text-white/50 font-bold hover:text-white transition-colors uppercase tracking-widest text-sm disabled:opacity-50"
-                                    >
-                                        ← Retour
-                                    </button>
-                                    <button
-                                        onClick={handleNext}
-                                        disabled={isSubmitting}
-                                        className="px-8 py-3 bg-accent-blue text-[#050a15] rounded-full font-bold hover:bg-white transition-colors uppercase tracking-widest shadow-[0_0_15px_rgba(0,210,255,0.4)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                                    >
-                                        {isSubmitting ? (
-                                            <>
-                                                <div className="w-5 h-5 border-2 border-[#050a15] border-t-transparent rounded-full animate-spin"></div>
-                                                Envoi...
-                                            </>
-                                        ) : (
-                                            stepId === 'contact' ? 'Envoyer ✓' : 'Suivant →'
-                                        )}
-                                    </button>
-                                </div>
-                            )}
-
-                        </motion.div>
-                    </AnimatePresence>
-
-                </LiquidGlassCard>
+        <div className="fn-carte rounded-[28px] md:rounded-[36px] px-6 py-9 md:px-12 md:py-12">
+          {etape < ETAPE_MERCI && (
+            <div className="mb-9 md:mb-11">
+              <div className="flex items-baseline justify-between mb-3">
+                <span className="text-[11px] md:text-xs font-bold tracking-[0.2em] uppercase text-accent-blue">
+                  {etape < ETAPE_CONTACT
+                    ? `Question ${etape + 1} sur ${QUESTIONS.length}`
+                    : 'Vos coordonnées'}
+                </span>
+                {/* La durée est annoncée dès le premier écran. Un formulaire
+                    dont on ne voit pas la fin est un formulaire qu'on quitte. */}
+                <span className="text-[11px] md:text-xs text-white/35">
+                  {etape === 0 ? 'moins de 2 minutes' : `${avancement} %`}
+                </span>
+              </div>
+              <div className="h-1.5 bg-white/[0.07] rounded-full overflow-hidden">
+                <div
+                  className="fn-jauge h-full rounded-full"
+                  style={{ width: `${Math.max(avancement, 4)}%` }}
+                />
+              </div>
             </div>
+          )}
+
+          {/* ── Les six questions ─────────────────────────────────────── */}
+          {enQuestion && (
+            <div key={q.cle} className="fn-entree">
+              <h1 className="text-[26px] md:text-4xl font-black text-white leading-[1.12] mb-3">
+                {q.titre}
+              </h1>
+              <p className="text-white/45 text-sm md:text-base leading-relaxed mb-8">
+                {q.aide}
+              </p>
+
+              {q.libre ? (
+                <>
+                  <input
+                    ref={champRegion}
+                    type="text"
+                    inputMode="text"
+                    autoComplete="address-level2"
+                    aria-label={q.titre}
+                    placeholder={q.placeholder}
+                    value={rep[q.cle]}
+                    onChange={(e) => setRep({ ...rep, [q.cle]: e.target.value })}
+                    onKeyDown={(e) => { if (e.key === 'Enter') suivant(); }}
+                    className="fn-champ w-full text-white text-base md:text-lg px-5 py-4 rounded-2xl"
+                  />
+                  <button
+                    onClick={suivant}
+                    className="fn-cta mt-6 w-full md:w-auto inline-flex items-center justify-center gap-2 bg-accent-blue text-[#050a15] font-black uppercase tracking-wide px-10 py-4 rounded-full min-h-[48px]"
+                  >
+                    Continuer
+                  </button>
+                </>
+              ) : (
+                <div className="grid gap-3">
+                  {q.options.map((opt, i) => {
+                    const choisi = rep[q.cle] === opt;
+                    return (
+                      <button
+                        key={opt}
+                        onClick={() => repondre(q.cle, opt)}
+                        style={{ ['--rang' as string]: String(i) }}
+                        className={`fn-choix ${choisi ? 'fn-choix-actif' : ''} w-full text-left flex items-center gap-4 px-5 py-4 md:px-6 md:py-[18px] rounded-2xl min-h-[48px]`}
+                      >
+                        <span className="fn-puce shrink-0" aria-hidden="true">
+                          <Check className="w-3.5 h-3.5" />
+                        </span>
+                        <span className="text-white/85 leading-snug text-[15px] md:text-base">
+                          {opt}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ── Les coordonnées ───────────────────────────────────────── */}
+          {etape === ETAPE_CONTACT && (
+            <div className="fn-entree">
+              <h1 className="text-[26px] md:text-4xl font-black text-white leading-[1.12] mb-3">
+                Où je vous envoie l’analyse ?
+              </h1>
+              <p className="text-white/45 text-sm md:text-base leading-relaxed mb-8">
+                Un courriel ou un téléphone suffit. C’est William qui vous répond,
+                pas un robot.
+              </p>
+
+              <div className="grid gap-3">
+                <input
+                  type="text"
+                  name="nom"
+                  autoComplete="name"
+                  aria-label="Votre nom"
+                  placeholder="Votre nom *"
+                  value={rep.nom}
+                  onChange={(e) => setRep({ ...rep, nom: e.target.value })}
+                  className="fn-champ w-full text-white px-5 py-4 rounded-2xl"
+                />
+                <div className="grid sm:grid-cols-2 gap-3">
+                  <input
+                    type="email"
+                    name="email"
+                    inputMode="email"
+                    autoComplete="email"
+                    aria-label="Votre courriel"
+                    placeholder="Courriel"
+                    value={rep.email}
+                    onChange={(e) => setRep({ ...rep, email: e.target.value })}
+                    className="fn-champ w-full text-white px-5 py-4 rounded-2xl"
+                  />
+                  <input
+                    type="tel"
+                    name="telephone"
+                    inputMode="tel"
+                    autoComplete="tel"
+                    aria-label="Votre téléphone"
+                    placeholder="Téléphone"
+                    value={rep.telephone}
+                    onChange={(e) => setRep({ ...rep, telephone: e.target.value })}
+                    className="fn-champ w-full text-white px-5 py-4 rounded-2xl"
+                  />
+                </div>
+                {/* Le champ libre est ici, et il est facultatif. Il était en
+                    troisième position et obligatoire : c'est là que le
+                    formulaire perdait le plus de monde. */}
+                <textarea
+                  aria-label="Précisions"
+                  placeholder="Quelque chose à ajouter ? (facultatif)"
+                  value={rep.message}
+                  onChange={(e) => setRep({ ...rep, message: e.target.value })}
+                  rows={3}
+                  className="fn-champ w-full text-white px-5 py-4 rounded-2xl resize-none"
+                />
+              </div>
+
+              <ul className="flex flex-wrap gap-x-6 gap-y-2 mt-6">
+                {GARANTIES.map((g) => (
+                  <li key={g.texte} className="inline-flex items-center gap-2 text-white/45 text-[12.5px]">
+                    <span className="text-accent-blue">{g.icone}</span>
+                    {g.texte}
+                  </li>
+                ))}
+              </ul>
+
+              <button
+                onClick={envoyer}
+                disabled={envoiEnCours}
+                className="fn-cta mt-7 w-full inline-flex items-center justify-center gap-3 bg-accent-blue text-[#050a15] font-black text-base md:text-lg uppercase tracking-wide px-10 py-5 rounded-full min-h-[48px] disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {envoiEnCours ? (
+                  <>
+                    <span className="w-5 h-5 border-2 border-[#050a15] border-t-transparent rounded-full animate-spin" />
+                    Envoi…
+                  </>
+                ) : (
+                  'Envoyer ma demande'
+                )}
+              </button>
+            </div>
+          )}
+
+          {/* ── Le merci ──────────────────────────────────────────────── */}
+          {etape === ETAPE_MERCI && (
+            <div className="fn-entree text-center py-6">
+              <div className="fn-sceau mx-auto mb-8">
+                <Check className="w-10 h-10" />
+              </div>
+              <h1 className="text-3xl md:text-5xl font-black text-white mb-4 leading-tight">
+                C’est reçu.
+              </h1>
+              {/* On dit ce qui va se passer, et quand. « Nous vous contacterons
+                  sous peu » ne rassure personne. */}
+              <p className="text-white/65 text-base md:text-lg leading-relaxed max-w-md mx-auto mb-3">
+                William regarde votre fiche Google, votre site et vos concurrents
+                directs, puis vous revient <strong className="text-white">d’ici 24 h ouvrables</strong>
+                {rep.email ? <> à <strong className="text-white">{rep.email}</strong></> : null}.
+              </p>
+              <p className="text-white/40 text-sm mb-9">
+                Si c’est urgent : <a href="tel:5146496862" className="text-accent-blue hover:underline">(514) 649-6862</a>
+              </p>
+              <Link
+                to="/questions"
+                className="inline-flex items-center justify-center gap-2 border border-white/15 text-white/80 font-bold px-8 py-4 rounded-full hover:border-accent-blue/50 hover:text-white transition-colors min-h-[48px]"
+              >
+                En attendant, lisez nos réponses aux questions fréquentes
+              </Link>
+            </div>
+          )}
+
+          {erreur && (
+            <p className="mt-5 text-[#ff8b8b] text-sm font-medium" role="alert">
+              {erreur}
+            </p>
+          )}
+
+          {/* Le retour arrière reste discret et n'apparaît jamais sur la
+              première question ni après l'envoi. */}
+          {etape > 0 && etape < ETAPE_MERCI && (
+            <button
+              onClick={retour}
+              disabled={envoiEnCours}
+              className="mt-8 inline-flex items-center gap-2 text-white/35 hover:text-white/70 text-sm transition-colors min-h-[24px] disabled:opacity-40"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Question précédente
+            </button>
+          )}
         </div>
-    );
+      </div>
+    </div>
+  );
 }
+
+/**
+ * Le CSS vit ici plutôt qu'en classes Tailwind : les états de choix demandent
+ * des ombres et des dégradés composés que les valeurs arbitraires rendent
+ * illisibles, et l'entrée en cascade a besoin d'un délai calculé par index.
+ */
+const CSS = `
+.fn-carte{
+  position:relative;
+  background:linear-gradient(160deg, rgba(16,32,62,.92) 0%, rgba(8,17,36,.96) 55%, rgba(6,12,26,.98) 100%);
+  box-shadow:
+    0 0 0 1px rgba(0,210,255,.14),
+    0 40px 110px rgba(0,0,0,.7),
+    inset 0 1px 0 rgba(255,255,255,.06);
+}
+
+.fn-jauge{
+  background:linear-gradient(90deg, #0077b6, #00d2ff);
+  box-shadow:0 0 14px rgba(0,210,255,.6);
+  transition:width .45s cubic-bezier(.2,.8,.25,1);
+}
+
+/* L'entrée n'anime que y : jamais opacity. Un contenu à opacity 0 reste
+   invisible si le JavaScript tarde ou échoue. */
+.fn-entree{ animation:fn-monte .42s cubic-bezier(.2,.8,.25,1) both; }
+@keyframes fn-monte{ from{ transform:translateY(14px); } to{ transform:translateY(0); } }
+
+.fn-choix{
+  position:relative;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.09);
+  transition:border-color .2s ease, background .2s ease, transform .2s cubic-bezier(.2,.8,.25,1);
+  animation:fn-monte .38s cubic-bezier(.2,.8,.25,1) both;
+  animation-delay:calc(var(--rang, 0) * 45ms);
+  cursor:pointer;
+}
+.fn-choix:hover{
+  background:rgba(0,210,255,.07);
+  border-color:rgba(0,210,255,.4);
+  transform:translateX(4px);
+}
+.fn-choix:focus-visible{
+  outline:2px solid #00d2ff;
+  outline-offset:2px;
+}
+.fn-choix-actif{
+  background:rgba(0,210,255,.11);
+  border-color:rgba(0,210,255,.7);
+}
+
+/* La pastille se remplit au choix. Elle reste visible mais creuse au repos :
+   un choix qui n'a pas d'emplacement visible se cherche du regard. */
+.fn-puce{
+  width:22px; height:22px;
+  border-radius:999px;
+  border:2px solid rgba(255,255,255,.22);
+  display:flex; align-items:center; justify-content:center;
+  color:transparent;
+  transition:background .2s ease, border-color .2s ease, color .2s ease;
+}
+.fn-choix:hover .fn-puce{ border-color:rgba(0,210,255,.55); }
+.fn-choix-actif .fn-puce{
+  background:#00d2ff;
+  border-color:#00d2ff;
+  color:#050a15;
+}
+
+.fn-champ{
+  background:rgba(0,0,0,.35);
+  border:1px solid rgba(255,255,255,.1);
+  transition:border-color .2s ease, box-shadow .2s ease;
+}
+.fn-champ::placeholder{ color:rgba(255,255,255,.28); }
+.fn-champ:focus{
+  outline:none;
+  border-color:rgba(0,210,255,.65);
+  box-shadow:0 0 0 3px rgba(0,210,255,.14);
+}
+
+.fn-cta{
+  box-shadow:0 10px 30px rgba(0,0,0,.4), 0 0 26px rgba(0,210,255,.35);
+  transition:box-shadow .3s ease, transform .25s cubic-bezier(.2,.8,.25,1), filter .2s ease;
+}
+.fn-cta:hover:not(:disabled){
+  transform:translateY(-2px);
+  filter:brightness(1.08);
+  box-shadow:0 14px 38px rgba(0,0,0,.45), 0 0 46px rgba(0,210,255,.5);
+}
+
+.fn-sceau{
+  width:88px; height:88px;
+  border-radius:999px;
+  display:flex; align-items:center; justify-content:center;
+  color:#00d2ff;
+  background:radial-gradient(circle at 50% 40%, rgba(0,210,255,.22), rgba(0,210,255,.05));
+  box-shadow:0 0 0 1px rgba(0,210,255,.3), 0 0 60px rgba(0,210,255,.22);
+  animation:fn-sceau-entre .6s cubic-bezier(.2,1.2,.3,1) both;
+}
+@keyframes fn-sceau-entre{ from{ transform:scale(.6); } to{ transform:scale(1); } }
+
+@media (prefers-reduced-motion: reduce){
+  .fn-entree, .fn-choix, .fn-sceau{ animation:none; }
+  .fn-choix:hover, .fn-cta:hover:not(:disabled){ transform:none; }
+  .fn-jauge{ transition:none; }
+}
+`;
