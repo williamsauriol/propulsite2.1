@@ -152,6 +152,30 @@ const CSS = `
   mask-composite:intersect;
   pointer-events:none;
 }
+/* ── Le plafond ─────────────────────────────────────────────────────────
+   Le pendant du plancher, incliné dans l'autre sens. Il ne sert pas à
+   décorer : un sol tout seul dit « objet posé sur une surface », un sol ET un
+   plafond disent « vous êtes DANS une pièce ». C'est ce qui fait qu'on sent
+   qu'on est arrivé ailleurs dans le site plutôt que devant une section de
+   plus. Deux fois plus discret que le sol — un plafond qu'on remarque devient
+   un deuxième plancher, et le regard ne sait plus où se poser. */
+.pq3d-plafond{
+  position:absolute; left:-25%; right:-25%; top:-10%; height:46%;
+  transform-origin:50% 0%;
+  transform:rotateX(-72deg) translateZ(-40px) translateX(calc(var(--cx) * -18px));
+  background-image:
+    linear-gradient(rgba(0,210,255,.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,210,255,.09) 1px, transparent 1px);
+  background-size:78px 78px;
+  -webkit-mask-image:linear-gradient(to bottom, transparent 0%, rgba(0,0,0,.5) 46%, rgba(0,0,0,.8) 100%),
+                     linear-gradient(to right, transparent 0%, rgba(0,0,0,1) 24%, rgba(0,0,0,1) 76%, transparent 100%);
+  -webkit-mask-composite:source-in;
+  mask-image:linear-gradient(to bottom, transparent 0%, rgba(0,0,0,.5) 46%, rgba(0,0,0,.8) 100%),
+             linear-gradient(to right, transparent 0%, rgba(0,0,0,1) 24%, rgba(0,0,0,1) 76%, transparent 100%);
+  mask-composite:intersect;
+  pointer-events:none;
+}
+
 /* La ligne d'horizon : le plancher doit finir quelque part. */
 .pq3d-horizon{
   position:absolute; left:0; right:0; top:42%; height:1px;
@@ -464,7 +488,14 @@ export default function PourquoiNousChoisissent() {
   }, []);
 
   return (
-    <section className="relative bg-gradient-to-b from-[#060d1f] to-[#0a1628]">
+    /* Le dégradé PART et REVIENT à #050a15, la couleur du corps de page.
+       Il allait de #060d1f à #0a1628 : deux couleurs qui ne sont celles
+       d'aucune section voisine, donc une ligne droite bien nette en haut ET en
+       bas de la section. On voyait la couture. Ici les deux bouts se confondent
+       avec la page, et le bleu ne monte qu'au milieu — là où personne ne peut
+       le comparer à autre chose. La salle s'ouvre et se referme au lieu de
+       commencer d'un coup. */
+    <section className="relative bg-gradient-to-b from-[#050a15] via-[#0a1628] to-[#050a15]">
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
 
       <div className="relative h-[340vh]">
@@ -504,6 +535,7 @@ export default function PourquoiNousChoisissent() {
               de caméra sont écrites sur cet élément. */}
           <div ref={scene} className="pq3d-scene relative z-10 w-full max-w-lg flex flex-col items-center">
 
+            <div className="pq3d-plafond" aria-hidden="true" />
             <div className="pq3d-sol" aria-hidden="true" />
             <div className="pq3d-horizon" aria-hidden="true" />
 

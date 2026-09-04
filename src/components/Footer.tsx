@@ -6,7 +6,12 @@ import { SECTEURS } from '../constants/secteursData';
 
 export default function Footer() {
     return (
-        <footer className="relative z-10 bg-[#050a15] border-t border-white/10 pt-16 pb-8 px-6 overflow-hidden">
+        /* Pas de `border-t` ici. Le trait blanc allait d'un bord à l'autre de
+           l'écran et coupait la page en deux : on voyait la couture entre le
+           contenu et le pied de page. Le filet cyan juste en dessous fait déjà
+           le travail, et lui s'éteint aux extrémités — on sent la séparation
+           sans voir la ligne. */
+        <footer className="relative z-10 bg-[#050a15] pt-16 pb-8 px-6 overflow-hidden">
 
             {/* Decorative Glow Inside Footer */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-px bg-gradient-to-r from-transparent via-accent-blue/50 to-transparent"></div>
