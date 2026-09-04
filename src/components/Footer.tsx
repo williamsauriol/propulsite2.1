@@ -67,6 +67,7 @@ export default function Footer() {
                             <li><Link to="/services" className="text-white/60 hover:text-accent-blue transition-colors text-sm">Nos services</Link></li>
                             <li><Link to="/geo" className="text-white/60 hover:text-accent-blue transition-colors text-sm">Le GEO</Link></li>
                             <li><Link to="/blog" className="text-white/60 hover:text-accent-blue transition-colors text-sm">Blogue</Link></li>
+                            <li><Link to="/questions" className="text-white/60 hover:text-accent-blue transition-colors text-sm">Questions fréquentes</Link></li>
                             <li><Link to="/a-propos" className="text-white/60 hover:text-accent-blue transition-colors text-sm">À propos</Link></li>
                             <li><Link to="/contact" className="text-white/60 hover:text-accent-blue transition-colors text-sm">Nous joindre</Link></li>
                         </ul>

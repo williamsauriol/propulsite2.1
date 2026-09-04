@@ -24,6 +24,7 @@ import { SERVICES } from '../src/constants/services';
 import { PAIN_POINTS_ARTICLES } from '../src/constants/painPointsData';
 import { SECTEURS } from '../src/constants/secteursData';
 import { FAQ as GEO_FAQ } from '../src/constants/geoData';
+import { QUESTIONS } from '../src/constants/questionsData';
 import { AppContent } from '../src/App';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -275,6 +276,69 @@ const routes: RouteMeta[] = [
       lastmod: date,
     };
   }),
+  {
+    // Index des questions-reponses. Le FAQPage est ici legitime : la page
+    // affiche reellement la liste des questions et de leurs reponses courtes.
+    path: '/questions',
+    title: 'Vos questions sur le web en construction | Propulsite',
+    description:
+      'Reponses directes aux questions des entrepreneurs en construction du Quebec : prix d\u2019un site web, delais de referencement, publicite, avis Google et IA.',
+    jsonLd: [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        inLanguage: 'fr-CA',
+        mainEntity: QUESTIONS.map((q) => ({
+          '@type': 'Question',
+          name: q.question,
+          url: `${SITE_URL}/questions/${q.slug}`,
+          acceptedAnswer: { '@type': 'Answer', text: q.reponseCourte },
+        })),
+      },
+      breadcrumb([
+        { name: 'Accueil', url: `${SITE_URL}/` },
+        { name: 'Questions', url: `${SITE_URL}/questions` },
+      ]),
+    ],
+    priority: '0.8',
+    changefreq: 'monthly',
+    lastmod: PAGES_LASTMOD,
+  },
+  // Une page par question. Le type QAPage decrit exactement ce qu'est la page :
+  // une question unique et sa reponse. C'est ce que les moteurs de reponse
+  // lisent pour decider quel passage citer.
+  ...QUESTIONS.map((q) => ({
+    path: `/questions/${q.slug}`,
+    title: `${q.metaTitle} | Propulsite`,
+    description: metaDesc(q.metaDescription),
+    jsonLd: [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'QAPage',
+        inLanguage: 'fr-CA',
+        mainEntity: {
+          '@type': 'Question',
+          name: q.question,
+          text: q.question,
+          answerCount: 1,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: q.reponseCourte,
+            url: `${SITE_URL}/questions/${q.slug}`,
+            author: { '@type': 'Person', name: 'William Sauriol' },
+          },
+        },
+      },
+      breadcrumb([
+        { name: 'Accueil', url: `${SITE_URL}/` },
+        { name: 'Questions', url: `${SITE_URL}/questions` },
+        { name: q.question, url: `${SITE_URL}/questions/${q.slug}` },
+      ]),
+    ],
+    priority: '0.7',
+    changefreq: 'monthly',
+    lastmod: PAGES_LASTMOD,
+  })),
   {
     path: '/a-propos',
     title: 'À Propos – Propulsite | Agence marketing construction Québec',

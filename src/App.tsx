@@ -11,6 +11,8 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Funnel from './pages/Funnel';
 import Blog from './pages/Blog';
+import Questions from './pages/Questions';
+import QuestionDetail from './pages/QuestionDetail';
 import Legal from './pages/Legal';
 import PainPointDetail from './pages/PainPointDetail';
 import SecteurDetail from './pages/SecteurDetail';
@@ -56,6 +58,8 @@ export function AppContent() {
             <Route path="/funnel" element={<Funnel />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<PainPointDetail />} />
+            <Route path="/questions" element={<Questions />} />
+            <Route path="/questions/:slug" element={<QuestionDetail />} />
             <Route path="/secteurs/:slug" element={<SecteurDetail />} />
             <Route path="/legal" element={<Legal />} />
             <Route path="*" element={<NotFound />} />
