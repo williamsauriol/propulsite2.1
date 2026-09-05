@@ -66,13 +66,16 @@ export const SERVICES: Service[] = [
     icon: <Layout className="w-8 h-8" />,
     color: '#0ea5e9', // Cyan
     shortDesc: 'Des sites vitrines et e-commerce performants pour entrepreneurs.',
-    fullDesc: "Votre site web est votre **carte de visite numérique 24/7**. Chez Propulsite, nous concevons des sites web qui ne sont pas seulement beaux, mais **bâtis pour convertir**. **Spécialisés pour la construction**, nous comprenons vos besoins : présentation de projets, **formulaires de soumission simplifiés** et **rapidité de chargement** sur chantier.",
+    fullDesc: "Votre site web est votre **carte de visite numérique 24/7**. Chez Propulsite, nous concevons des sites web qui ne sont pas seulement beaux, mais **bâtis pour convertir**. **Spécialisés pour la construction**, nous comprenons vos besoins : présentation de projets, **formulaires de soumission simplifiés** et **rapidité de chargement** sur chantier. Que vous appeliez ça une **conception de site web** ou une **création de site internet**, le but reste le même : un site que vos clients **trouvent sur Google** et qui les amène à **décrocher le téléphone**.",
     features: [
       'Design responsive (mobile, tablette, desktop)',
       'Optimisation de la vitesse de chargement',
       'Système de gestion de contenu (CMS) intuitif',
       'Intégration de formulaires de soumission personnalisés',
-      'Hébergement sécurisé et maintenance'
+      'Hébergement sécurisé et maintenance',
+      'Galerie de réalisations : vos chantiers avant / après',
+      'Une page par service (toiture, agrandissement, revêtement…)',
+      'Structure et balises prêtes pour le référencement Google'
     ],
     faq: [
       {
@@ -90,6 +93,65 @@ export const SERVICES: Service[] = [
       {
         q: "Combien coûte un site web pour une entreprise de construction ?",
         a: "Le prix dépend de l'ampleur du projet : nombre de pages, fonctionnalités, photographie, rédaction. Plutôt que des forfaits génériques, on prépare une soumission personnalisée gratuite basée sur vos besoins réels et vos objectifs d'affaires."
+      },
+      {
+        q: "Quelle différence entre conception de site web et création de site internet ?",
+        a: "Aucune. Les deux expressions décrivent le même travail : bâtir le site de votre entreprise de construction, de la structure des pages jusqu'à la mise en ligne. « Site web » et « site internet » sont deux mots pour la même chose — on emploie les deux parce que nos clients emploient les deux."
+      },
+      {
+        q: "Faites-vous des sites transactionnels ou seulement des sites vitrines ?",
+        a: "Les deux. La plupart des entrepreneurs en construction ont besoin d'un site vitrine : montrer les réalisations et récolter des demandes de soumission. Mais si vous vendez des matériaux, des plans ou des produits en ligne, on bâtit aussi le transactionnel — paiement, inventaire, livraison."
+      },
+      {
+        q: "Vous travaillez partout au Québec ou seulement sur la Rive-Nord ?",
+        a: "Partout au Québec. Notre bureau est à Saint-Eustache et une bonne partie de nos clients sont sur la Rive-Nord et à Laval, mais la conception d'un site web se fait très bien à distance. On travaille aussi avec des entrepreneurs de la Montérégie, de la région de Québec et du Saguenay."
+      },
+      {
+        q: "J'ai déjà un site. Vaut-il mieux le refaire ou le réparer ?",
+        a: "Ça dépend de son âge et de ce qu'il y a en dessous. Un site de moins de trois ans qui charge vite se répare souvent : on retravaille les textes, la structure et le formulaire. Un site lent, mal affiché sur téléphone ou bâti sur une plateforme fermée coûte plus cher à rafistoler qu'à refaire. On vous le dit franchement après l'avoir regardé."
+      }
+    ],
+    // Cette page recoit 371 impressions sur « conception site web construction »
+    // et reste 31e. Le titre et la description etaient deja corriges — c'est le
+    // corps de la page qui manquait : une intro, cinq puces et quatre questions
+    // ne battent pas des pages concurrentes trois fois plus fouillees. Les
+    // piliers sont le seul bloc de contenu long du gabarit ServiceDetail.
+    pillars: [
+      {
+        title: 'Un site bâti pour le téléphone',
+        tagline: 'Vos clients vous cherchent debout dans une entrée de garage.',
+        color: '#00d2ff',
+        icon: <Zap className="w-7 h-7" />,
+        paragraphs: [
+          "Plus de **70 %** des recherches pour trouver un entrepreneur se font **sur un téléphone**, souvent avec deux barres de réseau. Un site qui met **six secondes** à s'ouvrir, c'est un appel qui part chez le voisin.",
+          "On bâtit léger : le **numéro cliquable** dès la première seconde, les photos compressées, aucune page au-dessus de **deux secondes** de chargement. Le reste, c'est du décor."
+        ],
+        articleSlug: 'site-mobile',
+        articleLabel: "Lire l'article : votre site sur mobile"
+      },
+      {
+        title: 'Vos chantiers comme preuve',
+        tagline: 'Les photos convainquent, pas les adjectifs.',
+        color: '#f59e0b',
+        icon: <Palette className="w-7 h-7" />,
+        paragraphs: [
+          "Un propriétaire ne lit pas votre texte : il regarde vos **photos**. On monte une galerie de **réalisations réelles** — avant / après, matériaux, ampleur du chantier — parce que c'est ce qui fait pencher la décision.",
+          "Et on découpe le site **par service** : une page toiture, une page agrandissement, une page revêtement. Une seule page fourre-tout ne se classe **sur rien** et ne rassure personne."
+        ],
+        articleSlug: 'conception-site-web-construction',
+        articleLabel: "Lire l'article sur la conception de site web"
+      },
+      {
+        title: 'Le formulaire qui qualifie',
+        tagline: 'Moins de curieux, plus de vraies soumissions.',
+        color: '#10b981',
+        icon: <MessageSquare className="w-7 h-7" />,
+        paragraphs: [
+          "Un formulaire de **douze champs** ne remplit personne. On en garde **quatre**, dont une seule vraie question : décrivez votre projet. Le reste, vous le demanderez au téléphone.",
+          "La demande vous arrive **par courriel et par texto** en même temps. Un entrepreneur qui rappelle **dans l'heure** signe beaucoup plus souvent que celui qui rappelle le lendemain."
+        ],
+        articleSlug: 'prix-site-web-entrepreneur-construction',
+        articleLabel: "Lire l'article : combien coûte un site web"
       }
     ]
   },
@@ -319,3 +381,27 @@ export const SERVICES: Service[] = [
     ]
   }
 ];
+
+/**
+ * Titre et description d'une page de service.
+ *
+ * Une seule regle, partagee par le rendu client (ServiceDetail) et le
+ * pre-rendu (scripts/prerender.ts). Les deux ecrivaient leur propre formule,
+ * et celle du client ignorait `metaTitle` : des que le JavaScript s'executait,
+ * le <title> redevenait « Google Ads (SEM) pour entrepreneurs en
+ * construction » — exactement le nom interne que `metaTitle` existe pour
+ * remplacer. Google rend le JavaScript, donc c'est cette version-la qu'il
+ * pouvait retenir.
+ */
+export function serviceTitle(service: Service): string {
+  return service.metaTitle
+    ? `${service.metaTitle} | Propulsite`
+    : `${service.title} — construction Québec | Propulsite`;
+}
+
+export function serviceDescription(service: Service): string {
+  return (
+    service.metaDescription ||
+    `${service.shortDesc} Service ${service.title} spécialisé pour les entrepreneurs en construction au Québec.`
+  );
+}

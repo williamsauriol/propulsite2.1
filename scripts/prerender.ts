@@ -20,7 +20,7 @@ import { fileURLToPath } from 'node:url';
 import { createElement } from 'react';
 import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom';
-import { SERVICES } from '../src/constants/services';
+import { SERVICES, serviceTitle, serviceDescription } from '../src/constants/services';
 import { PAIN_POINTS_ARTICLES } from '../src/constants/painPointsData';
 import { SECTEURS } from '../src/constants/secteursData';
 import { FAQ as GEO_FAQ } from '../src/constants/geoData';
@@ -168,22 +168,10 @@ const routes: RouteMeta[] = [
   },
   ...SERVICES.map((service) => ({
     path: `/services/${service.slug}`,
-    // « pour entrepreneurs en construction | Propulsite » coûtait 47 caractères
-    // de gabarit : les titres de service dépassaient la limite d'affichage de
-    // Google. La formule courte garde les deux mots-clés qui comptent.
-    // `metaTitle` l'emporte : il est deja formule pour la recherche et n'a pas
-    // besoin du suffixe « — construction Québec », qui ferait deborder la
-    // limite d'affichage de Google.
-    title: service.metaTitle
-      ? `${service.metaTitle} | Propulsite`
-      : `${service.title} — construction Québec | Propulsite`,
-    // La description ecrite a la main l'emporte sur le gabarit : elle contient
-    // les mots de la requete ET une raison de cliquer. Le gabarit ne faisait ni
-    // l'un ni l'autre, et le site plafonnait a 0,3 % de taux de clic.
-    description: metaDesc(
-      service.metaDescription ||
-        `${service.shortDesc} Service ${service.title} spécialisé pour les entrepreneurs en construction au Québec.`,
-    ),
+    // La formule vit dans constants/services (serviceTitle / serviceDescription),
+    // pour que le rendu client et le pre-rendu ne puissent plus diverger.
+    title: serviceTitle(service),
+    description: metaDesc(serviceDescription(service)),
     jsonLd: [
       {
         '@context': 'https://schema.org',
@@ -383,6 +371,26 @@ const routes: RouteMeta[] = [
         image: OG_IMAGE,
         inLanguage: 'fr-CA',
         priceRange: '$$',
+        // Propulsite VEND du marketing a des entrepreneurs ; ce n'est pas un
+        // entrepreneur. Sans ces deux champs, un ProfessionalService + dix
+        // villes dans areaServed se lisait comme la fiche d'un entrepreneur
+        // local : des centaines d'impressions sur « couvreur saint-eustache »,
+        // zero clic. serviceType dit ce qu'on vend, audience dit a qui.
+        serviceType: 'Marketing web, conception de site web et referencement local',
+        audience: {
+          '@type': 'BusinessAudience',
+          name: 'Entrepreneurs en construction',
+          audienceType:
+            'Entrepreneurs en construction, en renovation et metiers du batiment',
+        },
+        makesOffer: SERVICES.map((s) => ({
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: s.title,
+            url: `${SITE_URL}/services/${s.slug}`,
+          },
+        })),
         // areaServed liste les villes reellement desservies : c'est ce champ
         // que Google lit pour rattacher l'entreprise a un secteur, et c'est
         // precisement ce qui manquait pour la Rive-Nord.

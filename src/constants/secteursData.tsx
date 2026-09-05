@@ -2,18 +2,31 @@
  * Pages de secteur desservi.
  *
  * ÉCRIRE À L'ENTREPRENEUR, JAMAIS AU PROPRIÉTAIRE. Mesuré dans Search
- * Console : cette page génère 543 impressions — 39 % de tout le site — sur
- * « couvreur saint-eustache », « entrepreneur général saint-eustache » et
- * leurs variantes. Ce sont des propriétaires qui veulent ENGAGER un
- * entrepreneur, pas des entrepreneurs qui cherchent du marketing. Zéro clic,
- * et c'est tant mieux : ces gens-là n'ont rien à faire ici.
+ * Console : cette page génère des centaines d'impressions sur « couvreur
+ * saint-eustache », « entrepreneur général saint-eustache » et leurs
+ * variantes. Ce sont des propriétaires qui veulent ENGAGER un entrepreneur,
+ * pas des entrepreneurs qui cherchent du marketing. Zéro clic, et c'est tant
+ * mieux : ces gens-là n'ont rien à faire ici.
  *
- * La cause était un paragraphe écrit du point de vue du client final — « un
- * propriétaire qui cherche un couvreur ». Le nom de métier accolé au nom de
- * ville, sur une page de secteur, suffit à faire basculer la lecture que
- * Google fait de la page. On s'adresse donc au lecteur à la deuxième
- * personne : « vos clients », « votre métier », jamais « un propriétaire qui
- * cherche un couvreur ».
+ * PREMIÈRE TENTATIVE, RATÉE — gardée ici pour qu'on ne la refasse pas. On
+ * avait cru que la cause était un paragraphe écrit du point de vue du client
+ * final, et on a tout réécrit à la deuxième personne. Le volume est passé de
+ * 543 à 665 impressions. Réécrire le corps du texte ne déplace rien.
+ *
+ * VRAIE CAUSE : deux signaux bien plus lourds que la prose.
+ *   1. Le `metaTitle` disait « Site web entrepreneur construction
+ *      Saint-Eustache ». C'est un quasi-doublon de la requête « entrepreneur
+ *      construction saint-eustache ». Google faisait la correspondance sur le
+ *      titre, pas sur le corps.
+ *   2. Le JSON-LD déclarait un `ProfessionalService` avec dix villes dans
+ *      `areaServed`, sans jamais dire QUEL service ni À QUI. Un commerce local
+ *      + un rayon de villes + « entrepreneur » dans le titre se lit comme la
+ *      fiche d'un entrepreneur local.
+ *
+ * Le titre nomme donc le service en premier (« agence web »), et le JSON-LD
+ * porte `serviceType`, `audience` et `makesOffer` : voir la route SECTEURS
+ * dans scripts/prerender.ts. Le mot « entrepreneur » reste partout dans le
+ * corps du texte — c'est le lecteur, pas l'identité de l'entreprise.
  *
  * Attention au piège des « doorway pages » : dupliquer la même page en
  * changeant le nom de ville est explicitement pénalisé par Google. Chaque
@@ -58,10 +71,13 @@ export const SECTEURS: SecteurData[] = [
       'Saint-Jérôme',
       'Laval',
     ],
-    metaTitle: 'Site web entrepreneur construction Saint-Eustache',
+    // Le service d'abord, la ville ensuite. « Site web entrepreneur
+    // construction Saint-Eustache » rendait la page interchangeable avec la
+    // fiche d'un entrepreneur du coin.
+    metaTitle: 'Agence web à Saint-Eustache et sur la Rive-Nord',
     metaDescription:
-      "Sites web et référencement local pour entrepreneurs en construction de Saint-Eustache, Deux-Montagnes, Boisbriand et Laval. Soumission gratuite.",
-    titrePart1: 'Marketing web pour entrepreneurs de ',
+      "Propulsite est l'agence web des entrepreneurs en construction de la Rive-Nord : site web, fiche Google et publicité locale. Bureau à Saint-Eustache.",
+    titrePart1: "L'agence web des entrepreneurs de ",
     titreHighlight: 'Saint-Eustache et la Rive-Nord',
     intro:
       "Vous êtes entrepreneur en construction sur la Rive-Nord et vous voulez plus d'appels ? C'est ce qu'on fait : site web, fiche Google et publicité locale pour les entrepreneurs de Saint-Eustache, Deux-Montagnes, Boisbriand, Blainville, Mirabel et Laval.",

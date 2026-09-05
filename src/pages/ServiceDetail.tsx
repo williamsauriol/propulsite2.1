@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { SERVICES } from '../constants/services';
+import { SERVICES, serviceTitle, serviceDescription } from '../constants/services';
 import LiquidGlassCard from '../components/LiquidGlassCard';
 import ServicePillars from '../components/ServicePillars';
 import { highlight } from '../components/highlight';
@@ -13,9 +13,10 @@ export default function ServiceDetail() {
   const { slug } = useParams<{ slug: string }>();
   const service = SERVICES.find((s) => s.slug === slug);
 
+  // Meme formule que le pre-rendu : voir serviceTitle() dans constants/services.
   usePageMeta(
-    service ? `${service.title} pour entrepreneurs en construction | Propulsite` : 'Service – Propulsite',
-    service ? (service.metaDescription || `${service.shortDesc} Service ${service.title} spécialisé pour les entrepreneurs en construction au Québec.`) : undefined
+    service ? serviceTitle(service) : 'Service – Propulsite',
+    service ? serviceDescription(service) : undefined
   );
 
   if (!service) {
