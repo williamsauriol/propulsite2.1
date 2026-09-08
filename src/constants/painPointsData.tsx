@@ -895,5 +895,98 @@ export const PAIN_POINTS_ARTICLES: PainPointArticleData[] = [
       btnText: "Obtenir ma soumission →",
       btnLink: "/funnel"
     }
+  },
+  {
+    slug: 'agence-marketing-construction',
+    tag: 'Stratégie',
+    datePublished: '2026-09-08',
+    titlePart1: 'Agence marketing ',
+    titleHighlight: 'construction',
+    titlePart3: " : ce qu'elle fait vraiment, et quand vous n'en avez pas besoin",
+    intro: "Ce qu'une agence de marketing spécialisée en construction fait de ses journées, comment reconnaître celle qui connaît votre métier, et les trois cas où vous feriez mieux de garder votre argent.",
+    metaTitle: 'Agence marketing construction au Québec',
+    metaDescription: "Ce qu'une agence marketing pour la construction fait vraiment, comment en choisir une qui connaît le métier, et les cas où vous feriez mieux de vous en passer.",
+    blocks: [
+      {
+        title: 'Une agence généraliste vous vendra ce qu\'elle vend à tout le monde',
+        paragraphs: [
+          "La plupart des agences web appliquent la même recette à un restaurant, à un dentiste et à un couvreur. Un site propre, quelques publications, un rapport mensuel. Ça n'est pas malhonnête, c'est juste à côté de la question.",
+          "La construction ne se comporte pas comme les autres commerces. Vos clients ne magasinent pas pendant des semaines : leur toiture coule aujourd'hui. Ils cherchent sur un téléphone, souvent debout dehors, et ils appellent les deux ou trois premiers noms qui sortent. Votre marché fait quelques kilomètres de rayon, pas toute la province. Et votre année n'est pas plate : mars et avril décident de votre été.",
+          "Une agence qui connaît la construction bâtit autour de ces quatre faits. Une agence généraliste bâtit autour de son gabarit."
+        ]
+      },
+      {
+        title: 'Les cinq choses qu\'une agence fait réellement pour un entrepreneur',
+        paragraphs: [
+          "Sous le vocabulaire, le travail se résume à peu de choses. Les voici, dans l'ordre où elles rapportent :"
+        ],
+        listItems: [
+          { bold: 'Votre fiche Google.', text: " C'est le premier résultat que voit quelqu'un qui cherche votre métier dans votre ville, et c'est gratuit. Catégories exactes, secteur desservi, photos de vrais chantiers, publications régulières. Une agence qui ne commence pas par là commence par la mauvaise porte." },
+          { bold: 'Un site qui prend l\'appel.', text: " Pas un catalogue. Une page qui charge vite sur un téléphone, avec votre numéro cliquable avant même qu'on défile, et vos réalisations en photos." },
+          { bold: 'Une page par service.', text: " Une page toiture, une page agrandissement, une page revêtement. Une seule page fourre-tout ne se classe sur rien, parce que Google ne sait pas de quoi elle parle." },
+          { bold: 'De la publicité au bon moment.', text: " Google Ads et Local Services Ads ont du sens en avril, beaucoup moins en décembre. Une agence qui dépense votre budget à la même vitesse toute l'année ne regarde pas votre métier." },
+          { bold: 'Vos avis clients.', text: " Le nombre et la fraîcheur des avis pèsent dans le classement local, et surtout dans la décision. Demander un avis après chaque chantier coûte zéro dollar." }
+        ],
+        solutionBox: {
+          label: 'Ce que vous pouvez faire aujourd\'hui, gratuitement',
+          text: "Ouvrez votre fiche Google Business. Vérifiez trois choses : la catégorie principale correspond-elle vraiment à votre métier, le secteur desservi couvre-t-il vos villes, et y a-t-il au moins dix photos de vos chantiers ? Ces trois corrections prennent vingt minutes et n'ont besoin de personne."
+        }
+      },
+      {
+        title: 'Combien ça coûte, honnêtement',
+        paragraphs: [
+          "Personne n'affiche ses prix, alors voici des ordres de grandeur observés au Québec. Un accompagnement mensuel sérieux pour un entrepreneur de moins de dix employés se situe généralement entre 500 et 2 000 $ par mois, sans compter le budget publicitaire qui va directement à Google.",
+          "En bas de 500 $, il ne reste pas assez d'heures pour faire autre chose qu'un rapport. Au-dessus de 2 000 $, vérifiez que vous payez du travail et non une structure. Le site, lui, se paie une fois."
+        ],
+        internalLink: {
+          text: "Lire : combien coûte vraiment un site web pour un entrepreneur",
+          to: '/blog/prix-site-web-entrepreneur-construction'
+        }
+      },
+      {
+        title: 'Quatre questions qui règlent le cas en dix minutes',
+        listItems: [
+          { text: "Montrez-moi un entrepreneur que vous avez classé, et sa position aujourd'hui." },
+          { text: "Qu'est-ce que vous feriez pour moi en janvier, et qu'est-ce qui changerait en avril ?" },
+          { text: "Par quoi commencez-vous : ma fiche Google ou mon site ?" },
+          { text: "Le site sera-t-il à moi, ou loué tant que je paie ?" }
+        ],
+        paragraphs: [
+          "La deuxième question est la plus révélatrice. Si la réponse est la même dans les deux cas, l'agence ne connaît pas la saison. La troisième trie aussi vite : celui qui propose une refonte complète avant d'avoir regardé votre fiche Google vend un produit, pas une solution."
+        ]
+      },
+      {
+        title: "Les trois cas où vous n'avez pas besoin d'agence",
+        paragraphs: [
+          "On vous vendra rarement le fait de ne pas acheter. Pourtant :"
+        ],
+        listItems: [
+          { bold: 'Votre carnet est plein pour un an.', text: " Le marketing sert à remplir un calendrier, pas à le faire déborder. Cet argent travaille mieux en outillage ou en main-d'œuvre." },
+          { bold: 'Votre fiche Google est vide.', text: " Remplissez-la d'abord. C'est gratuit, ça prend une heure, et ça change souvent plus de choses que trois mois de publicité." },
+          { bold: "Vous faites « un peu de tout ».", text: " Un entrepreneur sans spécialité aura un site qui ne parle à personne. Décidez vos deux ou trois services principaux avant de payer quelqu'un pour les annoncer." }
+        ],
+        internalLink: {
+          text: "Lire : par quoi commencer entre la fiche Google et le site web",
+          to: '/blog/fiche-google-ou-site-web'
+        }
+      },
+      {
+        title: 'Le vrai rôle d\'une agence',
+        paragraphs: [
+          "Une bonne agence de marketing en construction ne vous rend pas célèbre. Elle fait en sorte que le propriétaire dont la toiture coule tombe sur votre nom avant celui du voisin, et qu'il ait envie d'appeler.",
+          "Tout le reste — les rapports, les tableaux, les mots savants — est du décor. Si votre téléphone ne sonne pas plus après six mois, il n'y a pas de bon rapport qui tienne."
+        ],
+        internalLink: {
+          text: "Lire : pourquoi votre entreprise est invisible sur Google",
+          to: '/blog/invisible-google'
+        }
+      }
+    ],
+    cta: {
+      title: "On regarde votre situation avant de vous vendre quoi que ce soit",
+      desc: "On vérifie votre fiche Google, votre site et votre position actuelle. Si votre priorité est gratuite, on vous le dit et vous la faites vous-même. Sans engagement.",
+      btnText: "Obtenir mon analyse →",
+      btnLink: "/funnel"
+    }
   }
 ];
