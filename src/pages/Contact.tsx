@@ -4,6 +4,7 @@ import {
   Mail, Phone, MapPin, Send, CheckCircle2, Star, ArrowRight, Clock, Sparkles,
 } from 'lucide-react';
 import { usePageMeta } from '../hooks/usePageMeta';
+import { mesurerLead } from '../lib/mesure';
 
 /**
  * Contact — parler à quelqu'un, vite.
@@ -112,6 +113,7 @@ export default function Contact() {
         setErreur("L'envoi a échoué. Réessayez, ou appelez au (514) 649-6862.");
         return;
       }
+      mesurerLead('contact');
       setEnvoye(true);
       // La remise à zéro repart de VIDE : lister les champs à la main, c'est
       // ce qui avait fait disparaître `provenance` de l'état.

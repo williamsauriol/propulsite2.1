@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Check, Clock, ShieldCheck } from 'lucide-react';
 import { usePageMeta } from '../hooks/usePageMeta';
+import { mesurerLead } from '../lib/mesure';
 
 /**
  * Funnel — le questionnaire de soumission.
@@ -264,6 +265,7 @@ export default function Funnel() {
         setErreur("L'envoi a échoué. Réessayez, ou écrivez directement à propulsiteprojet@gmail.com.");
         return;
       }
+      mesurerLead('funnel');
       try { localStorage.removeItem(CLE_SAUVEGARDE); } catch { /* sans importance */ }
       setEtape(ETAPE_MERCI);
     } catch {
