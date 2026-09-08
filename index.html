@@ -127,6 +127,22 @@
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
+
+      // Loi 25 : aucun temoin de mesure avant le consentement. On part refuse,
+      // et BandeauTemoins.tsx fait le « update » si le visiteur accepte.
+      gtag('consent', 'default', {
+        analytics_storage: 'denied',
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        wait_for_update: 500
+      });
+      try {
+        if (localStorage.getItem('propulsite-temoins') === 'accepte') {
+          gtag('consent', 'update', { analytics_storage: 'granted' });
+        }
+      } catch (e) { /* stockage bloque : on reste sur « refuse » */ }
+
       gtag('js', new Date());
       // send_page_view: false — le page_view est envoyé par le routeur React
       // à chaque navigation (incluant la première), sinon double comptage.
