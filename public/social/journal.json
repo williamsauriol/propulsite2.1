@@ -76,5 +76,81 @@
     "fond": "5/5 — Pexels « concrete wall » — cottonbro studio",
     "publieLe": "2026-09-03T22:37:24.246Z",
     "urlInstagram": "https://www.instagram.com/p/18093219968109299/"
+  },
+  {
+    "slug": "68-pourcent-sans-clic",
+    "angle": "Recherches Google sans aucun clic",
+    "diapos": [
+      {
+        "titre": "Ton site est trouvé. Personne clique.",
+        "lignes": [],
+        "alt": "Diapo 1 sur 5 : titre blanc en gros caractères sur fond sombre, texte centré, style épuré aux couleurs de Propulsite."
+      },
+      {
+        "titre": "Le problème, c'est pas Google",
+        "lignes": [
+          "Google te place en résultats.",
+          "Mais les gens obtiennent leur réponse",
+          "sans jamais ouvrir ton site."
+        ],
+        "alt": "Diapo 2 sur 5 : trois lignes de texte blanc centrées sur fond foncé texturé, mise en page minimaliste."
+      },
+      {
+        "titre": "68 % sans clic",
+        "lignes": [
+          "68 % des recherches Google se terminent",
+          "sans un seul clic. (SparkToro, 2026)",
+          "Ton site existe — mais personne n'arrive."
+        ],
+        "alt": "Diapo 3 sur 5 : le chiffre 68 % en très gros caractères blancs, suivi de deux lignes explicatives, sur fond sombre aux couleurs de Propulsite."
+      },
+      {
+        "titre": "Ce que tu peux faire",
+        "lignes": [
+          "Sois là où ils s'arrêtent vraiment :",
+          "fiche Google soignée, avis récents,",
+          "et présence dans les réponses de l'IA."
+        ],
+        "alt": "Diapo 4 sur 5 : liste de trois actions en texte blanc sur fond foncé, mise en page aérée avec tirets ou puces simples."
+      },
+      {
+        "titre": "On regarde ça ensemble",
+        "lignes": [
+          "Écris-nous. On te dit où tu es visible",
+          "et où tu disparais — sans jargon.",
+          "propulsite.ca"
+        ],
+        "alt": "Diapo 5 sur 5 : invitation en texte blanc centré avec l'adresse du site en bas, fond sombre texturé aux couleurs de Propulsite."
+      }
+    ],
+    "photo": "concrete wall",
+    "legende": "Référencement Google pour entrepreneur en construction au Québec — as-tu déjà su que ton site peut apparaître dans les résultats sans que personne clique dessus ? 68 % des recherches se terminent sans un seul clic (SparkToro, 2026). Ça veut dire que même bien placé, tu peux passer inaperçu. La solution : être présent là où les gens s'arrêtent — ta fiche Google, tes avis, et les réponses de l'IA. Écris-nous ou visite propulsite.ca",
+    "hashtags": [
+      "#construction",
+      "#entrepreneurquebec",
+      "#renovationquebec",
+      "#marketingconstruction",
+      "#referencementgoogle",
+      "#ficheGoogle",
+      "#visibiliteweb",
+      "#constructionquebec",
+      "#rivenord",
+      "#laval",
+      "#sainteustache",
+      "#blainville",
+      "#terrebonne",
+      "#mirabel",
+      "#entrepreneurgeneral"
+    ],
+    "date": "2026-09-10",
+    "images": [
+      "2026-09-10-68-pourcent-sans-clic-1.png",
+      "2026-09-10-68-pourcent-sans-clic-2.png",
+      "2026-09-10-68-pourcent-sans-clic-3.png",
+      "2026-09-10-68-pourcent-sans-clic-4.png",
+      "2026-09-10-68-pourcent-sans-clic-5.png"
+    ],
+    "publie": false,
+    "fond": "5/5 — Pexels « concrete wall » — Alex Quezada"
   }
 ]
