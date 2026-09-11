@@ -48,12 +48,11 @@ img,video{max-width:100%;display:block}
 
 /* --- Le décor : une seule vidéo, fixe, pour tout le site ----------------- */
 .fond{position:fixed;inset:0;z-index:0;overflow:hidden;background:var(--nuit)}
-.fond video{
-  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+.fond .plans{
+  position:absolute;inset:0;width:100%;height:100%;display:block;
   /* Aucun assombrissement global : il rendait l'image terne. La lisibilité
      est assurée par le voile dégradé, qui ne couvre que le bas. */
 }
-.ciel{position:absolute;inset:0;width:100%;height:45%;pointer-events:none}
 
 /* Voile de protection du texte. Son opacité est pilotée en JavaScript :
    dense pendant qu'on lit, presque nul pendant qu'on avance. */
@@ -136,11 +135,24 @@ img,video{max-width:100%;display:block}
 
 /* Les sections d'avance sont vides : leur seule fonction est de donner de la
    distance à parcourir, donc du temps de vidéo. */
-.avance{height:200svh}
+.avance{height:110svh}
 
 /* Les haltes : la vidéo est tenue en arrêt, on lit. */
 .halte{min-height:120svh;display:grid;align-items:center;padding:var(--e7) var(--e3)}
-.halte-in{max-width:var(--large);width:100%;margin:0 auto}
+/* Les pièces sont claires : le texte se lit sur une carte sombre et floue,
+   posée à gauche, qui laisse la pièce respirer à droite. */
+.halte-in{
+  position:relative;max-width:640px;width:100%;
+  /* alignée sur le bord gauche du gabarit large, comme la couverture */
+  margin:0 auto 0 max(0px,calc((100% - var(--large)) / 2));
+}
+.halte-in::before{
+  content:"";position:absolute;inset:calc(-1*var(--e4));z-index:-1;
+  background:rgba(20,19,15,.58);
+  -webkit-backdrop-filter:blur(14px) saturate(1.1);backdrop-filter:blur(14px) saturate(1.1);
+  border:1px solid rgba(154,147,133,.18);border-radius:4px;
+}
+@media (max-width:760px){.halte-in::before{inset:calc(-1*var(--e3))}}
 .halte-fin{min-height:100svh}
 
 .sur{font-size:var(--t-s);letter-spacing:.2em;text-transform:uppercase;color:var(--laiton);margin:0 0 var(--e2);font-weight:500}

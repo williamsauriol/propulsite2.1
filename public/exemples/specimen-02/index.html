@@ -10,21 +10,16 @@
 <meta name="description" content="Site de démonstration réalisé par Propulsite : une maison qu'on traverse au défilement, pour illustrer une présence web haut de gamme en construction résidentielle.">
 <meta name="theme-color" content="#14130F">
 <link rel="preload" as="font" type="font/woff2" href="polices/Geist-wght-500.woff2" crossorigin>
-<link rel="preload" as="image" href="video/affiche.jpg">
+<link rel="preload" as="image" href="plans/entree.jpg">
+<link rel="preload" as="image" href="plans/entree-prof.png">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- UNE seule vidéo, fixe derrière tout le site. Elle ne redémarre jamais et
-     ne se fait jamais remplacer : le défilement la fait avancer, ou la tient
-     en arrêt pendant qu'on lit. -->
+<!-- UN seul canevas, fixe derrière tout le site. Neuf plans d'une même
+     maison ; le défilement change de pièce, le regard bouge dans la pièce. -->
 <div class="fond" aria-hidden="true">
-  <video id="traversee"
-         data-bureau="video/traversee.mp4"
-         data-mobile="video/traversee-mobile.mp4"
-         poster="video/affiche.jpg"
-         muted playsinline preload="auto"></video>
-  <canvas class="ciel" id="ciel"></canvas>
+  <canvas class="plans" id="plans"></canvas>
   <div class="voile" id="voile"></div>
   <div class="grain"></div>
 </div>
@@ -42,24 +37,24 @@
 <header class="hdr">
   <a class="hdr-marque" href="#haut">SPÉCIMEN 02</a>
   <nav class="hdr-nav" aria-label="Navigation principale">
-    <a href="#entree">L'entrée</a>
+    <a href="#hall">Le hall</a>
     <a href="#salon">Le salon</a>
     <a href="#cuisine">La cuisine</a>
+    <a href="#chambre">L'étage</a>
+    <a href="#cour">La cour</a>
     <a class="hdr-cta" href="#contact">Planifier une visite</a>
   </nav>
 </header>
 
 <div class="jauge" aria-hidden="true">
-  <div class="jauge-piece"><span id="jauge-nom">Extérieur</span></div>
+  <div class="jauge-piece"><span id="jauge-nom">L'entrée</span></div>
   <div class="jauge-rail"><i id="jauge-barre"></i></div>
 </div>
 
 <main id="contenu">
 
-  <!-- COUVERTURE — la vidéo est tenue sur sa première image, le ciel bouge -->
-  <!-- Voile allégé : la couverture doit montrer la maison, pas la cacher.
-       Le dégradé du bas suffit à porter le titre. -->
-  <section class="couverture" id="haut" data-piece="Extérieur" data-halte="0" data-voile="0.42">
+  <!-- COUVERTURE — l'entrée de la maison, depuis l'allée -->
+  <section class="couverture" id="haut" data-plan="entree" data-piece="L'entrée" data-voile="0.30">
     <div class="couverture-in">
       <p class="sur">Constructeur — Saint-Jérôme et Laurentides</p>
       <h1 class="titre" data-mots>On ne visite pas un plan. On visite une maison.</h1>
@@ -68,17 +63,18 @@
     </div>
   </section>
 
-  <!-- La vidéo avance de 0 s à 10 s : on franchit la porte -->
-  <section class="avance" data-piece="On entre" data-avance="0,10"></section>
+  <!-- On franchit la porte -->
+  <section class="avance" data-plan="entree>hall" data-piece="On entre"></section>
 
-  <section class="halte" id="entree" data-piece="L'entrée" data-halte="10">
+  <section class="halte" id="hall" data-plan="hall" data-piece="Le hall">
     <div class="halte-in">
       <p class="sur">Première arrivée</p>
       <h2 class="titre-2" data-mots>La lumière entre avant vous.</h2>
       <p class="texte">
-        Une entrée réussie ne se décore pas, elle se calcule. Orientation du
-        vestibule, hauteur du plafond, position de la première fenêtre : tout
-        est décidé avant la première pelletée de terre.
+        Un hall réussi ne se décore pas, il se calcule. Deux étages de hauteur,
+        un escalier qui tourne au lieu de monter droit, une fenêtre placée là
+        où le soleil passe le matin : tout est décidé avant la première
+        pelletée de terre.
       </p>
       <ul class="liste">
         <li><strong>Plans revus avec vous</strong> jusqu'à ce que la circulation soit évidente</li>
@@ -88,10 +84,9 @@
     </div>
   </section>
 
-  <!-- 10 s à 20 s : jusqu'au salon -->
-  <section class="avance" data-piece="On avance" data-avance="10,20"></section>
+  <section class="avance" data-plan="hall>salon" data-piece="On avance"></section>
 
-  <section class="halte" id="salon" data-piece="Le salon" data-halte="20">
+  <section class="halte" id="salon" data-plan="salon" data-piece="Le salon">
     <div class="halte-in">
       <p class="sur">Deuxième arrivée</p>
       <h2 class="titre-2" data-mots>Le silence est un matériau.</h2>
@@ -118,10 +113,9 @@
     </div>
   </section>
 
-  <!-- 20 s à 30 s : jusqu'à la cuisine -->
-  <section class="avance" data-piece="On continue" data-avance="20,30"></section>
+  <section class="avance" data-plan="salon>cuisine" data-piece="On continue"></section>
 
-  <section class="halte" id="cuisine" data-piece="La cuisine" data-halte="30">
+  <section class="halte" id="cuisine" data-plan="cuisine" data-piece="La cuisine">
     <div class="halte-in">
       <p class="sur">Troisième arrivée</p>
       <h2 class="titre-2" data-mots>Ici, on répond de tout.</h2>
@@ -139,7 +133,77 @@
     </div>
   </section>
 
-  <section class="halte halte-fin" id="contact" data-piece="Nous joindre" data-halte="30">
+  <section class="avance" data-plan="cuisine>chambre" data-piece="On monte"></section>
+
+  <section class="halte" id="chambre" data-plan="chambre" data-piece="La chambre">
+    <div class="halte-in">
+      <p class="sur">À l'étage</p>
+      <h2 class="titre-2" data-mots>On dort mieux dans une maison bien faite.</h2>
+      <p class="texte">
+        Les chambres sont du côté calme du terrain, loin de la rue. Les murs
+        entre les pièces sont isolés comme des murs extérieurs. Ce n'est pas
+        un luxe, c'est ce qui fait qu'une maison reste agréable dans dix ans.
+      </p>
+      <ul class="liste">
+        <li><strong>Walk-in fermé</strong> attenant à chaque chambre principale</li>
+        <li><strong>Fenêtres pleine hauteur</strong> orientées sur la cour, jamais sur le voisin</li>
+        <li><strong>Plancher de bois franc</strong> partout à l'étage, sans transition</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="avance" data-plan="chambre>bain" data-piece="Juste à côté"></section>
+
+  <section class="halte" id="bain" data-plan="bain" data-piece="La salle de bain">
+    <div class="halte-in">
+      <p class="sur">La salle de bain</p>
+      <h2 class="titre-2" data-mots>Le matin commence ici.</h2>
+      <p class="texte">
+        Baignoire îlot, douche vitrée sans seuil, double vasque. Derrière le
+        carrelage : membrane d'étanchéité continue, ventilation dimensionnée
+        pour la pièce, plomberie accessible par une trappe. Ce qu'on ne voit
+        pas est ce qui dure.
+      </p>
+      <div class="grille">
+        <div class="carte">
+          <span class="carte-n">0 seuil</span>
+          <p>Douche de plain-pied, drain linéaire, verre pleine hauteur</p>
+        </div>
+        <div class="carte">
+          <span class="carte-n">2</span>
+          <p>Vasques, deux miroirs, deux prises : personne n'attend</p>
+        </div>
+        <div class="carte">
+          <span class="carte-n">25 ans</span>
+          <p>Garantie du fabricant sur la membrane sous le carrelage</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="avance" data-plan="bain>cour" data-piece="On sort"></section>
+
+  <section class="halte" id="cour" data-plan="cour" data-piece="La cour">
+    <div class="halte-in">
+      <p class="sur">Dehors</p>
+      <h2 class="titre-2" data-mots>La maison continue dehors.</h2>
+      <p class="texte">
+        Terrasse, piscine et coin feu sont dessinés avec la maison, pas
+        ajoutés après. Le terrassement, le drainage et l'éclairage extérieur
+        font partie du contrat : vous emménagez dans une propriété finie, pas
+        dans un chantier qui reste à terminer.
+      </p>
+      <ul class="liste">
+        <li><strong>Terrassement et pelouse</strong> compris, avec plantations de base</li>
+        <li><strong>Terrasse et allée</strong> livrées avec la maison</li>
+        <li><strong>Piscine en option</strong>, planifiée dès les plans pour les remblais</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="avance" data-plan="cour>aerien" data-piece="Vue d'ensemble"></section>
+
+  <section class="halte halte-fin" id="contact" data-plan="aerien" data-piece="Nous joindre" data-voile="0.70">
     <div class="halte-in">
       <p class="sur">Prochaine étape</p>
       <h2 class="titre-2" data-mots>Venez voir une maison finie.</h2>
@@ -162,9 +226,9 @@
     <p class="demo">
       <strong>Ceci est une démonstration.</strong> « Spécimen 02 » est une
       entreprise fictive. Les textes, les chiffres, les coordonnées et la
-      licence RBQ sont des exemples, et les visuels sont générés par
-      intelligence artificielle. Rien ici ne décrit une entreprise réelle,
-      un projet réel ou une propriété réelle.
+      licence RBQ sont des exemples. Les visuels sont des images de synthèse
+      d'une maison modélisée en 3D pour ce site. Rien ici ne décrit une
+      entreprise réelle, un projet réel ou une propriété réelle.
     </p>
     <p class="retour">
       Site conçu par <a href="https://propulsite.ca">Propulsite</a> —
