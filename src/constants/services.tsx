@@ -204,7 +204,7 @@ export const SERVICES: Service[] = [
     features: [
       'Référencement naturel (SEO) : audit technique et optimisation on-page',
       'Optimisation de votre fiche Google Business (carte et top local)',
-      'Local Services Ads « Google Garantie » : configuration et gestion',
+      'Local Services Ads « Google Garantie » : configuration et gestion — fiche Google toujours incluse, parce que sa qualité fait le rang des annonces',
       'GEO : être cité et recommandé par ChatGPT, l\'IA de Google et Perplexity',
       'Stratégie de contenu et de mots-clés locaux',
       'Avis clients et autorité — les signaux que Google et les IA récompensent'
