@@ -48,10 +48,10 @@ img,video{max-width:100%;display:block}
 
 /* --- Le décor : une seule vidéo, fixe, pour tout le site ----------------- */
 .fond{position:fixed;inset:0;z-index:0;overflow:hidden;background:var(--nuit)}
-.fond .plans{
-  position:absolute;inset:0;width:100%;height:100%;display:block;
+.fond video{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   /* Aucun assombrissement global : il rendait l'image terne. La lisibilité
-     est assurée par le voile dégradé, qui ne couvre que le bas. */
+     est assurée par la carte de lecture derrière les textes. */
 }
 
 /* Voile de protection du texte. Son opacité est pilotée en JavaScript :
@@ -135,7 +135,7 @@ img,video{max-width:100%;display:block}
 
 /* Les sections d'avance sont vides : leur seule fonction est de donner de la
    distance à parcourir, donc du temps de vidéo. */
-.avance{height:110svh}
+.avance{height:var(--marche,160svh)}   /* la longueur de la marche vient de data-avance, voir index.html */
 
 /* Les haltes : la vidéo est tenue en arrêt, on lit. */
 .halte{min-height:120svh;display:grid;align-items:center;padding:var(--e7) var(--e3)}
