@@ -6,7 +6,7 @@
 
    LES ÉTAGES (du fond vers l'œil)
      0  la vidéo, fixe, et ses voiles                     .fond
-     1  le chiffre fantôme et le mot qui dérive           .fantome .derive
+     1  le chiffre fantôme, en retrait                       .fantome
      2  le titre, puis la carte de lecture qu'il chevauche .halte-tete .halte-carte
      3  l'étiquette, au premier plan                       .etiquette .fiche
      4  l'interface fixe : en-tête, fil, plan              .hdr .fil .plan
@@ -249,29 +249,14 @@ em{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:40
 
 /* --- Les marches --------------------------------------------------------- */
 /* Les sections d'avance donnent de la distance à parcourir, donc du temps
-   de vidéo. Un seul mot y dérive, collé à l'écran, en retrait. */
+   de vidéo. Elles sont vides : on regarde la maison. */
 .avance{height:var(--marche,160svh)}
-.derive{
-  position:sticky;top:34svh;pointer-events:none;
-  margin:24svh auto 0;max-width:var(--scene);padding:0 var(--e3);
-  display:grid;gap:var(--e2);
-}
-.derive-mot{
-  font-family:'Instrument Serif',Georgia,serif;font-style:italic;
-  font-size:clamp(4rem,12vw,10rem);line-height:1;color:var(--craie);opacity:.16;
-  letter-spacing:-.01em;
-}
-.derive-note{
-  font-size:var(--t-s);letter-spacing:.14em;text-transform:uppercase;color:var(--craie-3);
-  padding-left:var(--e4);position:relative;max-width:40ch;
-}
-.derive-note::before{content:"";position:absolute;left:0;top:.7em;width:var(--e2);height:1px;background:var(--laiton)}
 
 /* --- Les haltes ---------------------------------------------------------- */
 /* La vidéo est tenue en arrêt, on lit. Quatre couches superposées : le
    chiffre fantôme derrière, le titre qui chevauche la carte, l'étiquette
    devant. Tout est aligné sur la même grille de douze colonnes. */
-.halte{min-height:130svh;display:grid;align-items:center;padding:var(--e8) var(--e3)}
+.halte{display:grid;align-items:center;padding:var(--e7) var(--e3)}
 .halte-scene{
   position:relative;max-width:var(--scene);width:100%;margin:0 auto;
   display:grid;grid-template-columns:repeat(12,1fr);column-gap:var(--e3);align-items:start;
@@ -317,7 +302,6 @@ em{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:40
 
 /* La dernière halte lit au centre : la table est au milieu de l'image. Le
    titre ne chevauche pas la carte, il la coiffe. */
-.halte-fin{min-height:110svh}
 .halte-fin .halte-carte{margin-top:var(--e3)}
 .halte-fin .halte-tete{grid-column:3/11;text-align:center}
 .halte-fin .titre-2{margin-left:auto;margin-right:auto}
@@ -409,7 +393,7 @@ em{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:40
   .fiche-l{grid-template-columns:96px 1fr;align-items:baseline;gap:var(--e2);padding:var(--e1) 0}
   .fiche-l b{font-size:var(--t-xl)}
 
-  .halte{min-height:auto;padding:var(--e7) var(--e2)}
+  .halte{padding:var(--e6) var(--e2)}
   .halte-scene{grid-template-columns:1fr;column-gap:0;row-gap:var(--e3)}
   .halte-tete,.halte-carte,.etiquette,
   .halte-droite .halte-tete,.halte-droite .halte-carte,.halte-droite .etiquette,
@@ -422,7 +406,6 @@ em{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:40
   .halte-fin .halte-tete,.halte-fin .halte-carte{text-align:left}
   .halte-fin .titre-2,.halte-fin .texte{margin-left:0}
   .halte-fin .joindre{justify-content:flex-start}
-  .derive{top:28svh}
   .titre{max-width:none}
   .sur::after{display:none}
 }
@@ -434,6 +417,5 @@ em{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:40
   .lueur{animation:none}
   .fil-nom{transition:none}
   .avance{height:60svh}
-  .halte{min-height:auto;padding:var(--e6) var(--e3)}
   .voile-bas{opacity:.8}
 }
