@@ -60,7 +60,7 @@ export default function Home() {
       <PourquoiNousChoisissent />
 
       {/* Réalisations — vitrine des sites de démonstration */}
-      <section className="py-32 px-6 relative">
+      <section id="exemples" className="py-32 px-6 relative">
         <div className="container mx-auto max-w-6xl">
           <motion.div
             initial={{ y: 24 }}

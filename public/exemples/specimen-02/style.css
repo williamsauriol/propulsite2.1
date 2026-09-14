@@ -137,7 +137,17 @@ em{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:40
   gap:var(--e3);padding:var(--e2) var(--e3);
   background:linear-gradient(to bottom,rgba(var(--nuit-rgb),.86),rgba(var(--nuit-rgb),0));
 }
+.hdr-gauche{display:flex;align-items:center;gap:var(--e3)}
 .hdr-marque{color:var(--craie);text-decoration:none;font-weight:500;font-size:var(--t-s);letter-spacing:.22em}
+/* Le chemin du retour : on est sur un exemple, pas sur propulsite.ca. */
+.hdr-retour{
+  display:inline-flex;align-items:center;gap:var(--e1);min-height:24px;
+  padding:var(--e1) var(--e2);border:1px solid var(--trait);border-radius:2px;
+  color:var(--craie-2);text-decoration:none;font-size:var(--t-s);
+  background:var(--verre);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  transition:color .18s,border-color .18s;
+}
+.hdr-retour:hover{color:var(--laiton);border-color:var(--laiton)}
 .hdr-nav{display:flex;align-items:center;gap:var(--e3)}
 .hdr-nav a{
   color:var(--craie-2);text-decoration:none;font-size:var(--t-s);
@@ -149,7 +159,9 @@ em{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:40
 .hdr-cta:hover{border-color:var(--laiton)!important;color:var(--laiton)!important}
 @media (max-width:760px){
   .hdr{padding:var(--e2)}
-  .hdr-marque,.hdr-cta{white-space:nowrap}
+  .hdr-gauche{gap:var(--e2)}
+  .hdr-marque{display:none}
+  .hdr-retour,.hdr-cta{white-space:nowrap}
   .hdr-nav a:not(.hdr-cta){display:none}
 }
 
@@ -370,10 +382,15 @@ em{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:40
 .fine{font-size:var(--t-s);color:var(--craie-3);margin:0}
 
 /* --- Pied de page -------------------------------------------------------- */
-.pied{position:relative;z-index:2;background:var(--nuit);padding:var(--e6) var(--e3);border-top:1px solid var(--nuit-3)}
+.pied{position:relative;z-index:2;background:var(--nuit);padding:var(--e7) var(--e3) var(--e6);border-top:1px solid var(--nuit-3)}
 .pied-in{max-width:var(--large);margin:0 auto}
-.demo{font-size:var(--t-m);color:var(--craie-2);margin:0 0 var(--e3);max-width:70ch;padding:var(--e3);background:var(--nuit-2);border-left:2px solid var(--laiton)}
-.demo strong{color:var(--craie)}
+.pied .sur{color:var(--craie-3)}
+.pied-titre{
+  font-weight:500;letter-spacing:-.02em;font-size:clamp(1.9rem,4vw,3.1rem);line-height:1.05;
+  color:var(--craie);margin:0 0 var(--e3);max-width:20ch;
+}
+.demo{font-size:var(--t-m);color:var(--craie-2);margin:0 0 var(--e4);max-width:64ch}
+.pied .joindre{margin-bottom:var(--e5)}
 .retour{font-size:var(--t-s);color:var(--craie-3);margin:0}
 .retour a{color:var(--laiton);display:inline-flex;align-items:center;min-height:24px}
 
