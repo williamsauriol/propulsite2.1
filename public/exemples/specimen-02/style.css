@@ -3,6 +3,15 @@
    Deux polices, une échelle modulaire de raison 1,25, un espacement en
    multiples de 8 px. Tout contraste a été calculé sur la couleur rendue,
    pas sur la valeur de la palette.
+
+   LES ÉTAGES (du fond vers l'œil)
+     0  la vidéo, fixe, et ses voiles                     .fond
+     1  le chiffre fantôme et le mot qui dérive           .fantome .derive
+     2  le titre, puis la carte de lecture qu'il chevauche .halte-tete .halte-carte
+     3  l'étiquette, au premier plan                       .etiquette .fiche
+     4  l'interface fixe : en-tête, fil, plan              .hdr .fil .plan
+   Chaque étage défile à sa propre vitesse (data-parallaxe, app.js) : c'est
+   la différence de vitesse qui donne la profondeur, pas les ombres.
    ========================================================================== */
 
 @font-face{font-family:Geist;src:url(polices/Geist-wght-400.woff2)format('woff2');font-weight:400;font-display:swap}
@@ -15,20 +24,28 @@
   --nuit:      #14130F;
   --nuit-2:    #1E1B15;
   --nuit-3:    #2A261D;
+  --nuit-rgb:  20,19,15;
 
   --craie:     #F4F1E9;   /* 15,2:1 sur --nuit */
   --craie-2:   #C9C3B4;   /* 10,6:1 */
   --craie-3:   #9A9385;   /*  6,2:1 — plancher accepté */
   --laiton:    #C9A227;   /*  7,8:1 */
+  --laiton-rgb:201,162,39;
 
   /* Échelle modulaire, raison 1,25, base 17 px. Rien sous 16 px. */
-  --t-s:1rem; --t-m:1.0625rem; --t-l:1.33rem; --t-xl:1.66rem; --t-2xl:2.07rem;
+  --t-s:1rem; --t-m:1.0625rem; --t-l:1.33rem; --t-xl:1.66rem; --t-2xl:2.07rem; --t-3xl:2.6rem;
 
   --e1:8px; --e2:16px; --e3:24px; --e4:32px; --e5:48px;
   --e6:64px; --e7:96px; --e8:128px;
 
-  --large:1120px;
-  --lent:cubic-bezier(.22,.61,.36,1);
+  --large:1240px;
+  /* Sur les écrans moyens, on garde la place du fil (gauche) et du plan
+     (droite) : le contenu ne passe jamais dessous. */
+  --scene:min(var(--large),calc(100vw - 336px));
+  --sortie:cubic-bezier(.16,1,.3,1);
+  --doux:cubic-bezier(.16,.84,.32,1);
+  --verre:rgba(var(--nuit-rgb),.62);
+  --trait:rgba(154,147,133,.22);
 }
 
 *,*::before,*::after{box-sizing:border-box}
@@ -45,28 +62,47 @@ body{
 img,video{max-width:100%;display:block}
 ::selection{background:var(--laiton);color:var(--nuit)}
 :focus-visible{outline:2px solid var(--laiton);outline-offset:3px;border-radius:2px}
+em{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400}
 
-/* --- Le décor : une seule vidéo, fixe, pour tout le site ----------------- */
+/* ==========================================================================
+   ÉTAGE 0 — le décor
+   ========================================================================== */
 .fond{position:fixed;inset:0;z-index:0;overflow:hidden;background:var(--nuit)}
-.fond video{
-  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  /* Aucun assombrissement global : il rendait l'image terne. La lisibilité
-     est assurée par la carte de lecture derrière les textes. */
+.fond video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
+/* Trois voiles, chacun piloté en JavaScript. Le voile du bas protège la
+   lecture ; les voiles de côté assombrissent seulement le côté où le texte
+   se pose, la pièce reste claire de l'autre côté. */
+.voile{position:absolute;inset:0;pointer-events:none;opacity:0}
+.voile-bas{
+  background:linear-gradient(to top,
+    rgba(var(--nuit-rgb),.96) 0%, rgba(var(--nuit-rgb),.84) 28%,
+    rgba(var(--nuit-rgb),.40) 60%, rgba(var(--nuit-rgb),.08) 84%, rgba(var(--nuit-rgb),.30) 100%);
+}
+.voile-gauche{
+  background:linear-gradient(to right,
+    rgba(var(--nuit-rgb),.94) 0%, rgba(var(--nuit-rgb),.86) 30%,
+    rgba(var(--nuit-rgb),.48) 56%, rgba(var(--nuit-rgb),0) 84%);
+}
+.voile-droite{
+  background:linear-gradient(to left,
+    rgba(var(--nuit-rgb),.94) 0%, rgba(var(--nuit-rgb),.86) 30%,
+    rgba(var(--nuit-rgb),.48) 56%, rgba(var(--nuit-rgb),0) 84%);
 }
 
-/* Voile de protection du texte. Son opacité est pilotée en JavaScript :
-   dense pendant qu'on lit, presque nul pendant qu'on avance. */
-.voile{
-  position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(to top,
-    rgba(20,19,15,.96) 0%, rgba(20,19,15,.86) 26%,
-    rgba(20,19,15,.45) 58%, rgba(20,19,15,.10) 82%, rgba(20,19,15,.28) 100%);
-  opacity:.35;
-  transition:opacity .45s var(--lent);
+/* Une lueur qui dérive lentement : le seul mouvement pendant qu'on lit,
+   pour que la page ne paraisse jamais figée. */
+.lueur{
+  position:absolute;left:-20%;top:-20%;width:70%;height:70%;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(var(--laiton-rgb),.10),rgba(var(--laiton-rgb),0));
+  animation:deriver 22s ease-in-out infinite alternate;
+  mix-blend-mode:screen;
 }
+@keyframes deriver{from{transform:translate3d(0,0,0)}to{transform:translate3d(60%,40%,0)}}
+
 /* Un grain très fin casse les dégradés en bandes sur les grands aplats. */
 .grain{
-  position:absolute;inset:0;pointer-events:none;opacity:.035;
+  position:absolute;inset:0;pointer-events:none;opacity:.04;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -82,115 +118,256 @@ img,video{max-width:100%;display:block}
 #rideau{
   position:fixed;inset:0;z-index:100;background:var(--nuit);
   display:grid;place-items:center;
-  transition:opacity 1.2s var(--lent),visibility 1.2s;
+  transition:opacity 1.2s var(--doux),visibility 1.2s;
 }
 #rideau.parti{opacity:0;visibility:hidden}
 .rideau-in{text-align:center;padding:var(--e3)}
 .rideau-marque{font-size:var(--t-l);font-weight:500;letter-spacing:.28em;color:var(--craie);margin-bottom:var(--e2)}
 .rideau-sous{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:var(--t-xl);color:var(--craie-3);margin-bottom:var(--e4)}
-.rideau-barre{width:200px;height:2px;background:var(--nuit-3);margin:0 auto;overflow:hidden}
-.rideau-barre i{display:block;height:100%;width:0;background:var(--laiton);transition:width 1.8s var(--lent)}
+.rideau-barre{width:200px;height:1px;background:var(--nuit-3);margin:0 auto;overflow:hidden}
+.rideau-barre i{display:block;height:100%;width:0;background:var(--laiton);transition:width 1.8s var(--doux)}
 #rideau.charge .rideau-barre i{width:100%}
 
-/* --- En-tête ------------------------------------------------------------- */
+/* ==========================================================================
+   ÉTAGE 4 — l'interface fixe
+   ========================================================================== */
 .hdr{
   position:fixed;top:0;left:0;right:0;z-index:60;
   display:flex;align-items:center;justify-content:space-between;
   gap:var(--e3);padding:var(--e2) var(--e3);
-  background:linear-gradient(to bottom,rgba(20,19,15,.9),rgba(20,19,15,0));
-  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  background:linear-gradient(to bottom,rgba(var(--nuit-rgb),.86),rgba(var(--nuit-rgb),0));
 }
 .hdr-marque{color:var(--craie);text-decoration:none;font-weight:500;font-size:var(--t-s);letter-spacing:.22em}
 .hdr-nav{display:flex;align-items:center;gap:var(--e3)}
 .hdr-nav a{
   color:var(--craie-2);text-decoration:none;font-size:var(--t-s);
   padding:var(--e1) 0;min-height:24px;display:inline-flex;align-items:center;
-  border-bottom:1px solid transparent;transition:color .25s,border-color .25s;
+  border-bottom:1px solid transparent;transition:color .18s,border-color .18s;
 }
 .hdr-nav a:hover{color:var(--craie);border-bottom-color:var(--laiton)}
 .hdr-cta{border:1px solid var(--craie-3);border-radius:2px;padding:var(--e1) var(--e2)!important}
 .hdr-cta:hover{border-color:var(--laiton)!important;color:var(--laiton)!important}
-@media (max-width:760px){.hdr-nav a:not(.hdr-cta){display:none}}
-
-/* --- Jauge --------------------------------------------------------------- */
-.jauge{
-  position:fixed;left:var(--e3);bottom:var(--e3);z-index:60;
-  display:flex;align-items:center;gap:var(--e2);padding:var(--e1) var(--e2);
-  background:rgba(20,19,15,.72);border-radius:2px;
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+@media (max-width:760px){
+  .hdr{padding:var(--e2)}
+  .hdr-marque,.hdr-cta{white-space:nowrap}
+  .hdr-nav a:not(.hdr-cta){display:none}
 }
-.jauge-piece{font-size:var(--t-s);color:var(--craie-2);letter-spacing:.06em;min-width:11ch}
-.jauge-rail{width:120px;height:2px;background:var(--nuit-3)}
-.jauge-rail i{display:block;height:100%;width:0;background:var(--laiton)}
-@media (max-width:760px){.jauge{left:var(--e2);bottom:var(--e2)}.jauge-rail{width:72px}}
 
-/* --- Le fil du parcours -------------------------------------------------- */
-/* Toutes les sections sont transparentes : c'est la vidéo qu'on voit
-   derrière, du début à la fin. */
+/* Le fil — à gauche, vertical. Les cinq arrêts et le trait qui se remplit. */
+.fil{
+  position:fixed;left:var(--e3);top:50%;transform:translateY(-50%);z-index:60;
+  display:flex;gap:var(--e2);align-items:stretch;
+}
+.fil-rail{width:1px;background:var(--trait);position:relative;overflow:hidden}
+.fil-rail i{position:absolute;left:0;top:0;width:100%;height:0;background:var(--laiton)}
+.fil-arrets{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;justify-content:space-between;gap:var(--e3)}
+.fil-arrets a{
+  display:inline-flex;align-items:baseline;gap:var(--e1);min-height:24px;
+  color:var(--craie-3);text-decoration:none;font-size:var(--t-s);
+  transition:color .18s;
+}
+.fil-n{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:var(--t-m);letter-spacing:.04em}
+.fil-nom{letter-spacing:.06em;transform:translateX(-4px);opacity:0;transition:transform .25s var(--sortie),opacity .25s}
+.fil-arrets a:hover,.fil-arrets a.actif{color:var(--craie)}
+.fil-arrets a.actif .fil-n{color:var(--laiton)}
+.fil-arrets a.actif .fil-nom,.fil:hover .fil-nom,.fil:focus-within .fil-nom{transform:none;opacity:1}
+@media (max-width:900px){.fil{display:none}}
+
+/* Le plan — en bas à droite. La maison vue de haut, et le point c'est vous. */
+.plan{
+  position:fixed;right:var(--e3);bottom:var(--e3);z-index:60;
+  width:128px;padding:var(--e2);
+  background:var(--verre);border:1px solid var(--trait);border-radius:2px;
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+}
+.plan svg{width:100%;height:auto;display:block;overflow:visible}
+.plan-mur{fill:none;stroke:var(--craie-2);stroke-width:1.4;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round}
+.plan-fin{stroke:var(--craie-3);stroke-width:1;stroke-dasharray:3 3}
+.plan-allee{fill:none;stroke:var(--craie-3);stroke-width:1;vector-effect:non-scaling-stroke;opacity:.7}
+.plan-fontaine{fill:rgba(154,147,133,.35);stroke:none}
+.plan-trace{fill:none;stroke:var(--laiton);stroke-width:1.2;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round;opacity:.75}
+.plan-cone{fill:rgba(var(--laiton-rgb),.22);stroke:none}
+.plan-point{fill:var(--laiton)}
+.plan-legende{
+  display:flex;flex-direction:column;gap:0;
+  margin-top:var(--e2);font-size:var(--t-s);color:var(--craie-2);letter-spacing:.04em;line-height:1.4;
+}
+#plan-temps{color:var(--craie-3);font-variant-numeric:tabular-nums}
+/* Sur téléphone, le plan devient une barre au bas de l'écran : rien de
+   fixe ne se pose sur le texte qu'on lit. */
+@media (max-width:760px){
+  .plan{
+    left:0;right:0;bottom:0;width:auto;
+    display:flex;align-items:center;gap:var(--e2);
+    padding:var(--e1) var(--e2);border-width:1px 0 0;border-radius:0;
+  }
+  .plan svg{width:auto;height:48px;flex:0 0 auto}
+  .plan-legende{flex-direction:row;justify-content:space-between;flex:1;margin:0;min-width:0}
+  .pied{padding-bottom:calc(var(--e6) + 72px)}
+}
+
+/* ==========================================================================
+   ÉTAGES 1 à 3 — le fil du parcours
+   Toutes les sections sont transparentes : c'est la vidéo qu'on voit
+   derrière, du début à la fin.
+   ========================================================================== */
 #contenu{position:relative;z-index:2}
 .couverture,.avance,.halte{position:relative}
 
+/* Les éléments qui défilent à leur propre vitesse. On n'anime que
+   transform : le navigateur compose sans recalculer la mise en page. */
+[data-parallaxe]{will-change:transform}
+
+/* --- La couverture ------------------------------------------------------- */
 .couverture{min-height:100svh;display:grid;align-items:end}
-.couverture-in{max-width:var(--large);width:100%;margin:0 auto;padding:var(--e6) var(--e3) var(--e7)}
-
-/* Les sections d'avance sont vides : leur seule fonction est de donner de la
-   distance à parcourir, donc du temps de vidéo. */
-.avance{height:var(--marche,160svh)}   /* la longueur de la marche vient de data-avance, voir index.html */
-
-/* Les haltes : la vidéo est tenue en arrêt, on lit. */
-.halte{min-height:120svh;display:grid;align-items:center;padding:var(--e7) var(--e3)}
-/* Les pièces sont claires : le texte se lit sur une carte sombre et floue,
-   posée à gauche, qui laisse la pièce respirer à droite. */
-.halte-in{
-  position:relative;max-width:640px;width:100%;
-  /* alignée sur le bord gauche du gabarit large, comme la couverture */
-  margin:0 auto 0 max(0px,calc((100% - var(--large)) / 2));
+.couverture-scene{
+  max-width:var(--scene);width:100%;margin:0 auto;
+  padding:var(--e8) var(--e3) var(--e7);
+  display:grid;grid-template-columns:repeat(12,1fr);column-gap:var(--e3);align-items:end;
 }
-.halte-in::before{
-  content:"";position:absolute;inset:calc(-1*var(--e4));z-index:-1;
-  background:rgba(20,19,15,.58);
-  -webkit-backdrop-filter:blur(14px) saturate(1.1);backdrop-filter:blur(14px) saturate(1.1);
-  border:1px solid rgba(154,147,133,.18);border-radius:4px;
+.couverture-in{grid-column:1/9;position:relative;z-index:2}
+.fiche{
+  grid-column:10/13;justify-self:end;align-self:end;position:relative;z-index:3;
+  min-width:232px;
+  background:var(--verre);border:1px solid var(--trait);border-radius:2px;
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  padding:var(--e1) var(--e3);
 }
-@media (max-width:760px){.halte-in::before{inset:calc(-1*var(--e3))}}
-.halte-fin{min-height:100svh}
+.fiche-l{display:grid;gap:2px;padding:var(--e2) 0;border-top:1px solid var(--trait)}
+.fiche-l:first-child{border-top:0}
+.fiche-l b{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400;font-size:var(--t-2xl);line-height:1.05;color:var(--craie)}
+.fiche-l span{font-size:var(--t-s);color:var(--craie-2)}
 
-.sur{font-size:var(--t-s);letter-spacing:.2em;text-transform:uppercase;color:var(--laiton);margin:0 0 var(--e2);font-weight:500}
-.titre{
-  font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400;
-  font-size:clamp(2.2rem,6vw,4.2rem);line-height:1.08;
-  color:var(--craie);margin:0 0 var(--e3);max-width:18ch;
-  text-shadow:0 2px 24px rgba(20,19,15,.5);
+.defile{
+  position:absolute;left:50%;bottom:var(--e3);transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:var(--e2);
+  font-size:var(--t-s);letter-spacing:.14em;text-transform:uppercase;color:var(--craie-3);white-space:nowrap;
 }
-.chapo{font-size:var(--t-l);color:var(--craie-2);margin:0;max-width:44ch}
-.titre-2{
-  font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400;
-  font-size:clamp(1.9rem,4.4vw,3.1rem);line-height:1.12;
-  color:var(--craie);margin:0 0 var(--e3);max-width:20ch;
-  text-shadow:0 2px 24px rgba(20,19,15,.5);
-}
-.texte{font-size:var(--t-l);line-height:1.65;max-width:60ch;margin:0 0 var(--e4);color:var(--craie-2)}
-
-.fleche{margin-top:var(--e5);width:1px;height:56px;background:rgba(154,147,133,.5);position:relative;overflow:hidden}
-.fleche i{position:absolute;top:0;left:0;width:100%;height:40%;background:var(--laiton);animation:descend 2.4s var(--lent) infinite}
+.defile i{width:1px;height:56px;background:var(--trait);position:relative;overflow:hidden}
+.defile i::after{content:"";position:absolute;top:0;left:0;width:100%;height:40%;background:var(--laiton);animation:descend 2.4s var(--doux) infinite}
 @keyframes descend{0%{transform:translateY(-100%)}60%,100%{transform:translateY(250%)}}
 
+/* --- Les marches --------------------------------------------------------- */
+/* Les sections d'avance donnent de la distance à parcourir, donc du temps
+   de vidéo. Un seul mot y dérive, collé à l'écran, en retrait. */
+.avance{height:var(--marche,160svh)}
+.derive{
+  position:sticky;top:34svh;pointer-events:none;
+  margin:24svh auto 0;max-width:var(--scene);padding:0 var(--e3);
+  display:grid;gap:var(--e2);
+}
+.derive-mot{
+  font-family:'Instrument Serif',Georgia,serif;font-style:italic;
+  font-size:clamp(4rem,12vw,10rem);line-height:1;color:var(--craie);opacity:.16;
+  letter-spacing:-.01em;
+}
+.derive-note{
+  font-size:var(--t-s);letter-spacing:.14em;text-transform:uppercase;color:var(--craie-3);
+  padding-left:var(--e4);position:relative;max-width:40ch;
+}
+.derive-note::before{content:"";position:absolute;left:0;top:.7em;width:var(--e2);height:1px;background:var(--laiton)}
+
+/* --- Les haltes ---------------------------------------------------------- */
+/* La vidéo est tenue en arrêt, on lit. Quatre couches superposées : le
+   chiffre fantôme derrière, le titre qui chevauche la carte, l'étiquette
+   devant. Tout est aligné sur la même grille de douze colonnes. */
+.halte{min-height:130svh;display:grid;align-items:center;padding:var(--e8) var(--e3)}
+.halte-scene{
+  position:relative;max-width:var(--scene);width:100%;margin:0 auto;
+  display:grid;grid-template-columns:repeat(12,1fr);column-gap:var(--e3);align-items:start;
+}
+
+.fantome{
+  position:absolute;z-index:1;top:-.35em;right:-.05em;pointer-events:none;user-select:none;
+  font-family:'Instrument Serif',Georgia,serif;font-style:italic;
+  font-size:clamp(9rem,26vw,22rem);line-height:1;color:var(--craie);opacity:.10;
+  letter-spacing:-.04em;
+}
+.halte-droite .fantome{right:auto;left:-.05em}
+
+.halte-tete{grid-column:1/9;grid-row:1;position:relative;z-index:3}
+.halte-droite .halte-tete{grid-column:5/13}
+
+.halte-carte{
+  grid-column:2/9;grid-row:2;position:relative;z-index:2;
+  margin-top:calc(-1*var(--e5));      /* le titre chevauche la carte */
+  padding:var(--e7) var(--e5) var(--e5);
+  background:var(--verre);border:1px solid var(--trait);border-radius:2px;
+  -webkit-backdrop-filter:blur(16px) saturate(1.1);backdrop-filter:blur(16px) saturate(1.1);
+}
+.halte-droite .halte-carte{grid-column:5/12}
+.carte-onglet{
+  position:absolute;top:0;right:var(--e5);transform:translateY(-50%);
+  padding:var(--e1) var(--e2);background:var(--nuit);border:1px solid var(--trait);border-radius:2px;
+  font-size:var(--t-s);letter-spacing:.12em;text-transform:uppercase;color:var(--craie-3);
+}
+
+.etiquette{
+  grid-column:9/13;grid-row:2;justify-self:start;align-self:start;position:relative;z-index:4;
+  margin-top:var(--e8);max-width:280px;
+  padding:var(--e3);display:grid;gap:var(--e1);
+  background:rgba(var(--nuit-rgb),.80);border:1px solid rgba(var(--laiton-rgb),.35);border-radius:2px;
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+}
+.etiquette::before{content:"";position:absolute;top:50%;right:100%;width:var(--e3);height:1px;background:var(--laiton)}
+.etiquette b{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400;font-size:var(--t-3xl);line-height:1.05;color:var(--craie)}
+.etiquette span{font-size:var(--t-s);color:var(--craie-2)}
+.halte-droite .etiquette{grid-column:1/5;justify-self:end}
+.halte-droite .etiquette::before{right:auto;left:100%}
+
+/* La dernière halte lit au centre : la table est au milieu de l'image. Le
+   titre ne chevauche pas la carte, il la coiffe. */
+.halte-fin{min-height:110svh}
+.halte-fin .halte-carte{margin-top:var(--e3)}
+.halte-fin .halte-tete{grid-column:3/11;text-align:center}
+.halte-fin .titre-2{margin-left:auto;margin-right:auto}
+.halte-fin .halte-carte{grid-column:3/11;text-align:center}
+.halte-fin .texte{margin-left:auto;margin-right:auto}
+.halte-fin .joindre{justify-content:center}
+.halte-fin .etiquette{grid-column:10/13;justify-self:start;margin-top:var(--e7)}
+
+/* --- La typographie ------------------------------------------------------ */
+.sur{
+  display:flex;align-items:baseline;gap:var(--e2);
+  font-size:var(--t-s);letter-spacing:.18em;text-transform:uppercase;color:var(--craie-2);
+  margin:0 0 var(--e3);font-weight:500;
+}
+.sur-n{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400;letter-spacing:0;color:var(--laiton);font-size:var(--t-l);line-height:1}
+.sur::after{content:"";flex:0 0 var(--e5);height:1px;background:var(--laiton);align-self:center;margin-left:var(--e1)}
+
+.titre{
+  font-weight:500;letter-spacing:-.025em;
+  font-size:clamp(2.8rem,7.6vw,6.6rem);line-height:.98;
+  color:var(--craie);margin:0 0 var(--e3);max-width:12ch;
+  text-shadow:0 2px 32px rgba(var(--nuit-rgb),.55);
+}
+.titre em{letter-spacing:-.01em;color:var(--craie)}
+.chapo{font-size:var(--t-xl);color:var(--craie-2);margin:0;max-width:40ch}
+.titre-2{
+  font-weight:500;letter-spacing:-.02em;
+  font-size:clamp(2.2rem,5.4vw,4.6rem);line-height:1.02;
+  color:var(--craie);margin:0;max-width:14ch;
+  text-shadow:0 2px 32px rgba(var(--nuit-rgb),.55);
+}
+.titre-2 em{letter-spacing:-.01em}
+.texte{font-size:var(--t-l);line-height:1.6;max-width:56ch;margin:0 0 var(--e4);color:var(--craie-2)}
+
 .liste{list-style:none;padding:0;margin:0;max-width:60ch}
-.liste li{padding:var(--e2) 0 var(--e2) var(--e4);border-top:1px solid rgba(154,147,133,.28);position:relative}
+.liste li{padding:var(--e2) 0 var(--e2) var(--e4);border-top:1px solid var(--trait);position:relative}
 .liste li::before{content:"";position:absolute;left:0;top:calc(var(--e2) + .65em);width:var(--e2);height:1px;background:var(--laiton)}
 .liste strong{color:var(--craie);font-weight:500}
 
-.grille{display:grid;gap:var(--e3);grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-.carte{
-  background:rgba(30,27,21,.72);padding:var(--e4);border-radius:2px;
-  border:1px solid rgba(154,147,133,.16);
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-}
-.carte-n{display:block;font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:var(--t-2xl);color:var(--laiton);margin-bottom:var(--e1)}
-.carte p{margin:0;font-size:var(--t-m);color:var(--craie-2)}
+.grille{display:grid;gap:var(--e2);grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.carte{padding:var(--e3) 0 0;border-top:1px solid var(--trait)}
+.carte-n{display:block;font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:var(--t-3xl);line-height:1;color:var(--laiton);margin-bottom:var(--e1)}
+.carte p{margin:0;font-size:var(--t-s);color:var(--craie-2)}
 
-.etapes{margin:0;padding:0 0 0 var(--e3);max-width:60ch}
-.etapes li{margin-bottom:var(--e3);padding-left:var(--e1)}
+.etapes{margin:0;padding:0;list-style:none;counter-reset:etape;max-width:60ch}
+.etapes li{counter-increment:etape;position:relative;padding:var(--e2) 0 var(--e2) var(--e5);border-top:1px solid var(--trait)}
+.etapes li::before{
+  content:counter(etape,decimal-leading-zero);position:absolute;left:0;top:var(--e2);
+  font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:var(--t-l);line-height:1.4;color:var(--laiton);
+}
 .etapes strong{color:var(--craie);font-weight:500}
 
 .bouton{
@@ -198,12 +375,12 @@ img,video{max-width:100%;display:block}
   padding:var(--e2) var(--e4);min-height:48px;   /* horizontal = 2 × vertical */
   border:1px solid var(--craie-3);border-radius:2px;
   color:var(--craie);text-decoration:none;font-weight:500;font-size:var(--t-m);
-  background:rgba(20,19,15,.35);
-  transition:border-color .25s,color .25s,background-color .25s;
+  background:rgba(var(--nuit-rgb),.35);
+  transition:border-color .18s,color .18s,background-color .18s;
 }
 .bouton:hover{border-color:var(--laiton);color:var(--laiton)}
 .bouton-fort{background:var(--laiton);border-color:var(--laiton);color:var(--nuit)}
-.bouton-fort:hover{background:rgba(20,19,15,.35);color:var(--laiton)}
+.bouton-fort:hover{background:rgba(var(--nuit-rgb),.35);color:var(--laiton)}
 
 .joindre{display:flex;flex-wrap:wrap;gap:var(--e2);margin-bottom:var(--e3)}
 .fine{font-size:var(--t-s);color:var(--craie-3);margin:0}
@@ -217,17 +394,46 @@ img,video{max-width:100%;display:block}
 .retour a{color:var(--laiton);display:inline-flex;align-items:center;min-height:24px}
 
 /* --- Apparitions --------------------------------------------------------- */
-.mot{display:inline-block;overflow:hidden;vertical-align:top}
-.mot i{display:inline-block;font-style:inherit;transform:translateY(105%);transition:transform .9s var(--lent)}
+.mot{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em;margin-bottom:-.08em}
+.mot i{display:inline-block;font-style:inherit;transform:translateY(105%);transition:transform .9s var(--sortie)}
 .vu .mot i{transform:none}
-[data-monte]{opacity:0;transform:translateY(20px);transition:opacity .8s var(--lent),transform .8s var(--lent)}
+[data-monte]{opacity:0;transform:translateY(16px);transition:opacity .7s var(--sortie),transform .7s var(--sortie)}
 [data-monte].vu{opacity:1;transform:none}
+
+/* --- Petits écrans ------------------------------------------------------- */
+@media (max-width:900px){
+  :root{--scene:var(--large)}
+  .couverture-scene{grid-template-columns:1fr;padding:var(--e7) var(--e3) var(--e8);row-gap:var(--e4)}
+  .couverture-in,.fiche{grid-column:auto;justify-self:stretch;min-width:0}
+  .fiche{padding:0 var(--e2)}
+  .fiche-l{grid-template-columns:96px 1fr;align-items:baseline;gap:var(--e2);padding:var(--e1) 0}
+  .fiche-l b{font-size:var(--t-xl)}
+
+  .halte{min-height:auto;padding:var(--e7) var(--e2)}
+  .halte-scene{grid-template-columns:1fr;column-gap:0;row-gap:var(--e3)}
+  .halte-tete,.halte-carte,.etiquette,
+  .halte-droite .halte-tete,.halte-droite .halte-carte,.halte-droite .etiquette,
+  .halte-fin .halte-tete,.halte-fin .halte-carte,.halte-fin .etiquette{grid-column:auto;grid-row:auto}
+  .halte-carte{margin-top:calc(-1*var(--e3));padding:var(--e6) var(--e3) var(--e4)}
+  .carte-onglet{right:var(--e3)}
+  .etiquette,.halte-droite .etiquette,.halte-fin .etiquette{justify-self:start;margin-top:0;max-width:none;width:100%}
+  .etiquette::before,.halte-droite .etiquette::before{display:none}
+  .fantome{font-size:clamp(7rem,40vw,11rem);top:-.5em;right:-.1em}
+  .halte-fin .halte-tete,.halte-fin .halte-carte{text-align:left}
+  .halte-fin .titre-2,.halte-fin .texte{margin-left:0}
+  .halte-fin .joindre{justify-content:flex-start}
+  .derive{top:28svh}
+  .titre{max-width:none}
+  .sur::after{display:none}
+}
 
 /* --- Mouvement réduit ---------------------------------------------------- */
 @media (prefers-reduced-motion:reduce){
   .mot i,[data-monte]{transition:none;transform:none;opacity:1}
-  .fleche i{animation:none}
+  .defile i::after{animation:none}
+  .lueur{animation:none}
+  .fil-nom{transition:none}
   .avance{height:60svh}
   .halte{min-height:auto;padding:var(--e6) var(--e3)}
-  .voile{opacity:.8}
+  .voile-bas{opacity:.8}
 }

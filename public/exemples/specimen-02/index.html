@@ -7,24 +7,29 @@
 <!-- Entreprise fictive : hors de l'index de Google pour ne pas brouiller le
      référencement réel de propulsite.ca. -->
 <meta name="robots" content="noindex,nofollow">
-<meta name="description" content="Site de démonstration réalisé par Propulsite : une maison qu'on traverse au défilement, pour illustrer une présence web haut de gamme en construction résidentielle.">
+<meta name="description" content="Site de démonstration réalisé par Propulsite : une maison qu'on traverse au défilement, pour illustrer une présence web haut de gamme pour un constructeur.">
 <meta name="theme-color" content="#14130F">
 <link rel="preload" as="font" type="font/woff2" href="polices/Geist-wght-500.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="polices/Instrument-Serif-ital-wght-1-400.woff2" crossorigin>
 <link rel="preload" as="image" href="video/affiche.jpg">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<!-- UNE seule vidéo, fixe derrière tout le site : la traversée du manoir en
-     caméra subjective. Elle ne redémarre jamais et n'est jamais remplacée :
-     le défilement la fait avancer, ou la tient en arrêt pendant qu'on lit. -->
+<!-- ÉTAGE 0 — UNE seule vidéo, fixe derrière tout le site : la traversée du
+     manoir en caméra subjective. Le défilement la fait avancer, ou la tient
+     en arrêt pendant qu'on lit. Par-dessus, trois voiles indépendants
+     (bas, gauche, droite) : on n'assombrit que le côté où le texte se pose,
+     la pièce reste claire de l'autre côté. -->
 <div class="fond" aria-hidden="true">
   <video id="traversee"
          data-bureau="video/traversee.mp4"
          data-mobile="video/traversee-mobile.mp4"
          poster="video/affiche.jpg"
          muted playsinline preload="auto"></video>
-  <div class="voile" id="voile"></div>
+  <div class="voile voile-bas" id="voile-bas"></div>
+  <div class="voile voile-gauche" id="voile-gauche"></div>
+  <div class="voile voile-droite" id="voile-droite"></div>
+  <div class="lueur"></div>
   <div class="grain"></div>
 </div>
 
@@ -38,6 +43,7 @@
 
 <a class="saut" href="#contenu">Aller au contenu</a>
 
+<!-- ÉTAGE 3 — l'interface fixe : en-tête, fil du parcours, plan -->
 <header class="hdr">
   <a class="hdr-marque" href="#haut">SPÉCIMEN 02</a>
   <nav class="hdr-nav" aria-label="Navigation principale">
@@ -48,113 +54,217 @@
   </nav>
 </header>
 
-<div class="jauge" aria-hidden="true">
-  <div class="jauge-piece"><span id="jauge-nom">L'entrée</span></div>
-  <div class="jauge-rail"><i id="jauge-barre"></i></div>
-</div>
+<!-- Le fil : où on en est dans la maison. Les cinq arrêts, le trait qui se
+     remplit à mesure. -->
+<nav class="fil" aria-label="Étapes de la visite">
+  <div class="fil-rail"><i id="fil-barre"></i></div>
+  <ol class="fil-arrets" id="fil-arrets">
+    <li><a href="#haut" data-piece="L'entrée"><span class="fil-n">00</span><span class="fil-nom">L'entrée</span></a></li>
+    <li><a href="#hall" data-piece="Le hall"><span class="fil-n">01</span><span class="fil-nom">Le hall</span></a></li>
+    <li><a href="#salon" data-piece="Le salon"><span class="fil-n">02</span><span class="fil-nom">Le salon</span></a></li>
+    <li><a href="#cuisine" data-piece="La cuisine"><span class="fil-n">03</span><span class="fil-nom">La cuisine</span></a></li>
+    <li><a href="#contact" data-piece="Nous joindre"><span class="fil-n">04</span><span class="fil-nom">Nous joindre</span></a></li>
+  </ol>
+</nav>
+
+<!-- Le plan : la maison vue de haut, le point c'est vous. Il suit la caméra
+     de la vidéo, image par image (voir app.js, STATIONS). -->
+<aside class="plan" aria-hidden="true">
+  <svg viewBox="-14 -9 28 46" id="plan-svg">
+    <!-- Terrain : l'allée, le rond-point, la fontaine -->
+    <line class="plan-allee" x1="0" y1="37" x2="0" y2="33"/>
+    <circle class="plan-allee" cx="0" cy="25" r="8"/>
+    <circle class="plan-fontaine" cx="0" cy="25" r="2"/>
+    <rect class="plan-allee" x="-3.6" y="11" width="7.2" height="2.5"/>
+    <!-- Le portique et la porte -->
+    <rect class="plan-mur plan-fin" x="-2.3" y="8.2" width="4.6" height="1.7"/>
+    <!-- La maison : murs extérieurs, la porte est l'ouverture en bas -->
+    <path class="plan-mur" d="M-1.15 7 H-12 V-7 H12 V7 H1.15"/>
+    <!-- Cloison hall / salon, avec son ouverture -->
+    <path class="plan-mur" d="M-3.6 7 V5.9 M-3.6 3.3 V-1.6"/>
+    <!-- La mezzanine au-dessus du hall, l'îlot de la cuisine -->
+    <path class="plan-mur plan-fin" d="M-3.6 -1.6 H4.5 M4.5 -1.6 V7"/>
+    <rect class="plan-mur plan-fin" x="6" y="-3.9" width="3.4" height="1.1"/>
+    <!-- Le chemin parcouru, tracé à mesure qu'on avance -->
+    <polyline class="plan-trace" id="plan-trace" points=""/>
+    <!-- Vous : le point et ce que vous regardez -->
+    <g id="plan-vous">
+      <path class="plan-cone" d="M0 0 L5 -2.6 A5.6 5.6 0 0 1 5 2.6 Z"/>
+      <circle class="plan-point" r=".7"/>
+    </g>
+  </svg>
+  <div class="plan-legende"><span id="plan-piece">L'entrée</span><span id="plan-temps">0,0 s</span></div>
+</aside>
 
 <main id="contenu">
-
-  <!-- COUVERTURE — l'entrée de la maison, depuis l'allée -->
   <!-- Instants de la vidéo, mesurés par tools/traversee.py :
        hall 20,15 s · salon 24,88 s · cuisine 37,96 s · table 40 s -->
-  <section class="couverture" id="haut" data-piece="L'entrée" data-halte="0" data-voile="0.30">
-    <div class="couverture-in">
-      <p class="sur">Constructeur — Saint-Jérôme et Laurentides</p>
-      <h1 class="titre" data-mots>On ne visite pas un plan. On visite une maison.</h1>
-      <p class="chapo">Descendez. Vous allez y entrer.</p>
-      <div class="fleche"><i></i></div>
+
+  <!-- ÉTAGE 1 et 2 — le contenu. Chaque halte superpose quatre couches qui
+       ne défilent pas à la même vitesse (data-parallaxe, voir app.js) :
+       le chiffre fantôme au fond, le titre, la carte de lecture, puis
+       l'étiquette au premier plan. -->
+
+  <!-- COUVERTURE — l'entrée de la maison, depuis l'allée -->
+  <section class="couverture" id="haut" data-piece="L'entrée" data-halte="0" data-voile="0.34">
+    <div class="couverture-scene">
+      <div class="couverture-in" data-parallaxe="-0.05">
+        <p class="sur"><span class="sur-n">00</span>Constructeur — Saint-Jérôme et Laurentides</p>
+        <h1 class="titre" data-mots>On ne visite pas un plan. <em>On visite une maison.</em></h1>
+        <p class="chapo">Descendez. Vous allez y entrer.</p>
+      </div>
+      <aside class="fiche" data-parallaxe="0.09" aria-label="En bref">
+        <div class="fiche-l"><b>3 400</b><span>pi² habitables, deux étages</span></div>
+        <div class="fiche-l"><b>4</b><span>chambres, dont une suite au rez-de-chaussée</span></div>
+        <div class="fiche-l"><b>10 ans</b><span>de garantie sur la structure et l'enveloppe</span></div>
+      </aside>
     </div>
+    <div class="defile" aria-hidden="true"><span>Défiler pour entrer</span><i></i></div>
   </section>
 
   <!-- De l'allée à la porte, puis dans le hall : 20 s de marche -->
-  <section class="avance" data-piece="On entre" data-avance="0,20.15" style="--marche:420svh"></section>
-
-  <section class="halte" id="hall" data-piece="Le hall" data-halte="20.15">
-    <div class="halte-in">
-      <p class="sur">Première arrivée</p>
-      <h2 class="titre-2" data-mots>La lumière entre avant vous.</h2>
-      <p class="texte">
-        Un hall réussi ne se décore pas, il se calcule. Deux étages de hauteur,
-        un escalier qui tourne au lieu de monter droit, une fenêtre placée là
-        où le soleil passe le matin : tout est décidé avant la première
-        pelletée de terre.
-      </p>
-      <ul class="liste">
-        <li><strong>Plans revus avec vous</strong> jusqu'à ce que la circulation soit évidente</li>
-        <li><strong>Orientation étudiée</strong> selon la course du soleil sur votre terrain</li>
-        <li><strong>Aucun changement facturé</strong> avant la mise en chantier</li>
-      </ul>
+  <section class="avance" data-piece="On entre" data-avance="0,20.15" style="--marche:420svh">
+    <div class="derive" data-parallaxe="-0.10" aria-hidden="true">
+      <span class="derive-mot">Entrer</span>
     </div>
   </section>
 
-  <section class="avance" data-piece="On avance" data-avance="20.15,24.88" style="--marche:110svh"></section>
+  <!-- HALTE 01 — le hall. L'escalier est à droite : le texte se pose à gauche. -->
+  <section class="halte halte-gauche" id="hall" data-piece="Le hall" data-halte="20.15" data-cote="gauche">
+    <div class="halte-scene">
+      <span class="fantome" data-parallaxe="-0.16" aria-hidden="true">01</span>
+      <div class="halte-tete" data-parallaxe="-0.04">
+        <p class="sur"><span class="sur-n">01</span>Le hall — première arrivée</p>
+        <h2 class="titre-2" data-mots>La lumière entre <em>avant vous.</em></h2>
+      </div>
+      <div class="halte-carte" data-parallaxe="0.03">
+        <span class="carte-onglet">Ce qu'on décide ici</span>
+        <p class="texte">
+          Un hall réussi ne se décore pas, il se calcule. Deux étages de hauteur,
+          un escalier qui tourne au lieu de monter droit, une fenêtre placée là
+          où le soleil passe le matin : tout est décidé avant la première
+          pelletée de terre.
+        </p>
+        <ul class="liste">
+          <li><strong>Plans revus avec vous</strong> jusqu'à ce que la circulation soit évidente</li>
+          <li><strong>Orientation étudiée</strong> selon la course du soleil sur votre terrain</li>
+          <li><strong>Aucun changement facturé</strong> avant la mise en chantier</li>
+        </ul>
+      </div>
+      <aside class="etiquette" data-parallaxe="0.12">
+        <b>2 étages</b><span>de hauteur sous plafond, du seuil à la mezzanine</span>
+      </aside>
+    </div>
+  </section>
 
-  <section class="halte" id="salon" data-piece="Le salon" data-halte="24.88">
-    <div class="halte-in">
-      <p class="sur">Deuxième arrivée</p>
-      <h2 class="titre-2" data-mots>Le silence est un matériau.</h2>
-      <p class="texte">
-        Un plafond de neuf pieds change une pièce plus qu'un meuble ne le fera
-        jamais. Membrures d'ingénierie, insonorisation entre étages, fenêtres
-        triple vitrage : trois décisions invisibles qui s'entendent tous les
-        jours.
-      </p>
-      <div class="grille">
-        <div class="carte">
-          <span class="carte-n">9 pi</span>
-          <p>Hauteur de plafond au rez-de-chaussée, de série et non en option</p>
-        </div>
-        <div class="carte">
-          <span class="carte-n">R-31</span>
-          <p>Valeur isolante des murs hors sol, au-dessus du code en vigueur</p>
-        </div>
-        <div class="carte">
-          <span class="carte-n">3</span>
-          <p>Vitrages par fenêtre, avec argon et intercalaire chaud</p>
+  <section class="avance" data-piece="On avance" data-avance="20.15,24.88" style="--marche:110svh">
+    <div class="derive" data-parallaxe="-0.10" aria-hidden="true">
+      <span class="derive-mot">Tourner</span>
+    </div>
+  </section>
+
+  <!-- HALTE 02 — le salon. Le foyer est à droite : le texte reste à gauche. -->
+  <section class="halte halte-gauche" id="salon" data-piece="Le salon" data-halte="24.88" data-cote="gauche">
+    <div class="halte-scene">
+      <span class="fantome" data-parallaxe="-0.16" aria-hidden="true">02</span>
+      <div class="halte-tete" data-parallaxe="-0.04">
+        <p class="sur"><span class="sur-n">02</span>Le salon — deuxième arrivée</p>
+        <h2 class="titre-2" data-mots>Le silence est <em>un matériau.</em></h2>
+      </div>
+      <div class="halte-carte" data-parallaxe="0.03">
+        <span class="carte-onglet">Ce qui ne se voit pas</span>
+        <p class="texte">
+          Un plafond de neuf pieds change une pièce plus qu'un meuble ne le fera
+          jamais. Membrures d'ingénierie, insonorisation entre étages, fenêtres
+          triple vitrage : trois décisions invisibles qui s'entendent tous les
+          jours.
+        </p>
+        <div class="grille">
+          <div class="carte">
+            <span class="carte-n">9 pi</span>
+            <p>Plafond au rez-de-chaussée, de série et non en option</p>
+          </div>
+          <div class="carte">
+            <span class="carte-n">R-31</span>
+            <p>Murs hors sol, au-dessus du code en vigueur</p>
+          </div>
+          <div class="carte">
+            <span class="carte-n">3</span>
+            <p>Vitrages par fenêtre, avec argon et intercalaire chaud</p>
+          </div>
         </div>
       </div>
+      <aside class="etiquette" data-parallaxe="0.12">
+        <b>−38 dB</b><span>entre les étages, mesuré porte fermée</span>
+      </aside>
     </div>
   </section>
 
-  <section class="avance" data-piece="On continue" data-avance="24.88,37.96" style="--marche:280svh"></section>
-
-  <section class="halte" id="cuisine" data-piece="La cuisine" data-halte="37.96">
-    <div class="halte-in">
-      <p class="sur">Troisième arrivée</p>
-      <h2 class="titre-2" data-mots>Ici, on répond de tout.</h2>
-      <p class="texte">
-        La cuisine est la pièce où les compromis se voient. C'est pourquoi
-        l'ébénisterie, la plomberie et l'électricité restent chez nous : un
-        seul interlocuteur, un seul responsable, une seule garantie.
-      </p>
-      <ol class="etapes">
-        <li><strong>Rencontre sur votre terrain</strong> — on regarde le sol, la pente, les arbres</li>
-        <li><strong>Plans et prix fermes</strong> — le montant signé est le montant final</li>
-        <li><strong>Un chargé de projet</strong> — la même personne du premier jour aux clés</li>
-        <li><strong>Garantie 10 ans</strong> — structure et enveloppe</li>
-      </ol>
+  <section class="avance" data-piece="On continue" data-avance="24.88,37.96" style="--marche:280svh">
+    <div class="derive" data-parallaxe="-0.10" aria-hidden="true">
+      <span class="derive-mot">Traverser</span>
     </div>
   </section>
 
-  <section class="avance" data-piece="On s'assoit" data-avance="37.96,40" style="--marche:70svh"></section>
-
-  <section class="halte halte-fin" id="contact" data-piece="Nous joindre" data-halte="40" data-voile="0.70">
-    <div class="halte-in">
-      <p class="sur">Prochaine étape</p>
-      <h2 class="titre-2" data-mots>Venez voir une maison finie.</h2>
-      <p class="texte">
-        Nos maisons modèles se visitent sur rendez-vous, du lundi au samedi.
-        Comptez une heure : on répond à tout, plans et prix en main.
-      </p>
-      <div class="joindre">
-        <a class="bouton bouton-fort" href="tel:+15550000000">555&nbsp;000-0000</a>
-        <a class="bouton" href="mailto:bonjour@specimen.exemple">bonjour@specimen.exemple</a>
+  <!-- HALTE 03 — la cuisine. L'îlot et les armoires sont à gauche : le texte passe à droite. -->
+  <section class="halte halte-droite" id="cuisine" data-piece="La cuisine" data-halte="37.96" data-cote="droite">
+    <div class="halte-scene">
+      <span class="fantome" data-parallaxe="-0.16" aria-hidden="true">03</span>
+      <div class="halte-tete" data-parallaxe="-0.04">
+        <p class="sur"><span class="sur-n">03</span>La cuisine — troisième arrivée</p>
+        <h2 class="titre-2" data-mots>Ici, on répond <em>de tout.</em></h2>
       </div>
-      <p class="fine">Licence RBQ 0000-0000-00 · Saint-Jérôme, Québec</p>
+      <div class="halte-carte" data-parallaxe="0.03">
+        <span class="carte-onglet">Comment ça se passe</span>
+        <p class="texte">
+          La cuisine est la pièce où les compromis se voient. C'est pourquoi
+          l'ébénisterie, la plomberie et l'électricité restent chez nous : un
+          seul interlocuteur, un seul responsable, une seule garantie.
+        </p>
+        <ol class="etapes">
+          <li><strong>Rencontre sur votre terrain</strong> — on regarde le sol, la pente, les arbres</li>
+          <li><strong>Plans et prix fermes</strong> — le montant signé est le montant final</li>
+          <li><strong>Un chargé de projet</strong> — la même personne du premier jour aux clés</li>
+          <li><strong>Garantie 10 ans</strong> — structure et enveloppe</li>
+        </ol>
+      </div>
+      <aside class="etiquette" data-parallaxe="0.12">
+        <b>1 seul</b><span>interlocuteur, du premier plan aux clés</span>
+      </aside>
     </div>
   </section>
 
+  <section class="avance" data-piece="On s'assoit" data-avance="37.96,40" style="--marche:70svh">
+    <div class="derive" data-parallaxe="-0.10" aria-hidden="true">
+      <span class="derive-mot">S'asseoir</span>
+    </div>
+  </section>
+
+  <!-- HALTE 04 — la table. La lecture se fait au centre. -->
+  <section class="halte halte-fin" id="contact" data-piece="Nous joindre" data-halte="40" data-voile="0.74">
+    <div class="halte-scene">
+      <span class="fantome" data-parallaxe="-0.16" aria-hidden="true">04</span>
+      <div class="halte-tete" data-parallaxe="-0.04">
+        <p class="sur"><span class="sur-n">04</span>Prochaine étape</p>
+        <h2 class="titre-2" data-mots>Venez voir <em>une maison finie.</em></h2>
+      </div>
+      <div class="halte-carte" data-parallaxe="0.03">
+        <span class="carte-onglet">Sur rendez-vous</span>
+        <p class="texte">
+          Nos maisons modèles se visitent du lundi au samedi. Comptez une heure :
+          on répond à tout, plans et prix en main.
+        </p>
+        <div class="joindre">
+          <a class="bouton bouton-fort" href="tel:+15550000000">555&nbsp;000-0000</a>
+          <a class="bouton" href="mailto:bonjour@specimen.exemple">bonjour@specimen.exemple</a>
+        </div>
+        <p class="fine">Licence RBQ 0000-0000-00 · Saint-Jérôme, Québec</p>
+      </div>
+      <aside class="etiquette" data-parallaxe="0.12">
+        <b>Lun.–sam.</b><span>9 h à 17 h, maison modèle de Saint-Jérôme</span>
+      </aside>
+    </div>
+  </section>
 </main>
 
 <footer class="pied">
