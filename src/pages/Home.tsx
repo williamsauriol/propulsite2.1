@@ -74,17 +74,13 @@ export default function Home() {
               Voyez ce qu'on peut <span className="text-accent-blue">bâtir</span> pour vous
             </h2>
             <p className="text-white/60 max-w-2xl mx-auto">
-              Plutôt que de vous le décrire, on vous le montre. Voici un site complet conçu pour un entrepreneur en rénovation.
+              Plutôt que de vous le décrire, on vous le montre. Deux sites complets, conçus pour des entreprises de construction.
             </p>
           </motion.div>
 
-          {/* Spécimen 02 existe sous public/exemples/specimen-02/ mais n'est
-              volontairement pas mis en vitrine : William ne veut pas encore
-              le montrer. Pour le remettre, rajouter une carte identique
-              pointant vers /exemples/specimen-02/. */}
-          {/* La carte s'incline vers le curseur et une lueur la balaie. Le
-              relief vit dans son enveloppe, pas ici : la mise en page, les
-              classes et le contenu de la carte n'ont pas bougé. */}
+          {/* Les cartes s'inclinent vers le curseur et une lueur les balaie. Le
+              relief vit dans leur enveloppe, pas ici. */}
+          <div className="grid md:grid-cols-2 gap-6">
           <motion.div
             initial={{ y: 28 }}
             whileInView={{ y: 0 }}
@@ -104,13 +100,13 @@ export default function Home() {
               loading="lazy"
               width={1920}
               height={1080}
-              className="w-full h-[280px] md:h-[420px] object-cover opacity-55 group-hover:opacity-70 group-hover:scale-[1.03] transition-all duration-700"
+              className="w-full h-[280px] md:h-[360px] object-cover opacity-55 group-hover:opacity-70 group-hover:scale-[1.03] transition-all duration-700"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#050a15] via-[#050a15]/55 to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 p-6 md:p-10 flex flex-wrap items-end justify-between gap-5">
+            <div className="absolute inset-x-0 bottom-0 p-6 md:p-8 flex flex-wrap items-end justify-between gap-5">
               <div>
                 <p className="text-[0.7rem] font-bold tracking-[0.2em] uppercase text-accent-blue mb-2">Rénovation haut de gamme</p>
-                <h3 className="text-2xl md:text-4xl font-black text-white leading-tight">Spécimen 01</h3>
+                <h3 className="text-2xl md:text-3xl font-black text-white leading-tight">Spécimen 01</h3>
                 <p className="text-white/55 text-sm mt-2 max-w-md">Site vitrine, animations sur mesure, optimisé pour le mobile et pour Google.</p>
               </div>
               <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white border border-white/25 rounded-full px-5 py-3 group-hover:bg-accent-blue group-hover:text-[#050a15] group-hover:border-accent-blue transition-all">
@@ -120,6 +116,42 @@ export default function Home() {
           </a>
           </CarteRelief>
           </motion.div>
+          <motion.div
+            initial={{ y: 28 }}
+            whileInView={{ y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+          <CarteRelief classeObjet="rounded-2xl">
+          <a
+            href="/exemples/specimen-02/"
+            target="_blank"
+            rel="noopener"
+            className="group block relative overflow-hidden rounded-2xl border border-white/10 bg-[#0a1628] hover:border-accent-blue/60 transition-colors"
+          >
+            <img
+              src="/exemples/specimen-02/video/affiche.jpg"
+              alt="Aperçu du site Spécimen 02, réalisé par Propulsite"
+              loading="lazy"
+              width={1920}
+              height={1080}
+              className="w-full h-[280px] md:h-[360px] object-cover opacity-55 group-hover:opacity-70 group-hover:scale-[1.03] transition-all duration-700"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050a15] via-[#050a15]/55 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 p-6 md:p-8 flex flex-wrap items-end justify-between gap-5">
+              <div>
+                <p className="text-[0.7rem] font-bold tracking-[0.2em] uppercase text-accent-blue mb-2">Constructeur de maisons neuves</p>
+                <h3 className="text-2xl md:text-3xl font-black text-white leading-tight">Spécimen 02</h3>
+                <p className="text-white/55 text-sm mt-2 max-w-md">Une maison modélisée en 3D qu'on traverse au défilement, avec un plan qui suit la visite.</p>
+              </div>
+              <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white border border-white/25 rounded-full px-5 py-3 group-hover:bg-accent-blue group-hover:text-[#050a15] group-hover:border-accent-blue transition-all">
+                Visiter le site <ArrowRight className="w-4 h-4" />
+              </span>
+            </div>
+          </a>
+          </CarteRelief>
+          </motion.div>
+          </div>
         </div>
       </section>
 
