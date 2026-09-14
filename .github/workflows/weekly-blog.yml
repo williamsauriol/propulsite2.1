@@ -1,10 +1,10 @@
 name: Weekly Blog Auto-Publisher
 
+# Publication automatique coupée le 15 septembre 2026 : les envois du lundi
+# ne servaient qu'à produire des notifications. Le déclenchement manuel reste
+# possible depuis l'onglet Actions de GitHub.
 on:
-  schedule:
-    # Every Monday at 9:00 AM Eastern (13:00 UTC)
-    - cron: '0 13 * * 1'
-  workflow_dispatch: # Allow manual trigger from GitHub UI
+  workflow_dispatch:
 
 jobs:
   generate-and-publish:
