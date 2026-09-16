@@ -154,5 +154,81 @@
     "fond": "5/5 — Pexels « concrete wall » — Alex Quezada",
     "publieLe": "2026-09-10T00:09:18.464Z",
     "urlInstagram": "https://www.instagram.com/p/DdFg7OUDk5R/"
+  },
+  {
+    "slug": "recherches-locales-ia-construction",
+    "angle": "Recherches locales échappent encore à l'IA",
+    "diapos": [
+      {
+        "titre": "L'IA ne remplace pas tout.",
+        "lignes": [],
+        "alt": "Diapo 1 sur 5 : titre blanc centré « L'IA ne remplace pas tout. » sur fond sombre texturé, typographie grande et grasse aux couleurs de Propulsite."
+      },
+      {
+        "titre": "Ton client cherche local.",
+        "lignes": [
+          "Il tape « couvreur Laval » ou « entrepreneur",
+          "Rive-Nord ». Il veut quelqu'un proche,",
+          "pas une réponse générique de robot."
+        ],
+        "alt": "Diapo 2 sur 5 : titre et trois lignes de texte blanc sur fond sombre, mise en page épurée aux couleurs de Propulsite."
+      },
+      {
+        "titre": "7 % — retiens ce chiffre.",
+        "lignes": [
+          "Seulement 7 % des recherches locales",
+          "affichent une réponse IA. (Search Engine Land, 2026)",
+          "Les 93 % restants : Google classique."
+        ],
+        "alt": "Diapo 3 sur 5 : chiffre « 7 % » en très gros plan blanc centré, suivi de deux lignes explicatives plus petites, fond sombre texturé aux couleurs de Propulsite."
+      },
+      {
+        "titre": "Mise sur les deux tableaux.",
+        "lignes": [
+          "Fiche Google complète. Avis récents.",
+          "Site mobile qui répond vite.",
+          "Comme ça, t'es là peu importe comment il cherche."
+        ],
+        "alt": "Diapo 4 sur 5 : titre suivi de trois lignes de texte blanc structurées en liste simple, fond sombre aux couleurs de Propulsite."
+      },
+      {
+        "titre": "On regarde ça ensemble ?",
+        "lignes": [
+          "Dis-moi où t'en es sur Google.",
+          "C'est gratuit, sans obligation.",
+          "Écris-moi ou visite propulsite.ca"
+        ],
+        "alt": "Diapo 5 sur 5 : titre d'invitation et trois courtes lignes blanches centrées sur fond sombre, mise en page simple aux couleurs de Propulsite."
+      }
+    ],
+    "photo": "concrete wall",
+    "legende": "Entrepreneur en construction au Québec : Google local est encore ton meilleur ami en 2026. Selon Search Engine Land, seulement 7 % des recherches locales affichent une réponse générée par l'IA — le reste passe encore par les résultats classiques. Fiche Google à jour, avis récents, site mobile rapide : c'est ce qui fait la différence quand ton client cherche quelqu'un près de chez lui. Écris-moi en privé ou passe sur propulsite.ca — on jette un œil ensemble, sans frais.",
+    "hashtags": [
+      "#construction",
+      "#entrepreneurquebec",
+      "#renovationquebec",
+      "#marketingconstruction",
+      "#referencementlocal",
+      "#ficheGoogle",
+      "#sitewebquebec",
+      "#rivenord",
+      "#laval",
+      "#sainteustache",
+      "#blainville",
+      "#terrebonne",
+      "#mirabel",
+      "#entrepreneurgeneral",
+      "#visibiliteweb"
+    ],
+    "date": "2026-09-16",
+    "images": [
+      "2026-09-16-recherches-locales-ia-construction-1.png",
+      "2026-09-16-recherches-locales-ia-construction-2.png",
+      "2026-09-16-recherches-locales-ia-construction-3.png",
+      "2026-09-16-recherches-locales-ia-construction-4.png",
+      "2026-09-16-recherches-locales-ia-construction-5.png"
+    ],
+    "publie": false,
+    "fond": "5/5 — Pexels « concrete wall » — Alex Quezada"
   }
 ]
