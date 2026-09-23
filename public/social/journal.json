@@ -232,5 +232,80 @@
     "fond": "5/5 — Pexels « concrete wall » — Alex Quezada",
     "publieLe": "2026-09-16T17:30:09.018Z",
     "urlInstagram": "https://www.instagram.com/p/DdW0z6LDLGA/"
+  },
+  {
+    "slug": "fiche-google-ou-site-web",
+    "angle": "fiche Google avant site web",
+    "diapos": [
+      {
+        "titre": "Par où commencer : fiche ou site ?",
+        "lignes": [],
+        "alt": "Diapo 1 sur 5 : titre blanc en gras sur fond sombre, texte centré — « Par où commencer : fiche ou site ? » aux couleurs de Propulsite."
+      },
+      {
+        "titre": "T'as pas de site. Pis après ?",
+        "lignes": [
+          "Tes clients te trouvent sur Google.",
+          "S'ils voient une fiche vide ou rien pantoute,",
+          "ils appellent le suivant."
+        ],
+        "alt": "Diapo 2 sur 5 : titre en blanc, trois lignes de texte en dessous, mise en page épurée sur fond foncé aux couleurs de Propulsite."
+      },
+      {
+        "titre": "7 % — retiens ça",
+        "lignes": [
+          "Seulement 7 % des recherches locales",
+          "affichent une réponse IA. (Search Engine Land, 2026)",
+          "Les 93 % restants? Google Maps et les fiches."
+        ],
+        "alt": "Diapo 3 sur 5 : le chiffre « 7 % » en très grand, titre et deux lignes d'explication en blanc sur fond sombre texturé, couleurs de Propulsite."
+      },
+      {
+        "titre": "Commence par ta fiche Google",
+        "lignes": [
+          "Remplis-la au complet : photos, heures, services.",
+          "Ramasse des avis de clients satisfaits.",
+          "Après ça, bâtis ton site par-dessus."
+        ],
+        "alt": "Diapo 4 sur 5 : titre suivi de trois courtes lignes de conseils concrets, texte blanc centré, fond sombre aux couleurs de Propulsite."
+      },
+      {
+        "titre": "On peut t'aider à partir du bon pied",
+        "lignes": [
+          "Écris-nous. On te dit par où commencer",
+          "selon où t'en es, sans te vendre de l'air."
+        ],
+        "alt": "Diapo 5 sur 5 : invitation en deux lignes sous un titre accrocheur, texte blanc sur fond sombre, mise en page simple aux couleurs de Propulsite."
+      }
+    ],
+    "photo": "concrete wall",
+    "legende": "Fiche Google ou site web : par où commencer quand t'es entrepreneur en construction au Québec ? La réponse courte — ta fiche Google en premier. C'est là que tes clients te cherchent en ce moment, et une fiche vide ou mal remplie, ça coûte des contrats. Le site vient après, pour solidifier ce que la fiche a commencé. Visite propulsite.ca/blog/fiche-google-ou-site-web pour lire l'article complet, ou écris-nous directement — on te dit quoi faire en premier selon ta situation.",
+    "hashtags": [
+      "#construction",
+      "#constructionquebec",
+      "#renovationquebec",
+      "#entrepreneurconstruction",
+      "#ficheGoogle",
+      "#marketingconstruction",
+      "#visibiliteweb",
+      "#rivenord",
+      "#laval",
+      "#sainteustache",
+      "#blainville",
+      "#terrebonne",
+      "#quebecbusiness",
+      "#referencementlocal",
+      "#conseilsmarketing"
+    ],
+    "date": "2026-09-23",
+    "images": [
+      "2026-09-23-fiche-google-ou-site-web-1.png",
+      "2026-09-23-fiche-google-ou-site-web-2.png",
+      "2026-09-23-fiche-google-ou-site-web-3.png",
+      "2026-09-23-fiche-google-ou-site-web-4.png",
+      "2026-09-23-fiche-google-ou-site-web-5.png"
+    ],
+    "publie": false,
+    "fond": "5/5 — Pexels « concrete wall » — Mak_ jp"
   }
 ]
