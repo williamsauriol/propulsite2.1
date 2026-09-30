@@ -309,5 +309,80 @@
     "fond": "5/5 — Pexels « concrete wall » — Mak_ jp",
     "publieLe": "2026-09-23T17:44:40.146Z",
     "urlInstagram": "https://www.instagram.com/p/Ddo4CYHHeVp/"
+  },
+  {
+    "slug": "site-web-ou-fiche-google",
+    "angle": "IA cite moins que Google",
+    "diapos": [
+      {
+        "titre": "Être sur Google ne suffit plus.",
+        "lignes": [],
+        "alt": "Diapo 1 sur 5 : titre blanc centré « Être sur Google ne suffit plus. » sur fond sombre, typographie bold, aux couleurs de Propulsite."
+      },
+      {
+        "titre": "Le problème que personne voit",
+        "lignes": [
+          "Tu as une fiche Google, peut-être un site.",
+          "Mais quand quelqu'un pose une question à l'IA,",
+          "ton nom n'apparaît nulle part."
+        ],
+        "alt": "Diapo 2 sur 5 : titre et trois lignes de texte blanc centré sur fond sombre, aux couleurs de Propulsite."
+      },
+      {
+        "titre": "Moins de 20 % de recoupement",
+        "lignes": [
+          "Les sites en tête de Google et ceux",
+          "que l'IA cite, c'est deux listes différentes.",
+          "(Source : Omnibound, 2026)"
+        ],
+        "alt": "Diapo 3 sur 5 : chiffre « < 20 % » en très grand, sous-titre explicatif en blanc sur fond sombre texturé, aux couleurs de Propulsite."
+      },
+      {
+        "titre": "Ce que tu peux faire aujourd'hui",
+        "lignes": [
+          "Vérifie si ton site parle clairement de ta région,",
+          "de ton métier, de ce que tu fais exactement.",
+          "L'IA cherche des réponses précises, pas des slogans."
+        ],
+        "alt": "Diapo 4 sur 5 : titre et trois lignes de texte blanc sur fond sombre, mise en page épurée, aux couleurs de Propulsite."
+      },
+      {
+        "titre": "Tu veux savoir où tu en es ?",
+        "lignes": [
+          "Écris-nous en privé.",
+          "On regarde ton cas, sans frais, sans pression."
+        ],
+        "alt": "Diapo 5 sur 5 : titre d'invitation et deux lignes de texte blanc centré sur fond sombre, aux couleurs de Propulsite."
+      }
+    ],
+    "photo": "concrete wall",
+    "legende": "Être visible sur Google en construction au Québec, c'est bien — mais depuis 2026, l'IA de Google et ChatGPT piochent dans une liste différente. Moins de 20 % de recoupement entre le top Google et ce que l'IA recommande (Omnibound, 2026). Ton nom peut très bien sortir en première page et rester invisible pour quelqu'un qui pose une question à l'IA. On explique comment corriger ça sur propulsite.ca/blog/geo-chatgpt-construction — ou écris-nous en privé, on jette un œil à ta situation.",
+    "hashtags": [
+      "#construction",
+      "#constructionquebec",
+      "#entrepreneurquebec",
+      "#renovationquebec",
+      "#marketingconstruction",
+      "#visibiliteweb",
+      "#referencement",
+      "#intelligenceartificielle",
+      "#rivenord",
+      "#laval",
+      "#sainteustache",
+      "#blainville",
+      "#terrebonne",
+      "#propulsite",
+      "#strategieweb"
+    ],
+    "date": "2026-09-30",
+    "images": [
+      "2026-09-30-site-web-ou-fiche-google-1.png",
+      "2026-09-30-site-web-ou-fiche-google-2.png",
+      "2026-09-30-site-web-ou-fiche-google-3.png",
+      "2026-09-30-site-web-ou-fiche-google-4.png",
+      "2026-09-30-site-web-ou-fiche-google-5.png"
+    ],
+    "publie": false,
+    "fond": "5/5 — Pexels « concrete wall » — 정규송 Nui MALAMA"
   }
 ]
