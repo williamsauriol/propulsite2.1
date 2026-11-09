@@ -157,8 +157,11 @@ export const SERVICES: Service[] = [
   },
   {
     slug: 'google-ads',
-    h1: 'Publicité Google Ads pour entrepreneurs en construction',
-    metaTitle: 'Google Ads pour la construction au Québec',
+    // Search Console, 3 mois au 8 nov. 2026 : « publicité google construction
+    // québec » place cette page 10,6e, juste au bord de la page 1. Le mot
+    // « publicité » manquait au titre, et « Québec » au H1.
+    h1: 'Publicité Google Ads pour entrepreneurs en construction au Québec',
+    metaTitle: 'Publicité Google Ads pour la construction au Québec',
     metaDescription: "Publicité Google Ads pour entrepreneurs en construction au Québec. On cible les recherches de gens prêts à signer et on coupe ce qui brûle le budget.",
     title: 'Google Ads (SEM)',
     icon: <Search className="w-8 h-8" />,
@@ -188,6 +191,43 @@ export const SERVICES: Service[] = [
       {
         q: "Quelle est la différence entre Google Ads et les Local Services Ads (Google Garantie) ?",
         a: "Les deux sont de la publicité Google, mais elles fonctionnent différemment. Google Ads, c'est de la pub au clic : vous choisissez vos mots-clés, on rédige vos annonces, et vous payez chaque fois que quelqu'un clique. Les Local Services Ads (offertes dans notre service Domination Google) affichent le badge « Garanti par Google » et vous font payer seulement quand un client vous contacte — au lead, pas au clic. On vous conseille la bonne combinaison selon votre métier et votre budget."
+      }
+    ],
+    // Trois pages du site se partagent cette recherche (ce service, /blog et
+    // l'article google-ads-construction). Les piliers donnent à celle-ci le
+    // corps qui lui manquait ; l'article pointe maintenant vers elle.
+    pillars: [
+      {
+        title: 'Devant ceux qui cherchent déjà',
+        tagline: "Quelqu'un tape « couvreur Laval ». Votre annonce est là.",
+        color: '#f59e0b',
+        icon: <Search className="w-7 h-7" />,
+        paragraphs: [
+          "La **publicité Google** montre votre annonce au moment exact où un client cherche votre métier dans votre ville. Il ne fait pas défiler des photos : il a un problème et il veut un prix.",
+          "On choisit les recherches qui mènent à une soumission, comme « réparation toiture Laval » ou « agrandissement maison Mirabel ». On laisse de côté celles qui ne rapportent rien."
+        ],
+        articleSlug: 'google-ads-construction',
+        articleLabel: "Lire l'article : Google Ads en construction, est-ce rentable ?"
+      },
+      {
+        title: 'Couper ce qui brûle le budget',
+        tagline: 'Chaque clic se paie. Les mauvais aussi.',
+        color: '#00d2ff',
+        icon: <ShieldCheck className="w-7 h-7" />,
+        paragraphs: [
+          "Sans **mots-clés négatifs**, vous payez pour « emploi couvreur », « toiture soi-même » ou « cours de plomberie ». Ces gens ne vous engageront jamais.",
+          "On bloque ces recherches dès le départ. On limite les annonces à **votre territoire de service** et aux heures où vous pouvez répondre."
+        ]
+      },
+      {
+        title: 'Savoir ce que chaque dollar rapporte',
+        tagline: 'Pas de rapport flou. Des appels et des demandes, comptés.',
+        color: '#10b981',
+        icon: <Zap className="w-7 h-7" />,
+        paragraphs: [
+          "On suit **chaque appel** et **chaque demande de soumission** qui vient d'une annonce. Vous voyez ce que coûte un vrai client potentiel, pas seulement des clics.",
+          "On commence avec un **budget de test**. On garde ce qui amène des demandes et on arrête le reste. Vous gardez le contrôle du budget en tout temps."
+        ]
       }
     ]
   },
