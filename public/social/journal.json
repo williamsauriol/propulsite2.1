@@ -250,7 +250,7 @@
       "portee": 16,
       "sauvegardes": 0,
       "partages": 0,
-      "vues": 49
+      "vues": 50
     }
   },
   {
@@ -334,10 +334,10 @@
       "quand": "2026-11-18",
       "likes": 3,
       "commentaires": 0,
-      "portee": 13,
+      "portee": 14,
       "sauvegardes": 0,
       "partages": 0,
-      "vues": 32
+      "vues": 35
     }
   },
   {
@@ -421,10 +421,10 @@
       "quand": "2026-11-18",
       "likes": 3,
       "commentaires": 0,
-      "portee": 16,
+      "portee": 17,
       "sauvegardes": 0,
       "partages": 0,
-      "vues": 49
+      "vues": 53
     }
   },
   {
@@ -496,12 +496,12 @@
     "publieFacebookLe": "2026-11-18T13:18:45.155Z",
     "mesures": {
       "quand": "2026-11-18",
-      "likes": 0,
+      "likes": 1,
       "commentaires": 0,
-      "portee": 0,
+      "portee": 11,
       "sauvegardes": 0,
       "partages": 0,
-      "vues": 0
+      "vues": 38
     }
   }
 ]
