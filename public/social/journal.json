@@ -386,5 +386,68 @@
     "fond": "5/5 — Pexels « concrete wall » — 정규송 Nui MALAMA",
     "publieLe": "2026-09-30T18:18:36.520Z",
     "urlInstagram": "https://www.instagram.com/p/Dd69fNemFxL/"
+  },
+  {
+    "slug": "repondre-vite-soumissions",
+    "angle": "répondre plus vite aux soumissions",
+    "diapos": [
+      {
+        "titre": "Le client a déjà appelé un autre. 3 gestes.",
+        "lignes": [],
+        "alt": "Diapo d'ouverture : un titre seul qui nomme le problème de la réponse arrivée trop tard et promet trois gestes."
+      },
+      {
+        "titre": "Prépare un message de réponse type",
+        "lignes": [
+          "Un petit texte prêt dans tes notes. Tu copies, tu envoies.",
+          "Merci, je regarde ça, je te reviens aujourd'hui."
+        ],
+        "alt": "Diapo de geste : un grand chiffre un, le titre du geste et deux courtes lignes d'explication."
+      },
+      {
+        "titre": "Fixe-toi une heure pour rappeler",
+        "lignes": [
+          "Un client sans nouvelles appelle le prochain sur sa liste.",
+          "Pause du midi ou fin de journée : bloque 15 minutes."
+        ],
+        "alt": "Diapo de geste : un grand chiffre deux, le titre du geste et deux courtes lignes d'explication."
+      },
+      {
+        "titre": "Réponds même si t'es complet",
+        "lignes": [
+          "Dis-lui quand tu peux commencer. Il saura à quoi s'attendre.",
+          "Un refus poli, il s'en souvient. Le silence aussi."
+        ],
+        "alt": "Diapo de geste : un grand chiffre trois, le titre du geste et deux courtes lignes d'explication."
+      },
+      {
+        "titre": "La liste à garder",
+        "lignes": [
+          "Prépare un message de réponse type",
+          "Fixe-toi une heure pour rappeler",
+          "Réponds même si t'es complet"
+        ],
+        "alt": "Diapo de résumé : un titre court suivi de trois lignes, chacune précédée d'une case à cocher."
+      }
+    ],
+    "photo": "steel beams",
+    "legende": "Soumission en retard en construction : trois gestes gratuits pour répondre plus vite aux clients. Quand tu es sur un toit, le message reste là, et le client appelle le prochain. Prépare un texte, bloque un moment pour rappeler, et réponds même quand t'es complet. Ça prend quinze minutes à mettre en place ce soir. À quelle heure de la journée rappelles-tu tes clients?",
+    "hashtags": [
+      "#entrepreneurconstruction",
+      "#quebec",
+      "#soumission"
+    ],
+    "date": "2026-11-18",
+    "format": "liste",
+    "images": [
+      "2026-11-18-repondre-vite-soumissions-1.png",
+      "2026-11-18-repondre-vite-soumissions-2.png",
+      "2026-11-18-repondre-vite-soumissions-3.png",
+      "2026-11-18-repondre-vite-soumissions-4.png",
+      "2026-11-18-repondre-vite-soumissions-5.png"
+    ],
+    "publie": false,
+    "fond": "5/5 — Pexels « steel beams » — Noland Live",
+    "jugement": "candidat 2 sur 3 (22/25) — Le titre « Le client a déjà appelé un autre » me pique parce que ça m'arrive pour vrai, et les trois gestes se font ce soir avec mon cell sans rien payer."
   }
 ]

@@ -37,7 +37,8 @@ jobs:
 
       # Trois cles, dans l'ordre d'importance.
       #
-      # ANTHROPIC_API_KEY ecrit le carrousel. Sans elle, rien ne part.
+      # ANTHROPIC_API_KEY ecrit trois brouillons et choisit le meilleur (environ
+      #   10 cents par semaine). Sans elle, ou sans credit, rien ne part.
       # PEXELS_API_KEY trouve de VRAIES photos de fond. Gratuite, et prioritaire
       #   sur l'image generee : le fil d'un entrepreneur est fait de photos.
       # GEMINI_API_KEY peint une matiere quand aucune vraie photo n'est
@@ -83,8 +84,31 @@ jobs:
           IG_LOCATION_ID: ${{ secrets.IG_LOCATION_ID }}
         run: npx tsx scripts/social-publier.ts
 
+      # Le meme carrousel sur la Page Facebook. Jamais bloquant : tant que le
+      # jeton n'a pas pages_manage_posts, le script le dit et on continue.
+      # `!cancelled()` : il tourne meme si Instagram a echoue.
+      - name: Publier sur Facebook
+        if: ${{ !cancelled() && github.event.inputs.publier != 'non' }}
+        continue-on-error: true
+        env:
+          META_TOKEN: ${{ secrets.META_TOKEN }}
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+        run: npx tsx scripts/social-facebook.ts
+
+      # Ce que les publications ont donne : mentions j'aime, envois, sauvegardes.
+      # Le generateur relit ces chiffres la semaine suivante. Jamais bloquant :
+      # si Meta refuse la mesure, la publication reste faite et le journal part.
+      - name: Mesurer les publications
+        if: ${{ !cancelled() && github.event.inputs.publier != 'non' }}
+        continue-on-error: true
+        env:
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          META_TOKEN: ${{ secrets.META_TOKEN }}
+        run: npx tsx scripts/social-mesurer.ts
+
+      # `!cancelled()` : on garde la trace de Facebook meme si Instagram a echoue.
       - name: Enregistrer la publication au journal
-        if: ${{ github.event.inputs.publier != 'non' }}
+        if: ${{ !cancelled() && github.event.inputs.publier != 'non' }}
         run: |
           if [ -z "$(git status --porcelain public/social/journal.json)" ]; then
             echo "Journal inchange."

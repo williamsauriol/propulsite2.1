@@ -111,7 +111,7 @@ pointe désormais sur elle plutôt que sur le profil personnel.
 Dans `developers.facebook.com` : créer une app de type **Business**, y ajouter
 le produit **Instagram** — en choisissant bien la **connexion Facebook**, pas
 la connexion Instagram, dont le jeton meurt tous les 60 jours — puis générer un
-jeton avec ces cinq permissions :
+jeton avec ces sept permissions :
 
 ```
 instagram_basic
@@ -119,7 +119,15 @@ instagram_content_publish
 pages_show_list
 pages_read_engagement
 business_management
+pages_manage_posts
+instagram_manage_insights
 ```
+
+Les deux dernières sont arrivées le 17 novembre 2026. `pages_manage_posts`
+publie le même carrousel sur la Page Facebook (`scripts/social-facebook.ts`) ;
+`instagram_manage_insights` lit les envois et les sauvegardes
+(`scripts/social-mesurer.ts`). Sans elles, Instagram publie quand même : les
+deux scripts le disent et passent.
 
 **La cinquième est celle qu'on oublie.** Sans `business_management`, `/me/accounts`
 répond une liste vide et rien ne laisse deviner pourquoi : les quatre autres

@@ -75,6 +75,8 @@ interface Entree {
   date: string; images: string[]; publie: boolean;
   fond?: string;
   publieLe?: string; urlInstagram?: string;
+  /** Le numero du media chez Meta : social-mesurer.ts s'en sert pour lire les chiffres. */
+  idInstagram?: string;
 }
 
 function journal(): Entree[] {
@@ -196,10 +198,10 @@ async function main() {
   await new Promise((r) => setTimeout(r, 10000));
 
   // 2. Le conteneur du carrousel. C'est lui, et lui seul, qui porte la légende.
+  // La legende, une ligne vide, puis les mots-clics. Les deux points seuls sur
+  // leur ligne qui les separaient avant ne servaient a rien.
   const legende = `${e.legende}
 
-.
-.
 ${e.hashtags.map((h) => (h.startsWith('#') ? h : `#${h}`)).join(' ')}`;
 
   const lieuId = await trouverLieu();
@@ -240,6 +242,7 @@ ${e.hashtags.map((h) => (h.startsWith('#') ? h : `#${h}`)).join(' ')}`;
   e.publie = true;
   e.publieLe = new Date().toISOString();
   e.urlInstagram = lien;
+  e.idInstagram = publie.id;
   fs.writeFileSync(JOURNAL, JSON.stringify(entrees, null, 2) + '\n', 'utf8');
 
   console.log(`✅ Publié — ${lien}`);

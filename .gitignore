@@ -21,3 +21,10 @@ blender/
 
 # Rendus d essai du gabarit social : utiles en local, inutiles en ligne
 public/social/essai-gabarit*.png
+
+# Deux dossiers prives ranges ici depuis novembre 2026. Ce depot est PUBLIC :
+# un « git add . » aurait publie des cles, des adresses de prospects et des
+# releves. « claude assistant » a son propre depot prive ; « claude emails »
+# n'en a aucun.
+claude assistant/
+claude emails/
