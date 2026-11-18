@@ -153,7 +153,17 @@
     "publie": true,
     "fond": "5/5 — Pexels « concrete wall » — Alex Quezada",
     "publieLe": "2026-09-10T00:09:18.464Z",
-    "urlInstagram": "https://www.instagram.com/p/DdFg7OUDk5R/"
+    "urlInstagram": "https://www.instagram.com/p/DdFg7OUDk5R/",
+    "idInstagram": "17935660830365331",
+    "mesures": {
+      "quand": "2026-11-18",
+      "likes": 4,
+      "commentaires": 0,
+      "portee": 14,
+      "sauvegardes": 0,
+      "partages": 0,
+      "vues": 39
+    }
   },
   {
     "slug": "recherches-locales-ia-construction",
@@ -231,7 +241,17 @@
     "publie": true,
     "fond": "5/5 — Pexels « concrete wall » — Alex Quezada",
     "publieLe": "2026-09-16T17:30:09.018Z",
-    "urlInstagram": "https://www.instagram.com/p/DdW0z6LDLGA/"
+    "urlInstagram": "https://www.instagram.com/p/DdW0z6LDLGA/",
+    "idInstagram": "18099719645034116",
+    "mesures": {
+      "quand": "2026-11-18",
+      "likes": 2,
+      "commentaires": 0,
+      "portee": 16,
+      "sauvegardes": 0,
+      "partages": 0,
+      "vues": 49
+    }
   },
   {
     "slug": "fiche-google-ou-site-web",
@@ -308,7 +328,17 @@
     "publie": true,
     "fond": "5/5 — Pexels « concrete wall » — Mak_ jp",
     "publieLe": "2026-09-23T17:44:40.146Z",
-    "urlInstagram": "https://www.instagram.com/p/Ddo4CYHHeVp/"
+    "urlInstagram": "https://www.instagram.com/p/Ddo4CYHHeVp/",
+    "idInstagram": "17969884563152136",
+    "mesures": {
+      "quand": "2026-11-18",
+      "likes": 3,
+      "commentaires": 0,
+      "portee": 13,
+      "sauvegardes": 0,
+      "partages": 0,
+      "vues": 32
+    }
   },
   {
     "slug": "site-web-ou-fiche-google",
@@ -385,7 +415,17 @@
     "publie": true,
     "fond": "5/5 — Pexels « concrete wall » — 정규송 Nui MALAMA",
     "publieLe": "2026-09-30T18:18:36.520Z",
-    "urlInstagram": "https://www.instagram.com/p/Dd69fNemFxL/"
+    "urlInstagram": "https://www.instagram.com/p/Dd69fNemFxL/",
+    "idInstagram": "18026983571692420",
+    "mesures": {
+      "quand": "2026-11-18",
+      "likes": 3,
+      "commentaires": 0,
+      "portee": 16,
+      "sauvegardes": 0,
+      "partages": 0,
+      "vues": 49
+    }
   },
   {
     "slug": "repondre-vite-soumissions",
@@ -446,8 +486,22 @@
       "2026-11-18-repondre-vite-soumissions-4.png",
       "2026-11-18-repondre-vite-soumissions-5.png"
     ],
-    "publie": false,
+    "publie": true,
     "fond": "5/5 — Pexels « steel beams » — Noland Live",
-    "jugement": "candidat 2 sur 3 (22/25) — Le titre « Le client a déjà appelé un autre » me pique parce que ça m'arrive pour vrai, et les trois gestes se font ce soir avec mon cell sans rien payer."
+    "jugement": "candidat 2 sur 3 (22/25) — Le titre « Le client a déjà appelé un autre » me pique parce que ça m'arrive pour vrai, et les trois gestes se font ce soir avec mon cell sans rien payer.",
+    "publieLe": "2026-11-18T13:18:31.252Z",
+    "urlInstagram": "https://www.instagram.com/p/Df4mF91l9BZ/",
+    "idInstagram": "18643590904014505",
+    "facebookId": "1277763615427534_122138663271467492",
+    "publieFacebookLe": "2026-11-18T13:18:45.155Z",
+    "mesures": {
+      "quand": "2026-11-18",
+      "likes": 0,
+      "commentaires": 0,
+      "portee": 0,
+      "sauvegardes": 0,
+      "partages": 0,
+      "vues": 0
+    }
   }
 ]
