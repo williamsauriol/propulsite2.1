@@ -195,26 +195,42 @@ correctement. Quelqu'un du métier qui parle à quelqu'un du métier. Jamais
 « boostez », « leviers », « synergie », « visibilité digitale ». Aucun
 anglicisme de marketing. Un mot de chantier vaut mieux qu'un mot de bureau.
 
-LE SUJET PART DE SA JOURNÉE, PAS DE LA NÔTRE
-Il ne se demande pas comment marche Google. Il se demande pourquoi son
-téléphone sonne moins. Les bons terrains :
-- les appels et les demandes de soumission qui n'arrivent pas ;
-- sa fiche Google : photos, avis, catégorie, heures, secteur desservi ;
-- les avis de clients : comment les demander, quoi répondre ;
-- ce qu'un client voit sur son cellulaire avant de décider d'appeler ;
-- les photos de chantier qui dorment dans son téléphone ;
-- la soumission envoyée trop tard, le message resté sans réponse ;
-- le bouche-à-oreille qui ne suffit plus à remplir le carnet.
-L'intelligence artificielle (ChatGPT et compagnie) : au plus une publication
-sur quatre. Regarde la liste « déjà publié » avant de choisir.
+LE SUJET TOUCHE CE QUE PROPULSITE FAIT. TOUJOURS.
+Le compte existe pour une raison : qu'un entrepreneur se dise « ce gars-là
+connaît le web ET la construction ». Un bon conseil de gestion (rappeler
+vite, organiser son horaire, négocier un prix) n'a rien à faire ici, même
+s'il est vrai : n'importe quel coach pourrait le publier.
+Chaque publication part d'UN de ces cinq piliers, et le conseil se fait
+DANS l'outil en ligne, pas dans sa tête ou dans son agenda :
+1. sa fiche Google et sa place sur Google Maps (photos, catégorie, heures,
+   secteur desservi, description) ;
+2. les avis Google (les demander, y répondre, le lien d'avis) ;
+3. son site sur cellulaire et son formulaire de soumission (ce que le
+   client voit avant d'appeler, ce qui le fait partir) ;
+4. être nommé par ChatGPT et les réponses de Google (au plus une
+   publication sur quatre) ;
+5. ses photos de chantier en ligne (fiche, site, Instagram).
+Le problème, lui, vient de SA journée : le téléphone qui sonne moins, la
+demande qui ne rentre pas, le client qui choisit un autre. Mais la cause
+nommée et le geste proposé sont TOUJOURS en ligne.
+Mauvais : « Rappelle tes clients plus vite. » (gestion, pas web)
+Bon : « Ton formulaire ne dit pas quand tu rappelles. Le client essaie
+le suivant. » (le site, donc Propulsite)
+Regarde la liste « déjà publié » : ne reprends ni un sujet ni un chiffre
+qui y est déjà.
 
 L'ACCROCHE (le titre de la diapo 1) décide de tout. Elle nomme un problème
 qu'il vit, dans ses mots à lui. Pas une statistique. Pas le nom d'un outil.
 Pas une vérité générale sur le marketing. Il doit se dire « ça, c'est moi ».
+ELLE SE COMPREND TOUTE SEULE, SANS LA DIAPO 2 : elle dit la cause ET la
+conséquence. « Le client a déjà appelé un autre » ne dit pas pourquoi : on
+ne comprend rien. « Ta fiche dit fermé le samedi. Le client appelle un
+autre. » se comprend en deux secondes.
 
 CHAQUE CONSEIL EST VRAI ET FAISABLE CE SOIR
-Un geste gratuit, précis, de moins de 15 minutes. Si tu n'es pas certain qu'un
-bouton ou un réglage existe dans l'outil, ne le nomme pas : décris le geste.
+Un geste gratuit, précis, de moins de 15 minutes, fait sur sa fiche, son
+site ou son compte. Si tu n'es pas certain qu'un bouton ou un réglage existe
+dans l'outil, ne le nomme pas : décris le geste.
 
 INTERDITS ABSOLUS :
 - Ne JAMAIS inventer une statistique. Les seuls chiffres permis sont dans la
@@ -354,10 +370,11 @@ const SCHEMA_JUGE = {
           clarte: { type: 'integer' },
           utilite: { type: 'integer' },
           partage: { type: 'integer' },
+          lien: { type: 'integer' },
           honnete: { type: 'boolean' },
           remarque: { type: 'string' },
         },
-        required: ['candidat', 'accroche', 'clarte', 'utilite', 'partage', 'honnete', 'remarque'],
+        required: ['candidat', 'accroche', 'clarte', 'utilite', 'partage', 'lien', 'honnete', 'remarque'],
         additionalProperties: false,
       },
     },
@@ -557,7 +574,11 @@ async function juger(candidats: Publication[], format: Format): Promise<{ gagnan
       message:
         `Voici ${candidats.length} publications candidates, au format « ${FICHES[format].nom} ».\n\n${fiches}\n\n` +
         `Note chacune de 1 à 5 :\n` +
-        `- accroche : en lisant SEULEMENT le titre de la diapo 1, est-ce que je me reconnais et j'arrête de défiler ?\n` +
+        `- accroche : en lisant SEULEMENT le titre de la diapo 1, est-ce que je comprends de quoi on parle, ` +
+        `je me reconnais et j'arrête de défiler ? Un titre qu'on ne comprend pas sans la diapo 2 vaut 1.\n` +
+        `- lien : la publication vient d'une agence web. Est-ce que le problème et le conseil touchent ma fiche ` +
+        `Google, mes avis, mon site, mes photos en ligne ou ce que ChatGPT dit de moi ? 1 = un conseil de gestion ` +
+        `sans rapport avec le web, 5 = ça me fait penser « eux autres pourraient m'aider avec ça ».\n` +
         `- clarte : est-ce que je comprends chaque diapo en trois secondes, sans un seul mot de bureau ?\n` +
         `- utilite : est-ce que je peux faire quelque chose ce soir, gratuitement, avec ce qui est écrit ?\n` +
         `- partage : est-ce que je l'enverrais à un autre entrepreneur que je connais ?\n` +
@@ -571,14 +592,19 @@ async function juger(candidats: Publication[], format: Format): Promise<{ gagnan
       max_tokens: 8000,
     });
 
-    const total = (n: any) => n.accroche * 2 + n.clarte + n.utilite + n.partage;
+    const total = (n: any) => n.accroche * 2 + n.clarte + n.utilite + n.partage + n.lien;
     const notes = (j.notes || []).filter((n: any) => candidats[n.candidat - 1]);
     notes.forEach((n: any) =>
       console.log(`  Candidat ${n.candidat} : accroche ${n.accroche}, clarté ${n.clarte}, utilité ${n.utilite}, ` +
-        `partage ${n.partage}${n.honnete ? '' : ' — PAS HONNÊTE'} — ${n.remarque}`));
+        `partage ${n.partage}, lien ${n.lien}${n.honnete ? '' : ' — PAS HONNÊTE'} — ${n.remarque}`));
 
-    const honnetes = notes.filter((n: any) => n.honnete);
-    if (!honnetes.length) throw new Error('le juge ne trouve aucun candidat honnête');
+    // Le 18 novembre 2026, le gagnant parlait de rappeler vite : vrai, utile,
+    // et sans aucun rapport avec Propulsite. Un candidat sans lien avec le web
+    // (moins de 3) ne gagne que si aucun autre n'en a.
+    const honnetesTous = notes.filter((n: any) => n.honnete);
+    if (!honnetesTous.length) throw new Error('le juge ne trouve aucun candidat honnête');
+    const relies = honnetesTous.filter((n: any) => n.lien >= 3);
+    const honnetes = relies.length ? relies : honnetesTous;
     // Le choix du juge, s'il est honnete. Sinon la meilleure note : l'accroche
     // compte double, parce que personne ne lit la diapo 2 d'une publication
     // dont la diapo 1 ne l'a pas arrete.
@@ -586,7 +612,7 @@ async function juger(candidats: Publication[], format: Format): Promise<{ gagnan
       || [...honnetes].sort((a: any, b: any) => total(b) - total(a))[0];
     return {
       gagnant: candidats[choisi.candidat - 1],
-      jugement: `candidat ${choisi.candidat} sur ${candidats.length} (${total(choisi)}/25) — ${j.pourquoi}`,
+      jugement: `candidat ${choisi.candidat} sur ${candidats.length} (${total(choisi)}/30) — ${j.pourquoi}`,
     };
   } catch (e: any) {
     // Aucun candidat honnete : on ne publie pas. Tout le reste est une panne
