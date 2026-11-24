@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Publier le carrousel</title>
+<style>
+  * { box-sizing:border-box; margin:0; }
+  body { background:#050a15; color:#fff; font:17px/1.45 system-ui, sans-serif; padding:24px 16px 60px; max-width:560px; margin:0 auto; }
+  h1 { font-size:24px; line-height:1.2; margin-bottom:4px; }
+  .date { color:#9fb0c0; margin-bottom:20px; }
+  .etape { background:#0d1626; border-radius:16px; padding:18px; margin-bottom:14px; }
+  .etape h2 { font-size:18px; margin-bottom:10px; }
+  .etape p { color:#c9d5e0; }
+  button { width:100%; min-height:54px; border:0; border-radius:12px; background:#00d2ff; color:#050a15; font:800 18px system-ui, sans-serif; cursor:pointer; }
+  button:disabled { opacity:.5; }
+  button:focus-visible, a:focus-visible { outline:3px solid #fff; outline-offset:3px; }
+  .photos { display:flex; gap:10px; overflow-x:auto; padding:12px 0 4px; }
+  .photos a { flex:none; width:46%; display:block; }
+  .photos img { width:100%; aspect-ratio:4/5; display:block; border-radius:10px; background:#16233a; }
+  pre { white-space:pre-wrap; font:15px/1.45 system-ui, sans-serif; color:#c9d5e0; margin-top:12px; }
+  ol { padding-left:22px; color:#c9d5e0; }
+  li { margin-bottom:6px; }
+  .note { margin-top:10px; font-size:15px; color:#9fb0c0; }
+</style>
+</head>
+<body>
+<h1 id="titre">Chargement…</h1>
+<p class="date" id="date"></p>
+<div id="contenu" hidden>
+  <div class="etape">
+    <h2>1. Les images</h2>
+    <button id="partager" disabled>Je charge les images…</button>
+    <div class="photos" id="photos"></div>
+    <p class="note">Choisis « Enregistrer les images ». Si le bouton ne marche pas, garde ton doigt sur chaque image pour l'enregistrer.</p>
+  </div>
+  <div class="etape">
+    <h2>2. Le texte</h2>
+    <button id="copier">Copier le texte</button>
+    <pre id="legende"></pre>
+  </div>
+  <div class="etape">
+    <h2>3. Dans Instagram</h2>
+    <ol>
+      <li>Touche <b>+</b>, puis <b>Publication</b>.</li>
+      <li>Choisis les images <b>dans l'ordre, de 1 à 5</b>.</li>
+      <li>Ajoute la <b>musique</b>.</li>
+      <li>Colle le texte, puis partage.</li>
+    </ol>
+    <p class="note">Laisse le partage vers Facebook fermé : le robot s'en occupe.</p>
+  </div>
+</div>
+<script>
+  // Le journal et les images viennent du dépôt, pas du site : le robot les
+  // pousse sans redéployer, la page est donc à jour dès son passage.
+  const BASE = 'https://raw.githubusercontent.com/williamsauriol/propulsite2.1/main/public/social/';
+  const $ = (id) => document.getElementById(id);
+  (async () => {
+    let e;
+    try {
+      const r = await fetch(BASE + 'journal.json?' + Math.floor(Date.now() / 60000), { cache: 'no-store' });
+      if (!r.ok) throw new Error();
+      e = (await r.json()).filter((x) => x.images && x.images.length).pop();
+      if (!e) throw new Error();
+    } catch {
+      $('titre').textContent = 'Le carrousel ne charge pas. Réessaie dans une minute.';
+      return;
+    }
+    $('titre').textContent = e.diapos[0].titre;
+    $('date').textContent = e.date + (e.publie ? ' — déjà publié. Le prochain arrive mercredi.' : ' — prêt à publier');
+    const texte = e.legende + '\n\n' + e.hashtags.map((h) => (h[0] === '#' ? h : '#' + h)).join(' ');
+    $('legende').textContent = texte;
+    e.images.forEach((n, i) => {
+      const a = document.createElement('a');
+      a.href = BASE + n;
+      const im = document.createElement('img');
+      im.src = BASE + n;
+      im.alt = 'Image ' + (i + 1) + ' : ' + e.diapos[i].titre;
+      a.append(im);
+      $('photos').append(a);
+    });
+    $('contenu').hidden = false;
+
+    $('copier').onclick = async () => {
+      try {
+        await navigator.clipboard.writeText(texte);
+        $('copier').textContent = 'Copié ✓';
+      } catch {
+        getSelection().selectAllChildren($('legende'));
+        $('copier').textContent = 'Texte choisi : touche Copier';
+      }
+    };
+
+    // Les images sont téléchargées d'avance : le téléphone refuse le partage
+    // si on le fait attendre après le toucher.
+    const b = $('partager');
+    try {
+      const fichiers = await Promise.all(e.images.map(async (n, i) => {
+        const r = await fetch(BASE + n);
+        if (!r.ok) throw new Error();
+        return new File([await r.blob()], 'image-' + (i + 1) + '.png', { type: 'image/png' });
+      }));
+      if (!navigator.canShare || !navigator.canShare({ files: fichiers })) throw new Error();
+      b.disabled = false;
+      b.textContent = 'Enregistrer les ' + fichiers.length + ' images';
+      b.onclick = () => navigator.share({ files: fichiers }).catch(() => {});
+    } catch {
+      b.textContent = 'Garde ton doigt sur chaque image';
+    }
+  })();
+</script>
+</body>
+</html>
