@@ -503,5 +503,75 @@
       "partages": 0,
       "vues": 38
     }
+  },
+  {
+    "slug": "avis-google-demande-reponse",
+    "angle": "Demander et répondre aux avis",
+    "diapos": [
+      {
+        "titre": "Tu ne demandes pas d'avis. Le concurrent, oui.",
+        "lignes": [],
+        "alt": "Diapo d'arrêt avec un seul grand titre centré sur le manque de demandes d'avis Google."
+      },
+      {
+        "titre": "Ta demande d'avis",
+        "lignes": [
+          "« Laisse-nous un avis si t'as le temps, merci! »",
+          "« Dis en 2 lignes ce qu'on a fait chez toi. Ça m'aide gros. »"
+        ],
+        "alt": "Diapo avant-après avec un titre et deux phrases : une demande d'avis vague, puis une demande précise à recopier."
+      },
+      {
+        "titre": "Ta réponse à un avis",
+        "lignes": [
+          "« Merci pour votre commentaire. »",
+          "« Merci [prénom]! Content que la salle de bain te plaise. »"
+        ],
+        "alt": "Diapo avant-après avec un titre et deux phrases : une réponse générique, puis une réponse qui nomme le travail fait."
+      },
+      {
+        "titre": "Ta réponse à un mauvais avis",
+        "lignes": [
+          "« C'est faux, on a fait le travail comme prévu. »",
+          "« Désolé pour ça. Je t'appelle demain pour qu'on règle ça. »"
+        ],
+        "alt": "Diapo avant-après avec un titre et deux phrases : une réponse sur la défensive, puis une réponse calme qui offre d'appeler."
+      },
+      {
+        "titre": "La règle à retenir",
+        "lignes": [
+          "Envoie ta demande d'avis par texto, le jour que c'est fini.",
+          "Réponds à chaque avis, le bon comme le mauvais.",
+          "Redis ce que t'as fait : le prochain client lit ça."
+        ],
+        "alt": "Diapo de conclusion avec un titre court et trois lignes résumant les règles pour les avis Google."
+      }
+    ],
+    "photo": "brick wall texture",
+    "legende": "Comment demander des avis Google à tes clients en construction, et quoi répondre. Un texto après le chantier, deux lignes de ta part et une réponse calme au mauvais avis : ça se fait ce soir, de ton cellulaire. Le prochain client lit tout ça avant de t'appeler. Glisse pour voir les exemples à recopier. Quel est le dernier avis reçu sur ta fiche?",
+    "hashtags": [
+      "#construction",
+      "#quebec",
+      "#avisgoogle"
+    ],
+    "date": "2026-11-25",
+    "format": "avant-apres",
+    "images": [
+      "2026-11-25-avis-google-demande-reponse-1.png",
+      "2026-11-25-avis-google-demande-reponse-2.png",
+      "2026-11-25-avis-google-demande-reponse-3.png",
+      "2026-11-25-avis-google-demande-reponse-4.png",
+      "2026-11-25-avis-google-demande-reponse-5.png"
+    ],
+    "videos": [
+      "2026-11-25-avis-google-demande-reponse-1.mp4",
+      "2026-11-25-avis-google-demande-reponse-2.mp4",
+      "2026-11-25-avis-google-demande-reponse-3.mp4",
+      "2026-11-25-avis-google-demande-reponse-4.mp4",
+      "2026-11-25-avis-google-demande-reponse-5.mp4"
+    ],
+    "publie": false,
+    "fond": "5/5 — Pexels « brick wall texture » — Sayeed Chowdhury",
+    "jugement": "candidat 1 sur 3 (25/30) — Le candidat 1 me donne des phrases à recopier ce soir, dont la réponse au mauvais avis qui me stresse vraiment, et je l'enverrais à un confrère sans hésiter."
   }
 ]
