@@ -15,12 +15,6 @@
  * « ça m'a servi », et les envois sont ce qui pousse une publication vers des
  * gens qui ne suivent pas le compte. Les mentions j'aime viennent après.
  *
- * IL RECONNAÎT LES CARROUSELS PUBLIÉS À LA MAIN
- *
- * Depuis le 24 novembre 2026, William publie sur Instagram lui-même, pour y
- * mettre une chanson. Le robot ne le sait pas : il compare le début des
- * légendes et marque la publication au journal.
- *
  * IL NE BLOQUE JAMAIS RIEN
  *
  * Les mentions j'aime et les commentaires se lisent avec le jeton de base.
@@ -55,10 +49,6 @@ async function lire(chemin: string): Promise<any> {
   return data;
 }
 
-/** Le debut d'une legende, sans ponctuation ni espaces : William peut y toucher un peu. */
-const debut = (texte?: string) =>
-  String(texte || '').toLowerCase().replace(/[^\p{L}\p{N}]/gu, '').slice(0, 40);
-
 /** Deux adresses de la meme publication, a une barre oblique pres. */
 const propre = (lien?: string) => String(lien || '').replace(/\/+$/, '').toLowerCase();
 
@@ -70,19 +60,7 @@ async function main() {
   if (!fs.existsSync(JOURNAL)) return;
   const journal: any[] = JSON.parse(fs.readFileSync(JOURNAL, 'utf8'));
 
-  const medias = (await lire(`${IG_USER_ID}/media?fields=id,permalink,caption,timestamp,like_count,comments_count&limit=30`)).data || [];
-  let trouvees = 0;
-  for (const e of journal.filter((x) => !x.publie && x.images?.length)) {
-    const m = medias.find((x: any) => debut(x.caption).length > 15 && debut(x.caption) === debut(e.legende));
-    if (!m) continue;
-    e.publie = true;
-    e.publieLe = m.timestamp;
-    e.urlInstagram = m.permalink;
-    e.idInstagram = m.id;
-    trouvees++;
-    console.log(`  publié à la main : « ${e.diapos?.[0]?.titre} » — ${m.permalink}`);
-  }
-
+  const medias = (await lire(`${IG_USER_ID}/media?fields=id,permalink,like_count,comments_count&limit=30`)).data || [];
   const publiees = journal.filter((e) => e.publie && e.urlInstagram).slice(-COMBIEN);
 
   let mesurees = 0;
@@ -122,7 +100,7 @@ async function main() {
   }
 
   if (refus) console.log(`  Certaines mesures ont été refusées par Meta : ${refus}`);
-  if (mesurees || trouvees) fs.writeFileSync(JOURNAL, JSON.stringify(journal, null, 2) + '\n', 'utf8');
+  if (mesurees) fs.writeFileSync(JOURNAL, JSON.stringify(journal, null, 2) + '\n', 'utf8');
   console.log(`${mesurees} publication(s) mesurée(s).`);
 }
 

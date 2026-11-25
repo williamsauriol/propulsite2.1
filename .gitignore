@@ -20,7 +20,7 @@ blender/
 .meta-court.txt
 
 # Rendus d essai du gabarit social : utiles en local, inutiles en ligne
-public/social/essai-gabarit*.png
+public/social/essai-gabarit*
 
 # Deux dossiers prives ranges ici depuis novembre 2026. Ce depot est PUBLIC :
 # un « git add . » aurait publie des cles, des adresses de prospects et des

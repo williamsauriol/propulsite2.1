@@ -9,13 +9,9 @@ on:
   workflow_dispatch:
     inputs:
       publier:
-        description: 'Publier sur Facebook (non = generer seulement)'
+        description: 'Publier sur Instagram (non = generer seulement)'
         required: false
         default: 'oui'
-      instagram:
-        description: 'Publier sur Instagram par le robot, SANS musique (oui / non)'
-        required: false
-        default: 'non'
 
 jobs:
   social:
@@ -36,8 +32,11 @@ jobs:
       # Puppeteer n'est PAS une dependance du site : il pese ~150 Mo avec son
       # Chrome, et Vercel l'installerait a chaque deploiement pour rien. On le
       # pose ici seulement, sans toucher package.json.
-      - name: Installer Chrome pour le rendu de l'image
-        run: npm install --no-save puppeteer@23
+      - name: Installer Chrome et ffmpeg, pour les images et le son
+        run: |
+          npm install --no-save puppeteer@23
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
 
       # Trois cles, dans l'ordre d'importance.
       #
@@ -79,13 +78,8 @@ jobs:
           git pull --rebase --autostash
           git push
 
-      # Depuis le 24 novembre 2026, William publie lui-meme sur Instagram, avec
-      # une chanson : l'API n'accepte aucun son sur un carrousel. Il prend les
-      # images sur propulsite.ca/social/publier.html. Cette etape ne sert que de
-      # secours, lancee a la main. Attention : s'il a deja publie ce carrousel,
-      # elle le publierait une deuxieme fois.
-      - name: Publier sur Instagram (secours, sans musique)
-        if: ${{ github.event.inputs.instagram == 'oui' }}
+      - name: Publier sur Instagram
+        if: ${{ github.event.inputs.publier != 'non' }}
         env:
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
           META_TOKEN: ${{ secrets.META_TOKEN }}
@@ -108,7 +102,7 @@ jobs:
       # Le generateur relit ces chiffres la semaine suivante. Jamais bloquant :
       # si Meta refuse la mesure, la publication reste faite et le journal part.
       - name: Mesurer les publications
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && github.event.inputs.publier != 'non' }}
         continue-on-error: true
         env:
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
@@ -117,7 +111,7 @@ jobs:
 
       # `!cancelled()` : on garde la trace de Facebook meme si Instagram a echoue.
       - name: Enregistrer la publication au journal
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && github.event.inputs.publier != 'non' }}
         run: |
           if [ -z "$(git status --porcelain public/social/journal.json)" ]; then
             echo "Journal inchange."
@@ -126,6 +120,6 @@ jobs:
           git config user.name "Propulsite Social Bot"
           git config user.email "bot@propulsite.ca"
           git add public/social/journal.json
-          git commit -m "social: journal a jour [skip ci]"
+          git commit -m "social: publie sur Instagram [skip ci]"
           git pull --rebase --autostash
           git push

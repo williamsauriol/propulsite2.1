@@ -49,6 +49,7 @@ import { PAIN_POINTS_ARTICLES } from '../src/constants/painPointsData';
 import { CHIFFRES, SOURCES } from '../src/constants/geoData';
 import { fabriquerFond } from './social-fond';
 import { vraiesPhotos } from './social-photo';
+import { sonoriser } from './social-sonoriser';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const RACINE = path.resolve(__dirname, '..');
@@ -121,6 +122,8 @@ interface EntreeJournal extends Publication {
   format?: Format;
   /** Les images du carrousel, dans l'ordre de defilement. */
   images: string[];
+  /** Les memes diapos, immobiles, avec la musique. Voir social-sonoriser.ts. */
+  videos?: string[];
   publie: boolean;
   /** La matiere peinte par Gemini, ou la raison pour laquelle il n'y en a pas. */
   fond?: string;
@@ -676,7 +679,9 @@ function gabarit(
   fond: string | null = null,
   format: Format = 'erreur',
 ): string {
-  const echapper = (t: string) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  // Le guillemet et le point d'interrogation ne tombent jamais seuls sur une ligne.
+  const echapper = (t: string) =>
+    t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/ ([?!:;»])/g, '&nbsp;$1').replace(/« /g, '«&nbsp;');
 
   const ouverture = index === 0;
   const fin = index === total - 1;
@@ -1116,6 +1121,7 @@ async function main() {
       if (avecFond) fonds = (await chercherFonds(p, i)).fonds;
       const noms = await rendre(p, format, fonds, (n) => `essai-gabarit-${format}-${n + 1}.png`);
       console.log(`Essai « ${format} » rendu : ${noms.join(', ')}`);
+      if (process.argv.includes('--son')) sonoriser(DOSSIER, noms, i);
     }
     return;
   }
@@ -1140,11 +1146,20 @@ async function main() {
 
   const noms = await rendre(p, format, fonds, (i) => `${jour}-${p.slug}-${i + 1}.png`);
 
+  // Sans musique, le carrousel part quand meme, en images.
+  let videos: string[] | undefined;
+  try {
+    videos = sonoriser(DOSSIER, noms, journal.length);
+  } catch (e: any) {
+    console.log(`  Pas de son cette semaine : ${e.message}`);
+  }
+
   journal.push({
     ...p,
     date: jour,
     format,
     images: noms,
+    ...(videos ? { videos } : {}),
     publie: false,
     // Une note par diapo serait illisible : on garde la premiere, et le compte
     // de celles qui ont vraiment recu une matiere.

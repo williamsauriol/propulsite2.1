@@ -1,9 +1,7 @@
 # Automatiser Instagram
 
-Depuis le 24 novembre 2026, le robot écrit et illustre le carrousel chaque
-mercredi, et le publie seul sur Facebook. **Sur Instagram, c'est William qui
-publie**, avec une chanson, depuis `propulsite.ca/social/publier.html` : l'API
-n'accepte aucun son sur un carrousel.
+Tout est branché et vérifié depuis le 3 septembre 2026 : le robot écrit,
+illustre et publie seul sur **@propulsite_** chaque mercredi.
 
 Ce document sert à deux choses : comprendre ce qui tourne, et pouvoir tout
 refaire le jour où un jeton est révoqué.
@@ -27,8 +25,8 @@ Chaque mercredi 9 h (heure de l'Est), sur GitHub Actions :
    (voir plus bas).
 4. Il fabrique les cinq images 1080 × 1350 aux couleurs de Propulsite.
 5. Il les pousse dans le dépôt.
-6. Il publie sur Facebook. Pour Instagram, voir le haut de cette page ; le robot
-   peut le faire en secours, sans musique (`instagram = oui` dans Actions).
+6. Il publie sur Instagram, avec le lieu et les textes alternatifs — **si les
+   deux secrets existent**.
 
 Il ne peut pas inventer de statistique : les seuls chiffres qu'il a le droit
 d'utiliser sont ceux du site, et ils portent tous leur source. Il n'a pas le

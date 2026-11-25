@@ -16,6 +16,16 @@
  * Poser la légende sur les enfants la fait disparaître : c'est le conteneur
  * parent qui la porte, et lui seul.
  *
+ * LE SON
+ *
+ * L'API n'accepte aucune chanson sur un carrousel. Chaque diapo part donc en
+ * vidéo immobile qui porte la musique (voir social-sonoriser.ts). Meta doit
+ * traiter chacune avant l'assemblage. Si une seule est refusée, le carrousel
+ * part en images, sans son, comme avant.
+ *
+ * Les vidéos passent par jsDelivr, qui sert les fichiers du dépôt avec le bon
+ * type ; raw.githubusercontent les sert comme des fichiers anonymes.
+ *
  * IL FAUT DEUX SECRETS DANS LE DÉPÔT (voir docs/AUTOMATISER-INSTAGRAM.md) :
  *   IG_USER_ID     l'identifiant du compte Instagram professionnel
  *   META_TOKEN     un jeton d'accès de longue durée
@@ -28,6 +38,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { execSync } from 'node:child_process';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const RACINE = path.resolve(__dirname, '..');
@@ -72,7 +83,7 @@ interface Diapo { titre: string; lignes: string[]; alt?: string }
 interface Entree {
   slug: string; angle: string; diapos: Diapo[];
   legende: string; hashtags: string[];
-  date: string; images: string[]; publie: boolean;
+  date: string; images: string[]; videos?: string[]; publie: boolean;
   fond?: string;
   publieLe?: string; urlInstagram?: string;
   /** Le numero du media chez Meta : social-mesurer.ts s'en sert pour lire les chiffres. */
@@ -137,6 +148,54 @@ async function appeler(chemin: string, corps: Record<string, string>) {
   return data;
 }
 
+/** Attend que Meta ait fini de traiter une video. Cinq minutes au plus. */
+async function attendreTraitement(conteneur: string) {
+  for (let i = 0; i < 30; i++) {
+    await new Promise((r) => setTimeout(r, 10000));
+    let d: any;
+    try {
+      const r = await fetch(`${API}/${conteneur}?fields=status_code,status&access_token=${encodeURIComponent(META_TOKEN as string)}`);
+      d = await r.json();
+    } catch {
+      continue; // le réseau peut hoqueter, on réessaie
+    }
+    if (d.status_code === 'FINISHED') return;
+    if (d.status_code === 'ERROR' || d.status_code === 'EXPIRED') {
+      throw new Error(`Meta n'a pas pu traiter la video : ${d.status || d.status_code}`);
+    }
+  }
+  throw new Error('Meta traite encore la video apres cinq minutes.');
+}
+
+/**
+ * Les diapos avec le son. Rend null des que quelque chose resiste : rien n'est
+ * encore publie a ce stade, le carrousel repart simplement en images.
+ */
+async function enfantsSonores(e: Entree): Promise<string[] | null> {
+  if (e.videos?.length !== e.images.length) return null;
+  try {
+    const sha = execSync('git rev-parse HEAD', { cwd: RACINE }).toString().trim();
+    const base = `https://cdn.jsdelivr.net/gh/${DEPOT}@${sha}/public/social`;
+    const ids: string[] = [];
+    for (const nom of e.videos) {
+      const url = `${base}/${nom}`;
+      if (!(await attendreImage(url))) throw new Error(`${nom} n'est pas servie par jsDelivr`);
+      const c = await appeler(`${IG_USER_ID}/media`, {
+        media_type: 'VIDEO',
+        video_url: url,
+        is_carousel_item: 'true',
+      });
+      ids.push(c.id);
+    }
+    for (const id of ids) await attendreTraitement(id);
+    console.log(`  ${ids.length} diapos avec le son, prêtes`);
+    return ids;
+  } catch (err: any) {
+    console.log(`  Son refusé (${err.message}) — le carrousel part en images.`);
+    return null;
+  }
+}
+
 async function main() {
   const entrees = journal();
 
@@ -181,8 +240,9 @@ async function main() {
   // `alt_text` va en revanche sur chaque enfant, et nulle part ailleurs :
   // c'est ce que lit un lecteur d'ecran, et ce dont Instagram se sert pour
   // comprendre de quoi parle l'image. Sans lui, il en invente un.
-  const enfants: string[] = [];
-  for (let i = 0; i < urls.length; i++) {
+  const sonores = await enfantsSonores(e);
+  const enfants: string[] = sonores ?? [];
+  for (let i = 0; !sonores && i < urls.length; i++) {
     const alt = e.diapos[i]?.alt;
     const c = await appeler(`${IG_USER_ID}/media`, {
       image_url: urls[i],
